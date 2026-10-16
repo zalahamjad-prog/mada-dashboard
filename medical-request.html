@@ -421,6 +421,10 @@
 <script src="orders.js"></script>
 <script src="medical.js"></script>
 <script src="doctor-orders.js"></script>
+<script src="patients.js"></script>
+<script src="doctor-history.js"></script>
+<script src="stamps.js"></script>
+<script src="medical-report.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -828,49 +832,8 @@
   });
   const readFile = f => new Promise((ok, no) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = no; fr.readAsDataURL(f); });
 
-  // Referral form (A4 PDF): what the doctor wrote, with the patient and visit. Same html2pdf setup as the invoices.
-  function fixArabic(wrap) {
-    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
-    while (walk.nextNode()) if (/[\u0600-\u06FF]/.test(walk.currentNode.nodeValue)) nodes.push(walk.currentNode);
-    nodes.forEach(nd => { const frag = document.createDocumentFragment();
-      nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => { if (!part) return;
-        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part)); else { const sp = document.createElement("span"); sp.textContent = part; frag.appendChild(sp); } });
-      nd.replaceWith(frag); });
-  }
-  async function refPdf(r, it) {
-    const rtl = current === "ar", o = it.order || {}, ri = DrOrders.refInfo(o), mo = MadaOrders.get(r.orderId), al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
-    const no = `${r.id}-${it.id}`, file = `Mada-Care-Referral-${no}.pdf`;
-    // Dates and numbers sit in their own left-to-right box, without the invisible direction marks the page uses: Safari's html2canvas otherwise draws "7:57 PM" over itself.
-    const L2R = v => `<span dir="ltr" style="display:inline-block">${esc(String(v).replace(/[\u2066-\u2069\u200e\u200f]/g, "")).replace(/ /g, "&nbsp;")}</span>`, DT = L2R;
-    const kv = (k, v) => `<tr><td style="padding:6px 0;color:#6b7a80;width:34%;vertical-align:top">${esc(k)}</td><td style="padding:6px 0;font-weight:600;white-space:pre-line">${v || "—"}</td></tr>`;
-    const box = (h, rows) => `<div style="border:1px solid #e3e8ea;border-radius:10px;padding:12px 14px;margin-top:14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:4px">${esc(h)}</div><table style="width:100%;border-collapse:collapse">${rows}</table></div>`;
-    const visit = mo && mo.appointment ? L2R(`${ymdD(mo.appointment.date)} · ${fmtMin(mo.appointment.minute)}`) : L2R(stamp(r.createdAt));
-    const wrap = document.createElement("div");
-    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:748px";
-    wrap.innerHTML = `<div dir="ltr" style="width:748px;min-height:1020px;padding:30px 34px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px"><div dir="${rtl ? "rtl" : "ltr"}">
-      <table style="width:100%;border-collapse:collapse;border-bottom:3px solid #0b6b5c"><tr>
-        <td style="padding:0 0 14px;width:52px;vertical-align:middle"><img src="assets/mada-logo.png" style="height:52px;width:auto;display:block" alt=""></td>
-        <td style="padding:0 10px 14px;vertical-align:middle;text-align:${al}"><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:11px;color:#0b6b5c">${esc(t().tagline)}</div></td>
-        <td style="padding:0 0 14px;vertical-align:middle;text-align:${ar2}"><div style="font-size:22px;font-weight:700">${esc(t().pdfT)}</div><div style="margin-top:4px;color:#6b7a80">${esc(t().pdfNo)}: <b style="color:#15304a">${L2R(no)}</b></div><div style="color:#6b7a80">${esc(t().pdfDate)}: <b style="color:#15304a">${L2R(stamp(r.createdAt))}</b></div></td>
-      </tr></table>
-      ${box(t().pdfPatient, kv(t().pdfName, esc(T(r.patient))) + kv(t().mrn, r.mrn ? L2R(r.mrn) : "") + kv(t().mobile, r.mobile ? L2R(r.mobile) : "") + kv(t().booking, L2R(r.bookingId || r.orderId || "—")) + kv(t().pdfVisit, visit))}
-      ${box(t().pdfRef, kv(t().rf_spec, esc(T(ri.spec))) + kv(t().rf_pri, esc(t()["rf_" + (o.priority === "urgent" ? "urgent" : "routine")])) + kv(t().rf_dest, esc(t()[o.dest === "ext" ? "rf_ext" : "rf_mada"])) + kv(t().rf_prov, ri.provider ? esc(T(ri.provider)) : "") + kv(t().rf_reason, esc(o.reason || "")) + kv(t().rf_rec, esc(o.rec || "")) + kv(t().rf_notes, esc(o.notes || "")))}
-      <table style="width:100%;border-collapse:collapse;margin-top:34px"><tr>
-        <td style="width:50%;vertical-align:top;padding-${rtl ? "left" : "right"}:20px"><div style="color:#6b7a80">${esc(t().rf_by)}</div><div style="font-weight:700;margin-top:4px">${esc(who(r.byDoctor)) || "—"}</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfSign)}</div></td>
-        <td style="width:50%;vertical-align:top"><div style="color:#6b7a80">&nbsp;</div><div style="margin-top:4px">&nbsp;</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfStamp)}</div></td></tr></table>
-      <div style="margin-top:26px;font-size:11px;color:#8a979c">${esc(t().pdfMade)} ${L2R(stamp(new Date()))} · ${esc(T(me && me.name))}</div></div></div>`;
-    document.body.appendChild(wrap); fixArabic(wrap); toast(t().making);
-    const sy = window.scrollY; window.scrollTo(0, 0);
-    try {
-      if (!window.html2pdf) await new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); setTimeout(bad, 15000); });
-      await window.html2pdf().set({ margin: [6, 6], filename: file, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save();
-      toast(tx("dlDone", { f: file }));
-    } catch (x) {
-      const w = window.open("", "_blank");
-      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
-      toast(t().dlFail);
-    } finally { wrap.remove(); window.scrollTo(0, sy); }
-  }
+  // Referral form PDF, drawn by medical-report.js: patient file, the visit's chief complaint and vital signs, then the referral.
+  const refPdf = (r, it) => MadaReport.downloadReferral(MadaOrders.get(r.orderId), r, it, current, toast);
 
   // Read and check one step's fields (ids f-<item>-<pre><key>). Returns the data, or null after showing the error.
   async function collect(it, fields, pre, err, r) {
