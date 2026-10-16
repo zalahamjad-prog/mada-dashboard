@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Doctor Stamps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Laboratory catalogue ---------- */
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; width: fit-content; }
+  .back svg { width: 16px; height: 16px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 8px; }
+  .ico { height: 48px; border: 1.5px solid #d9e1e3; border-radius: 10px; display: grid; place-items: center; cursor: pointer; color: #44545a; background: #fff; position: relative; }
+  .ico input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .ico svg { width: 22px; height: 22px; }
+  .ico:hover { background: #f5f8f8; }
+  .ico:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .ico:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .cic { width: 36px; height: 36px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); display: grid; place-items: center; flex: none; }
+  .cic svg { width: 19px; height: 19px; }
+  .chip svg { width: 17px; height: 17px; color: var(--purple); }
+  .chip[aria-checked="true"] svg { color: var(--primary); }
+  .ph-icon.rad { background: var(--purple-soft); color: var(--purple); }
+  .ph-icon.nurse { background: var(--green-soft); color: var(--green); }
+  .cic.g { background: var(--green-soft); color: var(--green); }
+  .chip.g svg { color: var(--green); }
+  .chip.g[aria-checked="true"] svg { color: var(--primary); }
+  .nm-i { display: flex; align-items: center; gap: 10px; min-width: 240px; }
+  .nm-i .cic { width: 32px; height: 32px; }
+  .nm-i .cic svg { width: 17px; height: 17px; }
+  .tag.rx { background: var(--orange-soft); color: var(--orange); }
+  .tag.norx { background: var(--green-soft); color: var(--green); }
+  .ph-icon.lab { background: var(--blue-soft); color: var(--blue); }
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border: 0; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .tabs button small { min-width: 22px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tabs button[aria-selected="true"] { color: var(--primary); border-color: var(--primary); }
+  .tabs button[aria-selected="true"] small { background: var(--primary-soft); }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .bar .grow { flex: 1; }
+  .search { position: relative; flex: 1; min-width: 200px; max-width: 360px; }
+  .search svg { position: absolute; top: 50%; inset-inline-start: 12px; width: 17px; height: 17px; transform: translateY(-50%); color: var(--muted); }
+  .search input { padding-inline-start: 38px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .in[readonly] { background: #f3f6f7; color: #44545a; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  textarea.in { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; font-family: inherit; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 9px; background: #fff; cursor: pointer; font-size: 13.5px; color: var(--ink); }
+  .chip small { color: var(--muted); font-size: 12px; }
+  .chip[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  /* Categories */
+  .cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .cg { padding: 18px 20px; display: grid; gap: 14px; }
+  .cg-h { display: flex; align-items: center; gap: 12px; }
+  .cg-h .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .cg-h .ic svg { width: 21px; height: 21px; }
+  .cg-h .ic.t { background: var(--blue-soft); color: var(--blue); }
+  .cg-h .ic.p { background: var(--purple-soft); color: var(--purple); }
+  .cg-h h2 { font-size: 16px; font-weight: 600; }
+  .cg-h p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .cg-h .btn { margin-inline-start: auto; height: 36px; padding: 0 12px; }
+  .cl { display: grid; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cr { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-top: 1px solid #eef2f3; }
+  .cr:first-child { border-top: 0; }
+  .cr .nm { flex: 1; min-width: 0; }
+  .cr .nm b { display: block; font-size: 14px; font-weight: 600; }
+  .cr .nm span { display: block; font-size: 12.5px; color: var(--muted); }
+  .cnt { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib { width: 34px; height: 34px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; display: grid; place-items: center; cursor: pointer; color: #44545a; flex: none; }
+  .ib svg { width: 16px; height: 16px; }
+  .ib:disabled { opacity: .4; cursor: not-allowed; }
+  .ib.red { color: var(--red); border-color: #f3c4c4; }
+  .empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  .nowrap { white-space: nowrap; }
+  .empty svg { width: 40px; height: 40px; color: #9fb3b8; display: block; margin: 0 auto 8px; }
+  /* Tables */
+  #view, #view > div, #view > div > * { min-width: 0; }
+  .table-wrap { overflow-x: auto; max-width: 100%; position: relative; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: start; font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; background: #fbfcfc; }
+  td { padding: 12px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.off td { color: #8a979c; }
+  td .nm b { display: block; font-weight: 600; }
+  td .nm span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #44545a; direction: ltr; unicode-bidi: isolate; }
+  .num { white-space: nowrap; }
+  .tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.none { background: var(--green-soft); color: var(--green); }
+  .tag.fast { background: var(--red-soft); color: var(--red); }
+  .tag.morning, .tag.optional { background: var(--orange-soft); color: var(--orange); }
+  .tag.cat { background: #f1f4f5; color: #44545a; font-weight: 500; }
+  .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .st.on { color: var(--green); }
+  .st.off { color: #8a979c; }
+  /* Modal */
+  .md-back { position: fixed; inset: 0; z-index: 70; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .md { width: min(640px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(16,35,43,.25); display: grid; grid-template-rows: auto 1fr auto; }
+  .md-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .md-h h2 { font-size: 17px; font-weight: 600; }
+  .md-b { padding: 18px 22px; display: grid; gap: 14px; }
+  .md-f { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: #fff; }
+  .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .fld { display: grid; gap: 6px; align-content: start; }
+  .fld > label, .fld > .lbl { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fld i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .err { font-size: 12.5px; color: var(--red); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  .types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .type { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid #d9e1e3; border-radius: 10px; cursor: pointer; }
+  .type input { margin-top: 3px; accent-color: var(--primary); }
+  .type b { display: block; font-size: 14px; font-weight: 600; }
+  .type span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .type:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .sw { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; width: fit-content; }
+  .sw input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .pick { border: 1px solid #d9e1e3; border-radius: 10px; max-height: 240px; overflow: auto; }
+  .pick label { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #eef2f3; font-size: 13.5px; cursor: pointer; }
+  .pick label:first-child { border-top: 0; }
+  .pick label:hover { background: #f8fafa; }
+  .pick input { width: 17px; height: 17px; accent-color: var(--primary); flex: none; }
+  .pick .grow { flex: 1; min-width: 0; }
+  .pick small { color: var(--muted); }
+  .pick-sum { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+  .pick.bad { border-color: var(--red); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pr-list { display: grid; gap: 10px; }
+  .pr { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #fbfcfc; display: grid; gap: 10px; }
+  .pr.bad { border-color: #f3b4b4; background: #fffafa; }
+  .pr-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; color: #44545a; }
+  .pr-h .code { font-weight: 400; }
+  .pr-g { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .pr .fld > label { font-size: 11.5px; }
+  .pr .in { height: 38px; font-size: 13.5px; }
+  .pr-add { display: flex; align-items: center; justify-content: center; gap: 8px; height: 42px; border: 1.5px dashed #b9d9cf; border-radius: 10px; background: #f6fbf9; color: var(--primary); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .pr-add svg { width: 17px; height: 17px; }
+  .sec-t { font-size: 14px; font-weight: 700; color: #15304a; margin-top: 4px; }
+  .sec-t + .hint { margin-top: -8px; }
+  .tag.miss { background: var(--red-soft); color: var(--red); }
+  .rng { font-size: 12.5px; color: #44545a; white-space: nowrap; }
+  @media (max-width: 760px) { .pr-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .foot { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .foot svg { width: 15px; height: 15px; color: var(--primary); }
+  @media (max-width: 900px) { .cat-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) {
+    .cg { padding: 16px; }
+    .row2, .types { grid-template-columns: minmax(0, 1fr); }
+    .md-h, .md-b, .md-f { padding-inline: 16px; }
+    .md-f .btn { flex: 1; }
+    .search { max-width: none; min-width: 0; flex-basis: 100%; }
+    .bar .btn { flex: 1; }
+  }
+  /* ---------- Doctor stamps ---------- */
+  .ph-acts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .st-note { display: flex; gap: 10px; align-items: flex-start; padding: 14px 18px; font-size: 13px; color: #44545a; line-height: 1.6; }
+  .st-note svg { width: 18px; height: 18px; color: var(--primary); flex: none; margin-top: 2px; }
+  .ds-l { display: grid; }
+  .ds-r { display: grid; grid-template-columns: minmax(0, 1.2fr) 220px auto; align-items: center; gap: 16px; padding: 16px 18px; border-top: 1px solid var(--border); }
+  .ds-r:first-child { border-top: 0; }
+  .ds-w { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .ds-w .av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #e8f0fb; color: #1d4ed8; font-weight: 600; font-size: 14px; flex: none; }
+  .ds-w b { display: block; font-size: 14.5px; font-weight: 600; }
+  .ds-w small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .ds-w .idn { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; direction: ltr; unicode-bidi: isolate; }
+  .ds-p { height: 96px; border: 1px dashed #cfd9dc; border-radius: 10px; background: #fbfcfc; display: grid; place-items: center; overflow: hidden; }
+  .ds-p img { max-width: 100%; max-height: 88px; object-fit: contain; }
+  .ds-p span { font-size: 12.5px; color: #9aa7ab; display: grid; justify-items: center; gap: 4px; }
+  .ds-p span svg { width: 22px; height: 22px; }
+  .ds-p.has { border-style: solid; background: #fff; }
+  .ds-a { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .ds-a .btn { height: 38px; padding: 0 14px; }
+  .btn-danger { background: #fff; color: #dc2626; border-color: #f3c5c5; }
+  .btn-danger:hover { background: #fdecec; }
+  .ds-meta { font-size: 11.5px; color: var(--muted); margin-top: 4px; text-align: center; }
+  .ds-l .empty { padding: 28px 16px; }
+  @media (max-width: 760px) {
+    .ds-r { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px; }
+    .ds-a { justify-content: stretch; }
+    .ds-a .btn { flex: 1; }
+    .ph-acts { width: 100%; }
+    .ph-acts .btn { flex: 1; }
+  }
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" aria-current="page" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6l-1 7h-4z"/><path d="M5 14h14v3H5z"/><path d="M8 10h8v4H8zM4 21h16"/></svg></span>
+      <div><h1 data-i18n="title">Doctor Stamps</h1><p data-i18n="subtitle">The stamp of each doctor, shown on the medical reports they approve.</p></div>
+    </div>
+    <div class="ph-acts"><a class="btn btn-ghost" href="staff.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="back">Back to Staff</span></a></div>
+  </div>
+  <section class="card st-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-i18n="note">Upload a clear image of the stamp (PNG with a transparent background is best). A new or changed stamp shows on that doctor's reports straight away.</span></section>
+  <section class="card ds-l" id="list"></section>
+</main>
+<input type="file" id="file" accept="image/png,image/jpeg" hidden>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="stamps.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Doctor stamps (admin): one stamp image per doctor (stamps.js). The medical report (medical-report.js) reads it each time it is drawn,
+  // so a new or replaced stamp is on the doctor's reports at once.
+  const MAX_MB = 2, MAX_W = 600;
+  const I18N = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Doctor Stamps", subtitle: "The stamp of each doctor, shown on the medical reports they approve.", back: "Back to Staff",
+      note: "Upload a clear image of the stamp (PNG with a transparent background is best). A new or changed stamp shows on that doctor's reports straight away.",
+      none: "No stamp yet", upload: "Upload Stamp", replace: "Replace", remove: "Remove", added: "Added {d}", saved: "Stamp saved for {n}.", removed: "Stamp removed.",
+      confirm: "Remove the stamp of {n}? It will no longer show on their reports.", badType: "Choose a PNG or JPG image.", tooBig: "The image is larger than {n} MB.",
+      readErr: "Couldn't read this image. Try another file.", storeErr: "Couldn't save the stamp. Try a smaller image.", noDocs: "No doctors yet."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "أختام الأطباء", subtitle: "ختم كل طبيب، يظهر في التقارير الطبية اللي يعتمدها.", back: "رجوع للموظفين",
+      note: "ارفع صورة واضحة للختم (الأفضل PNG بخلفية شفافة). الختم الجديد أو المعدّل يظهر في تقارير الطبيب على طول.",
+      none: "ما فيه ختم للحين", upload: "رفع الختم", replace: "تغيير", remove: "حذف", added: "أضيف {d}", saved: "انحفظ ختم {n}.", removed: "انحذف الختم.",
+      confirm: "تحذف ختم {n}؟ ما راح يظهر في تقاريره بعدها.", badType: "اختر صورة PNG أو JPG.", tooBig: "حجم الصورة أكبر من {n} ميجا.",
+      readErr: "ما قدرنا نقرأ الصورة. جرب ملف ثاني.", storeErr: "ما قدرنا نحفظ الختم. جرب صورة أصغر.", noDocs: "ما فيه أطباء للحين."
+    }
+  };
+  let current = "en", target = null;
+  const t = () => I18N[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { up: '<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>', del: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', stamp: '<path d="M9 3h6l-1 7h-4z"/><path d="M5 14h14v3H5z"/><path d="M8 10h8v4H8zM4 21h16"/>' };
+  const initials = n => String(n || "").replace(/^(Dr\.|د\.)\s*/, "").split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  const fmtD = s => new Date(s).toLocaleDateString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
+
+  function render() {
+    const docs = MadaStamps.doctors();
+    $("list").innerHTML = docs.length ? docs.map(d => { const s = MadaStamps.get(d.id);
+      return `<div class="ds-r"><div class="ds-w"><span class="av">${esc(initials(T(d.name)))}</span><span><b>${esc(T(d.name))}</b><small>${esc(T(d.spec))}${T(d.spec) ? " · " : ""}<span class="idn">${esc(d.id)}</span></small></span></div>
+        <div><div class="ds-p ${s ? "has" : ""}">${s ? `<img src="${esc(s.data)}" alt="${esc(T(d.name))}">` : `<span>${svg(IC.stamp, 1.8)}${t().none}</span>`}</div>${s ? `<div class="ds-meta">${esc(tx("added", { d: fmtD(s.at) }))}</div>` : ""}</div>
+        <div class="ds-a"><button type="button" class="btn ${s ? "btn-ghost" : "btn-primary"}" data-up="${esc(d.id)}">${svg(IC.up)}${s ? t().replace : t().upload}</button>
+          ${s ? `<button type="button" class="btn btn-danger" data-del="${esc(d.id)}">${svg(IC.del)}${t().remove}</button>` : ""}</div></div>`; }).join("")
+      : `<div class="empty">${t().noDocs}</div>`;
+  }
+  // Images are scaled down to MAX_W px wide so they stay small in browser storage.
+  function shrink(file) {
+    return new Promise((ok, bad) => {
+      const r = new FileReader();
+      r.onerror = bad;
+      r.onload = () => { const img = new Image(); img.onerror = bad; img.onload = () => {
+        const k = Math.min(1, MAX_W / img.width), c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        ok(file.type === "image/png" ? c.toDataURL("image/png") : c.toDataURL("image/jpeg", 0.92)); }; img.src = r.result; };
+      r.readAsDataURL(file);
+    });
+  }
+  $("list").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.up) { target = b.dataset.up; $("file").value = ""; $("file").click(); }
+    if (b.dataset.del) { const d = MadaStamps.doctors().find(x => x.id === b.dataset.del);
+      if (!confirm(tx("confirm", { n: T(d && d.name) }))) return; MadaStamps.remove(b.dataset.del); render(); toast(t().removed); }
+  });
+  $("file").addEventListener("change", async () => {
+    const f = $("file").files[0]; if (!f || !target) return;
+    if (!/^image\/(png|jpeg)$/.test(f.type)) return toast(t().badType);
+    if (f.size > MAX_MB * 1048576) return toast(tx("tooBig", { n: MAX_MB }));
+    let data; try { data = await shrink(f); } catch (x) { return toast(t().readErr); }
+    const d = MadaStamps.doctors().find(x => x.id === target);
+    try { MadaStamps.set(target, { data, name: f.name, by: me ? me.name : null }); } catch (x) { return toast(t().storeErr); }
+    render(); toast(tx("saved", { n: T(d && d.name) }));
+  });
+  window.addEventListener("storage", e => { if (!e.key || e.key === MadaStamps.KEY) render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = (lang === "ar" ? "مدى كير | " : "Mada Care | ") + t().title;
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>

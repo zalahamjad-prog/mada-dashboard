@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --orange: #f59e0b; --orange-soft: #fef3e2;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button { font: inherit; }
+  svg { flex-shrink: 0; }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; gap: 20px;
+    height: 68px; padding: 0 28px;
+    background: #fff; border-bottom: 1px solid var(--border);
+  }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .search {
+    flex: 1; max-width: 340px;
+    display: flex; align-items: center; gap: 10px;
+    height: 38px; padding: 0 12px;
+    border: 1px solid var(--border); border-radius: 8px; background: #fff;
+    margin-inline-start: 24px;
+  }
+  .search:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .search svg { width: 16px; height: 16px; color: var(--muted); }
+  .search input { flex: 1; border: 0; outline: 0; font: inherit; font-size: 13px; background: none; min-width: 0; }
+  .search input::placeholder { color: #8a979c; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    position: relative; width: 38px; height: 38px;
+    display: grid; place-items: center;
+    background: none; border: 0; border-radius: 8px; cursor: pointer; color: #44545a;
+  }
+  .icon-btn:hover { background: #f1f4f5; }
+  .icon-btn svg { width: 20px; height: 20px; }
+  .badge {
+    position: absolute; top: 3px; inset-inline-end: 3px;
+    min-width: 16px; height: 16px; padding: 0 4px;
+    background: var(--primary); color: #fff; border: 2px solid #fff;
+    border-radius: 8px; font-size: 9px; font-weight: 600; line-height: 12px; text-align: center;
+  }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start;
+    margin-inline-start: 6px;
+  }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { font-size: 13px; font-weight: 600; }
+  .user-role { font-size: 11px; color: var(--muted); }
+  .user-menu {
+    position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px;
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none;
+  }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; white-space: nowrap; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #dc2626; color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  /* ---------- Content ---------- */
+  main { max-width: 1240px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 20px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+
+  [hidden] { display: none !important; }
+  .notice {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 18px; background: var(--primary-soft); border: 1px solid #bfe0d5; border-radius: 12px;
+  }
+  .notice-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; }
+  .notice-icon svg { width: 22px; height: 22px; }
+  .notice-body { flex: 1; min-width: 0; }
+  .notice-title { font-size: 15px; font-weight: 600; color: var(--primary); }
+  .notice-text { margin-top: 4px; font-size: 13.5px; line-height: 1.6; color: #2c4a44; }
+  .notice-close { width: 32px; height: 32px; display: grid; place-items: center; background: none; border: 0; border-radius: 8px; cursor: pointer; color: #44545a; }
+  .notice-close:hover { background: rgba(11,107,92,.08); }
+  .notice-close svg { width: 18px; height: 18px; }
+  .hero {
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    padding: 28px 36px; min-height: 190px;
+    background: linear-gradient(110deg, #f4faf8 0%, #eef6f3 60%, #e4f1ec 100%);
+  }
+  .hero h1 { font-size: 26px; font-weight: 600; }
+  .date { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; color: #44545a; }
+  .date svg { width: 16px; height: 16px; }
+  .hero h3 { margin-top: 22px; font-size: 16px; font-weight: 600; }
+  .hero p { margin-top: 6px; font-size: 13.5px; line-height: 1.6; color: #44545a; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 20px; height: 42px; padding: 0 22px;
+    background: var(--primary); color: #fff; border: 0; border-radius: 6px; cursor: pointer;
+    font-size: 14px; font-weight: 500; box-shadow: 0 4px 12px rgba(11,107,92,.22); text-decoration: none;
+  }
+  .btn:hover { background: var(--primary-dark); }
+  .btn svg { width: 18px; height: 18px; }
+  .hero-art { width: 340px; max-width: 42%; }
+  .hero-art svg { width: 100%; height: auto; display: block; }
+
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .stat { display: flex; align-items: center; gap: 18px; padding: 20px 22px; }
+  .stat-icon { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; }
+  .stat-icon svg { width: 28px; height: 28px; }
+  .stat-icon.green { background: var(--primary-soft); color: var(--primary); }
+  .stat-icon.blue { background: var(--blue-soft); color: var(--blue); }
+  .stat-icon.orange { background: var(--orange-soft); color: var(--orange); }
+  .stat-label { font-size: 12.5px; color: #44545a; }
+  .stat-value { font-size: 24px; font-weight: 600; margin: 2px 0; }
+  .stat-note { font-size: 12px; color: #8a979c; }
+
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .panel { padding: 18px 20px 24px; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .panel-head h2 { font-size: 14px; font-weight: 600; }
+  .select {
+    appearance: none; -webkit-appearance: none;
+    height: 32px; padding: 0 30px 0 12px;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff;
+    font: inherit; font-size: 12.5px; color: var(--ink); cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+  [dir="rtl"] .select { padding: 0 12px 0 30px; background-position: left 10px center; }
+  .empty { text-align: center; padding-top: 16px; }
+  .empty svg { width: 170px; height: 110px; }
+  .empty h4 { margin-top: 12px; font-size: 15px; font-weight: 600; }
+  .empty p { margin-top: 6px; font-size: 12.5px; line-height: 1.6; color: var(--muted); max-width: 260px; margin-inline: auto; }
+
+  .services-empty {
+    margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 20px;
+    padding: 18px; border-radius: 8px; background: #f2f8f6; border: 1px solid #e3efeb;
+  }
+  .services-empty svg { width: 64px; height: 44px; }
+  .services-empty strong { display: block; font-size: 13px; font-weight: 600; }
+  .services-empty span { font-size: 12px; color: var(--muted); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1000px) {
+    .charts { grid-template-columns: 1fr; }
+    .user-meta { display: none; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 0 16px; gap: 8px; height: auto; flex-wrap: wrap; padding-top: 10px; padding-bottom: 10px; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .search { order: 4; max-width: none; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 16px; }
+    .hero { padding: 22px 20px; }
+    .hero-art { display: none; }
+    .stats { grid-template-columns: 1fr; gap: 12px; }
+  }
+  /* Nav scrolls sideways when the links do not fit. */
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" aria-current="page" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input type="search" data-i18n-ph="search" placeholder="Search patients, requests, bookings...">
+  </label>
+
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <button class="icon-btn" type="button" data-i18n-aria="notifications" aria-label="Notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+      <span class="badge">0</span>
+    </button>
+    <button class="icon-btn" type="button" data-i18n-aria="messages" aria-label="Messages">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      <span class="badge">0</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta">
+          <span class="user-name" style="display:block" id="userName">Sarah Ahmed</span>
+          <span class="user-role" style="display:block" id="userRole">Administrator</span>
+        </span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <section class="notice" id="notice" role="status" hidden>
+    <div class="notice-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></div>
+    <div class="notice-body">
+      <div class="notice-title" data-i18n="noticeTitle">Request closed</div>
+      <div class="notice-text" data-i18n="noticeText">The request has been referred to the Medical Administration for review, and the request has been closed.</div>
+    </div>
+    <button type="button" class="notice-close" id="noticeClose" data-i18n-aria="dismiss" aria-label="Dismiss">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </section>
+
+  <!-- Welcome -->
+  <section class="card hero">
+    <div>
+      <h1><span id="welcome">Welcome, Sarah</span> 👋</h1>
+      <div class="date">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        <span id="today">Today – March 15</span>
+      </div>
+      <h3 data-i18n="allSet">You're all set!</h3>
+      <p><span data-i18n="noRequests">No requests have been created yet.</span><br><span data-i18n="startBy">Start by creating your first patient request.</span></p>
+      <a class="btn" href="new-request.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-i18n="createFirst">Create First Request</span>
+      </a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 340 190">
+        <path d="M40 190 C40 90 110 30 200 30 C290 30 330 100 330 190z" fill="#dfeee9"/>
+        <path d="M60 40 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#9fd0bf"/>
+        <path d="M318 70 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#bfe0d5"/>
+        <!-- logo badge -->
+        <image href="assets/mada-logo.png" x="228" y="28" width="70" height="74" opacity=".9"/>
+        <!-- desk -->
+        <rect x="80" y="160" width="190" height="6" rx="3" fill="#cfe3dc"/>
+        <!-- person -->
+        <path d="M86 160 c0-40 18-62 46-62 s46 22 46 62z" fill="#13907a"/>
+        <path d="M120 98 l12 14 12-14" fill="#0e7a67"/>
+        <rect x="124" y="84" width="16" height="18" rx="6" fill="#f2c7a5"/>
+        <ellipse cx="132" cy="66" rx="20" ry="23" fill="#f6d2b5"/>
+        <path d="M110 66 c-2-22 10-34 24-34 15 0 25 10 24 28 -6-10-16-14-26-14 -8 0-15 6-22 20z" fill="#0f5f55"/>
+        <circle cx="153" cy="40" r="9" fill="#0f5f55"/>
+        <circle cx="125" cy="68" r="1.8" fill="#10232b"/><circle cx="140" cy="68" r="1.8" fill="#10232b"/>
+        <path d="M127 78 q5 4 10 0" stroke="#c0785a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- laptop -->
+        <path d="M160 116 h62 l-10 44 h-62z" fill="#d7e2e6"/>
+        <circle cx="187" cy="138" r="3" fill="#fff"/>
+        <rect x="140" y="156" width="80" height="5" rx="2" fill="#b8c9cf"/>
+        <path d="M150 148 c-10 2-16 6-18 12" stroke="#f2c7a5" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <!-- plant -->
+        <rect x="290" y="150" width="22" height="22" rx="4" fill="#fff" stroke="#dbe7e3"/>
+        <path d="M301 150 c-2-14 -14-18 -18-30 10 2 18 10 18 30 M301 150 c2-16 10-24 18-28 -2 12-8 20-18 28" fill="#3fa98f"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="card stat">
+      <div class="stat-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+      </div>
+      <div><div class="stat-label" data-i18n="todayReq">Today's Requests</div><div class="stat-value">0</div><div class="stat-note" data-i18n="noData">No data yet</div></div>
+    </div>
+    <div class="card stat">
+      <div class="stat-icon blue">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4"/></svg>
+      </div>
+      <div><div class="stat-label" data-i18n="confirmed">Confirmed Bookings</div><div class="stat-value">0</div><div class="stat-note" data-i18n="noData">No data yet</div></div>
+    </div>
+    <div class="card stat">
+      <div class="stat-icon orange">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <div><div class="stat-label" data-i18n="inProgress">In Progress</div><div class="stat-value">0</div><div class="stat-note" data-i18n="noData">No data yet</div></div>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section class="charts">
+    <div class="card panel">
+      <div class="panel-head">
+        <h2 data-i18n="overview">Requests Overview</h2>
+        <select class="select" aria-label="Period">
+          <option data-i18n="thisWeek">This Week</option>
+          <option data-i18n="thisMonth">This Month</option>
+          <option data-i18n="thisYear">This Year</option>
+        </select>
+      </div>
+      <div class="empty">
+        <svg viewBox="0 0 170 110" aria-hidden="true">
+          <ellipse cx="85" cy="102" rx="60" ry="6" fill="#eef4f2"/>
+          <path d="M22 40 h22 M28 34 h10" stroke="#e1ebe8" stroke-width="4" stroke-linecap="round"/>
+          <path d="M128 30 h24 M134 24 h12" stroke="#e1ebe8" stroke-width="4" stroke-linecap="round"/>
+          <path d="M58 8 h38 l16 16 v74 h-54z" fill="#fff" stroke="#9fd0bf" stroke-width="2"/>
+          <path d="M96 8 v16 h16" fill="#e6f3ef" stroke="#9fd0bf" stroke-width="2"/>
+          <rect x="66" y="40" width="38" height="28" rx="3" fill="#f2f8f6"/>
+          <polyline points="70,62 80,52 88,57 100,45" fill="none" stroke="#0b6b5c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M66 78 h30 M66 86 h22" stroke="#d3e6df" stroke-width="3" stroke-linecap="round"/>
+          <path d="M118 100 c0-14 6-22 14-26 -2 10-6 18-14 26z M50 100 c-2-12-8-18-14-20 2 10 6 16 14 20z" fill="#bfe0d5"/>
+        </svg>
+        <h4 data-i18n="noDataTitle">No Data Available Yet</h4>
+        <p data-i18n="overviewEmpty">Once requests are created, you'll see an overview of activity here.</p>
+      </div>
+    </div>
+
+    <div class="card panel">
+      <div class="panel-head"><h2 data-i18n="byStatus">Requests by Status</h2></div>
+      <div class="empty">
+        <svg viewBox="0 0 170 110" aria-hidden="true">
+          <circle cx="85" cy="54" r="42" fill="none" stroke="#dbeee8" stroke-width="14"/>
+          <path d="M85 12 a42 42 0 0 1 42 42" fill="none" stroke="#bfe0d5" stroke-width="14"/>
+          <path d="M127 54 a42 42 0 0 1 -42 42" fill="none" stroke="#d6e4f7" stroke-width="14"/>
+          <path d="M85 96 a42 42 0 0 1 -36 -20" fill="none" stroke="#f8e6c4" stroke-width="14"/>
+          <rect x="72" y="38" width="26" height="32" rx="3" fill="#fff" stroke="#9fd0bf" stroke-width="2"/>
+          <rect x="79" y="34" width="12" height="7" rx="2" fill="#9fd0bf"/>
+          <path d="M78 55 l5 5 9-9" fill="none" stroke="#0b6b5c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="30" r="2" fill="#cfe3dc"/><circle cx="150" cy="80" r="2" fill="#cfe3dc"/>
+        </svg>
+        <h4 data-i18n="noDataTitle">No Data Available Yet</h4>
+        <p data-i18n="statusEmpty">Status distribution will appear here once requests are created.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top services -->
+  <section class="card panel">
+    <div class="panel-head">
+      <h2 data-i18n="topServices">Top Services</h2>
+      <select class="select" aria-label="Period">
+        <option data-i18n="thisMonth">This Month</option>
+        <option data-i18n="thisWeek">This Week</option>
+        <option data-i18n="thisYear">This Year</option>
+      </select>
+    </div>
+    <div class="services-empty">
+      <svg viewBox="0 0 64 44" aria-hidden="true">
+        <rect x="14" y="12" width="36" height="26" rx="4" fill="#fff" stroke="#5ab9a3" stroke-width="2"/>
+        <path d="M26 12 v-4 h12 v4" fill="none" stroke="#5ab9a3" stroke-width="2"/>
+        <path d="M32 30 c-5-3-7-5-7-8 0-2 2-3 3.5-3 1.5 0 2.5 1 3.5 2 1-1 2-2 3.5-2 1.5 0 3.5 1 3.5 3 0 3-2 5-7 8z" fill="#5ab9a3"/>
+        <path d="M4 38 c0-6 4-10 8-12 M60 38 c0-6-4-10-8-12" stroke="#bfe0d5" stroke-width="2" fill="none"/>
+      </svg>
+      <div>
+        <strong data-i18n="noServices">No services requested yet</strong>
+        <span data-i18n="servicesEmpty">Top requested services will be shown here.</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="auth.js"></script>
+<script src="requests.js"></script>
+<script src="orders.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services", search: "Search patients, requests, bookings...",
+      otherLang: "العربية", notifications: "Notifications", messages: "Messages",
+      userName: "Sarah Ahmed", userRole: "Administrator",
+      profile: "My Profile", settings: "Settings", logout: "Log out",
+      welcome: "Welcome,", today: "Today",
+      allSet: "You're all set!", noRequests: "No requests have been created yet.",
+      startBy: "Start by creating your first patient request.", createFirst: "Create First Request",
+      noticeTitle: "Request closed", dismiss: "Dismiss",
+      noticeText: "The request has been referred to the Medical Administration for review, and the request has been closed.",
+      noticeDeclined: "The customer did not agree to the appointment. The request has been closed and the reason was recorded.",
+      noticeCreatedTitle: "Request created", noticeCreated: "The patient file for {p} was created and the visit was booked with {n} on {d} at {t}.",
+      noticeCreatedShort: "The request and the patient file have been created.", noticeMrn: "Medical record number: {m}.",
+      todayReq: "Today's Requests", confirmed: "Confirmed Bookings", inProgress: "In Progress", noData: "No data yet",
+      overview: "Requests Overview", byStatus: "Requests by Status", topServices: "Top Services",
+      thisWeek: "This Week", thisMonth: "This Month", thisYear: "This Year",
+      noDataTitle: "No Data Available Yet",
+      overviewEmpty: "Once requests are created, you'll see an overview of activity here.",
+      statusEmpty: "Status distribution will appear here once requests are created.",
+      noServices: "No services requested yet", servicesEmpty: "Top requested services will be shown here.",
+      statNote0: "Created today", statNote1: "Visits waiting to happen", statNote2: "Waiting for the customer or doctor",
+      noticeDoctorTitle: "Sent to the doctor", noticeDoctor: "The patient file for {p} was created ({m}). A doctor will call the patient to choose the tests."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات", search: "ابحث عن مريض أو طلب أو حجز...",
+      otherLang: "English", notifications: "الإشعارات", messages: "الرسائل",
+      userName: "سارة أحمد", userRole: "مديرة النظام",
+      profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      welcome: "مرحباً،", today: "اليوم",
+      allSet: "كل شيء جاهز!", noRequests: "لم يتم إنشاء أي طلبات بعد.",
+      startBy: "ابدأ بإنشاء أول طلب لمريض.", createFirst: "إنشاء أول طلب",
+      noticeTitle: "تم إغلاق الطلب", dismiss: "إغلاق",
+      noticeText: "تمت إحالة الطلب إلى الإدارة الطبية لمراجعته، وتم إغلاق الطلب.",
+      noticeDeclined: "لم يوافق العميل على الموعد. تم إغلاق الطلب وتسجيل السبب.",
+      noticeCreatedTitle: "تم إنشاء الطلب", noticeCreated: "تم إنشاء ملف المريض {p} وحجز الزيارة مع {n} يوم {d} الساعة {t}.",
+      noticeCreatedShort: "تم إنشاء الطلب وملف المريض.", noticeMrn: "رقم الملف الطبي: {m}.",
+      todayReq: "طلبات اليوم", confirmed: "الحجوزات المؤكدة", inProgress: "قيد التنفيذ", noData: "لا توجد بيانات بعد",
+      overview: "نظرة عامة على الطلبات", byStatus: "الطلبات حسب الحالة", topServices: "الخدمات الأكثر طلباً",
+      thisWeek: "هذا الأسبوع", thisMonth: "هذا الشهر", thisYear: "هذه السنة",
+      noDataTitle: "لا توجد بيانات بعد",
+      overviewEmpty: "بعد إنشاء الطلبات ستظهر هنا نظرة عامة على النشاط.",
+      statusEmpty: "سيظهر هنا توزيع الطلبات حسب الحالة بعد إنشائها.",
+      noServices: "لم يتم طلب أي خدمات بعد", servicesEmpty: "ستظهر هنا الخدمات الأكثر طلباً.",
+      statNote0: "أُنشئت اليوم", statNote1: "زيارات قادمة", statNote2: "بانتظار العميل أو الطبيب",
+      noticeDoctorTitle: "تم الإرسال للطبيب", noticeDoctor: "تم إنشاء ملف المريض {p} ({m}). سيتصل الطبيب بالمريض لتحديد التحاليل."
+    }
+  };
+
+  let current = "en";
+  function setLang(lang) {
+    current = lang;
+    const t = i18n[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t[el.dataset.i18nPh]);
+    if (me) {
+      document.getElementById("welcome").textContent = `${t.welcome} ${me.firstName[lang]}`;
+      document.getElementById("userName").textContent = me.name[lang];
+      document.getElementById("userRole").textContent = me.role[lang];
+      document.getElementById("avatar").textContent = me.initials[lang];
+    }
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t[el.dataset.i18nAria]));
+    const date = new Date().toLocaleDateString(lang === "ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-US", { month: "long", day: "numeric" });
+    document.getElementById("today").textContent = `${t.today} – ${date}`;
+    document.title = lang === "ar" ? "مدى كير | لوحة التحكم" : "Mada Care | Dashboard";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+  }
+
+  document.getElementById("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+
+  const user = document.getElementById("user"), userBtn = document.getElementById("userBtn");
+  userBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    userBtn.setAttribute("aria-expanded", user.classList.toggle("open"));
+  });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+
+  document.getElementById("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  { const n = MadaOrders.needsAction(), c = document.getElementById("navCount"); c.hidden = !n; c.textContent = n; }
+  // Stats from the Requests page.
+  {
+    const list = MadaOrders.all(), today = new Date().toDateString();
+    const vals = [list.filter(o => new Date(o.createdAt).toDateString() === today).length,
+      list.filter(o => o.status === "booked").length,
+      list.filter(o => o.decision === "pending" || o.decision === "on_hold").length];
+    document.querySelectorAll(".stats .stat").forEach((el, i) => {
+      el.querySelector(".stat-value").textContent = vals[i];
+      if (list.length) { const note = el.querySelector(".stat-note"); note.dataset.i18n = "statNote" + i; note.textContent = i18n[current]["statNote" + i]; }
+    });
+  }
+
+  // Notice after an emergency referral closes a request
+  let notice = ["#referred", "#declined", "#created"].includes(location.hash) ? location.hash.slice(1) : null;
+  try { const v = sessionStorage.getItem("mada-notice"); if (v) { notice = v; sessionStorage.removeItem("mada-notice"); } } catch (e) {}
+  if (notice) {
+    const $notice = document.getElementById("notice");
+    if (notice === "declined") document.querySelector("#notice .notice-text").dataset.i18n = "noticeDeclined";
+    if (notice === "doctor") {
+      let info = null; try { info = JSON.parse(sessionStorage.getItem("mada-created")); } catch (e) {}
+      document.querySelector("#notice .notice-title").dataset.i18n = "noticeDoctorTitle";
+      document.querySelector("#notice .notice-text").removeAttribute("data-i18n");
+      const renderDoc = () => { document.querySelector("#notice .notice-text").textContent = i18n[current].noticeDoctor.replace("{p}", info ? info.patient : "").replace("{m}", info ? info.mrn : ""); };
+      renderDoc();
+      document.getElementById("langToggle").addEventListener("click", renderDoc);
+    }
+    if (notice === "created") {
+      let info = null; try { info = JSON.parse(sessionStorage.getItem("mada-created")); } catch (e) {}
+      document.querySelector("#notice .notice-title").removeAttribute("data-i18n");
+      document.querySelector("#notice .notice-text").removeAttribute("data-i18n");
+      const renderCreated = () => {
+        const t = i18n[current];
+        document.querySelector("#notice .notice-title").textContent = t.noticeCreatedTitle;
+        let text = t.noticeCreatedShort;
+        if (info && info.appt && info.appt.nurse) {
+          const [y, m, d] = info.appt.date.split("-").map(Number);
+          const date = new Date(y, m - 1, d).toLocaleDateString(current === "ar" ? "ar-SA-u-ca-gregory-nu-latn" : "en-GB", { weekday: "long", day: "numeric", month: "long" });
+          const h = Math.floor(info.appt.minute / 60), mm = String(info.appt.minute % 60).padStart(2, "0"), pm = h >= 12;
+          const time = `${((h + 11) % 12) + 1}:${mm} ${current === "ar" ? (pm ? "م" : "ص") : (pm ? "PM" : "AM")}`;
+          text = t.noticeCreated.replace("{p}", info.patient).replace("{n}", info.appt.nurse[current]).replace("{d}", date).replace("{t}", time);
+        }
+        if (info && info.mrn) text += " " + t.noticeMrn.replace("{m}", info.mrn);
+        document.querySelector("#notice .notice-text").textContent = text;
+      };
+      renderCreated();
+      document.getElementById("langToggle").addEventListener("click", renderCreated);
+    }
+    setLang(current);
+    $notice.hidden = false;
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    document.getElementById("noticeClose").addEventListener("click", () => $notice.hidden = true);
+  }
+</script>
+</body>
+</html>

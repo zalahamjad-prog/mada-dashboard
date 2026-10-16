@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Medical Requests</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Stats ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .stat { display: flex; align-items: center; gap: 16px; padding: 18px 20px; }
+  .stat-icon { width: 54px; height: 54px; border-radius: 12px; display: grid; place-items: center; }
+  .stat-icon svg { width: 26px; height: 26px; }
+  .s-green { background: var(--primary-soft); color: var(--primary); }
+  .s-orange { background: var(--orange-soft); color: var(--orange); }
+  .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); }
+  .s-purple { background: var(--purple-soft); color: var(--purple); }
+  .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .stat-label { display: block; font-size: 13px; color: #44545a; font-weight: 500; }
+  .stat-value { display: block; font-size: 24px; font-weight: 700; margin: 2px 0; }
+  .stat-note { display: block; font-size: 12px; color: var(--muted); }
+
+  /* ---------- Filters ---------- */
+  .filters { padding: 18px 20px; display: grid; gap: 16px; }
+  .f-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr) minmax(0, .85fr) minmax(0, 1fr) minmax(0, 1.6fr); gap: 16px 20px; align-items: end; }
+  .f-label { display: block; margin-bottom: 8px; font-size: 12.5px; font-weight: 600; color: #2c3d43; }
+  .field { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; width: 100%; }
+  .field:focus-within, select.field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .field svg { width: 17px; height: 17px; color: var(--muted); }
+  .field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13px; }
+  .field input::placeholder { color: #8a979c; }
+  .date-f { position: relative; padding-inline-end: 4px; }
+  .date-f input[type="text"] { font-variant-numeric: tabular-nums; }
+  .cal { width: 34px; height: 34px; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .cal:hover { background: var(--primary-soft); color: var(--primary); }
+  .native { position: absolute; inset-inline-end: 0; bottom: 0; width: 34px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
+  .field.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1); }
+  .f-err { margin-top: 6px; font-size: 12px; color: var(--red); }
+  select.field { appearance: none; -webkit-appearance: none; cursor: pointer; font-size: 13px; font-weight: 500; outline: 0; padding-inline-end: 32px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; }
+  [dir="rtl"] select.field { background-position: left 12px center; }
+  .f-search { align-self: end; }
+  .f-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .f-foot .push { margin-inline-start: auto; display: flex; gap: 10px; }
+  .more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 20px; padding-top: 16px; border-top: 1px dashed var(--border); }
+  .btn[aria-expanded="true"] { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .f-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--primary); color: #fff; font-size: 10.5px; line-height: 18px; text-align: center; }
+
+  /* ---------- List ---------- */
+  .list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px 14px; flex-wrap: wrap; }
+  .list-head h2 { font-size: 17px; font-weight: 600; }
+  .list-head p { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .list-tools { display: flex; gap: 10px; position: relative; }
+  .cols-menu { position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 10; width: 220px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 28px rgba(16,35,43,.1); padding: 6px; }
+  .cols-menu label { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+  .cols-menu label:hover { background: #f5f8f8; }
+  .cols-menu input { accent-color: var(--primary); width: 15px; height: 15px; }
+  .table-wrap { padding: 0 20px 6px; overflow-x: auto; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  th { text-align: start; padding: 0; font-size: 12.5px; font-weight: 600; color: #2c3d43; background: #f5f8f8; white-space: nowrap; }
+  th:first-child { border-start-start-radius: 8px; border-end-start-radius: 8px; }
+  th:last-child { border-start-end-radius: 8px; border-end-end-radius: 8px; }
+  th .sort { display: inline-flex; align-items: center; gap: 8px; width: 100%; padding: 13px 14px; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; text-align: start; }
+  th .sort svg { width: 13px; height: 13px; color: #9aa7ab; }
+  th .sort[aria-sort="ascending"] svg, th .sort[aria-sort="descending"] svg { color: var(--primary); }
+  th.plain { padding: 13px 14px; }
+  td { padding: 13px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tbody tr:hover td { background: #fafcfc; }
+  .oid { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .oid:hover { text-decoration: underline; }
+  .bid { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .svc { display: flex; align-items: center; gap: 10px; }
+  .svc-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; }
+  .svc-icon svg { width: 17px; height: 17px; }
+  .sub { display: block; margin-top: 2px; font-size: 11.5px; color: var(--muted); }
+  .muted { color: var(--muted); }
+  .sub.rs { color: var(--orange); font-weight: 600; }
+  .rs-item s { color: var(--muted); }
+  .mobile { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+  .nowrap { white-space: nowrap; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-green { background: var(--green-soft); color: var(--green); }
+  .p-orange { background: var(--orange-soft); color: var(--orange); }
+  .p-red { background: var(--red-soft); color: var(--red); }
+  .p-blue { background: var(--blue-soft); color: var(--blue); }
+  .act { width: 32px; height: 32px; display: inline-grid; place-items: center; border: 1px solid #e0e7e9; border-radius: 8px; background: #fff; color: #44545a; text-decoration: none; }
+  .act:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .act svg { width: 16px; height: 16px; }
+  td.c-acts, th.c-acts { text-align: center; }
+
+  /* ---------- Empty state ---------- */
+  .empty { display: grid; justify-items: center; text-align: center; padding: 30px 20px 40px; }
+  .empty-art { width: 170px; height: 140px; }
+  .empty h3 { margin-top: 10px; font-size: 21px; font-weight: 700; }
+  .empty p { margin-top: 8px; font-size: 14px; line-height: 1.6; color: #44545a; max-width: 420px; }
+  .empty .btn { margin-top: 22px; height: 46px; padding: 0 30px; font-size: 14.5px; font-weight: 600; }
+  .empty .link { margin-top: 16px; font-size: 13.5px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; cursor: pointer; }
+  .empty.small .empty-art { width: 120px; height: 100px; }
+  .empty.small h3 { font-size: 17px; }
+
+  /* ---------- Time to visit ---------- */
+  .left { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .left svg { width: 14px; height: 14px; }
+  .l-green { color: var(--green); } .l-orange { color: var(--orange); } .l-red { color: var(--red); } .l-blue { color: var(--blue); }
+  .oid-btn { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+
+  @media (max-width: 1180px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .f-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .f-row .f-search { grid-column: 1 / -1; }
+    .user-meta { display: none; }
+  }
+  @media (max-width: 980px) {
+    .table-wrap { padding: 0; }
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-svc { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { text-align: end; }
+    .table-wrap td.c-acts::before { display: none !important; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .page-head .btn { width: 100%; }
+    .stats { gap: 10px; }
+    .stat { padding: 12px; gap: 10px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 10px; }
+    .stat-icon svg { width: 20px; height: 20px; }
+    .stat-value { font-size: 20px; }
+    .filters { padding: 16px; }
+    .f-row, .more { grid-template-columns: minmax(0, 1fr); }
+    .f-foot .push { margin-inline-start: 0; width: 100%; }
+    .f-foot .push .btn, .f-foot > .btn { flex: 1; }
+    .list-head { padding: 16px; }
+    .list-tools { width: 100%; }
+    .list-tools .btn { flex: 1; }
+    .empty h3 { font-size: 19px; }
+    .empty .btn { width: 100%; }
+  }
+  /* ---------- Medical requests ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .nr { position: relative; }
+  .nr-menu { position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 15; width: 280px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 28px rgba(16,35,43,.12); padding: 6px; display: grid; gap: 2px; }
+  .nr-menu button { display: grid; gap: 2px; text-align: start; padding: 10px 12px; border: 0; background: none; border-radius: 8px; cursor: pointer; }
+  .nr-menu button:hover { background: var(--primary-soft); }
+  .nr-menu b { font-size: 13.5px; font-weight: 600; }
+  .nr-menu small { font-size: 12px; color: var(--muted); }
+  @media (min-width: 1181px) { .f-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, .85fr) minmax(0, .85fr) minmax(0, 1.5fr); } }
+  .tys { display: flex; flex-wrap: wrap; gap: 6px; max-width: 320px; }
+  .ty { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 9px; border-radius: 7px; background: #f1f5f6; color: #2c3d43; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .ty svg { width: 14px; height: 14px; color: var(--primary); }
+  .mobile { direction: ltr; unicode-bidi: isolate; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  tbody tr[data-open] { cursor: pointer; }
+  tbody tr.is-new td { background: #f0faf6; }
+  .list-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-top: 1px solid #eef2f3; flex-wrap: wrap; }
+  .per-page { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #44545a; }
+  .per-page select.field { width: 76px; height: 36px; }
+  .pager { display: flex; gap: 6px; }
+  .pager button { min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; display: grid; place-items: center; }
+  .pager button svg { width: 15px; height: 15px; }
+  [dir="rtl"] .pager .arrow svg { transform: scaleX(-1); }
+  .pager button[aria-current="page"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .pager button:disabled { opacity: .45; cursor: default; }
+  .overlay { position: fixed; inset: 0; z-index: 50; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .dialog { width: min(520px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 14px; padding: 22px; display: grid; }
+  .dialog h2 { font-size: 18px; font-weight: 600; }
+  .dialog > p { margin: 4px 0 16px; font-size: 13px; color: var(--muted); }
+  .add-types { display: grid; gap: 8px; }
+  .add-ty { display: grid; gap: 6px; }
+  .add-ty label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .add-ty input[type="checkbox"] { accent-color: var(--primary); width: 16px; height: 16px; }
+  .add-ty input.field { font-size: 13px; outline: 0; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+  @media (max-width: 760px) {
+    .ph-icon { width: 40px; height: 40px; }
+    .nr, .nr .btn { width: 100%; }
+    .nr-menu { width: 100%; }
+    .list-foot { padding: 14px 16px; }
+    .table-wrap td.c-service { grid-column: 1 / -1; }
+  }
+  /* Nav scrolls sideways when the links do not fit. */
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" aria-current="page" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 11h6M9 15h4"/></svg></span>
+      <div><h1 data-i18n="title">Medical Requests</h1><p data-i18n="subtitle">View and manage all medical orders, treatment plans and follow-up activities.</p></div>
+    </div>
+    <div class="nr">
+      <button type="button" class="btn btn-primary" id="newBtn" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-i18n="newRequest">New Request</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="nr-menu" id="newMenu" hidden>
+        <button type="button" id="demoReq" hidden><b data-i18n="fromDoctor">From the doctors system</b><small data-i18n="fromDoctorSub">Demo: a doctor sends orders after a visit</small></button>
+        <button type="button" id="manualReq"><b data-i18n="manual">Add manually</b><small data-i18n="manualSub">Staff add the doctor's orders by hand</small></button>
+      </div>
+    </div>
+  </div>
+
+  <section class="stats" aria-label="Summary">
+    <div class="card stat">
+      <span class="stat-icon s-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+      <span><span class="stat-label" data-i18n="stTotal">Total Requests</span><span class="stat-value" id="stTotal">0</span><span class="stat-note" data-i18n="stTotalNote">All requests</span></span>
+    </div>
+    <div class="card stat">
+      <span class="stat-icon s-orange"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <span><span class="stat-label" data-i18n="stOpen">Open Requests</span><span class="stat-value" id="stOpen">0</span><span class="stat-note" data-i18n="stOpenNote">Not yet completed</span></span>
+    </div>
+    <div class="card stat">
+      <span class="stat-icon s-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span>
+      <span><span class="stat-label" data-i18n="stClosed">Closed Requests</span><span class="stat-value" id="stClosed">0</span><span class="stat-note" data-i18n="stClosedNote">Completed</span></span>
+    </div>
+    <div class="card stat">
+      <span class="stat-icon s-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5h.01"/></svg></span>
+      <span><span class="stat-label" data-i18n="stFollow">Requires Follow-up</span><span class="stat-value" id="stFollow">0</span><span class="stat-note" data-i18n="stFollowNote">Need attention</span></span>
+    </div>
+  </section>
+
+  <section class="card filters" aria-label="Filters">
+    <div class="f-row">
+      <div>
+        <label class="f-label" for="type" data-i18n="serviceType">Service Type</label>
+        <select class="field" id="type"><option value="" data-i18n="allServices">All Services</option></select>
+      </div>
+      <div>
+        <label class="f-label" for="status" data-i18n="status">Status</label>
+        <select class="field" id="status">
+          <option value="" data-i18n="allStatuses">All Statuses</option>
+          <option value="open" data-i18n="st_open">Open</option>
+          <option value="follow" data-i18n="st_follow">Requires follow-up</option>
+          <option value="quality" data-i18n="st_quality">In quality review</option>
+          <option value="done" data-i18n="st_done">Closed</option>
+        </select>
+      </div>
+      <div>
+        <label class="f-label" for="from" data-i18n="dateFrom">From Date</label>
+        <div class="field date-f"><input type="text" id="from" inputmode="numeric" maxlength="10" data-i18n-ph="datePh" placeholder="DD/MM/YYYY" autocomplete="off"><button type="button" class="cal" data-for="from" data-i18n-aria="pickDate" aria-label="Pick a date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button><input type="date" class="native" id="fromPick" tabindex="-1" aria-hidden="true"></div>
+      </div>
+      <div>
+        <label class="f-label" for="to" data-i18n="dateTo">To Date</label>
+        <div class="field date-f"><input type="text" id="to" inputmode="numeric" maxlength="10" data-i18n-ph="datePh" placeholder="DD/MM/YYYY" autocomplete="off"><button type="button" class="cal" data-for="to" data-i18n-aria="pickDate" aria-label="Pick a date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button><input type="date" class="native" id="toPick" tabindex="-1" aria-hidden="true"></div>
+      </div>
+      <div class="f-search">
+        <label class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input type="search" id="q" data-i18n-ph="searchPh" data-i18n-aria="search" placeholder="Booking number, patient, mobile or file number" autocomplete="off">
+        </label>
+      </div>
+    </div>
+    <div class="f-foot">
+      <div class="push">
+        <button type="button" class="btn btn-ghost" id="reset" data-i18n="reset">Reset</button>
+        <button type="button" class="btn btn-primary" id="apply">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+          <span data-i18n="apply">Apply Filters</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="emptyBox"></div>
+    <div class="list-foot" id="foot">
+      <label class="per-page"><select class="field" id="perPage"><option>10</option><option>25</option><option>50</option></select><span data-i18n="rowsPer">Rows per page</span></label>
+      <div class="pager" id="pager"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Add manually -->
+<div class="overlay" id="addOverlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="addTitle">
+    <h2 id="addTitle" data-i18n="manualTitle">Add the doctor's orders</h2>
+    <p data-i18n="manualText">Pick the visit, then the orders the doctor wrote.</p>
+    <label class="f-label" for="addBk" data-i18n="visitLbl">Visit</label>
+    <select class="field" id="addBk"></select>
+    <label class="f-label" for="addDoc" style="margin-top:14px" data-i18n="doctorLbl">Ordering doctor</label>
+    <select class="field" id="addDoc"></select>
+    <span class="f-label" style="margin-top:14px" data-i18n="ordersLbl">Orders</span>
+    <div class="add-types" id="addTypes"></div>
+    <div class="f-err" id="addErr" hidden></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="addCancel" data-i18n="cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="addGo" data-i18n="create">Create Request</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="nurses.js"></script>
+<script src="orders.js"></script>
+<script src="medical.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Medical Requests", subtitle: "View and manage all medical orders, treatment plans and follow-up activities.",
+      newRequest: "New Request", fromDoctor: "From the doctors system", fromDoctorSub: "Demo: a doctor sends orders after a visit", manual: "Add manually", manualSub: "Staff add the doctor's orders by hand",
+      stTotal: "Total Requests", stTotalNote: "All requests", stOpen: "Open Requests", stOpenNote: "Not yet completed", stClosed: "Closed Requests", stClosedNote: "Completed", stFollow: "Requires Follow-up", stFollowNote: "Need attention",
+      serviceType: "Service Type", allServices: "All Services", status: "Status", allStatuses: "All Statuses",
+      st_open: "Open", st_follow: "Requires follow-up", st_quality: "In quality review", st_done: "Closed",
+      dateFrom: "From Date", dateTo: "To Date", datePh: "DD/MM/YYYY", pickDate: "Pick a date", badDate: "Enter the date as DD/MM/YYYY.",
+      search: "Search", searchPh: "Booking number, patient, mobile or file number", reset: "Reset", apply: "Apply Filters",
+      ty_referral: "Specialty Referral", ty_doctor: "Doctor Visit", ty_nursing: "Nursing Services", ty_physio: "Physiotherapy", ty_iv: "IV Therapy", ty_radiology: "Imaging", ty_lab: "Lab Tests", ty_leave: "Sick Leave", ty_medication: "Medications", ty_plan: "Treatment plan", ty_followup: "Follow-up visit", sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_none: "Service",
+      cBooking: "Booking No.", cPatient: "Patient Name", cMobile: "Mobile Number", cFile: "File No.", cService: "Service", cStatus: "Status", cDate: "Service Date",
+      itemsDone: "{n} of {t} done", fromDoc: "Dr. {n}", rowsPer: "Rows per page", prev: "Previous page", next: "Next page",
+      emptyTitle: "No Medical Requests Yet", emptyText: "Medical requests from doctors (lab tests, radiology, medications, medical leave, follow-up or additional visits) will appear here.",
+      emptyBtn: "Create New Request", noMatchTitle: "No matching requests", noMatchText: "No requests match these filters.", clearFilters: "Clear filters",
+      manualTitle: "Add the doctor's orders", manualText: "Pick the visit, then the orders the doctor wrote.", visitLbl: "Visit", doctorLbl: "Ordering doctor", ordersLbl: "Orders",
+      titlePh: "What the doctor ordered", cancel: "Cancel", create: "Create Request", needVisit: "There are no visits yet. A visit appears here once a booking is paid.",
+      needType: "Choose at least one order and write what it is.", created: "{id} created with {n} orders.", demoMade: "{id} received from {d}.",
+      noVisit: "No visit", sar: "SAR", newTag: "New"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "الطلبات الطبية", subtitle: "عرض وإدارة طلبات الأطباء والخطط العلاجية وأعمال المتابعة.",
+      newRequest: "طلب جديد", fromDoctor: "من نظام الأطباء", fromDoctorSub: "تجربة: الطبيب يرسل طلباته بعد الزيارة", manual: "إضافة يدوية", manualSub: "الموظف يضيف طلبات الطبيب بنفسه",
+      stTotal: "إجمالي الطلبات", stTotalNote: "كل الطلبات", stOpen: "الطلبات المفتوحة", stOpenNote: "لم تكتمل بعد", stClosed: "الطلبات المغلقة", stClosedNote: "مكتملة", stFollow: "تحتاج متابعة", stFollowNote: "تحتاج انتباه",
+      serviceType: "نوع الخدمة", allServices: "كل الخدمات", status: "الحالة", allStatuses: "كل الحالات",
+      st_open: "مفتوح", st_follow: "يحتاج متابعة", st_quality: "عند الجودة", st_done: "مغلق",
+      dateFrom: "من تاريخ", dateTo: "إلى تاريخ", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.",
+      search: "بحث", searchPh: "رقم الحجز أو اسم المريض أو الجوال أو رقم الملف", reset: "إعادة تعيين", apply: "تطبيق الفلاتر",
+      ty_referral: "تحويل لتخصص آخر", ty_doctor: "زيارة طبيب", ty_nursing: "خدمات التمريض", ty_physio: "علاج طبيعي", ty_iv: "محاليل وريدية", ty_radiology: "أشعة", ty_lab: "تحاليل", ty_leave: "إجازة مرضية", ty_medication: "أدوية", ty_plan: "خطة علاجية", ty_followup: "زيارة متابعة", sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل الوريدية", sv_none: "خدمة",
+      cBooking: "رقم الحجز", cPatient: "اسم المريض", cMobile: "رقم الجوال", cFile: "رقم الملف", cService: "الخدمة", cStatus: "الحالة", cDate: "تاريخ الخدمة",
+      itemsDone: "تم {n} من {t}", fromDoc: "{n}", rowsPer: "عدد الصفوف", prev: "الصفحة السابقة", next: "الصفحة التالية",
+      emptyTitle: "لا توجد طلبات طبية بعد", emptyText: "تظهر هنا طلبات الأطباء بعد الزيارة: التحاليل والأشعة والأدوية والإجازات المرضية والمتابعة أو الزيارات الإضافية.",
+      emptyBtn: "إنشاء طلب جديد", noMatchTitle: "لا توجد طلبات مطابقة", noMatchText: "لا توجد طلبات تطابق هذه الفلاتر.", clearFilters: "مسح الفلاتر",
+      manualTitle: "إضافة طلبات الطبيب", manualText: "اختر الزيارة، ثم الطلبات اللي كتبها الطبيب.", visitLbl: "الزيارة", doctorLbl: "الطبيب الطالب", ordersLbl: "الطلبات",
+      titlePh: "وش طلب الطبيب", cancel: "إلغاء", create: "إنشاء الطلب", needVisit: "ما فيه زيارات بعد. الزيارة تظهر هنا بعد ما يندفع الحجز.",
+      needType: "اختر طلب واحد على الأقل واكتب وش هو.", created: "تم إنشاء {id} وفيه {n} طلبات.", demoMade: "وصل {id} من {d}.",
+      noVisit: "بدون زيارة", sar: "ريال", newTag: "جديد"
+    }
+  };
+  let current = "en";
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
+  const T = v => MadaOrders.text(v, current);
+  const pad = n => String(n).padStart(2, "0");
+  const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const iso = s => "⁦" + s + "⁩";
+  const fmtDate = s => { const [y, m, d] = s.split("-"); return iso(`${d}/${m}/${y}`); };
+
+  const TY_ICON = {
+    referral: '<path d="M4 12h12M12 6l6 6-6 6"/><path d="M20 5v14"/>',
+    doctor: '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    nursing: '<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M12 10v5M9.5 12.5h5"/>',
+    physio: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>',
+    iv: '<rect x="7" y="2.5" width="10" height="11" rx="2"/><path d="M10 6.5h4M12 13.5v3M12 16.5c0 3 3 3 3 5"/>',
+    lab: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/>',
+    radiology: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/>',
+    medication: '<rect x="3" y="9" width="18" height="7" rx="3.5" transform="rotate(-45 12 12.5)"/><path d="m9.5 10 5 5"/>',
+    leave: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 14h6M12 11v6"/>',
+    plan: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 14 2 2 4-4"/>',
+    followup: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M12 13v4M10 15h4"/>'
+  };
+  // Main service of the visit, same icons and names as the Bookings page.
+  const ICONS = {
+    nursing: ['s-green', '<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M12 10v5M9.5 12.5h5"/>'],
+    doctor: ['s-blue', '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>'],
+    blood: ['s-red', '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>'],
+    iv: ['s-purple', '<rect x="7" y="2.5" width="10" height="11" rx="2"/><path d="M10 6.5h4M12 13.5v3M12 16.5c0 3 3 3 3 5"/>'],
+    none: ['s-gray', '<circle cx="12" cy="12" r="8"/>']
+  };
+  const SVCS = ["doctor", "nursing", "blood", "iv"];
+  const SORT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 9 4-4 4 4M8 15l4 4 4-4"/></svg>';
+  const orderOf = r => MadaOrders.get(r.orderId);
+  const visitDate = r => { const o = orderOf(r); return o && o.appointment ? o.appointment.date : r.createdAt.slice(0, 10); };
+  const stateOf = r => r.status === "open" ? (MadaMedical.needsFollowUp(r) ? "follow" : "open") : r.status;
+  const PILL = { open: "p-orange", follow: "p-red", quality: "p-blue", done: "p-green" };
+
+  // ---------- Filters ----------
+  const blank = () => ({ type: "", status: "", from: "", to: "", q: "" });
+  let applied = blank(), page = 1, sort = { k: "date", dir: -1 }, perPage = 10;
+  function fromDmy(v) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v); if (!m) return null;
+    const d = new Date(+m[3], +m[2] - 1, +m[1]);
+    return d.getDate() === +m[1] && d.getMonth() === +m[2] - 1 ? ymd(d) : null;
+  }
+  const toDmy = v => v ? v.split("-").reverse().join("/") : "";
+  const readUI = () => ({ type: $("type").value, status: $("status").value, from: fromDmy($("from").value) || "", to: fromDmy($("to").value) || "", q: $("q").value.trim() });
+  function writeUI(f) { $("type").value = f.type; $("status").value = f.status; $("q").value = f.q; $("from").value = toDmy(f.from); $("to").value = toDmy(f.to); ["from", "to"].forEach(k => $(k).closest(".field").classList.remove("bad")); }
+  const datesOk = () => ["from", "to"].every(k => { const v = $(k).value.trim(), ok = !v || !!fromDmy(v); $(k).closest(".field").classList.toggle("bad", !ok); return ok; });
+  ["from", "to"].forEach(k => {
+    $(k).addEventListener("input", e => {
+      const dg = e.target.value.replace(/\D/g, "").slice(0, 8);
+      e.target.value = dg.length > 4 ? `${dg.slice(0, 2)}/${dg.slice(2, 4)}/${dg.slice(4)}` : dg.length > 2 ? `${dg.slice(0, 2)}/${dg.slice(2)}` : dg;
+      e.target.closest(".field").classList.remove("bad");
+    });
+    $(k + "Pick").addEventListener("change", e => { $(k).value = toDmy(e.target.value); });
+  });
+  document.querySelectorAll(".cal").forEach(b => b.addEventListener("click", () => {
+    const p = $(b.dataset.for + "Pick"); p.value = fromDmy($(b.dataset.for).value) || "";
+    try { p.showPicker(); } catch (e) { p.focus(); p.click(); }
+  }));
+  function matches(r, f) {
+    if (f.type && r.service !== f.type) return false;
+    if (f.status && !(f.status === "open" ? r.status === "open" : stateOf(r) === f.status)) return false;
+    const day = visitDate(r);
+    if (f.from && day < f.from) return false;
+    if (f.to && day > f.to) return false;
+    if (f.q) {
+      const q = f.q.toLowerCase(), o = orderOf(r) || {};
+      if (![r.id, r.bookingId, r.orderId, r.mobile, r.mrn, r.patient && r.patient.en, r.patient && r.patient.ar].filter(Boolean).join(" ").toLowerCase().includes(q)) return false;
+    }
+    return true;
+  }
+
+  // ---------- Render ----------
+  const COLS = [["booking", "cBooking"], ["patient", "cPatient"], ["mobile", "cMobile"], ["file", "cFile"], ["service", "cService"], ["status", "cStatus"], ["date", "cDate"]];
+  const sortVal = { booking: r => r.id, patient: r => T(r.patient) || "", mobile: r => r.mobile || "", file: r => r.mrn || "", service: r => t()["sv_" + (r.service || "none")], status: r => stateOf(r), date: r => visitDate(r) + r.createdAt };
+  function render() {
+    const all = MadaMedical.all();
+    $("stTotal").textContent = all.length;
+    $("stOpen").textContent = all.filter(r => r.status === "open").length;
+    $("stClosed").textContent = all.filter(r => r.status !== "open").length;
+    $("stFollow").textContent = all.filter(MadaMedical.needsFollowUp).length;
+    const tv = $("type").value;
+    $("type").innerHTML = `<option value="">${t().allServices}</option>` + SVCS.map(k => `<option value="${k}">${t()["sv_" + k]}</option>`).join("");
+    $("type").value = tv;
+
+    const list = all.filter(r => matches(r, applied));
+    const fn = sortVal[sort.k];
+    list.sort((a, b) => { const x = fn(a), y = fn(b); return (x > y ? 1 : x < y ? -1 : 0) * sort.dir; });
+    const pages = Math.max(1, Math.ceil(list.length / perPage)); page = Math.min(page, pages);
+    const rows = list.slice((page - 1) * perPage, page * perPage);
+
+    $("thead").innerHTML = COLS.map(([k, l]) => `<th class="c-${k}"><button type="button" class="sort" data-sort="${k}" aria-sort="${sort.k === k ? (sort.dir > 0 ? "ascending" : "descending") : "none"}">${t()[l]}${SORT_ICON}</button></th>`).join("");
+    const fresh = new URLSearchParams(location.search).get("new");
+    $("rows").innerHTML = rows.map(r => {
+      const pr = MadaMedical.progress(r), st = stateOf(r);
+      return `<tr data-open="${esc(r.id)}" class="${fresh === r.id ? "is-new" : ""}">
+        <td class="c-booking" data-l="${esc(t().cBooking)}"><a class="oid" href="medical-request.html?id=${encodeURIComponent(r.id)}">${esc(r.bookingId || r.orderId || "—")}</a><span class="sub">${esc(r.id)}</span></td>
+        <td class="c-patient" data-l="${esc(t().cPatient)}">${esc(T(r.patient) || "—")}</td>
+        <td class="c-mobile" data-l="${esc(t().cMobile)}"><span class="mobile">${esc(r.mobile || "—")}</span></td>
+        <td class="c-file" data-l="${esc(t().cFile)}"><span class="mobile">${esc(r.mrn || "—")}</span></td>
+        <td class="c-service" data-l="${esc(t().cService)}">${(([cls, path]) => `<div class="svc"><span class="svc-icon ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${path}</svg></span><span>${esc(t()["sv_" + (r.service || "none")])}</span></div>`)(ICONS[r.service] || ICONS.none)}</td>
+        <td class="c-status" data-l="${esc(t().cStatus)}"><span class="pill ${PILL[st]}"><span class="dot"></span>${t()["st_" + st]}</span><span class="sub">${esc(tx("itemsDone", { n: pr.done, t: pr.total }))}</span></td>
+        <td class="c-date" data-l="${esc(t().cDate)}"><span class="nowrap">${fmtDate(visitDate(r))}</span></td></tr>`;
+    }).join("");
+
+    const art = `<svg class="empty-art" viewBox="0 0 170 140" fill="none" aria-hidden="true">
+      <circle cx="80" cy="74" r="60" fill="#e6f3ef"/>
+      <g stroke="#bfe0d5" stroke-width="2.4" stroke-linecap="round"><path d="M140 22l5-7M148 34h8"/></g>
+      <rect x="48" y="30" width="62" height="82" rx="8" fill="#fff" stroke="#0b6b5c" stroke-width="3"/>
+      <rect x="66" y="23" width="26" height="14" rx="4" fill="#fff" stroke="#0b6b5c" stroke-width="3"/>
+      <g fill="#9fd2c3"><circle cx="62" cy="56" r="4"/><circle cx="62" cy="72" r="4"/><circle cx="62" cy="88" r="4"/></g>
+      <g stroke="#9fd2c3" stroke-width="4" stroke-linecap="round"><path d="M72 56h24M72 72h24M72 88h14"/></g>
+      <circle cx="112" cy="104" r="19" fill="#0b6b5c" stroke="#fff" stroke-width="4"/>
+      <path d="M112 95v18M103 104h18" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>`;
+    const box = $("emptyBox");
+    if (!all.length) box.innerHTML = `<div class="empty">${art}<h3>${t().emptyTitle}</h3><p>${t().emptyText}</p>
+        <button type="button" class="btn btn-primary" id="emptyNew"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>${t().emptyBtn}</button></div>`;
+    else if (!list.length) box.innerHTML = `<div class="empty small">${art}<h3>${t().noMatchTitle}</h3><p>${t().noMatchText}</p><button type="button" class="link" id="clearF">${t().clearFilters}</button></div>`;
+    else box.innerHTML = "";
+    if ($("emptyNew")) $("emptyNew").addEventListener("click", e => { e.stopPropagation(); openMenu(); });
+    if ($("clearF")) $("clearF").addEventListener("click", resetFilters);
+
+    const arrow = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="${d}"/></svg>`;
+    $("pager").innerHTML = `<button type="button" class="arrow" data-pg="${page - 1}" ${page <= 1 ? "disabled" : ""} aria-label="${t().prev}">${arrow("M19 12H5M11 6l-6 6 6 6")}</button>
+      ${Array.from({ length: pages }, (_, i) => `<button type="button" data-pg="${i + 1}" ${i + 1 === page ? 'aria-current="page"' : ""}>${i + 1}</button>`).join("")}
+      <button type="button" class="arrow" data-pg="${page + 1}" ${page >= pages ? "disabled" : ""} aria-label="${t().next}">${arrow("M5 12h14M13 6l6 6-6 6")}</button>`;
+  }
+
+  // ---------- Events ----------
+  function resetFilters() { applied = blank(); writeUI(applied); page = 1; render(); }
+  $("apply").addEventListener("click", () => { if (!datesOk()) return toast(t().badDate); applied = readUI(); page = 1; render(); });
+  $("reset").addEventListener("click", resetFilters);
+  $("q").addEventListener("keydown", e => { if (e.key === "Enter" && datesOk()) { applied = readUI(); page = 1; render(); } });
+  $("thead").addEventListener("click", e => { const b = e.target.closest("[data-sort]"); if (!b) return; sort = sort.k === b.dataset.sort ? { k: sort.k, dir: -sort.dir } : { k: b.dataset.sort, dir: 1 }; render(); });
+  $("rows").addEventListener("click", e => { if (e.target.closest("a")) return; const tr = e.target.closest("[data-open]"); if (tr) location.href = "medical-request.html?id=" + encodeURIComponent(tr.dataset.open); });
+  $("pager").addEventListener("click", e => { const b = e.target.closest("[data-pg]"); if (b && !b.disabled) { page = +b.dataset.pg; render(); } });
+  $("perPage").addEventListener("change", e => { perPage = +e.target.value; page = 1; render(); });
+
+  // New request menu
+  function openMenu() { $("newMenu").hidden = false; $("newBtn").setAttribute("aria-expanded", true); }
+  function closeMenu() { $("newMenu").hidden = true; $("newBtn").setAttribute("aria-expanded", false); }
+  $("newBtn").addEventListener("click", e => { e.stopPropagation(); $("newMenu").hidden ? openMenu() : closeMenu(); });
+  $("newMenu").addEventListener("click", e => e.stopPropagation());
+  document.addEventListener("click", closeMenu);
+
+  // Visits a medical request can belong to: paid bookings first, then any paid visit.
+  const visits = () => MadaOrders.all().filter(o => o.payment === "paid" && o.medical !== "emergency")
+    .sort((a, b) => (b.bookingId ? 1 : 0) - (a.bookingId ? 1 : 0) || b.createdAt.localeCompare(a.createdAt));
+  const reqFrom = (o, doctorId, items, source) => (o = o.bookingId ? o : MadaOrders.update(o.id, { payment: "paid" }), { orderId: o.id, bookingId: o.bookingId || null, mrn: o.mrn, patient: o.patient, mobile: o.mobile, service: o.service,
+    doctorId, source, createdBy: source === "staff" ? me.name : null, byDoctor: (MadaOrders.DOCTORS.find(d => d.id === doctorId) || {}).name || null, items });
+
+  // Demo: the doctors system sends a request after a visit.
+  $("demoReq").hidden = !MadaStore.SAMPLES; // demo only, hidden with real data
+  $("demoReq").addEventListener("click", () => {
+    closeMenu();
+    const v = visits(); if (!v.length) return toast(t().needVisit);
+    const used = new Set(MadaMedical.all().map(r => r.orderId));
+    const o = v.find(x => !used.has(x.id)) || v[0];
+    const doctorId = (o.booking && o.booking.doctorId) || "D01";
+    const sets = [["lab", "radiology", "leave", "doctor"], ["referral", "lab", "nursing"], ["physio", "radiology", "leave"]];
+    const types = sets[MadaMedical.all().length % sets.length];
+    // TODO: the doctors system calls the backend; the backend creates the request and notifies the team.
+    const r = MadaMedical.add(reqFrom(o, doctorId, types.map(MadaMedical.sampleItem), "doctor"));
+    render(); toast(tx("demoMade", { id: r.id, d: T(MadaOrders.DOCTORS.find(d => d.id === doctorId).name) }));
+  });
+
+  // Add manually
+  function openAdd() {
+    closeMenu();
+    const v = visits(); if (!v.length) return toast(t().needVisit);
+    $("addBk").innerHTML = v.map(o => `<option value="${esc(o.id)}">${esc(o.bookingId || o.id)} · ${esc(T(o.patient) || o.mobile)}</option>`).join("");
+    $("addDoc").innerHTML = MadaOrders.DOCTORS.map(d => `<option value="${d.id}">${esc(T(d.name))} · ${esc(T(d.spec))}</option>`).join("");
+    $("addTypes").innerHTML = MadaMedical.TYPES.map(k => `<div class="add-ty"><label><input type="checkbox" value="${k}"><span class="ty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${TY_ICON[k]}</svg>${t()["ty_" + k]}</span></label>
+      <input class="field" data-title="${k}" maxlength="120" dir="auto" placeholder="${esc(t().titlePh)}" hidden></div>`).join("");
+    $("addErr").hidden = true; $("addOverlay").hidden = false; $("addBk").focus();
+  }
+  $("manualReq").addEventListener("click", openAdd);
+  $("addTypes").addEventListener("change", e => { if (e.target.type !== "checkbox") return; const inp = document.querySelector(`[data-title="${e.target.value}"]`); inp.hidden = !e.target.checked; if (e.target.checked) inp.focus(); });
+  $("addCancel").addEventListener("click", () => $("addOverlay").hidden = true);
+  $("addOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) $("addOverlay").hidden = true; });
+  $("addGo").addEventListener("click", () => {
+    const items = [...document.querySelectorAll("#addTypes input:checked")].map(c => {
+      const v = document.querySelector(`[data-title="${c.value}"]`).value.trim();
+      return v ? { type: c.value, title: { en: v, ar: v }, details: null } : null;
+    });
+    if (!items.length || items.some(x => !x)) { $("addErr").textContent = t().needType; $("addErr").hidden = false; return; }
+    const o = MadaOrders.get($("addBk").value);
+    const r = MadaMedical.add(reqFrom(o, $("addDoc").value, items, "staff"));
+    $("addOverlay").hidden = true; render(); toast(tx("created", { id: r.id, n: items.length }));
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { $("addOverlay").hidden = true; closeMenu(); } });
+
+  window.addEventListener("storage", e => { if (!e.key || e.key === "mada-medical" || e.key === "mada-orders") render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  // ---------- Language & header ----------
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | الطلبات الطبية" : "Mada Care | Medical Requests";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  MadaMedical.linkBookings();
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  setInterval(render, 60000);
+</script>
+</body>
+</html>

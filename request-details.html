@@ -1,0 +1,1904 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Request Details</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c; --primary-dark: #08584b; --primary-soft: #e6f3ef;
+    --ink: #10232b; --muted: #6b7a80; --border: #e3e8ea; --page: #f5f7f8; --card: #ffffff;
+    --red: #dc2626; --red-dark: #b91c1c; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2; --green: #15803d; --green-soft: #e7f6ec; --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, textarea { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 24px 28px 48px; display: grid; gap: 16px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  #content { display: grid; gap: 16px; }
+  .head { display: flex; align-items: center; gap: 14px; }
+  .back { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: #fff; display: grid; place-items: center; color: var(--ink); text-decoration: none; }
+  .back:hover { background: #f1f4f5; }
+  .back svg { width: 20px; height: 20px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .head h1 { font-size: 22px; font-weight: 600; }
+  .head p { margin-top: 2px; font-size: 13px; color: var(--muted); }
+
+  .strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .strip > div { display: flex; align-items: center; gap: 14px; padding: 18px 22px; min-width: 0; }
+  .strip > div + div { border-inline-start: 1px solid var(--border); }
+  .strip svg { width: 24px; height: 24px; color: #44545a; }
+  .strip small { display: block; font-size: 12px; color: var(--muted); }
+  .strip strong { display: flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 16px; font-weight: 600; }
+  .strip .oid { color: var(--primary); }
+  .strip.four { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, .8fr) minmax(0, 1.5fr); }
+  .strip .bid, .pdf-btn { white-space: nowrap; }
+  @media (max-width: 1100px) { .strip.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } .strip.four > div:nth-child(3) { border-inline-start: 0; } .strip.four > div:nth-child(n+3) { border-top: 1px solid var(--border); } }
+  .strip .bid { color: var(--ink); }
+  .pdf-btn { margin-inline-start: auto; }
+  .bk-hero .pdf-btn { margin-inline-start: 0; background: #fff; }
+  .copy { width: 26px; height: 26px; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .copy:hover { background: #f1f4f5; color: var(--primary); }
+  .copy svg { width: 15px; height: 15px; }
+
+  .sec { padding: 20px 22px 22px; }
+  .sec h2 { font-size: 16px; font-weight: 600; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .lock-tag { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; background: #f0f3f4; color: #44545a; font-size: 12px; font-weight: 500; }
+  .lock-tag svg { width: 13px; height: 13px; }
+  .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 0 28px; }
+  .row2 > div + div { border-inline-start: 1px solid var(--border); padding-inline-start: 28px; }
+  .lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+  .ro { display: flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 14px; border: 1px solid #dfe5e7; border-radius: 8px; background: #f8fafa; font-size: 15px; font-weight: 500; }
+  .ro svg { width: 18px; height: 18px; color: #44545a; }
+  .ro .num { direction: ltr; unicode-bidi: isolate; letter-spacing: .02em; }
+  .srcs { display: flex; flex-wrap: wrap; border: 1px solid #dfe5e7; border-radius: 8px; overflow: hidden; width: fit-content; max-width: 100%; }
+  .src { display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 22px; font-size: 13.5px; color: #8a979c; background: #fff; }
+  .src + .src { border-inline-start: 1px solid #dfe5e7; }
+  .src svg { width: 17px; height: 17px; }
+  .src.on { background: var(--primary-soft); color: var(--ink); font-weight: 600; box-shadow: inset 0 0 0 1px var(--primary); }
+  .src.on svg { color: var(--primary); }
+  .row3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) auto; gap: 0 24px; }
+  .row3 > div + div { border-inline-start: 1px solid var(--border); padding-inline-start: 24px; }
+  .row3 .src { padding: 0 14px; }
+  .row3 .srcs { flex-wrap: nowrap; }
+  .svc-row { grid-template-columns: minmax(0, 1fr) auto; }
+  .svc-opts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .svc-opt { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 14px; border: 1px solid #dfe5e7; border-radius: 8px; font-size: 13.5px; color: #8a979c; }
+  .svc-opt svg { width: 20px; height: 20px; }
+  .svc-opt .radio { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #c3ccd0; margin-inline-start: 6px; }
+  .svc-opt.on { background: var(--primary-soft); border-color: var(--primary); color: var(--ink); font-weight: 600; }
+  .svc-opt.on svg { color: var(--primary); }
+  .svc-opt.on .radio { border: 5px solid var(--primary); }
+  textarea.ro-area.rej { background: #fff8f8; border-color: #f3d0d0; min-height: 90px; }
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+  .status-chip { display: inline-flex; align-items: center; gap: 10px; height: 44px; padding: 0 18px; border-radius: 8px; font-size: 15px; font-weight: 600; }
+  .status-chip svg { width: 22px; height: 22px; }
+  .emg { background: var(--red-soft); color: var(--red); border: 1px solid #f6caca; }
+  .non { background: var(--green-soft); color: var(--green); border: 1px solid #bfe3cb; }
+  .block { margin-top: 20px; }
+  .checks { max-width: 480px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 10px; }
+  .checks small { display: block; font-size: 12.5px; font-weight: 500; margin-bottom: 10px; }
+  .check { display: flex; align-items: center; gap: 10px; font-size: 13.5px; padding: 4px 0; }
+  .check input { width: 16px; height: 16px; accent-color: var(--primary); }
+  textarea.ro-area { width: 100%; min-height: 70px; padding: 12px 14px; border: 1px solid #dfe5e7; border-radius: 8px; background: #f8fafa; resize: none; font-size: 13.5px; line-height: 1.6; cursor: not-allowed; }
+  .locked-note { display: flex; gap: 10px; align-items: flex-start; margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: #f6f8f9; border: 1px dashed #c9d3d6; font-size: 13px; color: #44545a; line-height: 1.6; }
+  .locked-note svg { width: 18px; height: 18px; margin-top: 1px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 46px; padding: 0 22px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; }
+  .btn svg { width: 18px; height: 18px; }
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-danger:hover { background: var(--red-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn:disabled { background: #e9edee; color: #7b898e; cursor: not-allowed; }
+  .close-row { display: flex; justify-content: center; margin-top: 22px; }
+  .close-row .btn { width: min(470px, 100%); }
+  .after { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 22px; background: #fafbfb; }
+  .after b { font-size: 13.5px; font-weight: 600; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+  .p-red { background: var(--red-soft); color: var(--red); border: 1px solid #f6caca; }
+  .p-gray { background: #eef1f2; color: #44545a; border: 1px solid #dde3e5; }
+  .p-green { background: var(--green-soft); color: var(--green); border: 1px solid #bfe3cb; }
+  .p-orange { background: var(--orange-soft); color: var(--orange); border: 1px solid #f6d9a8; }
+  .p-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid #cfe0fd; }
+  .after .who { font-size: 12.5px; color: var(--muted); }
+  .closure { margin-top: 20px; padding: 16px; border-radius: 10px; background: #f8fafa; border: 1px solid var(--border); }
+  .closure h3 { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .closure h3 svg { width: 18px; height: 18px; color: var(--green); }
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; }
+  .facts div { min-width: 0; }
+  .facts dt { font-size: 12px; color: var(--muted); }
+  .facts dd { margin-top: 3px; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; line-height: 1.5; }
+  .facts .wide { grid-column: 1 / -1; }
+  .items { margin-top: 4px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .items div { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; font-size: 13.5px; border-bottom: 1px solid #eef2f3; }
+  .items div:last-child { border-bottom: 0; }
+  .items code { font-family: inherit; font-size: 11.5px; color: var(--muted); margin-inline-end: 6px; }
+  .items .total { background: #f8fafa; font-weight: 600; }
+  .muted { color: var(--muted); font-size: 13px; }
+
+  .overlay { position: fixed; inset: 0; z-index: 50; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .dialog { width: min(500px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 20px 50px rgba(16,35,43,.25); }
+  .dialog h2 { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .dialog h2 svg { width: 22px; height: 22px; color: var(--red); }
+  .dialog p { margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .outs { display: grid; gap: 8px; margin: 16px 0 14px; }
+  .outs label { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border: 1px solid #d9e1e3; border-radius: 10px; cursor: pointer; font-size: 13.5px; }
+  .outs label:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .outs input { width: 16px; height: 16px; accent-color: var(--primary); }
+  .dialog textarea { width: 100%; min-height: 90px; padding: 12px 14px; border: 1px solid #d9e1e3; border-radius: 8px; font-size: 13.5px; line-height: 1.6; resize: vertical; }
+  .dialog textarea:focus { outline: 0; border-color: var(--primary); }
+  .dialog textarea.bad { border-color: var(--red); }
+  .err { margin-top: 6px; font-size: 12.5px; color: var(--red); }
+  .dialog-actions { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; max-width: calc(100% - 32px); }
+  .missing { text-align: center; padding: 48px 20px; }
+  .missing a { color: var(--primary); font-weight: 600; }
+
+
+  /* ---------- Full request (not locked) ---------- */
+  .status-chip.wait { background: var(--orange-soft); color: var(--orange); border: 1px solid #f6d9a8; }
+  .banner { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: var(--orange-soft); border: 1px solid #f6d9a8; font-size: 13px; line-height: 1.6; color: #6b4a0c; }
+  .banner.info { background: var(--blue-soft); border-color: #cfe0fd; color: #1e4fa3; }
+  .banner.gray { background: #f6f8f9; border-color: var(--border); color: #44545a; }
+  .banner > svg { width: 18px; height: 18px; }
+  .banner span { flex: 1 1 260px; }
+  .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; }
+  .grid2 .wide { grid-column: 1 / -1; }
+  .fld { min-width: 0; }
+  .fld .opt { font-weight: 400; color: var(--muted); }
+  .in, .sel, .area { width: 100%; height: 46px; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; }
+  .sel { appearance: none; padding-inline-end: 38px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center; cursor: pointer; }
+  [dir="rtl"] .sel { background-position: left 14px center; }
+  .area { height: auto; min-height: 84px; padding: 12px 14px; line-height: 1.6; resize: vertical; }
+  .in:focus, .sel:focus, .area:focus { outline: 0; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); }
+  .in:disabled, .sel:disabled, .area:disabled { background: #f8fafa; color: #44545a; cursor: not-allowed; }
+  .in.bad, .area.bad { border-color: var(--red); }
+  .ltr { direction: ltr; }
+  [dir="rtl"] .ltr { text-align: right; }
+  .in-ic { position: relative; }
+  .in-ic svg { position: absolute; top: 50%; transform: translateY(-50%); inset-inline-start: 13px; width: 18px; height: 18px; color: #8a979c; pointer-events: none; }
+  .in-ic .in { padding-inline-start: 40px; }
+  [dir="rtl"] .in-ic .in.ltr { padding-left: 14px; padding-right: 40px; }
+  .hint { display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .hint:empty { display: none; }
+  .hint svg { width: 14px; height: 14px; }
+  .hint.bad { color: var(--red); }
+  .hint.ok { color: var(--green); }
+  .sec-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .sec-actions .saved { margin-inline-end: auto; font-size: 12.5px; color: var(--muted); }
+  .bk-lock { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; padding: 12px 14px; border-radius: 10px; background: var(--green-soft); border: 1px solid #bfe3cb; color: #14532d; font-size: 13px; line-height: 1.6; }
+  .bk-lock > svg { width: 18px; height: 18px; }
+  .bk-lock span { flex: 1 1 240px; }
+  .bk-lock.edit { background: var(--orange-soft); border-color: #f6d9a8; color: #6b4a0c; }
+  .rs-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 24px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--border); }
+  .rs-cmp { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; }
+  .rs-cmp s { color: var(--muted); }
+  .rs-cmp b { color: var(--primary); }
+  .rs-cmp svg { width: 16px; height: 16px; color: var(--muted); }
+  [dir="rtl"] .rs-cmp svg { transform: scaleX(-1); }
+  .rs-log { list-style: none; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); display: grid; gap: 12px; }
+  .rs-log h3 { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .rs-log li { display: flex; gap: 12px; font-size: 13px; line-height: 1.6; }
+  .rs-log .ic { width: 30px; height: 30px; border-radius: 50%; background: var(--orange-soft); color: var(--orange); display: grid; place-items: center; flex-shrink: 0; }
+  .rs-log .ic svg { width: 16px; height: 16px; }
+  .rs-log s { color: var(--muted); }
+  .rs-log b { color: var(--ink); }
+  .rs-log small { display: block; font-size: 12px; color: var(--muted); }
+  .rs-tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 12px; background: var(--orange-soft); color: var(--orange); font-size: 12px; font-weight: 600; margin-inline-start: 10px; vertical-align: middle; }
+  .btn-ghost:hover { background: #f6f8f9; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn.btn-primary:disabled { background: #e9edee; color: #7b898e; }
+  a.btn[aria-disabled="true"] { pointer-events: none; opacity: .5; }
+  .ask { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; padding: 12px 14px; border-radius: 10px; background: #f6faf9; border: 1px dashed #b9d9d1; font-size: 13px; line-height: 1.6; }
+  .ask > svg { width: 20px; height: 20px; color: var(--primary); }
+  .ask span { flex: 1 1 260px; }
+  .ask.sent { background: var(--orange-soft); border: 1px solid #f6d9a8; color: #6b4a0c; }
+  .ask.sent > svg { color: var(--orange); }
+  .ask.cust { background: var(--green-soft); border: 1px solid #bfe3cb; color: #14532d; }
+  .ask.cust > svg { color: var(--green); }
+  .img-drop { display: flex; align-items: center; gap: 14px; padding: 16px; border: 1.5px dashed #c9d3d6; border-radius: 10px; background: #fbfcfc; }
+  .img-drop .ic { width: 46px; height: 46px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; }
+  .img-drop .ic svg { width: 22px; height: 22px; }
+  .img-drop p { flex: 1; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .img-prev { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .img-prev img { width: 220px; max-width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); cursor: zoom-in; }
+  .img-prev .acts { display: flex; flex-direction: column; gap: 8px; }
+  .img-prev small { font-size: 12px; color: var(--muted); }
+  .pay-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 28px; }
+  .pay-card { display: flex; flex-direction: column; gap: 14px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
+  .pay-top { display: flex; align-items: center; gap: 12px; }
+  .pay-ic { width: 44px; height: 44px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; }
+  .pay-ic svg { width: 22px; height: 22px; }
+  .pay-top b { display: block; font-size: 14.5px; font-weight: 600; }
+  .pay-top small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); }
+  .pay-top .amt { margin-inline-start: auto; text-align: end; font-size: 15px; font-weight: 600; white-space: nowrap; }
+  .pay-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pay-acts .btn { flex: 1 1 160px; }
+  .facts3 { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; }
+  .share { padding-top: 14px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
+  .share-lbl { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .link-box { padding: 9px 12px; border-radius: 8px; background: #f6f8f9; border: 1px solid var(--border); font-size: 12px; color: #44545a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; text-align: left; }
+  .share-btns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .share-btns .btn { padding: 0 8px; }
+  .btn-wa { background: #25d366; color: #073b1d; }
+  .btn-wa:hover { background: #1fbe5b; }
+  .svc-table { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .st-head, .st-row { display: grid; grid-template-columns: 110px minmax(0, 1fr) 110px; gap: 12px; align-items: center; padding: 11px 14px; }
+  .st-head { background: #f6f8f9; font-size: 12px; font-weight: 600; color: var(--muted); }
+  .st-row { border-top: 1px solid #eef2f3; font-size: 13.5px; }
+  .st-row .code { font-family: "Inter", monospace; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--primary-soft); padding: 3px 8px; border-radius: 6px; direction: ltr; display: inline-block; }
+  .st-name b { display: block; font-weight: 600; }
+  .st-name small { display: block; margin-top: 3px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .st-name .ty { display: inline-block; margin-inline-end: 6px; padding: 0 6px; border-radius: 4px; background: #eef1f2; color: #44545a; font-size: 11px; }
+  .st-price, .st-head span:last-child { text-align: end; font-weight: 600; white-space: nowrap; }
+  .st-total { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--border); background: #f8fafa; font-size: 14px; }
+  .st-total b { font-size: 15px; }
+  .facts3 .sub { display: block; font-size: 11.5px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+  .left-pill { height: 28px; font-family: "Inter", sans-serif; direction: ltr; }
+  .track { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 6px; }
+  .track li { position: relative; text-align: center; padding: 0 4px; }
+  .track li::before { content: ""; position: absolute; top: 15px; inset-inline-start: 50%; width: 100%; height: 3px; background: var(--border); }
+  .track li:last-child::before { display: none; }
+  .track li.line-done::before { background: var(--green); }
+  .tdot { position: relative; z-index: 1; width: 32px; height: 32px; margin: 0 auto; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 2px solid #cfd8db; color: #8a979c; }
+  .tdot svg { width: 16px; height: 16px; }
+  .track li.done .tdot { background: var(--green); border-color: var(--green); color: #fff; }
+  .track li.miss .tdot { border-color: #f3c0c0; color: var(--red); }
+  .track b { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; }
+  .track small { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+  .track li.done small { color: var(--ink); }
+  .timeline { list-style: none; margin-top: 4px; }
+  .timeline li { position: relative; display: flex; gap: 12px; padding: 0 0 14px; font-size: 13.5px; }
+  .timeline li::before { content: ""; position: absolute; inset-inline-start: 6px; top: 16px; bottom: 0; width: 2px; background: var(--border); }
+  .timeline li:last-child::before { display: none; }
+  .timeline .dot { width: 14px; height: 14px; margin-top: 3px; border-radius: 50%; border: 3px solid #cfd8db; background: #fff; flex-shrink: 0; }
+  .timeline .dot.green { border-color: var(--green); } .timeline .dot.red { border-color: var(--red); } .timeline .dot.blue { border-color: var(--blue); }
+  .timeline time { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .note-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .note-foot small { font-size: 12px; color: var(--muted); }
+  .notes { list-style: none; display: grid; gap: 10px; margin-top: 4px; }
+  .notes li { display: flex; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; }
+  .notes li.n-alert { border-color: #f3c0c0; background: #fff7f7; border-inline-start: 4px solid var(--red); }
+  .notes li.n-followup { border-color: #f6d9a8; background: #fffbf3; border-inline-start: 4px solid var(--orange); }
+  .ntype { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 11px; font-size: 11.5px; font-weight: 600; }
+  .ntype svg { width: 12px; height: 12px; }
+  .nt-general { background: #eef1f2; color: #44545a; } .nt-alert { background: var(--red); color: #fff; } .nt-followup { background: var(--orange-soft); color: var(--orange); border: 1px solid #f6d9a8; }
+  .n-done { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--green); font-weight: 600; }
+  .n-done svg { width: 14px; height: 14px; }
+  .n-open { margin-top: 6px; font-size: 12px; color: var(--orange); font-weight: 600; }
+  .n-btn { margin-top: 8px; }
+  .n-oid { font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; }
+  .notes.earlier li { opacity: .85; }
+  .note-form { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; }
+  .n-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .n-bar .lbl { margin: 0; }
+  .n-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip-f { height: 30px; padding: 0 12px; border-radius: 15px; border: 1px solid #d9e1e3; background: #fff; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .chip-f span { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #eef1f2; font-size: 11px; display: grid; place-items: center; }
+  .chip-f.on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  /* ---------- Booking view ---------- */
+  .bk-hero { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 20px 22px; border: 1px solid; }
+  .bk-hero .ic { width: 56px; height: 56px; border-radius: 50%; background: #fff; display: grid; place-items: center; flex-shrink: 0; }
+  .bk-hero .ic svg { width: 28px; height: 28px; }
+  .bk-hero .txt { flex: 1 1 240px; min-width: 0; }
+  .bk-hero small { display: block; font-size: 12.5px; opacity: .85; }
+  .bk-hero strong { display: block; font-size: 26px; font-weight: 700; margin: 2px 0; line-height: 1.25; }
+  .bk-hero .when { font-size: 13.5px; }
+  .bk-hero .bk-ids { display: grid; gap: 4px; text-align: end; font-size: 12.5px; }
+  .bk-hero .bk-ids b { font-size: 15px; }
+  .h-green { background: var(--green-soft); border-color: #bfe3cb; color: #14532d; }
+  .h-orange { background: var(--orange-soft); border-color: #f6d9a8; color: #7a4205; }
+  .h-red { background: var(--red-soft); border-color: #f6caca; color: #8f1d1d; }
+  .h-blue { background: var(--blue-soft); border-color: #cfe0fd; color: #1e4fa3; }
+  .h-gray { background: #f6f8f9; border-color: var(--border); color: #44545a; }
+  /* Doctor visit steps (read only, from the Doctor Portal) */
+  .dv-sum { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .dv-sum div { background: #f7f9fa; border-radius: 10px; padding: 10px 12px; min-width: 0; }
+  .dv-sum span { display: block; font-size: 11.5px; color: var(--muted); }
+  .dv-sum b { display: block; font-size: 13.5px; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .dv-ro { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted); margin-bottom: 14px; }
+  .dv-ro svg { width: 15px; height: 15px; flex: none; }
+  .dv-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .dv-head h2 { margin-bottom: 0 !important; }
+  .dvsteps li { align-items: flex-start; }
+  .dvsteps .tm { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: 12px; color: var(--muted); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .dvsteps .tm i { font-style: normal; color: #2c3d43; font-weight: 600; }
+  @media (max-width: 700px) { .dv-sum { grid-template-columns: minmax(0, 1fr); } }
+  .steps-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 13px; }
+  .steps-bar .bar { flex: 1; height: 8px; border-radius: 4px; background: #eef2f3; overflow: hidden; }
+  .steps-bar .bar i { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
+  .steps-bar b { white-space: nowrap; }
+  .vsteps { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; counter-reset: st; }
+  .vsteps li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; }
+  .vsteps .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: #f0f3f4; color: #5b6b70; flex-shrink: 0; }
+  .vsteps .n svg { width: 16px; height: 16px; }
+  .vsteps li.done { border-color: #bfe3cb; background: #f6fcf8; }
+  .vsteps li.done .n { background: var(--green); color: #fff; }
+  .vsteps li.now { border-color: #f6d9a8; background: #fffaf2; }
+  .vsteps li.now .n { background: var(--orange); color: #fff; }
+  .vsteps div { min-width: 0; flex: 1; }
+  .vsteps b { display: block; font-weight: 500; }
+  .vsteps small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .vsteps .st { font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .vsteps li.done .st { color: var(--green); } .vsteps li .st { color: #8a979c; } .vsteps li.now .st { color: var(--orange); }
+  .src-note { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+  .src-note svg { width: 15px; height: 15px; }
+  .src-note .link-btn { margin-inline-start: auto; }
+  .link-btn { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+  .drv-card { display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: #f8fafa; font-size: 13px; }
+  .drv-card .avatar { width: 38px; height: 38px; font-size: 13px; }
+  .drv-card div { flex: 1; min-width: 0; }
+  .drv-card b { display: block; font-size: 14px; }
+  .drv-card small { display: block; color: var(--muted); }
+  .arr-box { display: grid; gap: 12px; }
+  .arr-btn { height: 52px; font-size: 15px; font-weight: 600; width: 100%; }
+  .arr-res { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 10px; border: 1px solid; }
+  .arr-res svg { width: 22px; height: 22px; flex-shrink: 0; }
+  .arr-res div { flex: 1; min-width: 0; }
+  .arr-res b { display: block; font-size: 15px; }
+  .arr-res small { display: block; font-size: 12.5px; opacity: .85; margin-top: 2px; }
+  .alert-card { padding: 0; display: grid; gap: 8px; border: 0; background: transparent; overflow: visible; }
+  .al { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; }
+  .al > svg { width: 22px; height: 22px; margin-top: 1px; }
+  .al > div { flex: 1; min-width: 0; }
+  .al b { font-size: 14px; font-weight: 700; }
+  .al p { margin-top: 3px; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+  .al small { display: block; margin-top: 4px; font-size: 12px; opacity: .8; }
+  .al-red { background: var(--red); color: #fff; box-shadow: 0 6px 18px rgba(220,38,38,.18); }
+  .al-orange { background: var(--orange-soft); color: #6b4a0c; border: 1px solid #f6d9a8; }
+  .al-orange > svg { color: var(--orange); }
+  .notes .avatar { width: 32px; height: 32px; font-size: 12px; }
+  .notes .n-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+  .notes b { font-size: 13px; font-weight: 600; }
+  .notes time { font-size: 12px; color: var(--muted); }
+  .notes p { margin-top: 4px; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .notes li > div { min-width: 0; flex: 1; }
+  .cancel-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 18px 22px; border-color: #f6caca; background: #fffafa; }
+  .cancel-row > svg { width: 24px; height: 24px; color: var(--red); }
+  .cancel-row div { flex: 1 1 260px; }
+  .cancel-row b { font-size: 15px; font-weight: 600; }
+  .cancel-row p { margin-top: 3px; font-size: 13px; color: #6b4a4a; line-height: 1.5; }
+  .btn-danger-o { background: #fff; color: var(--red); border-color: #f0b4b4; }
+  .btn-danger-o:hover { background: var(--red-soft); }
+  .lightbox { position: fixed; inset: 0; z-index: 70; background: rgba(16,35,43,.8); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+  .lightbox img { max-width: 100%; max-height: calc(100vh - 32px); border-radius: 10px; }
+
+  @media (max-width: 900px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .strip, .strip.four { grid-template-columns: 1fr; }
+    .strip > div + div { border-inline-start: 0; border-top: 1px solid var(--border); }
+    .strip > div { padding: 14px 16px; }
+    .sec { padding: 16px; }
+    .row2 { grid-template-columns: 1fr; gap: 18px; }
+    .row2 > div + div { border-inline-start: 0; padding-inline-start: 0; }
+    .row3 { grid-template-columns: 1fr; gap: 18px; }
+    .row3 > div + div { border-inline-start: 0; padding-inline-start: 0; }
+    .svc-opt { flex: 1 1 45%; }
+    .src { padding: 0 14px; }
+    .facts { grid-template-columns: 1fr; }
+    .after { padding: 14px 16px; }
+    .grid2, .pay-grid, .vsteps { grid-template-columns: 1fr; }
+    .bk-hero strong { font-size: 21px; }
+    .bk-hero .bk-ids { text-align: start; }
+    .facts3 { grid-template-columns: 1fr 1fr; }
+    .track b { font-size: 11.5px; }
+    .st-head { display: none; }
+    .note-form { grid-template-columns: 1fr; gap: 12px; }
+    .al { flex-wrap: wrap; }
+    .al .btn { width: 100%; }
+    .st-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "code price" "name name"; gap: 6px 10px; }
+    .st-row > span:first-child { grid-area: code; } .st-row .st-name { grid-area: name; } .st-row .st-price { grid-area: price; }
+    .sec-actions .btn { flex: 1 1 auto; }
+    .sec-actions .saved { flex-basis: 100%; }
+    .rs-form { grid-template-columns: minmax(0, 1fr); }
+    .cancel-row { padding: 16px; }
+    .cancel-row .btn { width: 100%; }
+    .img-drop { flex-wrap: wrap; }
+    .img-drop .btn { width: 100%; }
+  }
+  /* Nav scrolls sideways when the links do not fit. */
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div><div class="logo-name">Mada Care</div><div class="logo-tag" data-i18n="tagline">Caring Like Family</div></div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html" aria-current="page"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main id="main">
+  <div class="head">
+    <a class="back" href="requests.html" data-i18n-aria="back" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+    </a>
+    <div><h1 data-i18n="title">Request Details</h1><p data-i18n="subtitle">View and manage request information</p></div>
+  </div>
+  <div id="content"></div>
+</main>
+
+<!-- Supervisor: close emergency case -->
+<div class="overlay" id="closeOverlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="closeTitle">
+    <h2 id="closeTitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-i18n="closeTitle">Close emergency case</span></h2>
+    <p id="closeText" data-i18n="closeText">Choose what happened with the patient and write the closing note. The call center agent will see it.</p>
+    <div class="outs" id="outs"></div>
+    <label class="lbl" for="closeNote" data-i18n="closeNoteLbl">Closing note</label>
+    <textarea id="closeNote" maxlength="500" data-i18n-ph="closeNotePh" placeholder="e.g. Called the family, the patient was admitted to the ER."></textarea>
+    <div class="err" id="closeErr" hidden data-i18n="closeErr">Write the closing note.</div>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="closeCancel" data-i18n="cancel">Cancel</button>
+      <button type="button" class="btn btn-danger" id="closeGo">Close Case</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel a request -->
+<div class="overlay" id="cancelOverlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="cTitle">
+    <h2 id="cTitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></svg><span data-i18n="cancelTitle">Cancel Request</span></h2>
+    <p id="cText"></p>
+    <div class="outs" id="cReasons"></div>
+    <label class="lbl" for="cNote" data-i18n="cancelNoteLbl">Note</label>
+    <textarea id="cNote" maxlength="500" data-i18n-ph="cancelNotePh" placeholder=""></textarea>
+    <div class="err" id="cErr" hidden data-i18n="cancelNoteErr">Write a short note.</div>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="cKeep" data-i18n="keep">Keep Request</button>
+      <button type="button" class="btn btn-danger" id="cGo" data-i18n="confirmCancel">Cancel Request</button>
+    </div>
+  </div>
+</div>
+<input type="file" id="imgIn" accept="image/*" hidden>
+<div class="lightbox" id="lightbox" hidden><img alt="" id="lightImg"></div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="requests.js"></script>
+<script src="orders.js"></script>
+<script src="nurses.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const isSupervisor = !!(me && me.supervisor);
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const id = new URLSearchParams(location.search).get("id");
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services", back: "Back to requests",
+      title: "Request Details", subtitle: "View and manage request information",
+      orderId: "Order ID", created: "Created Date", time: "Time", copy: "Copy order ID", copied: "Order ID copied.",
+      s1: "1. Basic Information", s2: "2. Service", s3: "3. Schedule & Nurse", s4: "4. Patient", s5: "5. Payment", s2p: "2. Patient",
+      locked: "Locked", mobile: "Mobile Number", source: "Request Source",
+      src_phone: "Call", src_whatsapp: "WhatsApp", src_website: "Website", src_other: "Other",
+      emgStatus: "Emergency Status", emergency: "Emergency", nonEmergency: "Non-Emergency",
+      reasonTitle: "Reason for Emergency Referral", quick: "Quick Checklist", noChecks: "No checklist item was ticked.", notes: "Additional Notes", noNotes: "No notes.",
+      lockedAgent: "This emergency case is locked. You can't edit it. Only a supervisor can close it and write the closing note.",
+      closeBtn: "Close Emergency Case", waitSup: "Waiting for the supervisor to close",
+      after: "After closing:", afterOpen: "Status:", stOpen: "Referred to emergency, open", stClosed: "Status: Emergency Closed",
+      closedBy: "Closed by {n} · {t}", closureTitle: "Supervisor's closing note", outcome: "What happened", closeNoteShow: "Note", closedOn: "Closed on",
+      closeTitle: "Close emergency case", closeText: "Choose what happened with the patient and write the closing note. The call center agent will see it.",
+      closeNoteLbl: "Closing note", closeNotePh: "e.g. Called the family, the patient was admitted to the ER.", closeErr: "Write the closing note.",
+      cancel: "Cancel", closeGo: "Close Case", closedToast: "{id} closed. The agent can see your note.",
+      service: "Service", items: "Requested items", total: "Total", sar: "SAR", noItems: "No items were chosen.",
+      sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_none: "Not chosen",
+      visit: "Visit", nurse: "Nurse", noVisit: "No visit booked.", patient: "Patient name", mrn: "Medical record", createdBy: "Created by", unknown: "Not recorded",
+      payment: "Payment", paid: "Paid", notPaid: "Not Paid", decision: "Customer decision", status: "Status",
+      approved: "Approved", rejected: "Rejected", pending: "Pending", on_hold: "On Hold",
+      st_booked: "Booked", st_awaiting_doctor: "Waiting for the doctor", st_declined: "Customer declined", st_completed: "Visit completed", st_on_hold: "On hold",
+      patientStatus: "Patient Status", svcRequested: "Service Type Requested", notApproved: "Not Approved", rejReason: "Reason for Not Approval",
+      lockedAgentRej: "This request is locked because the customer did not approve. You can't edit it. Only a supervisor can close it.",
+      closeReqBtn: "Close Request", stCancelled: "Status: Cancelled", stRejOpen: "Not approved, open", st_cancelled: "Cancelled", st_emergency_closed: "Emergency closed",
+      closeReqTitle: "Close request", closeReqText: "Choose how this was handled with the customer and write the closing note. The call center agent will see it.", closeReqGo: "Close Request",
+      reason: "Reason", missing: "This request was not found.", toList: "Back to requests"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات", back: "العودة للطلبات",
+      title: "تفاصيل الطلب", subtitle: "عرض وإدارة معلومات الطلب",
+      orderId: "رقم الطلب", created: "تاريخ الإنشاء", time: "الوقت", copy: "نسخ رقم الطلب", copied: "تم نسخ رقم الطلب.",
+      s1: "1. المعلومات الأساسية", s2: "2. الخدمة", s3: "3. الموعد والممرضة", s4: "4. المريض", s5: "5. الدفع", s2p: "2. المريض",
+      locked: "مقفل", mobile: "رقم الجوال", source: "مصدر الطلب",
+      src_phone: "اتصال", src_whatsapp: "واتساب", src_website: "الموقع", src_other: "أخرى",
+      emgStatus: "الحالة الطبية", emergency: "طارئة", nonEmergency: "غير طارئة",
+      reasonTitle: "سبب التحويل للطوارئ", quick: "قائمة التحقق", noChecks: "لم يتم تحديد أي عنصر.", notes: "ملاحظات إضافية", noNotes: "لا توجد ملاحظات.",
+      lockedAgent: "هذه الحالة الطارئة مقفلة وما تقدرين تعدلين عليها. المشرفة فقط تقفل الحالة وتكتب ملاحظة الإقفال.",
+      closeBtn: "إقفال الحالة الطارئة", waitSup: "بانتظار إقفال المشرفة",
+      after: "بعد الإقفال:", afterOpen: "الحالة:", stOpen: "محوّلة للطوارئ، مفتوحة", stClosed: "الحالة: تم إقفال الحالة الطارئة",
+      closedBy: "أقفلتها {n} · {t}", closureTitle: "ملاحظة إقفال المشرفة", outcome: "ماذا حدث", closeNoteShow: "الملاحظة", closedOn: "تاريخ الإقفال",
+      closeTitle: "إقفال الحالة الطارئة", closeText: "اختاري ماذا حدث مع المريض واكتبي ملاحظة الإقفال. ستظهر لموظفة خدمة العملاء.",
+      closeNoteLbl: "ملاحظة الإقفال", closeNotePh: "مثال: تم التواصل مع الأهل والمريض دخل الطوارئ.", closeErr: "اكتبي ملاحظة الإقفال.",
+      cancel: "إلغاء", closeGo: "إقفال الحالة", closedToast: "تم إقفال {id}. الموظفة تقدر تشوف ملاحظتك.",
+      service: "الخدمة", items: "الخدمات المطلوبة", total: "الإجمالي", sar: "ريال", noItems: "لم يتم اختيار خدمات.",
+      sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_none: "لم تُحدد",
+      visit: "الزيارة", nurse: "الممرض/ة", noVisit: "لا يوجد موعد.", patient: "اسم المريض", mrn: "الملف الطبي", createdBy: "أنشأ الطلب", unknown: "غير مسجل",
+      payment: "الدفع", paid: "مدفوع", notPaid: "غير مدفوع", decision: "قرار العميل", status: "الحالة",
+      approved: "موافق", rejected: "مرفوض", pending: "بانتظار الرد", on_hold: "معلّق",
+      st_booked: "تم الحجز", st_awaiting_doctor: "بانتظار الطبيب", st_declined: "اعتذر العميل", st_completed: "اكتملت الزيارة", st_on_hold: "معلّق",
+      patientStatus: "الحالة الطبية", svcRequested: "نوع الخدمة المطلوبة", notApproved: "غير موافق", rejReason: "سبب عدم الموافقة",
+      lockedAgentRej: "هذا الطلب مقفل لأن العميل ما وافق، وما تقدرين تعدلين عليه. المشرفة فقط تقفل الطلب.",
+      closeReqBtn: "إقفال الطلب", stCancelled: "الحالة: ملغي", stRejOpen: "غير موافق، مفتوح", st_cancelled: "ملغي", st_emergency_closed: "أُقفلت الحالة الطارئة",
+      closeReqTitle: "إقفال الطلب", closeReqText: "اختاري كيف تم التعامل مع العميل واكتبي ملاحظة الإقفال. ستظهر لموظفة خدمة العملاء.", closeReqGo: "إقفال الطلب",
+      reason: "السبب", missing: "لم يتم العثور على الطلب.", toList: "العودة للطلبات"
+    }
+  };
+  // Full request page (requests that are not locked).
+  Object.assign(i18n.en, {
+
+    bkTitle: "Booking Details", bkSub: "Everything about this visit in one place", bkBack: "Back to bookings",
+    hUntil: "Time left until the visit", hNow: "The visit should be happening now", hLate: "The team has not arrived yet", hArrived: "The team arrived", hDone: "Visit completed", hCancel: "Booking cancelled", hNone: "No visit time yet",
+    inT: "{t}", lateBy: "Late by {t}", bookingNo: "Booking", orderNo2: "Order",
+    dvT: "4. Visit Data · Doctor Portal", dvRo: "Read only: filled in by the doctor in the Doctor Portal.", dvNotStarted: "The doctor has not started the visit yet.",
+    dvSt_wait: "Not opened", dvSt_open: "Opened, not saved", dvSt_done: "Done", dvOpened: "Opened", dvClosed: "Saved", dvDur: "Time taken",
+    dvStart: "Visit started", dvEnd: "Visit finished", dvTotal: "Total time", dvOngoing: "In progress", dvDl: "Download PDF", dvMaking: "Preparing the PDF...", dvDlDone: "Downloaded {f}.", dvDlFail: "Couldn't make the PDF. A print view opened: choose Save as PDF.",
+    dvPdfT: "Doctor Visit Timeline", dvPatient: "Patient", dvDoctor: "Doctor", dvBooked: "Booked for", dvMade: "Printed {t}", dvStep: "Step", dvStatus: "Status",
+    ds_arrival: "Arrival Confirmation", ds_history: "Case History", ds_vitals: "Vital Signs", ds_exam: "Clinical Examination", ds_allergy: "Allergy History", ds_assess: "Diagnosis",
+    ds_plan: "Treatment Plan", ds_orders: "Orders & Services", ds_nurse: "Nurse Note", ds_edu: "Family Education", ds_idform: "Identity Confirmation", ds_consent: "Patient Consent",
+    vd: "4. Visit Data", vdProgress: "{n} of {t} steps done", vdDone: "Done", vdNow: "In progress", vdWait: "Not yet",
+    vdSrc: "Updated by the doctors and nursing app.", vdSample: "These 10 steps are an example until we agree on the final list.", vdDemo: "Demo: next step",
+    vdFinished: "Visit completed. It is now waiting for the quality review.", vs_received: "Team received the booking", vs_ontheway: "Team on the way", vs_arrived: "Arrived at the location", vs_identity: "Patient identity checked", vs_consent: "Consent signed",
+    vs_vitals: "Vital signs recorded", vs_assess: "Patient assessed", vs_service: "Service done / samples taken", vs_educate: "Patient instructions given", vs_report: "Report sent and visit closed",
+    da: "5. Driver and Arrival", drvLbl: "Assigned Driver", selDriver: "Select driver", drvAssign: "Assign Driver", drvChange: "Change Driver", drvSaved: "{n} assigned. The driver will get the visit details.",
+    drvBy: "Assigned by {n} · {t}", drvNone: "No driver assigned yet.", call: "Call",
+    arrLbl: "Team Arrival", arrBtn: "Team Arrived", arrHint: "Press when the team reaches the customer.", arrUndo: "Undo",
+    hDrStarted: "The doctor started the visit", drStartedAt: "Started at {t}", drEarly: "Early by {t}", drLate: "Late by {t}", arrAt: "Arrived at {t}", arrEarly: "{t} before the visit time", arrLate: "{t} after the visit time", arrOnTime: "On time", arrSched: "Visit time {t} · marked by {n}",
+    arrToast: "Team arrival saved.", arrUndone: "Arrival removed.", arrNoTime: "Set the visit time first.",
+    bk6: "6. Staff Notes", bookingIdLbl: "Booking ID", pdfBtn: "Download PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
+    pdfTitle: "Booking Confirmation", pdfIssued: "Issued {t}", pdfStConfirmed: "Confirmed", pdfStPaid: "Paid", pdfStMoved: "Rescheduled", pdfVisitTime: "Visit time", pdfDur: "About {m} minutes", pdfHome: "Home visit",
+    pdfMoved: "Moved from {t}", pdfScan: "Scan to view your booking", pdfTbd: "To be confirmed", pdfNoDoc: "Not needed for this service", pdfPay: "Payment", pdfStatus: "Status", pdfPaidAt: "Paid on", pdfPromo: "Promo code", pdfStaffPaid: "Confirmed by our team",
+    pdfSub: "Services total", pdfDisc: "Discount", pdfVat: "VAT 15% (included)", pdfPrep: "Before the visit", pdfPolicy: "Cancellation policy", pdfFootL: "Mada Care · Home healthcare · Jeddah",
+    pr_fast: "Fast for {h} hours before the visit. Water is fine.", pr_morning: "A morning sample is preferred.", pr_rx: "Keep the doctor's prescription ready for the nurse.", pr_iv: "Eat a light meal and drink water before the session.",
+    pr_id: "Keep the patient's ID and any recent reports ready.", pr_call: "The team will call you before arriving. Please keep your phone close.",
+    p_home: "Home visit", p_h1: "2 hours or more before the visit", p_h1d: "You can cancel and get a full refund.", p_h2: "In the last 2 hours before the visit", p_h2d: "The amount can't be refunded.", p_r: "Rescheduling", p_rd: "Call us to move the visit, subject to availability.",
+    p_iv: "IV vitamin therapy", p_i1: "Cancellation", p_i1d: "At least 3 hours before the visit.", p_i2: "Rescheduling", p_i2d: "At least 1 hour before the visit, to a new time within 3 days of the original, subject to availability.", p_i3: "After that", p_i3d: "Requests are not eligible for a refund.",
+    pdfConfirmed: "Confirmed · Paid", pdfVisit: "Visit", pdfDate: "Date", pdfTime: "Time", pdfPatient: "Patient", pdfName: "Name", pdfTeam: "Care Team",
+    pdfLoc: "Visit Location", pdfSvc: "Services", pdfCode: "Code", pdfItem: "Service", pdfPrice: "Price", pdfTotal: "Total paid (incl. VAT)", pdfMethod: "Paid with", pdfFoot: "Issued {t} · Keep your booking number for any change.",
+    b2: "2. Booking Details", b3: "3. Customer Location", b4: "4. Payment Status", b5: "5. Staff Notes", n3: "3. Staff Notes", n6: "6. Staff Notes",
+    approveChip: "Approved", pendingChip: "Pending", holdChip: "On Hold",
+    holdBanner: "This request is on hold. Finish it in the request form, then assign the team here.", holdGo: "Continue Request",
+    docBanner: "Waiting for the doctor to choose the tests. You can assign the team and add the location now. Payment opens after the customer approves.",
+    doneBanner: "This visit is completed, so the booking and payment are read only.",
+    doctorLbl: "Assigned Doctor", nurseLbl: "Assigned Nurse", dateLbl: "Visit Date", timeLbl: "Visit Time", fileLbl: "File Number",
+    selDoctor: "Select doctor", selNurse: "Select nurse", selTime: "Select time", pickDateFirst: "Choose the date first",
+    docNo: "Doctor not assigned", docOpt: "Optional for this service", noDoctorOpt: "This service doesn't need a doctor", docNone: "No doctor needed", nurseAuto: "Assigned automatically: first available nurse at this time", nurseNo: "Nurse not assigned", dateNo: "Visit date not scheduled", timeNo: "Visit time not scheduled",
+    assigned: "Assigned", scheduled: "Scheduled", nurseAvail: "Available", nurseBusy: "Not available", full: "Full", noFile: "No file created yet",
+    dateBad: "Enter a date from today, as DD/MM/YYYY.", noSlots: "No nurse works on this day. Choose another date.", pickTimeForNurse: "Choose the time to see who is free",
+    earliestBtn: "Earliest Available", saveBooking: "Save Booking",
+    bkLocked: "Booking confirmed and paid. To change the visit time, press Reschedule.", rsBtn: "Reschedule", rsEditing: "Rescheduling: pick the new date, time or nurse, then save.",
+    rsReason: "Reason for the change", rsNote: "Note", rsNotePh: "e.g. Customer asked for the evening", rsCancel: "Cancel", rsSave: "Save New Time", rsChange: "Change",
+    rs_customer: "Customer asked by phone", rs_whatsapp: "Customer asked on WhatsApp", rs_nurse: "Nurse not available", rs_doctor: "Doctor not available", rs_other: "Other",
+    rsNeedReason: "Choose the reason for the change.", rsSame: "Nothing changed: pick a different date, time or nurse.", rsSaved: "Visit moved to {t}. The customer and the team will be notified.",
+    rsLog: "Change History", rsFrom: "Moved from", rsTo: "to", rsBy: "{n} · {t}", rsTag: "Rescheduled", rsOrig: "Original booking: {t}", bookingSaved: "Team assigned. The nurse{d} will be notified.", andDoctor: " and the doctor", drAfterPay: "Team assigned. The doctor gets the notification once the customer pays.",
+    bookingErr: "Choose the date, time and nurse first.", lastSaved: "Last saved by {n} · {t}",
+    locAsk: "No location yet? The payment link lets the customer pin their exact location. You can also send a location request, or paste what they send below.", locAskBtn: "Request Location", locAskAgain: "Send Again",
+    locAsked: "Location request sent to {m} at {t}. Waiting for the customer.", locAskToast: "Location request sent to {m}.",
+    addrLbl: "Detailed Address", addrPh: "City, district, street, building number",
+    mapLbl: "Google Maps Link", mapPh: "Paste the link or coordinates the customer shared",
+    mapCoords: "Pin found: {c}", mapLinkOk: "Link saved. Open it to check the pin.", mapBad: "This is not a maps link or coordinates.",
+    codeLbl: "National Address Short Code", codePh: "e.g. RRRD2929", codeHint: "4 letters and 4 numbers, from the customer's National Address.", codeBad: "The short code is 4 letters then 4 numbers, e.g. RRRD2929.",
+    floorLbl: "Floor / Apartment", floorPh: "e.g. 2nd floor, apartment 5", landmarkLbl: "Nearest Landmark", landmarkPh: "e.g. Next to Al Rajhi Mosque",
+    imgLbl: "Building / Location Image", optional: "(Optional)", imgAdd: "Add Image", imgHelp: "A photo of the building or the entrance helps the nurse find the place.",
+    imgChange: "Change Image", imgRemove: "Remove", imgSaved: "Image saved.", imgRemoved: "Image removed.", imgErr: "Couldn't save this image. Try a smaller one.", imgType: "Choose an image file.", imgAddedAt: "Added {t}",
+    openMaps: "Open in Maps", saveLoc: "Save Location", locSaved: "Location saved.", locEmpty: "Add the address, the maps link or the short code first.", fixErr: "Fix the highlighted field first.",
+    payLinkTitle: "Payment Link", notSent: "Not Sent Yet", sendLink: "Send Payment Link", resendLink: "Resend Link", markPaid: "Mark as Paid",
+    markPaidHint: "Demo only: the payment gateway will do this by itself.", amount: "Amount",
+    payStatusLbl: "Payment Status", ps_none: "Waiting for payment link", ps_wait: "Waiting for payment", ps_expired: "Link expired", ps_paid: "Paid",
+    linkSent: "Link Sent", payTime: "Payment Time", expiry: "Expiry", leftTxt: "left", linkSentToast: "Payment link sent to {m}. It is valid for 1 hour.", paidToast: "Payment recorded.",
+    paidAt: "Paid at {t}", expiredAt: "Expired at {t}",
+    payNotYet: "The payment link opens after the customer approves and the price is known.", timeline: "Payment Timeline",
+    ev_created: "Request created", ev_sent: "Payment link sent to {m}", ev_expired: "Payment link expired", ev_paid: "Payment received",
+    noteType: "Note Type", nt_general: "General Note", nt_alert: "Important Alert", nt_followup: "Follow-up Required", nf_all: "All", fromReq: "from request {id}", markDone: "Mark as Done", doneBy: "Followed up by {n} · {t}", fuOpen: "Follow-up still open", fuDoneToast: "Follow-up marked as done.", added_general: "Note added.", added_alert: "Important alert added. It now shows at the top of the request.", added_followup: "Follow-up added. It stays at the top until marked as done.", earlierNotes: "Notes from this patient’s other requests ({n})", noteLbl: "Add a Note", notePh: "Write a note for the team, e.g. the customer wants a call before the visit", addNote: "Add Note", history: "Notes History", noNotesYet: "No notes yet.", noteAdded: "Note added.",
+    cancelTitle: "Cancel Request", cancelTextSup: "Cancelling frees the nurse's time and stops the payment link.", cancelTextAgent: "The request will be locked and sent to the supervisor to close.",
+    cancelPaid: " This request is paid, so the supervisor will arrange the refund.",
+    cancelDlgText: "Choose why the request is cancelled and add a short note.",
+    cancelNoteLbl: "Note", cancelNotePh: "e.g. The customer called back and cancelled.", cancelNoteErr: "Write a short note.", keep: "Keep Request", confirmCancel: "Cancel Request",
+    cancelledAgent: "{id} sent to the supervisor to close.", cancelledSup: "{id} cancelled.",
+    statusLbl: "Status:", createdByLbl: "Created by {n}", openCustomer: "Open Customer Page", custLoc: "The customer set the exact location from the payment link · {t}", pm_apple: "Apple Pay", pm_card: "Bank card", pm_tamara: "Tamara", pm_tabby: "Tabby", payMethod: "Method", openedLbl: "Opened", notOpened: "Not opened yet", opensN: "Opened {n} times, last at {t}", timeLeft: "Time left", expiryAt: "Expires {t}", trackLbl: "Link Tracking", tr_sent: "Sent", tr_opened: "Opened", tr_located: "Location set", tr_paid: "Paid", trWaiting: "Waiting", trMissed: "Did not happen", ev_opened: "Customer opened the payment link", reqServices: "Requested Services", colCode: "Code", colService: "Service", colPrice: "Price", totalVat: "Total (incl. VAT)", ty_pkg: "Lab package", ty_test: "Lab test", ty_nursing: "Nursing", ty_iv: "IV therapy", pkgTests: "{n} tests: {l}", fastH: "Fasting {h} hours", morningSample: "Morning sample preferred", noFast: "No fasting", mins: "{m} min", needsRx: "Needs a prescription", outArea: "Outside the service area. We only serve {c} for now.", shareLbl: "Share the link with the customer", copyLink: "Copy Link", viaWa: "WhatsApp", viaSms: "SMS", linkCopied: "Link copied. Paste it in the chat with the customer.", ev_shared: "Link shared by {c}", ev_copied: "Link copied to send", ch_whatsapp: "WhatsApp", ch_sms: "SMS", ev_located: "Customer set the visit location", city_riyadh: "Riyadh", city_jeddah: "Jeddah"
+  });
+  Object.assign(i18n.ar, {
+
+    bkTitle: "تفاصيل الحجز", bkSub: "كل تفاصيل الزيارة في مكان واحد", bkBack: "العودة للحجوزات",
+    hUntil: "الوقت المتبقي على الزيارة", hNow: "المفروض الزيارة جارية الآن", hLate: "الفريق لم يصل بعد", hArrived: "وصل الفريق", hDone: "تمت الزيارة", hCancel: "الحجز ملغى", hNone: "لم يحدد موعد الزيارة بعد",
+    inT: "{t}", lateBy: "متأخر {t}", bookingNo: "الحجز", orderNo2: "الطلب",
+    dvT: "4. بيانات الزيارة · نظام الأطباء", dvRo: "للعرض فقط: يعبيها الطبيب من نظام الأطباء.", dvNotStarted: "الطبيب ما بدأ الزيارة للحين.",
+    dvSt_wait: "ما انفتحت", dvSt_open: "انفتحت وما انحفظت", dvSt_done: "تمت", dvOpened: "فتحها", dvClosed: "حفظها", dvDur: "المدة",
+    dvStart: "بداية الزيارة", dvEnd: "نهاية الزيارة", dvTotal: "المدة الكاملة", dvOngoing: "جارية", dvDl: "تحميل PDF", dvMaking: "جاري تجهيز الملف...", dvDlDone: "تم تحميل {f}.", dvDlFail: "ما قدرنا نسوي الملف. انفتحت صفحة الطباعة: اختر حفظ PDF.",
+    dvPdfT: "سجل خطوات زيارة الطبيب", dvPatient: "المريض", dvDoctor: "الطبيب", dvBooked: "موعد الحجز", dvMade: "طُبع {t}", dvStep: "الخطوة", dvStatus: "الحالة",
+    ds_arrival: "تأكيد الوصول", ds_history: "التاريخ المرضي", ds_vitals: "العلامات الحيوية", ds_exam: "الفحص السريري", ds_allergy: "تاريخ الحساسية", ds_assess: "التشخيص",
+    ds_plan: "الخطة العلاجية", ds_orders: "الطلبات والخدمات", ds_nurse: "ملاحظة الممرضة", ds_edu: "تثقيف الأسرة", ds_idform: "تأكيد هوية المريض", ds_consent: "موافقة المريض",
+    vd: "4. بيانات الزيارة", vdProgress: "تم {n} من {t} خطوات", vdDone: "تم", vdNow: "جاري", vdWait: "لم يتم",
+    vdSrc: "تتحدث من نظام الأطباء والتمريض.", vdSample: "الخطوات العشر هذي مثال لين نتفق على القائمة النهائية.", vdDemo: "تجربة: الخطوة التالية",
+    vdFinished: "اكتملت الزيارة، وراحت لقسم الجودة للتقييم.", vs_received: "استلم الفريق الحجز", vs_ontheway: "الفريق في الطريق", vs_arrived: "الوصول للموقع", vs_identity: "التحقق من هوية المريض", vs_consent: "توقيع الموافقة",
+    vs_vitals: "تسجيل العلامات الحيوية", vs_assess: "تقييم حالة المريض", vs_service: "تنفيذ الخدمة / سحب العينات", vs_educate: "إعطاء التعليمات للمريض", vs_report: "رفع التقرير وإغلاق الزيارة",
+    da: "5. السائق ووصول الفريق", drvLbl: "السائق المسند", selDriver: "اختر السائق", drvAssign: "إسناد السائق", drvChange: "تغيير السائق", drvSaved: "تم إسناد {n}. بتوصله تفاصيل الزيارة.",
+    drvBy: "أسنده {n} · {t}", drvNone: "لم يتم إسناد سائق بعد.", call: "اتصال",
+    arrLbl: "وصول الفريق", arrBtn: "وصل الفريق", arrHint: "اضغطي عليه لما يوصل الفريق عند العميل.", arrUndo: "تراجع",
+    hDrStarted: "الطبيب بدأ الزيارة", drStartedAt: "بدأت الساعة {t}", drEarly: "قبل الموعد بـ{t}", drLate: "متأخر {t}", arrAt: "وصل الساعة {t}", arrEarly: "قبل موعد العميل بـ{t}", arrLate: "بعد موعد العميل بـ{t}", arrOnTime: "في الوقت المحدد", arrSched: "موعد الزيارة {t} · سجلته {n}",
+    arrToast: "تم تسجيل وصول الفريق.", arrUndone: "تم إلغاء تسجيل الوصول.", arrNoTime: "حدد موعد الزيارة أول.",
+    bk6: "6. ملاحظات الموظفين", bookingIdLbl: "رقم الحجز", pdfBtn: "تحميل PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدم حفظ كـ PDF من نافذة الطباعة.",
+    pdfTitle: "تأكيد الحجز", pdfIssued: "صدر {t}", pdfStConfirmed: "مؤكد", pdfStPaid: "مدفوع", pdfStMoved: "تم تعديل الموعد", pdfVisitTime: "وقت الزيارة", pdfDur: "حوالي {m} دقيقة", pdfHome: "زيارة منزلية",
+    pdfMoved: "تم نقله من {t}", pdfScan: "امسح الرمز لعرض حجزك", pdfTbd: "يتم تأكيده لاحقاً", pdfNoDoc: "غير مطلوب لهذه الخدمة", pdfPay: "الدفع", pdfStatus: "الحالة", pdfPaidAt: "تاريخ الدفع", pdfPromo: "كود الخصم", pdfStaffPaid: "أكده فريقنا",
+    pdfSub: "إجمالي الخدمات", pdfDisc: "الخصم", pdfVat: "ضريبة القيمة المضافة 15% (مشمولة)", pdfPrep: "قبل الزيارة", pdfPolicy: "سياسة الإلغاء", pdfFootL: "مدى كير · رعاية صحية منزلية · جدة",
+    pr_fast: "الصيام {h} ساعات قبل الزيارة، ويسمح بشرب الماء.", pr_morning: "يفضّل أخذ العينة صباحاً.", pr_rx: "جهّز وصفة الطبيب للممرضة.", pr_iv: "تناول وجبة خفيفة واشرب ماء قبل الجلسة.",
+    pr_id: "جهّز هوية المريض وأي تقارير حديثة.", pr_call: "بيتواصل معك الفريق قبل الوصول، خلك قريب من جوالك.",
+    p_home: "الزيارة المنزلية", p_h1: "قبل الموعد بساعتين أو أكثر", p_h1d: "تقدر تلغي ونرجع لك المبلغ كامل.", p_h2: "خلال آخر ساعتين قبل الموعد", p_h2d: "ما يمكن استرداد المبلغ.", p_r: "إعادة الجدولة", p_rd: "تواصل معنا لتغيير الموعد حسب المواعيد المتاحة.",
+    p_iv: "الفيتامينات الوريدية", p_i1: "الإلغاء", p_i1d: "قبل الموعد بـ 3 ساعات على الأقل.", p_i2: "إعادة الجدولة", p_i2d: "قبل الموعد بساعة على الأقل، والموعد الجديد يكون خلال 3 أيام من الموعد الأساسي حسب المواعيد المتاحة.", p_i3: "بعد هذي الفترة", p_i3d: "الطلبات غير مؤهلة للاسترداد.",
+    pdfConfirmed: "مؤكد · مدفوع", pdfVisit: "الزيارة", pdfDate: "التاريخ", pdfTime: "الوقت", pdfPatient: "المريض", pdfName: "الاسم", pdfTeam: "الفريق الطبي",
+    pdfLoc: "موقع الزيارة", pdfSvc: "الخدمات", pdfCode: "الكود", pdfItem: "الخدمة", pdfPrice: "السعر", pdfTotal: "المبلغ المدفوع (شامل الضريبة)", pdfMethod: "طريقة الدفع", pdfFoot: "صدر {t} · احتفظ برقم الحجز لأي تعديل.",
+    b2: "2. تفاصيل الحجز", b3: "3. موقع العميل", b4: "4. حالة الدفع", b5: "5. ملاحظات الموظفين", n3: "3. ملاحظات الموظفين", n6: "6. ملاحظات الموظفين",
+    approveChip: "موافق", pendingChip: "بانتظار الرد", holdChip: "معلّق",
+    holdBanner: "هذا الطلب معلّق. كمّلي الطلب في نموذج الطلب، وبعدها أسندي الفريق من هنا.", holdGo: "إكمال الطلب",
+    docBanner: "بانتظار الطبيب يختار التحاليل. تقدرين تسندين الفريق وتضيفين الموقع الحين، والدفع يفتح بعد موافقة العميل.",
+    doneBanner: "اكتملت الزيارة، فالحجز والدفع للعرض فقط.",
+    doctorLbl: "الطبيب المسند", nurseLbl: "الممرضة المسندة", dateLbl: "تاريخ الزيارة", timeLbl: "وقت الزيارة", fileLbl: "رقم الملف",
+    selDoctor: "اختاري الطبيب", selNurse: "اختاري الممرضة", selTime: "اختاري الوقت", pickDateFirst: "اختاري التاريخ أولاً",
+    docNo: "لم يتم إسناد طبيب", docOpt: "اختياري لهذه الخدمة", noDoctorOpt: "هذي الخدمة ما تحتاج طبيب", docNone: "ما تحتاج طبيب", nurseAuto: "تم الإسناد تلقائي: أول ممرضة متاحة في هذا الوقت", nurseNo: "لم يتم إسناد ممرضة", dateNo: "لم يتم تحديد تاريخ الزيارة", timeNo: "لم يتم تحديد وقت الزيارة",
+    assigned: "تم الإسناد", scheduled: "تم التحديد", nurseAvail: "متاحة", nurseBusy: "غير متاحة", full: "ممتلئ", noFile: "لم يُنشأ ملف بعد",
+    dateBad: "اكتبي تاريخاً من اليوم وطالع، بصيغة DD/MM/YYYY.", noSlots: "ما فيه ممرضة تداوم هذا اليوم. اختاري يوماً آخر.", pickTimeForNurse: "اختاري الوقت عشان تشوفين مين المتاحة",
+    earliestBtn: "أقرب موعد متاح", saveBooking: "حفظ الحجز",
+    bkLocked: "الحجز مؤكد ومدفوع. لتغيير موعد الزيارة اضغط تعديل الموعد.", rsBtn: "تعديل الموعد", rsEditing: "تعديل الموعد: اختر التاريخ أو الوقت أو الممرضة الجديدة ثم احفظ.",
+    rsReason: "سبب التعديل", rsNote: "ملاحظة", rsNotePh: "مثال: العميل طلب الفترة المسائية", rsCancel: "إلغاء", rsSave: "حفظ الموعد الجديد", rsChange: "التغيير",
+    rs_customer: "العميل طلب عبر الاتصال", rs_whatsapp: "العميل طلب عبر واتساب", rs_nurse: "الممرضة غير متاحة", rs_doctor: "الطبيب غير متاح", rs_other: "أخرى",
+    rsNeedReason: "اختر سبب التعديل.", rsSame: "ما تغيّر شي: اختر تاريخ أو وقت أو ممرضة مختلفة.", rsSaved: "تم نقل الزيارة إلى {t}. بيوصل إشعار للعميل والفريق.",
+    rsLog: "سجل التعديلات", rsFrom: "من", rsTo: "إلى", rsBy: "{n} · {t}", rsTag: "تم تعديل الموعد", rsOrig: "الحجز الأصلي: {t}", bookingSaved: "تم إسناد الفريق. بيوصل إشعار للممرضة{d}.", andDoctor: " والطبيب", drAfterPay: "تم إسناد الفريق. بيوصل الإشعار للطبيب بعد ما يدفع العميل.",
+    bookingErr: "اختاري التاريخ والوقت والممرضة أولاً.", lastSaved: "آخر حفظ بواسطة {n} · {t}",
+    locAsk: "ما عندك الموقع؟ رابط الدفع يخلي العميل يحدد موقعه الفعلي بنفسه. وتقدرين ترسلين طلب موقع، أو تلصقين اللي يرسله تحت.", locAskBtn: "طلب الموقع", locAskAgain: "إرسال مرة ثانية",
+    locAsked: "تم إرسال طلب الموقع إلى {m} الساعة {t}. بانتظار العميل.", locAskToast: "تم إرسال طلب الموقع إلى {m}.",
+    addrLbl: "العنوان التفصيلي", addrPh: "المدينة، الحي، الشارع، رقم المبنى",
+    mapLbl: "رابط قوقل ماب", mapPh: "الصقي الرابط أو الإحداثيات اللي أرسلها العميل",
+    mapCoords: "تم تحديد الموقع: {c}", mapLinkOk: "تم حفظ الرابط. افتحيه للتأكد من الموقع.", mapBad: "هذا ليس رابط خرائط ولا إحداثيات.",
+    codeLbl: "الرمز المختصر للعنوان الوطني", codePh: "مثال: RRRD2929", codeHint: "4 حروف و4 أرقام، من العنوان الوطني للعميل.", codeBad: "الرمز المختصر 4 حروف ثم 4 أرقام، مثل RRRD2929.",
+    floorLbl: "الدور / الشقة", floorPh: "مثال: الدور الثاني، شقة 5", landmarkLbl: "أقرب معلم", landmarkPh: "مثال: بجانب جامع الراجحي",
+    imgLbl: "صورة المبنى / الموقع", optional: "(اختياري)", imgAdd: "إضافة صورة", imgHelp: "صورة المبنى أو المدخل تساعد الممرضة توصل للمكان.",
+    imgChange: "تغيير الصورة", imgRemove: "حذف", imgSaved: "تم حفظ الصورة.", imgRemoved: "تم حذف الصورة.", imgErr: "تعذّر حفظ الصورة. جربي صورة أصغر.", imgType: "اختاري ملف صورة.", imgAddedAt: "أضيفت {t}",
+    openMaps: "فتح في الخرائط", saveLoc: "حفظ الموقع", locSaved: "تم حفظ الموقع.", locEmpty: "أضيفي العنوان أو رابط الخريطة أو الرمز المختصر أولاً.", fixErr: "صحّحي الحقل المحدد أولاً.",
+    payLinkTitle: "رابط الدفع", notSent: "لم يُرسل بعد", sendLink: "إرسال رابط الدفع", resendLink: "إعادة إرسال الرابط", markPaid: "تسجيل كمدفوع",
+    markPaidHint: "للتجربة فقط: بوابة الدفع بتسجلها تلقائياً.", amount: "المبلغ",
+    payStatusLbl: "حالة الدفع", ps_none: "بانتظار رابط الدفع", ps_wait: "بانتظار الدفع", ps_expired: "انتهى الرابط", ps_paid: "مدفوع",
+    linkSent: "إرسال الرابط", payTime: "وقت الدفع", expiry: "انتهاء الرابط", leftTxt: "متبقي", linkSentToast: "تم إرسال رابط الدفع إلى {m}. صالح لمدة ساعة.", paidToast: "تم تسجيل الدفع.",
+    paidAt: "دُفع الساعة {t}", expiredAt: "انتهى الساعة {t}",
+    payNotYet: "رابط الدفع يفتح بعد موافقة العميل وتحديد السعر.", timeline: "سجل الدفع",
+    ev_created: "تم إنشاء الطلب", ev_sent: "تم إرسال رابط الدفع إلى {m}", ev_expired: "انتهت صلاحية رابط الدفع", ev_paid: "تم استلام الدفع",
+    noteType: "نوع الملاحظة", nt_general: "ملاحظة عامة", nt_alert: "تنبيه مهم", nt_followup: "متابعة مطلوبة", nf_all: "الكل", fromReq: "من الطلب {id}", markDone: "تمت المتابعة", doneBy: "تابعتها {n} · {t}", fuOpen: "المتابعة ما زالت مفتوحة", fuDoneToast: "تم تسجيل المتابعة.", added_general: "تمت إضافة الملاحظة.", added_alert: "تمت إضافة التنبيه، ويظهر الحين أعلى الطلب.", added_followup: "تمت إضافة المتابعة، وتبقى أعلى الطلب لين تنتهي.", earlierNotes: "ملاحظات من طلبات سابقة لنفس المريض ({n})", noteLbl: "إضافة ملاحظة", notePh: "اكتبي ملاحظة للفريق، مثلاً: العميل يبي اتصال قبل الزيارة", addNote: "إضافة الملاحظة", history: "سجل الملاحظات", noNotesYet: "لا توجد ملاحظات بعد.", noteAdded: "تمت إضافة الملاحظة.",
+    cancelTitle: "إلغاء الطلب", cancelTextSup: "الإلغاء يفرّغ وقت الممرضة ويوقف رابط الدفع.", cancelTextAgent: "بيتقفل الطلب ويروح للمشرفة عشان تقفله.",
+    cancelPaid: " الطلب مدفوع، فالمشرفة بترتب استرجاع المبلغ.",
+    cancelDlgText: "اختاري سبب الإلغاء واكتبي ملاحظة قصيرة.",
+    cancelNoteLbl: "الملاحظة", cancelNotePh: "مثال: العميل اتصل وألغى الطلب.", cancelNoteErr: "اكتبي ملاحظة قصيرة.", keep: "إبقاء الطلب", confirmCancel: "إلغاء الطلب",
+    cancelledAgent: "تم إرسال {id} للمشرفة عشان تقفله.", cancelledSup: "تم إلغاء {id}.",
+    statusLbl: "الحالة:", createdByLbl: "أنشأ الطلب: {n}", openCustomer: "فتح صفحة العميل", custLoc: "العميل حدد موقعه الفعلي من رابط الدفع · {t}", pm_apple: "Apple Pay", pm_card: "البطاقة البنكية", pm_tamara: "تمارا", pm_tabby: "تابي", payMethod: "طريقة الدفع", openedLbl: "فتح الرابط", notOpened: "لم يُفتح بعد", opensN: "فُتح {n} مرات، آخرها {t}", timeLeft: "الوقت المتبقي", expiryAt: "ينتهي {t}", trackLbl: "تتبع الرابط", tr_sent: "أُرسل", tr_opened: "فتحه العميل", tr_located: "حدد الموقع", tr_paid: "دفع", trWaiting: "بالانتظار", trMissed: "لم يحدث", ev_opened: "العميل فتح رابط الدفع", reqServices: "الخدمات المطلوبة", colCode: "الكود", colService: "الخدمة", colPrice: "السعر", totalVat: "الإجمالي (شامل الضريبة)", ty_pkg: "باقة تحاليل", ty_test: "تحليل", ty_nursing: "تمريض", ty_iv: "محاليل وريدية", pkgTests: "{n} تحاليل: {l}", fastH: "صيام {h} ساعات", morningSample: "يفضّل أخذ العينة صباحاً", noFast: "بدون صيام", mins: "{m} دقيقة", needsRx: "يحتاج وصفة طبية", outArea: "خارج نطاق التغطية. نخدم حالياً في {c} فقط.", shareLbl: "شاركي الرابط مع العميل", copyLink: "نسخ الرابط", viaWa: "واتساب", viaSms: "رسالة SMS", linkCopied: "تم نسخ الرابط. الصقيه في المحادثة مع العميل.", ev_shared: "تمت مشاركة الرابط عبر {c}", ev_copied: "تم نسخ الرابط للإرسال", ch_whatsapp: "واتساب", ch_sms: "رسالة SMS", ev_located: "العميل حدد موقع الزيارة", city_riyadh: "الرياض", city_jeddah: "جدة"
+  });
+  let current = "en";
+  const t = () => i18n[current];
+  const T = v => MadaOrders.text(v, current);
+  const tx = (k, v) => Object.entries(v || {}).reduce((s, [a, b]) => s.split("{" + a + "}").join(b), t()[k]);
+  // English dates and times, isolated so they keep their order inside Arabic text.
+  const fmtTime = d => "⁦" + d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) + "⁩";
+  const fmtDateLong = d => "⁦" + d.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) + "⁩";
+  const fmtDate = d => `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+  const fmtMin = m => { const h = Math.floor(m / 60); return `⁦${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}⁩`; };
+
+  const ICON = {
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    whatsapp: '<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"/>',
+    website: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
+    other: '<circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/>',
+    lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'
+  };
+  const svg = (p, sw) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw || 1.8}" aria-hidden="true">${p}</svg>`;
+  const SVC_ICON = {
+    doctor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0"/>',
+    nursing: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 3.5h4M12 2v3"/>',
+    blood: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    iv: '<rect x="7" y="2.5" width="10" height="11" rx="2"/><path d="M10 6.5h4M12 13.5v3M12 16.5c0 3 3 3 3 5"/>'
+  };
+  const statusChip = emg => emg ? `<span class="status-chip emg">${svg('<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>', 2)}${t().emergency}</span>`
+    : `<span class="status-chip non">${svg('<path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 11C19 15.6 12 20 12 20z"/><path d="M7 12h3l1-2 2 4 1-2h3"/>', 2)}${t().nonEmergency}</span>`;
+  function itemInfo(it) {
+    const src = it.kind === "pkg" ? MadaLabs.pkgById : it.kind === "test" ? MadaLabs.byCode : it.kind === "nursing" ? MadaNursing.byCode : it.kind === "iv" ? MadaIV.byCode : null;
+    const p = src && src[it.code]; return p ? { name: p.name, price: p.price } : null;
+  }
+
+  // A paid request opens as a booking: own title, back link and menu item.
+  function headFor(o) {
+    const isBk = !!(o && o.bookingId);
+    document.querySelector(".head h1").textContent = isBk ? t().bkTitle : t().title;
+    document.querySelector(".head p").textContent = isBk ? t().bkSub : t().subtitle;
+    const back = document.querySelector(".head .back"); back.href = isBk ? "bookings.html" : "requests.html"; back.setAttribute("aria-label", isBk ? t().bkBack : t().back);
+    document.querySelector('.nav a[href="requests.html"]').toggleAttribute("aria-current", !isBk);
+    if (!isBk) document.querySelector('.nav a[href="requests.html"]').setAttribute("aria-current", "page");
+    const b = document.querySelector('.nav a[href="bookings.html"]'); if (isBk) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    document.title = (current === "ar" ? "مدى كير | " : "Mada Care | ") + (isBk ? t().bkTitle : t().title);
+  }
+  function render() {
+    const o = id && MadaOrders.get(id);
+    if (!o) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="requests.html">${t().toList}</a></p></section>`; return; }
+    const d = new Date(o.createdAt), isEmg = o.medical === "emergency", em = o.emergency || { checks: [], notes: "" };
+    // Emergency referrals and "Not Approved" requests are locked for agents; a supervisor closes them.
+    const isRej = !isEmg && o.decision === "rejected", locked = isEmg || isRej;
+    const closed = o.status === "emergency_closed" || o.status === "cancelled";
+    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "other" ? ["other"] : []);
+    let html = `
+    <section class="card strip${o.bookingId ? " four" : ""}">
+      <div>${svg('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 11h6M9 15h6"/>')}<div><small>${t().orderId}</small><strong class="oid">${esc(o.id)}<button type="button" class="copy" id="copyId" aria-label="${esc(t().copy)}" title="${esc(t().copy)}">${svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h9"/>')}</button></strong></div></div>
+      <div>${svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>')}<div><small>${t().created}</small><strong>${fmtDateLong(d)}</strong></div></div>
+      <div>${svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}<div><small>${t().time}</small><strong>${fmtTime(d)}</strong></div></div>
+      ${o.bookingId ? `<div>${svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/>')}<div><small>${t().bookingIdLbl}</small><strong class="bid">${esc(o.bookingId)}</strong></div>
+        <button type="button" class="btn btn-ghost btn-sm pdf-btn" id="pdfBtn">${svg('<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>')}${t().pdfBtn}</button></div>` : ""}
+    </section>`;
+    if (!locked) {
+      // Keep what the agent typed but has not saved yet (render runs after every save and language switch).
+      const keep = {};
+      document.querySelectorAll("[data-keep]").forEach(el => keep[el.id] = el.value);
+      $("content").innerHTML = html + fullHtml(o);
+      Object.keys(keep).forEach(k => { if ($(k)) $(k).value = keep[k]; });
+      $("copyId").addEventListener("click", () => { try { navigator.clipboard.writeText(o.id); } catch (e) {} toast(t().copied); });
+      bindBooking(o); bindLocation(o); bindRest(o);
+      if (o.bookingId) { bindBk(o); $("pdfBtn").addEventListener("click", () => downloadPdf(MadaOrders.get(id))); }
+      headFor(o);
+      return;
+    }
+    html += `
+    <section class="card">
+      <div class="sec">
+        <h2>${t().s1}${locked ? `<span class="lock-tag">${svg(ICON.lock, 2)}${t().locked}</span>` : ""}</h2>
+        <div class="${isRej ? "row3" : "row2"}">
+          <div><span class="lbl">${t().mobile}</span><div class="ro">${svg(ICON.phone)}<span class="num">${esc(o.mobile)}</span></div></div>
+          <div><span class="lbl">${t().source}</span><div class="srcs">${srcs.map(k => `<span class="src ${o.source === k ? "on" : ""}">${svg(ICON[k])}${esc(k === "other" && o.sourceOther ? o.sourceOther : t()["src_" + k])}</span>`).join("")}</div></div>
+          ${isRej ? `<div><span class="lbl">${t().patientStatus}</span>${statusChip(false)}</div>` : ""}
+        </div>
+        <div class="divider"></div>`;
+    if (isRej) {
+      html += `<div class="row2 svc-row">
+          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv"].map(k =>
+            `<span class="svc-opt ${o.service === k ? "on" : ""}">${svg(SVC_ICON[k])}<span>${t()["sv_" + k]}</span><span class="radio"></span></span>`).join("")}</div></div>
+          <div><span class="lbl">${t().decision}</span><span class="status-chip emg">${svg('<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>', 2)}${t().notApproved}</span></div>
+        </div>
+        <div class="block"><label class="lbl" for="rejReason">${t().rejReason}</label>
+          <textarea class="ro-area rej" id="rejReason" readonly dir="auto">${esc(T(o.reason) || t().noNotes)}</textarea></div>`;
+    } else {
+      html += `<span class="lbl">${t().emgStatus}</span>${statusChip(isEmg)}`;
+    }
+    if (isEmg) {
+      html += `
+        <div class="block"><span class="lbl">${t().reasonTitle}</span>
+          <div class="checks"><small>${t().quick}</small>
+            ${em.checks.length ? em.checks.map(k => `<label class="check"><input type="checkbox" checked disabled>${esc(T(MadaOrders.CHECKS[k]) || k)}</label>`).join("") : `<span class="muted">${t().noChecks}</span>`}
+          </div>
+        </div>
+        <div class="block"><label class="lbl" for="emgNotes">${t().notes}</label>
+          <textarea class="ro-area" id="emgNotes" readonly dir="auto">${esc(T(em.notes) || t().noNotes)}</textarea></div>`;
+    }
+    if (locked) {
+      const outs = isEmg ? MadaOrders.OUTCOMES : MadaOrders.CANCEL_OUTCOMES;
+      if (closed && o.closure) {
+        const c = o.closure, ca = new Date(c.at);
+        html += `<div class="closure"><h3>${svg('<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>', 2)}${t().closureTitle}</h3><dl class="facts">
+          <div><dt>${t().outcome}</dt><dd>${esc(T(outs[c.outcome]) || c.outcome)}</dd></div>
+          <div><dt>${t().closedOn}</dt><dd>${fmtDate(ca)} · ${fmtTime(ca)}</dd></div>
+          <div class="wide"><dt>${t().closeNoteShow}</dt><dd dir="auto">${esc(T(c.note))}</dd></div></dl></div>`;
+      } else if (isSupervisor) {
+        html += `<div class="close-row"><button type="button" class="btn btn-danger" id="closeBtn">${svg(ICON.lock, 2)}${isEmg ? t().closeBtn : t().closeReqBtn}</button></div>`;
+      } else {
+        html += `<div class="locked-note">${svg(ICON.lock, 2)}<span>${isEmg ? t().lockedAgent : t().lockedAgentRej}</span></div>
+          <div class="close-row"><button type="button" class="btn" disabled>${svg(ICON.lock, 2)}${t().waitSup}</button></div>`;
+      }
+    }
+    html += `</div>`;
+    if (locked) {
+      html += `<div class="after"><b>${closed ? t().after : t().afterOpen}</b>${closed
+        ? `<span class="pill p-red">${isEmg ? t().stClosed : t().stCancelled}</span>${o.closure ? `<span class="who">${esc(tx("closedBy", { n: T(o.closure.by), t: `${fmtDate(new Date(o.closure.at))} ${fmtTime(new Date(o.closure.at))}` }))}</span>` : ""}`
+        : `<span class="pill p-orange">${isEmg ? t().stOpen : t().stRejOpen}</span>`}</div>`;
+    }
+    html += `</section>`;
+
+    if (!isEmg) {
+      const items = (o.items || []).map(it => ({ it, info: itemInfo(it) })).filter(x => x.info);
+      const dec = o.decision ? `<span class="pill ${{ approved: "p-green", rejected: "p-red", pending: "p-orange", on_hold: "p-orange" }[o.decision]}">${t()[o.decision]}</span>` : "—";
+      html += `
+      <section class="card sec"><h2>${t().s2}</h2><dl class="facts">
+        <div><dt>${t().service}</dt><dd>${esc(o.service ? t()["sv_" + o.service] : t().sv_none)}</dd></div>
+        <div><dt>${t().status}</dt><dd>${esc(t()["st_" + o.status] || o.status)}</dd></div>
+        <div class="wide"><dt>${t().items}</dt><dd>${items.length ? `<div class="items">${items.map(({ it, info }) => `<div><span><code>${esc(it.code)}</code>${esc(T(info.name))}</span><span>${info.price} ${t().sar}</span></div>`).join("")}${o.total != null ? `<div class="total"><span>${t().total}</span><span>${o.total} ${t().sar}</span></div>` : ""}</div>` : `<span class="muted">${t().noItems}</span>`}</dd></div>
+        ${o.reason && !isRej ? `<div class="wide"><dt>${t().reason}</dt><dd>${esc(T(o.reason))}</dd></div>` : ""}
+      </dl></section>
+      <section class="card sec"><h2>${t().s3}</h2>${o.appointment ? `<dl class="facts">
+        <div><dt>${t().visit}</dt><dd>${(() => { const [y, m, dd] = o.appointment.date.split("-").map(Number); return `${fmtDate(new Date(y, m - 1, dd))} · ${fmtMin(o.appointment.minute)}`; })()}</dd></div>
+        ${o.appointment.nurse ? `<div><dt>${t().nurse}</dt><dd>${esc(T(o.appointment.nurse))}</dd></div>` : ""}</dl>` : `<span class="muted">${t().noVisit}</span>`}</section>
+      <section class="card sec"><h2>${t().s4}</h2><dl class="facts">
+        <div><dt>${t().patient}</dt><dd>${esc(T(o.patient) || t().unknown)}</dd></div>
+        <div><dt>${t().mrn}</dt><dd>${esc(o.mrn || t().unknown)}</dd></div>
+        <div><dt>${t().createdBy}</dt><dd>${esc(T(o.staff) || "—")}</dd></div></dl></section>
+      <section class="card sec"><h2>${t().s5}</h2><dl class="facts">
+        <div><dt>${t().decision}</dt><dd>${dec}</dd></div>
+        <div><dt>${t().payment}</dt><dd>${o.payment === "paid" ? `<span class="pill p-green">${t().paid}</span>` : o.payment === "unpaid" ? `<span class="pill p-red">${t().notPaid}</span>` : "—"}</dd></div></dl></section>`;
+    } else {
+      html += `<section class="card sec"><h2>${t().s2p}</h2><dl class="facts">
+        <div><dt>${t().patient}</dt><dd>${esc(T(o.patient) || t().unknown)}</dd></div>
+        <div><dt>${t().mrn}</dt><dd>${esc(o.mrn || t().unknown)}</dd></div>
+        <div><dt>${t().createdBy}</dt><dd>${esc(T(o.staff) || "—")}</dd></div></dl></section>`;
+    }
+    // Locked requests keep staff notes too (e.g. "called the family").
+    const keepL = {};
+    document.querySelectorAll("[data-keep]").forEach(el => keepL[el.id] = el.value);
+    html = html.replace("</section>", "</section>" + alertsTop(o)) + notesSection(o, isEmg ? t().n3 : t().n6);
+    $("content").innerHTML = html;
+    Object.keys(keepL).forEach(k => { if ($(k)) $(k).value = keepL[k]; });
+    $("copyId").addEventListener("click", () => { try { navigator.clipboard.writeText(o.id); } catch (e) {} toast(t().copied); });
+    if ($("closeBtn")) $("closeBtn").addEventListener("click", openClose);
+    bindNotes();
+  }
+
+  // ---------- Full request: booking, location, payment, notes, cancel ----------
+  const I = {
+    check: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>', x: '<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', pause: '<circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>', image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+    send: '<path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/>', file: '<path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/>',
+    cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', warn: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+    bolt: '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>', save: '<path d="M5 3h11l3 3v15H5z"/><path d="M8 3v5h7M8 21v-7h8v7"/>', note: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'
+  };
+  const LRM = "‎";
+  const optMin = m => { const h = Math.floor(m / 60); return `${LRM}${((h + 11) % 12) + 1}:${String(m % 60).padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`; };
+  const enOf = v => v && typeof v === "object" ? v.en : (v || "");
+  const initials = v => T(v).split(/\s+/).filter(w => w && !/^(Dr\.|د\.)$/.test(w)).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  const stamp = d => `${fmtDate(d)} · ${fmtTime(d)}`;
+  const hint = (cls, ic, txt) => `<span class="hint ${cls}">${ic ? svg(ic, 2) : ""}${esc(txt)}</span>`;
+  const imgKey = oid => "mada-order-img-" + oid;
+
+  let bk = null;            // booking draft: { oid, doctorId, nurseId, date, minute, dateErr }
+  let canBook = false;
+  // Paid bookings are locked; "Reschedule" opens them again (?reschedule=1 opens it straight away).
+  let rsEdit = new URLSearchParams(location.search).get("reschedule") ? id : null;
+  const RS_REASONS = ["customer", "whatsapp", "nurse", "doctor", "other"];
+  const apptTxt = a => `${fmtDate(MadaNurses.parse(a.date))} · ${fmtMin(a.minute)}`;
+  const nurseName = nid => { const n = MadaNurses.NURSES.find(x => x.id === nid); return n ? T(n.name) : ""; };
+  const docName = did => { const d = MadaOrders.DOCTORS.find(x => x.id === did); return d ? T(d.name) : ""; };
+  const slotTxt = a => [apptTxt(a), nurseName(a.nurseId), a.doctorId ? docName(a.doctorId) : ""].filter(Boolean).join(" · ");
+  function rsLogHtml(o) {
+    const list = (o.reschedules || []).slice().reverse();
+    if (!list.length) return "";
+    return `<ul class="rs-log"><li style="display:block"><h3>${t().rsLog} (${list.length})</h3></li>${list.map(r => `<li><span class="ic">${svg(I.clock, 2)}</span><div>
+      ${t().rsFrom} <s>${esc(slotTxt(r.from))}</s> ${t().rsTo} <b>${esc(slotTxt(r.to))}</b>
+      <small>${esc(t()["rs_" + r.reason] || r.reason)}${r.note ? " · " + esc(r.note) : ""}</small>
+      <small>${esc(tx("rsBy", { n: T(r.by), t: `${fmtDate(new Date(r.at))} ${fmtTime(new Date(r.at))}` }))}</small></div></li>`).join("")}</ul>`;
+  }
+
+  // ---------- Booking view (a paid request) ----------
+  const VISIT_STEPS = ["received", "ontheway", "arrived", "identity", "consent", "vitals", "assess", "service", "educate", "report"];
+  const visitAt = o => o.appointment ? new Date(MadaNurses.parse(o.appointment.date).getTime() + o.appointment.minute * 60000) : null;
+  const arCount = (n, one, two, few, many) => n === 1 ? one : n === 2 ? two : n <= 10 ? `${n} ${few}` : `${n} ${many}`;
+  function dur(ms) {
+    const mins = Math.max(1, Math.round(Math.abs(ms) / 60000)), d = Math.floor(mins / 1440), h = Math.floor(mins % 1440 / 60), m = mins % 60;
+    if (current === "ar") {
+      const D = n => arCount(n, "يوم", "يومين", "أيام", "يوماً"), H = n => arCount(n, "ساعة", "ساعتين", "ساعات", "ساعة"), M = n => arCount(n, "دقيقة", "دقيقتين", "دقائق", "دقيقة");
+      return (d ? [D(d), h && H(h)] : h ? [H(h), m && M(m)] : [M(m)]).filter(Boolean).join(" و");
+    }
+    return (d ? [`${d}d`, h && `${h}h`] : h ? [`${h}h`, m && `${m}m`] : [`${m} min`]).filter(Boolean).join(" ");
+  }
+  function arrivalDiff(o) {
+    const at = visitAt(o); if (!o.arrival || !at) return null;
+    const ms = new Date(o.arrival.at) - at;
+    return { ms, txt: Math.abs(ms) < 60000 ? t().arrOnTime : tx(ms < 0 ? "arrEarly" : "arrLate", { t: dur(ms) }), cls: ms <= 5 * 60000 ? "green" : ms <= 15 * 60000 ? "orange" : "red" };
+  }
+  // Doctor Portal: when the doctor pressed Start Visit against the booked time (within 5 minutes either way is on time).
+  function drStartDiff(o) {
+    const at = visitAt(o), st = o.doctorVisit && o.doctorVisit.startedAt; if (!st || !at) return null;
+    const mins = Math.round((new Date(st) - at) / 60000), ms = Math.abs(mins) * 60000;
+    if (Math.abs(mins) <= 5) return { cls: "green", txt: t().arrOnTime };
+    return mins < 0 ? { cls: "blue", txt: tx("drEarly", { t: dur(ms) }) } : { cls: mins <= 15 ? "orange" : "red", txt: tx("drLate", { t: dur(ms) }) };
+  }
+  function heroHtml(o) {
+    const at = visitAt(o), st = o.status;
+    let cls, head, big, ico = I.clock;
+    if (st === "cancelled") { cls = "gray"; big = t().hCancel; ico = I.x; }
+    else if (st === "completed") { cls = "green"; big = t().hDone; ico = I.check; }
+    else if (o.doctorVisit && o.doctorVisit.startedAt && o.doctorVisit.status !== "done") { const d = drStartDiff(o);
+      return heroWrap(o, d ? d.cls : "green", t().hDrStarted, tx("drStartedAt", { t: fmtTime(new Date(o.doctorVisit.startedAt)) }), d ? `${d.txt} · ${apptTxt(o.appointment)}` : "", I.clock); }
+    else if (o.arrival) { const d = arrivalDiff(o); cls = d ? d.cls : "green"; head = t().hArrived; big = tx("arrAt", { t: fmtTime(new Date(o.arrival.at)) }); ico = I.check;
+      return heroWrap(o, cls, head, big, d ? d.txt : "", ico); }
+    else if (!at) { cls = "blue"; big = t().hNone; ico = I.cal; }
+    else { const ms = at - Date.now();
+      if (ms > 0) { cls = ms < 2 * 3600000 ? "red" : ms < 24 * 3600000 ? "orange" : "green"; head = t().hUntil; big = dur(ms); }
+      else if (-ms < 60 * 60000) { cls = "orange"; head = t().hNow; big = tx("lateBy", { t: dur(ms) }); }
+      else { cls = "red"; head = t().hLate; big = tx("lateBy", { t: dur(ms) }); } }
+    return heroWrap(o, cls, head, big, at ? apptTxt(o.appointment) : "", ico);
+  }
+  const heroWrap = (o, cls, head, big, when, ico) => `<section class="card bk-hero h-${cls}" id="bkHero"><span class="ic">${svg(ico, 2)}</span>
+    <div class="txt">${head ? `<small>${head}</small>` : ""}<strong>${esc(big)}</strong>${when ? `<span class="when">${when}</span>` : ""}</div>
+    <div class="bk-ids"><span>${t().bookingNo} <b class="num">${esc(o.bookingId)}</b></span><span>${t().orderNo2} <span class="num">${esc(o.id)}</span></span></div></section>`;
+  // Doctor visits: the doctor's own visit steps from the Doctor Portal (doctor-visit.html), read only.
+  // Each step shows when the doctor first opened it (doctorVisit.stepLog), when it was saved (steps[k].at) and the time between.
+  const DR_STEPS = ["arrival", "history", "vitals", "exam", "allergy", "assess", "plan", "orders", "nurse", "edu", "idform", "consent"];
+  function drRows(o) {
+    const dv = o.doctorVisit || {}, st = dv.steps || {}, log = dv.stepLog || {};
+    return DR_STEPS.map(k => { const op = log[k] && log[k].openedAt, cl = st[k] && st[k].at;
+      return { k, op, cl, s: cl ? "done" : op ? "open" : "wait", dur: op && cl && new Date(cl) >= new Date(op) ? new Date(cl) - new Date(op) : null }; });
+  }
+  const stampTxt = v => v ? stamp(new Date(v)).replace(/[⁦⁩]/g, "") : "—";
+  function drVisitHtml(o) {
+    const dv = o.doctorVisit || {}, rows = drRows(o), done = rows.filter(r => r.s === "done").length, end = dv.status === "done" ? dv.completedAt : null;
+    const total = dv.startedAt ? (end ? new Date(end) : new Date()) - new Date(dv.startedAt) : null;
+    return `
+    <section class="card sec" id="secVisit">
+      <div class="dv-head"><h2>${t().dvT}</h2>${dv.startedAt ? `<button type="button" class="btn btn-ghost btn-sm" id="dvDl">${svg(I.download || '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', 2)}${t().dvDl}</button>` : ""}</div>
+      <div class="dv-ro">${svg(I.info, 2)}<span>${dv.startedAt ? t().dvRo : t().dvNotStarted}</span></div>
+      ${dv.startedAt ? `<div class="dv-sum"><div><span>${t().dvStart}</span><b>${esc(stampTxt(dv.startedAt))}</b></div><div><span>${t().dvEnd}</span><b>${end ? esc(stampTxt(end)) : t().dvOngoing}</b></div>
+        <div><span>${t().dvTotal}</span><b>${total != null ? esc(dur(total)) : "—"}</b></div></div>` : ""}
+      <div class="steps-bar"><span class="bar"><i style="width:${done / DR_STEPS.length * 100}%"></i></span><b>${tx("vdProgress", { n: done, t: DR_STEPS.length })}</b></div>
+      <ol class="vsteps dvsteps">${rows.map((r, i) => `<li class="${r.s === "done" ? "done" : r.s === "open" ? "now" : ""}"><span class="n">${r.s === "done" ? svg('<path d="m6 12 4 4 8-8"/>', 2.6) : i + 1}</span>
+        <div><b>${t()["ds_" + r.k]}</b>${r.op || r.cl ? `<span class="tm">${r.op ? `<span>${t().dvOpened} <i>${esc(fmtTime(new Date(r.op)))}</i></span>` : ""}${r.cl ? `<span>${t().dvClosed} <i>${esc(fmtTime(new Date(r.cl)))}</i></span>` : ""}${r.dur != null ? `<span>${t().dvDur} <i>${esc(dur(r.dur))}</i></span>` : ""}</span>` : ""}</div>
+        <span class="st">${t()["dvSt_" + r.s]}</span></li>`).join("")}</ol>
+    </section>`;
+  }
+  // The same timeline as an A4 PDF (html2pdf, as on the Doctor Portal); without the library a print view opens instead.
+  // html2canvas drops the spaces between Arabic words: each Arabic word goes in its own span (same fix as the Doctor Portal PDFs).
+  function fixArabic(wrap) {
+    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) if (/[\u0600-\u06FF]/.test(walk.currentNode.nodeValue)) nodes.push(walk.currentNode);
+    nodes.forEach(nd => {
+      const frag = document.createDocumentFragment();
+      nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+        else { const sp = document.createElement("span"); sp.textContent = part; frag.appendChild(sp); }
+      });
+      nd.replaceWith(frag);
+    });
+  }
+  async function drVisitPdf(o) {
+    const dv = o.doctorVisit || {}, rows = drRows(o), rtl = current === "ar", file = `Mada-Care-Visit-Steps-${o.id}.pdf`, d = MadaOrders.DOCTORS.find(x => x.id === (o.booking && o.booking.doctorId));
+    const end = dv.status === "done" ? dv.completedAt : null, total = dv.startedAt ? (end ? new Date(end) : new Date()) - new Date(dv.startedAt) : null;
+    const cell = "padding:7px 9px;border-bottom:1px solid #e6ecee;text-align:" + (rtl ? "right" : "left");
+    const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(String(v).replace(/[⁦⁩]/g, ""))}</span>`, tm = v => v ? L2R(fmtTime(new Date(v))) : "—";
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:794px";
+    wrap.innerHTML = `<div dir="${rtl ? "rtl" : "ltr"}" style="width:794px;padding:34px 38px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0b6b5c;padding-bottom:12px"><div><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:15px;font-weight:700;margin-top:6px">${t().dvPdfT}</div></div></div>
+      <table style="width:100%;border-collapse:collapse;margin:14px 0"><tr>
+        <td style="${cell}"><b>${esc(t().bookingNo)}:</b> ${L2R(o.bookingId)}</td><td style="${cell}"><b>${esc(t().orderNo2)}:</b> ${L2R(o.id)}</td></tr><tr>
+        <td style="${cell}"><b>${t().dvPatient}:</b> ${esc(T(o.patient))} ${o.mrn ? `· ${L2R(o.mrn)}` : ""}</td><td style="${cell}"><b>${t().dvDoctor}:</b> ${d ? esc(T(d.name)) : "—"}</td></tr><tr>
+        <td style="${cell}"><b>${t().dvBooked}:</b> ${o.appointment ? L2R(apptTxt(o.appointment)) : "—"}</td><td style="${cell}"><b>${t().dvTotal}:</b> ${total != null ? esc(dur(total)) : "—"}</td></tr><tr>
+        <td style="${cell}"><b>${t().dvStart}:</b> ${dv.startedAt ? L2R(stampTxt(dv.startedAt)) : "—"}</td><td style="${cell}"><b>${t().dvEnd}:</b> ${end ? L2R(stampTxt(end)) : t().dvOngoing}</td></tr></table>
+      <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#eef5f3">${["#", t().dvStep, t().dvStatus, t().dvOpened, t().dvClosed, t().dvDur].map(h => `<th style="${cell};font-size:11.5px">${h}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map((r, i) => `<tr><td style="${cell}">${i + 1}</td><td style="${cell}">${t()["ds_" + r.k]}</td><td style="${cell};color:${r.s === "done" ? "#15803d" : r.s === "open" ? "#b45309" : "#8a979c"}">${t()["dvSt_" + r.s]}</td>
+          <td style="${cell}">${tm(r.op)}</td><td style="${cell}">${tm(r.cl)}</td><td style="${cell}">${r.dur != null ? esc(dur(r.dur)) : "—"}</td></tr>`).join("")}</tbody></table>
+      <div style="margin-top:16px;font-size:11px;color:#8a979c">${esc(tx("dvMade", { t: "" }))}${L2R(stampTxt(new Date().toISOString()))} · ${esc(T(me.name))}</div></div>`;
+    document.body.appendChild(wrap); fixArabic(wrap); toast(t().dvMaking);
+    const sy = window.scrollY; window.scrollTo(0, 0);
+    try {
+      if (!window.html2pdf) await new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); setTimeout(bad, 15000); });
+      await window.html2pdf().set({ margin: [6, 6], filename: file, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save();
+      toast(tx("dvDlDone", { f: file }));
+    } catch (e) {
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().dvDlFail);
+    } finally { wrap.remove(); window.scrollTo(0, sy); }
+  }
+  function visitHtml(o) {
+    if (o.service === "doctor") return drVisitHtml(o);
+    const steps = (o.visit && o.visit.steps) || {}, done = VISIT_STEPS.filter(k => steps[k]).length, next = VISIT_STEPS.find(k => !steps[k]);
+    return `
+    <section class="card sec" id="secVisit">
+      <h2>${t().vd}</h2>
+      <div class="steps-bar"><span class="bar"><i style="width:${done * 10}%"></i></span><b>${tx("vdProgress", { n: done, t: VISIT_STEPS.length })}</b></div>
+      <ol class="vsteps">${VISIT_STEPS.map((k, i) => { const at = steps[k], now = !at && k === next && done > 0;
+        return `<li class="${at ? "done" : now ? "now" : ""}"><span class="n">${at ? svg('<path d="m6 12 4 4 8-8"/>', 2.6) : i + 1}</span><div><b>${t()["vs_" + k]}</b>${at ? `<small>${fmtTime(new Date(at))}</small>` : ""}</div><span class="st">${at ? t().vdDone : now ? t().vdNow : t().vdWait}</span></li>`; }).join("")}</ol>
+      <div class="src-note">${svg(I.info, 2)}<span>${t().vdSrc} ${t().vdSample}</span>${MadaStore.SAMPLES && next && o.status !== "cancelled" ? `<button type="button" class="link-btn" id="vdDemo">${t().vdDemo}</button>` : ""}</div>
+    </section>`;
+  }
+  function driverHtml(o) {
+    const dv = o.driver && MadaOrders.DRIVERS.find(d => d.id === o.driver.id), open = o.status !== "cancelled" && o.status !== "completed";
+    const diff = arrivalDiff(o), at = visitAt(o);
+    return `
+    <section class="card sec" id="secDriver">
+      <h2>${t().da}</h2>
+      <div class="grid2">
+        <div class="fld"><label class="lbl" for="drvSel">${t().drvLbl}</label>
+          ${open ? `<div style="display:flex;gap:10px"><select class="sel" id="drvSel"><option value="">${t().selDriver}</option>${MadaOrders.DRIVERS.map(d => `<option value="${d.id}" ${dv && dv.id === d.id ? "selected" : ""}>${esc(T(d.name))} · ${esc(T(d.car))}</option>`).join("")}</select>
+            <button type="button" class="btn btn-primary" id="drvSave" style="flex-shrink:0">${dv ? t().drvChange : t().drvAssign}</button></div>` : ""}
+          ${dv ? `<div class="drv-card"><span class="avatar">${esc(initials(dv.name))}</span><div><b>${esc(T(dv.name))}</b><small>${esc(T(dv.car))}</small><small>${esc(tx("drvBy", { n: T(o.driver.by), t: stamp(new Date(o.driver.at)) }))}</small></div>
+            <a class="btn btn-ghost btn-sm" href="tel:${esc(dv.mobile)}">${svg(ICON.phone)}${t().call}</a></div>` : `<div class="hint">${t().drvNone}</div>`}</div>
+        <div class="fld arr-box"><span class="lbl" style="margin-bottom:0">${t().arrLbl}</span>
+          ${o.arrival ? `<div class="arr-res h-${diff ? diff.cls : "green"}">${svg(I.check, 2)}<div><b>${esc(tx("arrAt", { t: fmtTime(new Date(o.arrival.at)) }))}${diff ? ` · ${esc(diff.txt)}` : ""}</b>
+              <small>${esc(tx("arrSched", { t: at ? apptTxt(o.appointment).replace(/[⁦⁩]/g, "") : "—", n: T(o.arrival.by) }))}</small></div>
+              ${open ? `<button type="button" class="btn btn-ghost btn-sm" id="arrUndo">${t().arrUndo}</button>` : ""}</div>`
+            : open ? `<button type="button" class="btn btn-primary arr-btn" id="arrBtn">${svg(I.pin, 2)}${t().arrBtn}</button><span class="hint">${t().arrHint}</span>` : `<span class="muted">—</span>`}
+        </div>
+      </div>
+    </section>`;
+  }
+  function bindBk(o) {
+    if ($("dvDl")) $("dvDl").addEventListener("click", async e => { e.currentTarget.disabled = true; await drVisitPdf(MadaOrders.get(id)); if ($("dvDl")) $("dvDl").disabled = false; });
+    if ($("vdDemo")) $("vdDemo").addEventListener("click", () => {
+      const cur = MadaOrders.get(id), steps = { ...((cur.visit && cur.visit.steps) || {}) }, k = VISIT_STEPS.find(x => !steps[x]);
+      if (!k) return; steps[k] = new Date().toISOString();
+      // Demo only: the doctors / nursing app sends these steps to the backend.
+      // The last step (visit report) finishes the visit; it then goes to the Quality page for review.
+      const done = k === VISIT_STEPS[VISIT_STEPS.length - 1];
+      MadaOrders.update(id, { visit: { ...(cur.visit || {}), steps }, ...(done ? { status: "completed", completedAt: steps[k] } : {}) }); render();
+      if (done) toast(t().vdFinished);
+    });
+    if ($("drvSave")) $("drvSave").addEventListener("click", () => {
+      const v = $("drvSel").value; if (!v) { $("drvSel").classList.add("bad"); $("drvSel").focus(); return; }
+      const d = MadaOrders.DRIVERS.find(x => x.id === v);
+      // TODO: send the visit (address, time, map link) to the driver app.
+      MadaOrders.update(id, { driver: { id: v, by: me.name, at: new Date().toISOString() } }); render(); toast(tx("drvSaved", { n: T(d.name) }));
+    });
+    if ($("drvSel")) $("drvSel").addEventListener("change", e => e.target.classList.remove("bad"));
+    if ($("arrBtn")) $("arrBtn").addEventListener("click", () => {
+      MadaOrders.update(id, { arrival: { at: new Date().toISOString(), by: me.name } }); render(); toast(t().arrToast);
+    });
+    if ($("arrUndo")) $("arrUndo").addEventListener("click", () => { MadaOrders.update(id, { arrival: null }); render(); toast(t().arrUndone); });
+  }
+  // Keep the countdown at the top live.
+  setInterval(() => { const o = id && MadaOrders.get(id), el = $("bkHero"); if (o && o.bookingId && el) el.outerHTML = heroHtml(o); }, 30000);
+
+  // ---------- Booking PDF (simple confirmation to share with the customer) ----------
+  // Small inline copy of the logo, so the PDF never depends on loading an image file.
+  const PDF_LOGO = "data:image/png;base64,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";
+  const H2P = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+  const loadH2p = () => window.html2pdf ? Promise.resolve() : new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = H2P; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); });
+  const QR_JS = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js";
+  const loadQr = () => window.qrcode ? Promise.resolve() : new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = QR_JS; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); });
+  // QR code to the customer's booking page (empty when the QR library can't load).
+  function qrImg(url) {
+    try { const q = window.qrcode(0, "M"); q.addData(url); q.make(); return q.createDataURL(4, 0); } catch (e) { return ""; }
+  }
+  function pdfHtml(o, qr) {
+    const clean = v => String(v == null ? "" : v).replace(/[⁦⁩‎]/g, "");
+    const rtl = current === "ar", al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
+    const G = "#0b6b5c", GD = "#07463d", INK = "#10232b", MU = "#6b7a80", LINE = "#e3e8ea", SOFT = "#f4f8f7", GOLD = "#c8a45a";
+    const n = o.booking && o.booking.nurseId ? MadaNurses.NURSES.find(x => x.id === o.booking.nurseId) : null;
+    const doc = o.booking && o.booking.doctorId ? MadaOrders.DOCTORS.find(x => x.id === o.booking.doctorId) : null;
+    const drv = o.driver ? MadaOrders.DRIVERS.find(x => x.id === o.driver.id) : null;
+    const nurse = n ? T(n.name) : o.appointment && o.appointment.nurse ? T(o.appointment.nurse) : t().pdfTbd;
+    const at = visitAt(o), loc = rtl ? "ar-SA-u-ca-gregory-nu-latn" : "en-GB";
+    const dd = at ? String(at.getDate()) : "—", mon = at ? at.toLocaleDateString(loc, { month: "long", year: "numeric" }) : "", wd = at ? at.toLocaleDateString(loc, { weekday: "long" }) : "";
+    const tm = o.appointment ? `${clean(fmtMin(o.appointment.minute))} – ${clean(fmtMin(o.appointment.minute + MadaNurses.VISIT_MINUTES))}` : t().pdfTbd;
+    const L = o.location || {}, A = o.address || {};
+    const addr = L.address || composeAddr(A) || "—";
+    const map = L.lat != null ? `https://www.google.com/maps/search/?api=1&query=${L.lat},${L.lng}` : (L.mapLink || A.mapLink || "");
+    const items = (o.items || []).map(it => ({ it, d: itemDetail(it) })).filter(x => x.d);
+    const p = o.paidInfo || {}, paid = p.amount != null ? +p.amount : o.total != null ? +o.total : null;
+    const list = o.total != null ? +o.total : paid, disc = list != null && paid != null && list - paid > 0.004 ? list - paid : 0;
+    const vat = paid != null ? paid - paid / 1.15 : null, money = v => `${(+v).toFixed(2)} ${t().sar}`;
+    const now = new Date(), issued = `${clean(fmtDate(now))} · ${clean(fmtTime(now))}`, paidAt = o.bookedAt ? `${clean(fmtDate(new Date(o.bookedAt)))} · ${clean(fmtTime(new Date(o.bookedAt)))}` : "—";
+    const rs = (o.reschedules || []).slice(-1)[0];
+    const ltr = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`;
+    const ic = path => `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${G}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px">${path}</svg>`;
+    const head = (icon, title) => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="width:28px;height:28px;border-radius:8px;background:#e6f3ef;display:inline-flex;align-items:center;justify-content:center">${ic(icon)}</span><span style="font-size:13px;font-weight:700;color:${INK}">${title}</span></div>`;
+    const kvS = (k, v, sub) => `<tr><td style="padding:4px 0"><div style="color:${MU};font-size:10.5px">${k}</div><div style="font-weight:600;color:${INK};font-size:12px">${v}</div>${sub ? `<div style="color:${MU};font-size:10.5px">${sub}</div>` : ""}</td></tr>`;
+    const card = (icon, title, rows) => `<div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:12px 14px;background:#fff">${head(icon, title)}<table style="width:100%;border-collapse:collapse">${rows}</table></div>`;
+    const I2 = { cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+      team: '<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/>', pin: '<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+      card: '<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19"/>', list: '<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+      info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>' };
+    // What the patient should do before the visit (from the chosen services).
+    const prep = [];
+    const fasts = (o.items || []).map(it => it.kind === "test" ? MadaLabs.byCode[it.code] : it.kind === "pkg" ? MadaLabs.pkgById[it.code] : null).filter(x => x && x.fasting === "fast");
+    if (fasts.length) prep.push(tx("pr_fast", { h: (fasts.find(x => x.fastHours) || {}).fastHours || "8-12" }));
+    if ((o.items || []).some(it => it.kind === "test" && (MadaLabs.byCode[it.code] || {}).fasting === "morning")) prep.push(t().pr_morning);
+    if ((o.items || []).some(it => it.kind === "nursing" && (MadaNursing.byCode[it.code] || {}).rx)) prep.push(t().pr_rx);
+    if (o.service === "iv") prep.push(t().pr_iv);
+    prep.push(t().pr_id, t().pr_call);
+    const iv = o.service === "iv";
+    const pol = iv ? [[t().p_i1, t().p_i1d], [t().p_i2, t().p_i2d], [t().p_i3, t().p_i3d]] : [[t().p_h1, t().p_h1d], [t().p_h2, t().p_h2d], [t().p_r, t().p_rd]];
+    const chip = (txt, bg, fg) => `<span style="display:inline-block;padding:4px 11px;border-radius:12px;background:${bg};color:${fg};font-weight:700;font-size:11px;margin-inline-end:6px">${txt}</span>`;
+    const ls = rtl ? "" : "letter-spacing:.14em;text-transform:uppercase;";
+    return `<div dir="${rtl ? "rtl" : "ltr"}" style="width:744px;padding:14px 18px 8px;background:#fff;color:${INK};font-family:${rtl ? "Tajawal, Inter" : "Inter, Tajawal"}, Arial, sans-serif;text-align:${al};line-height:1.38">
+      <div style="border-radius:16px;padding:16px 20px;background:linear-gradient(135deg, ${G} 0%, ${GD} 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:58px;height:58px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center"><img src="${PDF_LOGO}" style="height:40px;width:auto" alt=""></span>
+          <div><div style="font-size:21px;font-weight:700">Mada Care</div><div style="font-size:11.5px;opacity:.85">${esc(t().tagline)}</div></div>
+        </div>
+        <div style="text-align:${ar2}">
+          <div style="font-size:11px;${ls}opacity:.85;color:#f3e3bd">${t().pdfTitle}</div>
+          <div style="font-size:28px;font-weight:700;margin:2px 0">${ltr(o.bookingId)}</div>
+          <div style="font-size:11px;opacity:.85">${t().orderNo2} ${ltr(o.id)} · ${esc(tx("pdfIssued", { t: "" }))}${ltr(issued)}</div>
+        </div>
+      </div>
+      <div style="height:3px;background:${GOLD};border-radius:2px;margin:0 24px"></div>
+
+      <div style="margin:12px 2px 10px">${chip(t().pdfStConfirmed, "#e7f6ec", "#15803d")}${chip(t().pdfStPaid, "#e6f3ef", G)}${rs ? chip(t().pdfStMoved, "#fef3e2", "#b45309") : ""}<span style="font-size:13px;font-weight:700">${esc(t()["sv_" + o.service] || "")}</span></div>
+
+      <div class="pdf-avoid" style="display:flex;align-items:stretch;gap:14px;border:1px solid ${LINE};border-radius:14px;padding:12px 14px;background:${SOFT}">
+        <div style="width:96px;border-radius:12px;background:#fff;border:1px solid ${LINE};text-align:center;padding:10px 6px;flex-shrink:0">
+          <div style="font-size:11px;color:${G};font-weight:700">${esc(wd)}</div><div style="font-size:34px;font-weight:700;line-height:1.1;color:${INK}">${esc(dd)}</div><div style="font-size:11px;color:${MU}">${esc(mon)}</div></div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:6px">
+          <div style="font-size:11.5px;color:${MU}">${t().pdfVisitTime}</div>
+          <div style="font-size:20px;font-weight:700">${ltr(tm)}</div>
+          <div style="font-size:12px;color:${MU}">${esc(tx("pdfDur", { m: MadaNurses.VISIT_MINUTES }))} · ${esc(t().pdfHome)}</div>
+          ${rs ? `<div style="font-size:11.5px;color:#b45309">${esc(tx("pdfMoved", { t: clean(apptTxt(rs.from)) }))}</div>` : ""}
+        </div>
+        ${qr ? `<div style="text-align:center;flex-shrink:0;width:112px"><img src="${qr}" style="width:84px;height:84px;background:#fff;padding:6px;border-radius:10px;border:1px solid ${LINE}" alt=""><div style="font-size:10px;color:${MU};margin-top:4px">${t().pdfScan}</div></div>` : ""}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:10px;margin-top:10px">
+        ${card(I2.user, t().pdfPatient, kvS(t().pdfName, esc(T(o.patient) || "—")) + kvS(t().fileLbl, ltr(o.mrn || "—")) + kvS(t().mobile, ltr(o.mobile || "—")))}
+        ${card(I2.team, t().pdfTeam, kvS(t().nurseLbl, esc(nurse)) + kvS(t().doctorLbl, doc ? esc(T(doc.name)) : esc(t().pdfNoDoc), doc ? esc(T(doc.spec)) : "") + (drv ? kvS(t().drvLbl, esc(T(drv.name)), esc(T(drv.car))) : ""))}
+        ${card(I2.pin, t().pdfLoc, kvS(t().addrLbl, esc(addr)) + ((L.floor || A.floor) ? kvS(t().floorLbl, esc(L.floor || A.floor)) : "") + ((L.landmark || A.landmark) ? kvS(t().landmarkLbl, esc(L.landmark || A.landmark)) : "") + (map ? kvS(t().mapLbl, `<span dir="ltr" style="font-weight:400;font-size:9.5px;color:${G};word-break:break-all">${esc(map)}</span>`) : ""))}
+      </div>
+
+      <div class="pdf-avoid" style="margin-top:10px;border:1px solid ${LINE};border-radius:12px;overflow:hidden">
+        <div style="padding:14px 16px 4px">${head(I2.list, t().pdfSvc)}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <tr style="background:${SOFT};color:#44545a"><th style="text-align:${al};padding:8px 16px;font-weight:600;width:18%">${t().pdfCode}</th><th style="text-align:${al};padding:8px 16px;font-weight:600">${t().pdfItem}</th><th style="text-align:${ar2};padding:8px 16px;font-weight:600;width:20%">${t().pdfPrice}</th></tr>
+          ${items.length ? items.map(({ it, d }) => `<tr><td style="padding:9px 16px;border-top:1px solid #eef2f3;color:${MU};vertical-align:top">${ltr(it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code)}</td>
+              <td style="padding:9px 16px;border-top:1px solid #eef2f3"><b style="font-weight:600">${esc(T(d.name))}</b><div style="color:${MU};font-size:10.5px;margin-top:1px">${esc(d.type)}${d.sub ? " · " + esc(d.sub) : ""}</div></td>
+              <td style="padding:9px 16px;border-top:1px solid #eef2f3;text-align:${ar2};white-space:nowrap;vertical-align:top">${money(d.price)}</td></tr>`).join("")
+            : `<tr><td colspan="3" style="padding:9px 16px;border-top:1px solid #eef2f3">${esc(t()["sv_" + o.service] || "—")}</td></tr>`}
+        </table>
+        <div style="border-top:1px solid ${LINE};padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:4px 28px;font-size:11.5px">
+          <div style="display:grid;gap:4px;align-content:start">
+            <div style="display:flex;justify-content:space-between;gap:10px"><span style="color:${MU}">${t().pdfMethod}</span><b style="font-weight:600">${esc(p.method ? t()["pm_" + p.method] || p.method : t().pdfStaffPaid)}</b></div>
+            <div style="display:flex;justify-content:space-between;gap:10px"><span style="color:${MU}">${t().pdfPaidAt}</span><b style="font-weight:600">${ltr(paidAt)}</b></div>
+          </div>
+          <div style="display:grid;gap:4px;align-content:start">
+          ${list != null ? `<div style="display:flex;justify-content:space-between"><span style="color:${MU}">${t().pdfSub}</span><span>${money(list)}</span></div>` : ""}
+          ${disc ? `<div style="display:flex;justify-content:space-between;color:#15803d"><span>${t().pdfDisc}${p.promo ? ` (${ltr(p.promo)})` : ""}</span><span>- ${money(disc)}</span></div>` : ""}
+          ${vat != null ? `<div style="display:flex;justify-content:space-between"><span style="color:${MU}">${t().pdfVat}</span><span>${money(vat)}</span></div>` : ""}
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg, ${G} 0%, ${GD} 100%);color:#fff">
+          <span style="font-weight:700;font-size:13px">${t().pdfTotal}</span><span style="font-weight:700;font-size:18px">${paid != null ? money(paid) : "—"}</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:12px 14px">${head(I2.info, t().pdfPrep)}
+          <div style="font-size:11.5px;color:#2c3d43;display:grid;gap:5px">${prep.map(x => `<div style="display:flex;gap:8px;align-items:flex-start"><span style="width:6px;height:6px;border-radius:50%;background:${G};margin-top:6px;flex-shrink:0"></span><span>${esc(x)}</span></div>`).join("")}</div></div>
+        <div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:12px 14px">${head(I2.shield, t().pdfPolicy + " · " + (iv ? t().p_iv : t().p_home))}
+          <div style="display:grid;gap:7px;font-size:11.5px">${pol.map(([h, d]) => `<div><b style="font-weight:600">${esc(h)}</b><div style="color:${MU}">${esc(d)}</div></div>`).join("")}</div></div>
+      </div>
+
+      <div style="margin-top:16px;padding-top:10px;border-top:1px solid ${LINE};display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#8a979c">
+        <span>${esc(t().pdfFootL)}</span><span>${esc(tx("pdfFoot", { t: issued }))}</span></div>
+    </div>`;
+  }
+  const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, bad) => setTimeout(() => bad(new Error("timeout")), ms))]);
+  async function downloadPdf(o) {
+    const file = `Mada-Care-${o.bookingId}.pdf`, btn = $("pdfBtn");
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1";
+    btn.disabled = true; toast(t().pdfMaking);
+    // The QR opens the customer's booking page. The PDF is still made if the QR library can't load.
+    let qr = ""; try { await withTimeout(loadQr(), 6000); qr = qrImg(new URL("pay.html?id=" + encodeURIComponent(o.id), location.href).href); } catch (e) {}
+    wrap.innerHTML = pdfHtml(o, qr);
+    document.body.appendChild(wrap);
+    // The PDF renderer draws each line left to right, which drops the spaces between Arabic words and
+    // moves punctuation: give every word and mark its own box so the browser's layout is kept.
+    if (current === "ar") {
+      const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+      while (walk.nextNode()) if (walk.currentNode.nodeValue.trim()) nodes.push(walk.currentNode);
+      nodes.forEach(nd => {
+        const frag = document.createDocumentFragment();
+        // Punctuation and brackets get their own box too, so they land on the right side of Arabic words.
+        nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+          else {
+            // Brackets in Arabic text are shown mirrored on screen; the PDF renderer does not mirror them.
+            const ltrBox = nd.parentElement && nd.parentElement.closest('[dir="ltr"]');
+            const sp = document.createElement("span");
+            sp.textContent = ltrBox ? part : part.replace(/[()]/g, c => c === "(" ? ")" : "(");
+            frag.appendChild(sp);
+          }
+        });
+        nd.replaceWith(frag);
+      });
+    }
+    try {
+      await loadH2p();
+      await withTimeout(window.html2pdf().set({ margin: [6, 6], filename: file, pagebreak: { mode: ["css"] }, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save(), 20000);
+      toast(tx("pdfDone", { f: file }));
+    } catch (e) {
+      // No PDF library (offline): open the same page for the browser's "Save as PDF".
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title><base href="${location.href}"></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().pdfFail);
+    } finally { wrap.remove(); btn.disabled = false; }
+  }
+
+  function savedAppt(o) {
+    if (!o.appointment) return null;
+    const nurseId = (o.booking && o.booking.nurseId) || (MadaNurses.NURSES.find(n => n.name.en === enOf(o.appointment.nurse)) || {}).id || "";
+    return { date: o.appointment.date, minute: o.appointment.minute, nurseId };
+  }
+  function composeAddr(a) {
+    if (!a) return "";
+    return [[a.building, a.street].filter(Boolean).join(" "), a.district, a.city ? (t()["city_" + a.city] || a.city) : "", a.postalCode].filter(Boolean).join(", ");
+  }
+  // Coordinates from a pasted Google Maps link, or "lat, lng" typed straight in.
+  function parseMap(v) {
+    v = (v || "").trim();
+    if (!v) return { empty: true };
+    const ok = (a, b) => Math.abs(a) <= 90 && Math.abs(b) <= 180 ? { lat: a, lng: b } : null;
+    const raw = v.match(/^(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)$/);
+    if (raw) { const c = ok(+raw[1], +raw[2]); return c ? { ...c, link: null } : { bad: true }; }
+    if (!/^https?:\/\/\S+$/i.test(v)) return { bad: true };
+    const m = v.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || v.match(/[?&](?:q|ll|query|daddr|destination|center)=(-?\d{1,3}\.\d+)(?:,|%2C)\s*(-?\d{1,3}\.\d+)/i) || v.match(/@(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)/);
+    if (m) { const c = ok(+m[1], +m[2]); if (c) return { ...c, link: v }; }
+    if (/(google\.[a-z.]+\/maps|maps\.google\.|goo\.gl\/|maps\.app\.goo\.gl|maps\.apple\.com|waze\.com)/i.test(v)) return { link: v };
+    return { bad: true };
+  }
+  const coordTxt = p => `${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}`;
+  function mapsUrl(p, addr, code) {
+    if (p && p.lat != null) return `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+    if (p && p.link) return p.link;
+    const q = addr || code;
+    return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : "";
+  }
+  function payState(o) {
+    if (o.payment === "paid") return "paid";
+    if (!o.payLink) return "none";
+    return new Date(o.payLink.expiresAt) <= Date.now() ? "expired" : "wait";
+  }
+  const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; };
+
+  function fullHtml(o) {
+    const st = o.status, held = st === "on_hold", done = st === "completed" || st === "cancelled";
+    canBook = !held && !done;
+    const canPay = canBook && o.decision === "approved" && (o.total > 0 || o.payment === "unpaid");
+    const dis = canBook ? "" : "disabled";
+    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "other" ? ["other"] : []);
+    const dec = o.decision === "approved" ? `<span class="status-chip non">${svg(I.check, 2)}${t().approveChip}</span>`
+      : `<span class="status-chip wait">${svg(o.decision === "on_hold" ? I.pause : I.clock, 2)}${o.decision === "on_hold" ? t().holdChip : t().pendingChip}</span>`;
+    const banner = held ? `<div class="banner">${svg(I.pause, 2)}<span>${t().holdBanner}</span><a class="btn btn-primary btn-sm" href="new-request.html?hold=${encodeURIComponent(o.id)}">${t().holdGo}</a></div>`
+      : st === "awaiting_doctor" ? `<div class="banner info">${svg(I.info, 2)}<span>${t().docBanner}</span></div>`
+      : done ? `<div class="banner gray">${svg(I.info, 2)}<span>${st === "completed" ? t().doneBanner : t().st_cancelled}</span></div>` : "";
+    const stPill = { booked: "p-blue", awaiting_doctor: "p-orange", on_hold: "p-orange", completed: "p-green", cancelled: "p-red" }[st] || "p-gray";
+
+    let top = (o.bookingId ? heroHtml(o) : "") + alertsTop(o);
+
+    // 1. Basic information
+    let h = top + `
+    <section class="card">
+      <div class="sec">
+        <h2>${t().s1}</h2>
+        <div class="row3">
+          <div><span class="lbl">${t().mobile}</span><div class="ro">${svg(ICON.phone)}<span class="num">${esc(o.mobile)}</span></div></div>
+          <div><span class="lbl">${t().source}</span><div class="srcs">${srcs.map(k => `<span class="src ${o.source === k ? "on" : ""}">${svg(ICON[k])}${esc(k === "other" && o.sourceOther ? o.sourceOther : t()["src_" + k])}</span>`).join("")}</div></div>
+          <div><span class="lbl">${t().patientStatus}</span>${statusChip(false)}</div>
+        </div>
+        <div class="divider"></div>
+        <div class="row2 svc-row">
+          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv"].map(k =>
+            `<span class="svc-opt ${o.service === k ? "on" : ""}">${svg(SVC_ICON[k])}<span>${t()["sv_" + k]}</span><span class="radio"></span></span>`).join("")}</div></div>
+          <div><span class="lbl">${t().decision}</span>${dec}</div>
+        </div>
+        ${itemsTable(o)}
+        ${banner}
+      </div>
+      <div class="after"><b>${t().statusLbl}</b><span class="pill ${stPill}">${esc(t()["st_" + st] || st)}</span>${o.staff ? `<span class="who">${esc(tx("createdByLbl", { n: T(o.staff) }))}</span>` : ""}</div>
+    </section>`;
+
+    // 2. Booking details
+    const paidBk = canBook && o.payment === "paid" && !!o.appointment, bkLock = paidBk && rsEdit !== o.id;
+    const bdis = canBook && !bkLock ? "" : "disabled";
+    h += `
+    <section class="card sec" id="secBooking">
+      <h2>${t().b2}${(o.reschedules || []).length ? `<span class="rs-tag">${svg(I.clock, 2)}${t().rsTag}</span>` : ""}</h2>
+      ${bkLock ? `<div class="bk-lock">${svg(I.check, 2)}<span>${t().bkLocked}</span><button type="button" class="btn btn-ghost btn-sm" id="rsOpen">${svg(I.cal)}${t().rsBtn}</button></div>`
+        : paidBk ? `<div class="bk-lock edit">${svg(I.cal, 2)}<span>${t().rsEditing}</span></div>` : ""}
+      <div class="grid2">
+        <div class="fld"><label class="lbl" for="bkDoctor">${t().doctorLbl}</label>
+          <select class="sel" id="bkDoctor" ${bdis}><option value="">${t().selDoctor}</option><option value="none" ${o.service === "doctor" ? "disabled" : ""}>${t().noDoctorOpt}</option>${MadaOrders.DOCTORS.map(d => `<option value="${d.id}">${esc(T(d.name))} · ${esc(T(d.spec))}</option>`).join("")}</select>
+          <div id="hDoc"></div></div>
+        <div class="fld"><label class="lbl" for="bkNurse">${t().nurseLbl}</label>
+          <select class="sel" id="bkNurse" ${bdis}></select><div id="hNurse"></div></div>
+        <div class="fld"><label class="lbl" for="bkDate">${t().dateLbl}</label>
+          <div class="in-ic">${svg(I.cal)}<input class="in ltr" id="bkDate" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off" ${bdis}></div><div id="hDate"></div></div>
+        <div class="fld"><label class="lbl" for="bkTime">${t().timeLbl}</label>
+          <select class="sel" id="bkTime" ${bdis}></select><div id="hTime"></div></div>
+        <div class="fld wide"><span class="lbl">${t().fileLbl}</span>
+          <div class="ro">${svg(I.file)}${o.mrn ? `<span class="num">${esc(o.mrn)}</span>${o.patient ? `<span class="muted">· ${esc(T(o.patient))}</span>` : ""}` : `<span class="muted">${t().noFile}</span>`}</div></div>
+      </div>
+      ${paidBk && !bkLock ? `<div class="rs-form">
+        <div class="fld wide"><span class="lbl">${t().rsChange}</span><div class="rs-cmp" id="rsCmp"></div></div>
+        <div class="fld"><label class="lbl" for="rsReason">${t().rsReason}</label>
+          <select class="sel" id="rsReason" data-keep><option value="">—</option>${RS_REASONS.map(k => `<option value="${k}">${t()["rs_" + k]}</option>`).join("")}</select><div id="hRs"></div></div>
+        <div class="fld"><label class="lbl" for="rsNote">${t().rsNote} <span class="opt">${t().optional}</span></label>
+          <input class="in" id="rsNote" data-keep maxlength="160" dir="auto" placeholder="${esc(t().rsNotePh)}"></div></div>
+        <div class="sec-actions"><button type="button" class="btn btn-ghost" id="rsCancel">${t().rsCancel}</button>
+        <button type="button" class="btn btn-ghost" id="bkEarliest">${svg(I.bolt)}${t().earliestBtn}</button>
+        <button type="button" class="btn btn-primary" id="rsSave">${svg(I.save)}${t().rsSave}</button></div>` : ""}
+      ${canBook && !paidBk ? `<div class="sec-actions">${o.booking ? `<span class="saved">${esc(tx("lastSaved", { n: T(o.booking.by), t: `${fmtDate(new Date(o.booking.at))} ${fmtTime(new Date(o.booking.at))}` }))}</span>` : ""}
+        <button type="button" class="btn btn-ghost" id="bkEarliest">${svg(I.bolt)}${t().earliestBtn}</button>
+        <button type="button" class="btn btn-primary" id="bkSave">${svg(I.save)}${t().saveBooking}</button></div>` : ""}
+      ${rsLogHtml(o)}
+    </section>`;
+
+    // 3. Customer location
+    const L = o.location || {}, A = o.address || {}, edit = st !== "cancelled";
+    const v = (k, d) => L[k] != null ? L[k] : (d || "");
+    const ldis = edit ? "" : "disabled";
+    h += `
+    <section class="card sec" id="secLoc">
+      <h2>${t().b3}</h2>
+      ${L.fromCustomer && L.savedAt ? `<div class="ask cust">${svg(I.check, 2)}<span>${esc(tx("custLoc", { t: `${fmtDate(new Date(L.savedAt))} ${fmtTime(new Date(L.savedAt))}` }))}</span></div>` : edit ? `<div class="ask ${L.requestedAt ? "sent" : ""}">${svg(L.requestedAt ? I.clock : I.pin, 2)}<span>${L.requestedAt ? esc(tx("locAsked", { m: o.mobile, t: fmtTime(new Date(L.requestedAt)) })) : t().locAsk}</span>
+        <button type="button" class="btn btn-ghost btn-sm" id="locAsk">${svg(I.send)}${L.requestedAt ? t().locAskAgain : t().locAskBtn}</button></div>` : ""}
+      <div class="grid2">
+        <div class="fld wide"><label class="lbl" for="locAddr">${t().addrLbl}</label>
+          <textarea class="area" id="locAddr" data-keep maxlength="300" dir="auto" placeholder="${esc(t().addrPh)}" ${ldis}>${esc(v("address", composeAddr(A)))}</textarea></div>
+        <div class="fld"><label class="lbl" for="locMap">${t().mapLbl}</label>
+          <div class="in-ic">${svg(I.map)}<input class="in ltr" id="locMap" data-keep maxlength="500" placeholder="${esc(t().mapPh)}" value="${esc(v("mapLink", A.mapLink))}" ${ldis}></div><div id="hMap"></div></div>
+        <div class="fld"><label class="lbl" for="locCode">${t().codeLbl}</label>
+          <div class="in-ic">${svg(I.pin)}<input class="in ltr" id="locCode" data-keep maxlength="9" placeholder="${esc(t().codePh)}" value="${esc(v("shortCode"))}" autocomplete="off" style="text-transform:uppercase" ${ldis}></div><div id="hCode"></div></div>
+        <div class="fld"><label class="lbl" for="locFloor">${t().floorLbl}</label>
+          <input class="in" id="locFloor" data-keep maxlength="60" dir="auto" placeholder="${esc(t().floorPh)}" value="${esc(v("floor", A.floor))}" ${ldis}></div>
+        <div class="fld"><label class="lbl" for="locLandmark">${t().landmarkLbl}</label>
+          <input class="in" id="locLandmark" data-keep maxlength="100" dir="auto" placeholder="${esc(t().landmarkPh)}" value="${esc(v("landmark", A.landmark))}" ${ldis}></div>
+        <div class="fld wide"><span class="lbl">${t().imgLbl} <span class="opt">${t().optional}</span></span><div id="imgBox"></div></div>
+      </div>
+      <div class="sec-actions">${L.savedAt ? `<span class="saved">${esc(tx("lastSaved", { n: T(L.by), t: `${fmtDate(new Date(L.savedAt))} ${fmtTime(new Date(L.savedAt))}` }))}</span>` : ""}
+        <a class="btn btn-ghost" id="openMaps" target="_blank" rel="noopener">${svg(I.map)}${t().openMaps}</a>
+        ${edit ? `<button type="button" class="btn btn-primary" id="locSave">${svg(I.save)}${t().saveLoc}</button>` : ""}</div>
+    </section>`;
+
+    // Bookings: visit data from the nursing app, then driver and team arrival.
+    if (o.bookingId) h += visitHtml(o) + driverHtml(o);
+
+    // 4. Payment status (requests only; a booking is already paid)
+    const ps = payState(o), pl = o.payLink;
+    const psPill = { none: "p-gray", wait: "p-orange", expired: "p-red", paid: "p-green" }[ps];
+    const sub = ps === "paid" ? tx("paidAt", { t: pl && pl.paidAt ? fmtTime(new Date(pl.paidAt)) : "—" })
+      : ps === "wait" ? `<span class="cd" data-exp="${pl.expiresAt}">${mmss(new Date(pl.expiresAt) - Date.now())}</span> ${t().leftTxt}`
+      : ps === "expired" ? esc(tx("expiredAt", { t: fmtTime(new Date(pl.expiresAt)) })) : t().notSent;
+    if (!o.bookingId) h += `
+    <section class="card sec" id="secPay">
+      <h2>${t().b4}</h2>
+      <div class="pay-grid">
+        <div class="pay-card">
+          <div class="pay-top"><span class="pay-ic">${svg(I.link)}</span><div><b>${t().payLinkTitle}</b><small>${sub}</small></div>${o.total ? `<span class="amt">${o.total} ${t().sar}</span>` : ""}</div>
+          ${canPay && ps !== "paid" ? `<div class="pay-acts"><button type="button" class="btn btn-primary" id="paySend">${svg(I.send)}${ps === "none" ? t().sendLink : t().resendLink}</button>
+            ${ps === "wait" ? `<a class="btn btn-ghost" id="payOpen" href="pay.html?id=${encodeURIComponent(o.id)}">${svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>')}${t().openCustomer}</a>` : ""}
+            ${ps === "wait" ? `<button type="button" class="btn btn-ghost" id="payMark" title="${esc(t().markPaidHint)}">${svg(I.check)}${t().markPaid}</button>` : ""}</div>
+          ${ps === "wait" ? `<div class="share"><span class="share-lbl">${t().shareLbl}</span>
+            <div class="link-box"><span class="ltr" id="payUrl">${esc(payUrl(o))}</span></div>
+            <div class="share-btns">
+              <button type="button" class="btn btn-ghost btn-sm" id="shCopy">${svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h9"/>')}${t().copyLink}</button>
+              <a class="btn btn-wa btn-sm" id="shWa" data-ch="whatsapp" target="_blank" rel="noopener" href="https://wa.me/${waNum(o.mobile)}?text=${encodeURIComponent(shareMsg(o))}">${svg(ICON.whatsapp)}${t().viaWa}</a>
+              <a class="btn btn-ghost btn-sm" id="shSms" data-ch="sms" href="sms:${esc(o.mobile)}?&body=${encodeURIComponent(shareMsg(o))}">${svg('<path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/>')}${t().viaSms}</a>
+            </div></div>` : ""}`
+            : ps !== "paid" ? `<span class="muted">${t().payNotYet}</span>` : ""}
+        </div>
+        <div>
+          <span class="lbl">${t().payStatusLbl}</span><span class="pill ${psPill}">${t()["ps_" + ps]}</span>
+          <dl class="facts facts3">
+            <div><dt>${t().linkSent}</dt><dd>${pl ? fmtTime(new Date(pl.sentAt)) : "—"}</dd></div>
+            <div><dt>${t().openedLbl}</dt><dd>${pl && pl.openedAt ? `${fmtTime(new Date(pl.openedAt))}${pl.opens > 1 ? `<small class="sub">${esc(tx("opensN", { n: pl.opens, t: fmtTime(new Date(pl.lastOpenAt)) }))}</small>` : ""}` : pl ? `<span class="muted">${t().notOpened}</span>` : "—"}</dd></div>
+            <div><dt>${t().timeLeft}</dt><dd>${ps === "wait" ? `<span class="pill ${new Date(pl.expiresAt) - Date.now() < 15 * 60000 ? "p-red" : "p-orange"} left-pill"><span class="cd" data-exp="${pl.expiresAt}">${mmss(new Date(pl.expiresAt) - Date.now())}</span></span>` : ps === "expired" ? `<span class="pill p-red">${t().ps_expired}</span>` : ps === "paid" ? `<span class="muted">${t().ps_paid}</span>` : "—"}</dd></div>
+            <div><dt>${t().payTime}</dt><dd>${pl && pl.paidAt ? fmtTime(new Date(pl.paidAt)) : pl ? `<span class="muted">${tx("expiryAt", { t: fmtTime(new Date(pl.expiresAt)) })}</span>` : "—"}</dd></div>
+          </dl>
+        </div>
+      </div>
+      ${pl ? `<div class="block"><span class="lbl">${t().trackLbl}</span><ol class="track">${[
+        ["sent", pl.sentAt, I.send], ["opened", pl.openedAt, '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'],
+        ["located", o.location && o.location.fromCustomer && o.location.savedAt >= pl.sentAt ? o.location.savedAt : null, I.pin], ["paid", pl.paidAt, I.check]
+      ].map(([k, at, ic], i, arr) => { const nextDone = i < arr.length - 1 && arr[i + 1][1];
+        return `<li class="${at ? "done" : ps === "expired" ? "miss" : ""} ${nextDone ? "line-done" : ""}"><span class="tdot">${svg(at ? I.check.replace('<circle cx="12" cy="12" r="9"/>', "") : ic, 2.2)}</span><b>${t()["tr_" + k]}</b><small>${at ? fmtTime(new Date(at)) : ps === "expired" ? t().trMissed : t().trWaiting}</small></li>`; }).join("")}</ol></div>` : ""}
+      <div class="block"><span class="lbl">${t().timeline}</span><ol class="timeline">${payEvents(o).map(e =>
+        `<li><span class="dot ${e.c || ""}"></span><div>${esc(e.txt)}<time>${stamp(new Date(e.at))}</time></div></li>`).join("")}</ol></div>
+    </section>`;
+
+    // 5. Staff notes
+    h += notesSection(o, o.bookingId ? t().bk6 : t().b5);
+
+    // 6. Cancel
+    if (!done) h += `
+    <section class="card cancel-row">${svg(I.warn, 2)}<div><b>${t().cancelTitle}</b><p>${isSupervisor ? t().cancelTextSup : t().cancelTextAgent}${o.payment === "paid" ? t().cancelPaid : ""}</p></div>
+      <button type="button" class="btn btn-danger-o" id="cancelBtn">${svg(I.x, 2)}${t().cancelTitle}</button></section>`;
+    return h;
+  }
+
+  // Customer link (pay.html) and the message sent with it. Demo: the link points at this prototype.
+  const payUrl = o => new URL("pay.html?id=" + encodeURIComponent(o.id), location.href).href;
+  const waNum = m => String(m || "").replace(/\D/g, "").replace(/^0/, "966");
+  function shareMsg(o) {
+    const name = (MadaOrders.text(o.patient, "ar") || "").split(" ")[0];
+    const exp = new Date(o.payLink.expiresAt), hh = exp.getHours(), time = `${((hh + 11) % 12) + 1}:${String(exp.getMinutes()).padStart(2, "0")} ${hh >= 12 ? "مساءً" : "صباحاً"}`;
+    return `مرحباً${name ? " " + name : ""}، زيارتك مع مدى كير جاهزة.\nحدد موقع الزيارة وادفع${o.total ? " " + o.total + " ريال" : ""} من الرابط:\n${payUrl(o)}\nالرابط صالح حتى الساعة ${time}.`;
+  }
+  // Requested services with code, details and price (lab tests and packages, nursing, IV).
+  function itemDetail(it) {
+    if (it.kind === "pkg") { const p = MadaLabs.pkgById[it.code]; return p && { type: t().ty_pkg, name: p.name, price: p.price, sub: tx("pkgTests", { n: p.tests.length, l: p.tests.join(", ") }), fast: p.fasting === "fast" }; }
+    if (it.kind === "test") { const p = MadaLabs.byCode[it.code]; return p && { type: t().ty_test, name: p.name, price: p.price, sub: p.fasting === "fast" ? tx("fastH", { h: p.fastHours || "8" }) : p.fasting === "morning" ? t().morningSample : t().noFast }; }
+    if (it.kind === "nursing") { const p = MadaNursing.byCode[it.code]; return p && { type: t().ty_nursing, name: p.name, price: p.price, sub: [tx("mins", { m: p.mins }), p.rx ? t().needsRx : ""].filter(Boolean).join(" · ") }; }
+    if (it.kind === "iv") { const p = MadaIV.byCode[it.code]; return p && { type: t().ty_iv, name: p.name, price: p.price, sub: [p.includes ? T(p.includes).join("، ") : "", p.mins ? tx("mins", { m: p.mins }) : ""].filter(Boolean).join(" · ") }; }
+    return null;
+  }
+  function itemsTable(o) {
+    const rows = (o.items || []).map(it => ({ it, d: itemDetail(it) })).filter(x => x.d);
+    if (!rows.length) return "";
+    const sum = rows.reduce((a, x) => a + x.d.price, 0), total = o.total != null ? o.total : sum;
+    return `<div class="block"><span class="lbl">${t().reqServices} (${rows.length})</span>
+      <div class="svc-table" role="table">
+        <div class="st-head" role="row"><span role="columnheader">${t().colCode}</span><span role="columnheader">${t().colService}</span><span role="columnheader">${t().colPrice}</span></div>
+        ${rows.map(({ it, d }) => `<div class="st-row" role="row"><span role="cell"><code class="code">${esc(it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code)}</code></span>
+          <span role="cell" class="st-name"><b>${esc(T(d.name))}</b><small><span class="ty">${esc(d.type)}</span>${d.sub ? esc(d.sub) : ""}</small></span>
+          <span role="cell" class="st-price">${d.price} ${t().sar}</span></div>`).join("")}
+        <div class="st-total"><span>${t().totalVat}</span><b>${total} ${t().sar}</b></div>
+      </div></div>`;
+  }
+  // Important alerts and open follow-ups, shown above everything (all request types).
+  function alertsTop(o) {
+    const nts = (o.notes || []).map((n, i) => ({ ...n, i, type: n.type || "general" }));
+    // Alerts from the same patient's other requests (e.g. an allergy) also show here.
+    const pastAlerts = o.mrn ? MadaOrders.all().filter(x => x.id !== o.id && x.mrn === o.mrn).flatMap(x => (x.notes || []).filter(n => n.type === "alert").map(n => ({ ...n, oid: x.id }))) : [];
+    const alerts = nts.filter(n => n.type === "alert").concat(pastAlerts).sort((a, b) => b.at.localeCompare(a.at)), fups = nts.filter(n => n.type === "followup" && !n.done).reverse();
+    let top = "";
+    if (alerts.length || fups.length) top = `<section class="card alert-card" role="alert">
+      ${alerts.map(n => `<div class="al al-red">${svg(I.warn, 2)}<div><b>${t().nt_alert}</b><p dir="auto">${esc(n.text)}</p><small>${esc(T(n.by))} · ${stamp(new Date(n.at))}${n.oid ? ` · ${esc(tx("fromReq", { id: n.oid }))}` : ""}</small></div></div>`).join("")}
+      ${fups.map(n => `<div class="al al-orange">${svg(I.clock, 2)}<div><b>${t().nt_followup}</b><p dir="auto">${esc(n.text)}</p><small>${esc(T(n.by))} · ${stamp(new Date(n.at))}</small></div><button type="button" class="btn btn-ghost btn-sm" data-done="${n.i}">${svg(I.check)}${t().markDone}</button></div>`).join("")}
+    </section>`;
+
+    return top;
+  }
+  // Staff notes section (all request types).
+  function notesSection(o, title) {
+    const all = (o.notes || []).map((n, i) => ({ ...n, i, type: n.type || "general" }));
+    const shown = all.filter(n => noteFilter === "all" || n.type === noteFilter).reverse();
+    const cnt = k => all.filter(n => n.type === k).length;
+    const earlier = o.mrn ? MadaOrders.all().filter(x => x.id !== o.id && x.mrn === o.mrn && (x.notes || []).length)
+      .flatMap(x => x.notes.map(n => ({ ...n, type: n.type || "general", oid: x.id }))).sort((a, b) => b.at.localeCompare(a.at)) : [];
+    return `
+    <section class="card sec" id="secNotes">
+      <h2>${title}</h2>
+      <div class="note-form">
+        <div><label class="lbl" for="noteType">${t().noteType}</label>
+          <select class="sel" id="noteType" data-keep>${NOTE_TYPES.map(k => `<option value="${k}">${t()["nt_" + k]}</option>`).join("")}</select></div>
+        <div><label class="lbl" for="noteIn">${t().noteLbl}</label>
+          <textarea class="area" id="noteIn" data-keep maxlength="500" dir="auto" placeholder="${esc(t().notePh)}"></textarea></div>
+      </div>
+      <div class="note-foot"><small id="noteCount">0/500</small><button type="button" class="btn btn-primary" id="noteAdd" disabled>${svg(I.note)}${t().addNote}</button></div>
+      <div class="block"><div class="n-bar"><span class="lbl">${t().history} (${all.length})</span>
+        ${all.length ? `<div class="n-filters">${["all"].concat(NOTE_TYPES).map(k => `<button type="button" class="chip-f ${noteFilter === k ? "on" : ""}" data-nf="${k}">${k === "all" ? t().nf_all : t()["nt_" + k]} <span>${k === "all" ? all.length : cnt(k)}</span></button>`).join("")}</div>` : ""}</div>
+        ${shown.length ? `<ul class="notes">${shown.map(noteItem).join("")}</ul>` : `<span class="muted">${t().noNotesYet}</span>`}</div>
+      ${earlier.length ? `<div class="block"><span class="lbl">${tx("earlierNotes", { n: earlier.length })}</span><ul class="notes earlier">${earlier.map(n => noteItem({ ...n, ro: true })).join("")}</ul></div>` : ""}
+    </section>`;
+  }
+  function bindNotes() {
+    const note = $("noteIn");
+    const count = () => { $("noteCount").textContent = `${note.value.length}/500`; $("noteAdd").disabled = !note.value.trim(); };
+    document.querySelectorAll("[data-nf]").forEach(b => b.addEventListener("click", () => { noteFilter = b.dataset.nf; render(); }));
+    document.querySelectorAll("[data-done]").forEach(b => b.addEventListener("click", () => {
+      const cur = MadaOrders.get(id), list = (cur.notes || []).slice(), i = +b.dataset.done;
+      if (!list[i]) return;
+      list[i] = { ...list[i], done: { by: me.name, at: new Date().toISOString() } };
+      MadaOrders.update(id, { notes: list }); render(); toast(t().fuDoneToast);
+    }));
+    note.addEventListener("input", count); count();
+    $("noteAdd").addEventListener("click", () => {
+      const text = note.value.trim(); if (!text) return;
+      const cur = MadaOrders.get(id);
+      const type = $("noteType").value;
+      MadaOrders.update(id, { notes: [...(cur.notes || []), { type, text, by: me.name, at: new Date().toISOString() }] });
+      note.value = ""; $("noteType").value = "general"; noteFilter = "all"; render(); toast(t()["added_" + type]);
+    });
+  }
+  const NOTE_TYPES = ["general", "alert", "followup"];
+  let noteFilter = "all";
+  const NT_ICON = { general: I.note, alert: I.warn, followup: I.clock };
+  function noteItem(n) {
+    const ty = n.type || "general";
+    return `<li class="n-${ty}"><span class="avatar">${esc(initials(n.by))}</span><div>
+      <div class="n-head"><span class="ntype nt-${ty}">${svg(NT_ICON[ty], 2)}${t()["nt_" + ty]}</span><b>${esc(T(n.by))}</b><time>${stamp(new Date(n.at))}</time>${n.oid ? `<a class="n-oid" href="request-details.html?id=${encodeURIComponent(n.oid)}">${esc(n.oid)}</a>` : ""}</div>
+      <p dir="auto">${esc(n.text)}</p>
+      ${ty === "followup" ? n.done ? `<div class="n-done">${svg(I.check, 2)}${esc(tx("doneBy", { n: T(n.done.by), t: `${fmtDate(new Date(n.done.at))} ${fmtTime(new Date(n.done.at))}` }))}</div>`
+        : n.ro ? `<div class="n-open">${t().fuOpen}</div>` : `<button type="button" class="btn btn-ghost btn-sm n-btn" data-done="${n.i}">${svg(I.check)}${t().markDone}</button>` : ""}
+    </div></li>`;
+  }
+  function payEvents(o) {
+    const ev = [{ at: o.createdAt, txt: t().ev_created }];
+    const sends = (o.messages || []).filter(m => m.type === "payment").map(m => m.at);
+    if (o.payLink && !sends.includes(o.payLink.sentAt)) sends.push(o.payLink.sentAt);
+    sends.sort();
+    sends.forEach((at, i) => {
+      ev.push({ at, txt: tx("ev_sent", { m: o.mobile }), c: "blue" });
+      const exp = new Date(new Date(at).getTime() + MadaOrders.PAY_MINUTES * 60000), next = sends[i + 1] ? new Date(sends[i + 1]) : new Date();
+      const paidAt = o.payLink && o.payLink.paidAt ? new Date(o.payLink.paidAt) : null;
+      if (exp <= next && !(paidAt && paidAt <= exp && i === sends.length - 1)) ev.push({ at: exp.toISOString(), txt: t().ev_expired, c: "red" });
+    });
+    (o.messages || []).filter(m => m.type === "share" && o.payLink && m.at >= o.payLink.sentAt).forEach(m => ev.push({ at: m.at, txt: m.channel === "copy" ? t().ev_copied : tx("ev_shared", { c: t()["ch_" + m.channel] }) + (m.by ? ` · ${T(m.by)}` : ""), c: "blue" }));
+    if (o.payLink && o.payLink.openedAt) ev.push({ at: o.payLink.openedAt, txt: t().ev_opened, c: "blue" });
+    if (o.location && o.location.fromCustomer && o.location.savedAt) ev.push({ at: o.location.savedAt, txt: t().ev_located, c: "blue" });
+    if (o.payLink && o.payLink.paidAt) ev.push({ at: o.payLink.paidAt, txt: t().ev_paid + (o.paidInfo && o.paidInfo.method ? ` · ${t()["pm_" + o.paidInfo.method]} · ${o.paidInfo.amount} ${t().sar}` : ""), c: "green" });
+    return ev.sort((a, b) => b.at.localeCompare(a.at));
+  }
+
+  // ----- Booking -----
+  function fillTimes(o) {
+    const sel = $("bkTime"), sv = savedAppt(o);
+    if (!bk.date) { sel.innerHTML = `<option value="">${t().pickDateFirst}</option>`; sel.disabled = true; bk.minute = null; return; }
+    const slots = MadaNurses.slotsFor(bk.date).filter(s => s.status !== "unavailable");
+    if (sv && sv.date === bk.date && !slots.some(s => s.minute === sv.minute)) slots.push({ minute: sv.minute, status: "available", nurses: [] });
+    slots.sort((a, b) => a.minute - b.minute);
+    const okMin = s => s.status === "available" || (sv && sv.date === bk.date && sv.minute === s.minute);
+    if (bk.minute != null && !slots.some(s => s.minute === bk.minute && okMin(s))) bk.minute = null;
+    sel.innerHTML = `<option value="">${slots.length ? t().selTime : t().noSlots}</option>` + slots.map(s =>
+      `<option value="${s.minute}" ${okMin(s) ? "" : "disabled"} ${bk.minute === s.minute ? "selected" : ""}>${optMin(s.minute)}${okMin(s) ? "" : " · " + t().full}</option>`).join("");
+    sel.disabled = !canBook || !slots.length;
+    bk.noSlots = !slots.length;
+  }
+  function freeNurses(o) {
+    if (!bk.date || bk.minute == null) return null;
+    const s = MadaNurses.slotsFor(bk.date).find(x => x.minute === bk.minute), sv = savedAppt(o);
+    const ids = s ? s.nurses.map(n => n.id) : [];
+    if (sv && sv.date === bk.date && sv.minute === bk.minute && sv.nurseId) ids.push(sv.nurseId);
+    return ids;
+  }
+  function fillNurses(o) {
+    const sel = $("bkNurse"), free = freeNurses(o);
+    if (free && bk.nurseId && !free.includes(bk.nurseId)) bk.nurseId = "";
+    // The nurse is picked automatically: the first nurse free at the chosen time (staff can still change her).
+    // TODO: at linking, pick the nearest free nurse to the visit address, using the work schedules.
+    if (bk.canAuto && free && free.length && !bk.nurseId) { bk.nurseId = free[0]; bk.autoNurse = true; }
+    sel.innerHTML = `<option value="">${free ? t().selNurse : t().pickTimeForNurse}</option>` + MadaNurses.NURSES.map(n => {
+      const ok = !free || free.includes(n.id);
+      return `<option value="${n.id}" ${ok ? "" : "disabled"} ${bk.nurseId === n.id ? "selected" : ""}>${esc(T(n.name))}${free ? " · " + (ok ? t().nurseAvail : t().nurseBusy) : ""}</option>`;
+    }).join("");
+    sel.disabled = !canBook;
+  }
+  function bookingHints(o) {
+    $("hDoc").innerHTML = bk.doctorId === "none" ? hint("ok", I.check, t().docNone) : bk.doctorId ? hint("ok", I.check, t().assigned) : o.service === "doctor" ? hint("bad", I.x, t().docNo) : hint("", "", t().docOpt);
+    $("hNurse").innerHTML = bk.nurseId ? hint("ok", I.check, bk.autoNurse ? t().nurseAuto : t().assigned) : hint("bad", I.x, t().nurseNo);
+    $("hDate").innerHTML = bk.dateErr ? hint("bad", I.x, t().dateBad) : bk.date ? hint("ok", I.check, t().scheduled) : hint("bad", I.x, t().dateNo);
+    $("hTime").innerHTML = bk.noSlots && bk.date ? hint("bad", I.x, t().noSlots) : bk.minute != null ? hint("ok", I.check, t().scheduled) : hint("bad", I.x, t().timeNo);
+    $("bkDate").classList.toggle("bad", !!bk.dateErr);
+  }
+  function parseDmy(s) {
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s); if (!m) return null;
+    const d = new Date(+m[3], +m[2] - 1, +m[1]);
+    return d.getDate() === +m[1] && d.getMonth() === +m[2] - 1 ? d : null;
+  }
+  function bindBooking(o) {
+    const sv = savedAppt(o);
+    const savedDoc = (o.booking && o.booking.doctorId) || (o.booking && o.booking.noDoctor || o.service !== "doctor" ? "none" : "");
+    if (!bk || bk.oid !== o.id) bk = { oid: o.id, doctorId: savedDoc, nurseId: sv ? sv.nurseId : "", date: sv ? sv.date : null, minute: sv ? sv.minute : null, dateErr: false };
+    bk.canAuto = canBook && !$("rsOpen");
+    $("bkDoctor").value = bk.doctorId;
+    $("bkDate").value = bk.date ? fmtDate(MadaNurses.parse(bk.date)) : "";
+    let refresh = () => { fillTimes(o); fillNurses(o); bookingHints(o); };
+    refresh();
+    if ($("rsOpen")) ["bkDoctor", "bkNurse", "bkDate", "bkTime"].forEach(k => $(k).disabled = true);
+    if ($("rsOpen")) $("rsOpen").addEventListener("click", () => { rsEdit = o.id; bk = null; render(); $("secBooking").scrollIntoView({ block: "start", behavior: "smooth" }); });
+    if (!canBook || $("rsOpen")) return;
+    const paidBk = !!$("rsSave");
+    const docVal = () => bk.doctorId && bk.doctorId !== "none" ? bk.doctorId : "";
+    const cmp = () => { if (!paidBk) return; const now = { date: bk.date, minute: bk.minute, nurseId: bk.nurseId, doctorId: docVal() };
+      $("rsCmp").innerHTML = `<s>${esc(slotTxt({ ...sv, doctorId: (o.booking && o.booking.doctorId) || "" }))}</s>${svg(I.arrow || '<path d="M5 12h14M13 6l6 6-6 6"/>')}<b>${now.date && now.minute != null ? esc(slotTxt(now)) : "—"}</b>`; };
+    const refresh2 = refresh;
+    refresh = () => { refresh2(); cmp(); };
+    cmp();
+    $("bkDoctor").addEventListener("change", e => { bk.doctorId = e.target.value; bookingHints(o); cmp(); });
+    $("bkNurse").addEventListener("change", e => { bk.nurseId = e.target.value; bk.autoNurse = false; bookingHints(o); cmp(); });
+    $("bkTime").addEventListener("change", e => { bk.minute = e.target.value === "" ? null : +e.target.value; fillNurses(o); bookingHints(o); cmp(); });
+    $("bkDate").addEventListener("input", e => {
+      const dg = e.target.value.replace(/\D/g, "").slice(0, 8);
+      e.target.value = dg.length > 4 ? `${dg.slice(0, 2)}/${dg.slice(2, 4)}/${dg.slice(4)}` : dg.length > 2 ? `${dg.slice(0, 2)}/${dg.slice(2)}` : dg;
+      bk.dateErr = false; bk.date = null;
+      if (dg.length === 8) {
+        const d = parseDmy(e.target.value), today = new Date(); today.setHours(0, 0, 0, 0);
+        const max = new Date(today); max.setDate(max.getDate() + 90);
+        const own = sv && d && MadaNurses.ymd(d) === sv.date;
+        if (d && (own || (d >= today && d <= max))) bk.date = MadaNurses.ymd(d); else bk.dateErr = true;
+      }
+      refresh();
+    });
+    $("bkEarliest").addEventListener("click", () => {
+      const e = MadaNurses.earliest(); if (!e) return;
+      Object.assign(bk, { date: e.date, minute: e.minute, nurseId: e.nurses[0].id, autoNurse: true, dateErr: false });
+      $("bkDate").value = fmtDate(MadaNurses.parse(e.date)); refresh();
+    });
+    if (paidBk) {
+      $("rsCancel").addEventListener("click", () => { rsEdit = null; bk = null; $("rsReason").value = ""; $("rsNote").value = ""; render(); });
+      $("rsReason").addEventListener("change", () => { $("hRs").innerHTML = ""; $("rsReason").classList.remove("bad"); });
+      $("rsSave").addEventListener("click", () => {
+        if (!bk.date || bk.minute == null || !bk.nurseId) { bookingHints(o); toast(t().bookingErr); return; }
+        const from = { date: sv.date, minute: sv.minute, nurseId: sv.nurseId, doctorId: (o.booking && o.booking.doctorId) || "" };
+        const to = { date: bk.date, minute: bk.minute, nurseId: bk.nurseId, doctorId: docVal() };
+        if (JSON.stringify(from) === JSON.stringify(to)) { toast(t().rsSame); return; }
+        const reason = $("rsReason").value;
+        if (!reason) { $("hRs").innerHTML = hint("bad", I.x, t().rsNeedReason); $("rsReason").classList.add("bad"); $("rsReason").focus(); return; }
+        const n = MadaNurses.NURSES.find(x => x.id === bk.nurseId), now = new Date().toISOString(), cur = MadaOrders.get(id);
+        // TODO: move the slot in the scheduling API, then SMS the customer and notify the old and new nurse.
+        MadaOrders.update(id, { booking: { doctorId: docVal() || null, noDoctor: bk.doctorId === "none", nurseId: bk.nurseId, by: me.name, at: now },
+          appointment: { date: bk.date, minute: bk.minute, nurse: n.name },
+          reschedules: [...(cur.reschedules || []), { from, to, reason, note: $("rsNote").value.trim(), by: me.name, at: now }] });
+        $("rsReason").value = ""; $("rsNote").value = "";
+        rsEdit = null; bk = null; render();
+        toast(tx("rsSaved", { t: apptTxt(to).replace(/[⁦⁩]/g, "") }));
+      });
+      return;
+    }
+    $("bkSave").addEventListener("click", () => {
+      if (!bk.date || bk.minute == null || !bk.nurseId) { bookingHints(o); toast(t().bookingErr); return; }
+      const n = MadaNurses.NURSES.find(x => x.id === bk.nurseId);
+      // TODO: book the nurse in the scheduling API and notify the assigned team.
+      // The doctor is notified in the Doctor Portal (bell and My Visits) only once the customer has paid (the order has a booking number).
+      const doc = docVal(), paid = !!MadaOrders.get(id).bookingId;
+      MadaOrders.update(id, { booking: { doctorId: doc || null, noDoctor: bk.doctorId === "none", nurseId: bk.nurseId, by: me.name, at: new Date().toISOString() },
+        appointment: { date: bk.date, minute: bk.minute, nurse: n.name } });
+      bk = null; render();
+      toast(doc && !paid ? t().drAfterPay : tx("bookingSaved", { d: doc ? t().andDoctor : "" }));
+    });
+  }
+
+  // ----- Location -----
+  function bindLocation(o) {
+    const L = o.location || {};
+    const mapHint = () => {
+      const p = parseMap($("locMap").value);
+      const outA = p.lat != null && !MadaOrders.coverageAt(p.lat, p.lng);
+      $("hMap").innerHTML = p.bad ? hint("bad", I.x, t().mapBad) : outA ? hint("bad", I.x, tx("outArea", { c: MadaOrders.COVERAGE.map(c => T(c.name)).join(", ") })) : p.lat != null ? hint("ok", I.pin, tx("mapCoords", { c: coordTxt(p) })) : p.link ? hint("", I.info, t().mapLinkOk) : "";
+      $("locMap").classList.toggle("bad", !!p.bad || outA);
+      const code = $("locCode").value.trim().toUpperCase(), cb = code && !/^[A-Z]{4}\d{4}$/.test(code);
+      $("hCode").innerHTML = cb ? hint("bad", I.x, t().codeBad) : hint("", "", t().codeHint);
+      $("locCode").classList.toggle("bad", !!cb);
+      const url = mapsUrl(p.bad ? null : p, $("locAddr").value.trim(), cb ? "" : code);
+      const a = $("openMaps"); if (url) { a.href = url; a.removeAttribute("aria-disabled"); } else { a.removeAttribute("href"); a.setAttribute("aria-disabled", "true"); }
+      return { p, code, cb, outA };
+    };
+    ["locMap", "locCode", "locAddr"].forEach(k => $(k).addEventListener("input", mapHint));
+    $("locCode").addEventListener("input", e => { const s = e.target.selectionStart; e.target.value = e.target.value.toUpperCase().replace(/\s/g, ""); e.target.setSelectionRange(s, s); mapHint(); });
+    mapHint();
+    renderImg(o);
+    if ($("locAsk")) $("locAsk").addEventListener("click", () => {
+      const now = new Date().toISOString(), cur = MadaOrders.get(id);
+      // TODO: send by SMS / WhatsApp with a location-sharing link.
+      MadaOrders.update(id, { location: { ...(cur.location || {}), requestedAt: now }, messages: [...(cur.messages || []), { type: "location", at: now, by: me ? me.name : null }] });
+      render(); toast(tx("locAskToast", { m: o.mobile }));
+    });
+    if ($("locSave")) $("locSave").addEventListener("click", () => {
+      const { p, code, cb, outA } = mapHint(), addr = $("locAddr").value.trim();
+      if (outA) { $("locMap").focus(); toast(tx("outArea", { c: MadaOrders.COVERAGE.map(c => T(c.name)).join(", ") })); return; }
+      if (p.bad || cb) { (p.bad ? $("locMap") : $("locCode")).focus(); toast(t().fixErr); return; }
+      if (!addr && p.empty && !code) { $("locAddr").focus(); toast(t().locEmpty); return; }
+      const cur = MadaOrders.get(id);
+      MadaOrders.update(id, { location: { ...(cur.location || {}), address: addr, mapLink: $("locMap").value.trim(), lat: p.lat != null ? p.lat : null, lng: p.lng != null ? p.lng : null,
+        shortCode: code, floor: $("locFloor").value.trim(), landmark: $("locLandmark").value.trim(), by: me.name, savedAt: new Date().toISOString() } });
+      render(); toast(t().locSaved);
+    });
+  }
+  function renderImg(o) {
+    const L = o.location || {}, src = L.image ? MadaStore.get(imgKey(o.id)) : null, edit = o.status !== "cancelled";
+    $("imgBox").innerHTML = src
+      ? `<div class="img-prev"><img src="${src}" alt="${esc(t().imgLbl)}" id="imgPrev"><div class="acts">${L.imageAt ? `<small>${esc(tx("imgAddedAt", { t: fmtDate(new Date(L.imageAt)) + " " + fmtTime(new Date(L.imageAt)) }))}</small>` : ""}
+          ${edit ? `<button type="button" class="btn btn-ghost btn-sm" id="imgPick">${svg(I.image)}${t().imgChange}</button><button type="button" class="btn btn-danger-o btn-sm" id="imgDel">${svg(I.x, 2)}${t().imgRemove}</button>` : ""}</div></div>`
+      : `<div class="img-drop"><span class="ic">${svg(I.image)}</span><p>${t().imgHelp}</p>${edit ? `<button type="button" class="btn btn-ghost" id="imgPick">${svg('<path d="M12 5v14M5 12h14"/>', 2)}${t().imgAdd}</button>` : ""}</div>`;
+    if ($("imgPick")) $("imgPick").addEventListener("click", () => { $("imgIn").value = ""; $("imgIn").click(); });
+    if ($("imgDel")) $("imgDel").addEventListener("click", () => {
+      MadaStore.set(imgKey(id), null);
+      const cur = MadaOrders.get(id); MadaOrders.update(id, { location: { ...(cur.location || {}), image: false, imageAt: null } });
+      renderImg(MadaOrders.get(id)); toast(t().imgRemoved);
+    });
+    if ($("imgPrev")) $("imgPrev").addEventListener("click", () => { $("lightImg").src = src; $("lightbox").hidden = false; });
+  }
+  // Shrink the photo before saving so it fits in browser storage.
+  function shrink(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onerror = rej;
+      r.onload = () => { const img = new Image(); img.onerror = rej; img.onload = () => {
+        const k = Math.min(1, 900 / Math.max(img.width, img.height)), c = document.createElement("canvas");
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); res(c.toDataURL("image/jpeg", 0.72));
+      }; img.src = r.result; };
+      r.readAsDataURL(file);
+    });
+  }
+  $("imgIn").addEventListener("change", async e => {
+    const f = e.target.files[0]; if (!f) return;
+    if (!/^image\//.test(f.type)) { toast(t().imgType); return; }
+    try {
+      const data = await shrink(f);
+      // TODO: upload to file storage; the order should keep only the file URL.
+      MadaStore.set(imgKey(id), data);
+      if (MadaStore.get(imgKey(id)) !== data) throw new Error("not saved");
+      const cur = MadaOrders.get(id); MadaOrders.update(id, { location: { ...(cur.location || {}), image: true, imageAt: new Date().toISOString() } });
+      renderImg(MadaOrders.get(id)); toast(t().imgSaved);
+    } catch (err) { toast(t().imgErr); }
+  });
+  $("lightbox").addEventListener("click", () => { $("lightbox").hidden = true; });
+
+  // ----- Payment, notes, cancel -----
+  function bindRest(o) {
+    if ($("paySend")) $("paySend").addEventListener("click", () => {
+      const now = new Date(), cur = MadaOrders.get(id);
+      // TODO: create the link with the payment gateway and send it by SMS.
+      MadaOrders.update(id, { payLink: { sentAt: now.toISOString(), expiresAt: new Date(+now + MadaOrders.PAY_MINUTES * 60000).toISOString() },
+        messages: [...(cur.messages || []), { type: "payment", at: now.toISOString(), by: me ? me.name : null }] });
+      render(); navCount(); toast(tx("linkSentToast", { m: o.mobile }));
+    });
+    // Share the payment link: copy, WhatsApp or SMS. Each share is logged on the request.
+    const logShare = ch => { const cur = MadaOrders.get(id);
+      MadaOrders.update(id, { messages: [...(cur.messages || []), { type: "share", channel: ch, at: new Date().toISOString(), by: me ? me.name : null }] }); };
+    if ($("shCopy")) $("shCopy").addEventListener("click", () => {
+      const url = payUrl(o);
+      const done = () => { logShare("copy"); render(); toast(t().linkCopied); };
+      const fallback = () => { const ta = document.createElement("textarea"); ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); } catch (e) {} ta.remove(); done(); };
+      try { navigator.clipboard.writeText(url).then(done, fallback); } catch (e) { fallback(); }
+    });
+    ["shWa", "shSms"].forEach(k => { if ($(k)) $(k).addEventListener("click", () => { logShare($(k).dataset.ch); setTimeout(render, 300); }); });
+    if ($("payMark")) $("payMark").addEventListener("click", () => {
+      const cur = MadaOrders.get(id);
+      MadaOrders.update(id, { payment: "paid", payLink: { ...cur.payLink, paidAt: new Date().toISOString() } });
+      render(); toast(t().paidToast);
+    });
+    bindNotes();
+    if ($("cancelBtn")) $("cancelBtn").addEventListener("click", openCancel);
+  }
+
+  function openCancel() {
+    const R = MadaOrders.CANCEL_REASONS;
+    $("cText").textContent = `${t().cancelDlgText} ${isSupervisor ? t().cancelTextSup : t().cancelTextAgent}`;
+    $("cReasons").innerHTML = Object.keys(R).map((k, i) => `<label><input type="radio" name="creason" value="${k}" ${i === 0 ? "checked" : ""}>${esc(T(R[k]))}</label>`).join("");
+    $("cErr").hidden = true; $("cNote").classList.remove("bad");
+    $("cancelOverlay").hidden = false; $("cNote").focus();
+  }
+  const closeCancel = () => { $("cancelOverlay").hidden = true; };
+  $("cKeep").addEventListener("click", closeCancel);
+  $("cancelOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) closeCancel(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { closeCancel(); $("lightbox").hidden = true; } });
+  $("cGo").addEventListener("click", () => {
+    const note = $("cNote").value.trim();
+    if (!note) { $("cErr").hidden = false; $("cNote").classList.add("bad"); $("cNote").focus(); return; }
+    const key = document.querySelector("input[name=creason]:checked").value, r = MadaOrders.CANCEL_REASONS[key], now = new Date().toISOString();
+    const reason = { en: `${r.en}: ${note}`, ar: `${r.ar}: ${note}` };
+    const patch = { decision: "rejected", reason, cancelRequest: { reason: key, note, by: me.name, at: now } };
+    // Agents send it to the supervisor (locked "Not Approved"); a supervisor cancels it straight away.
+    // TODO: free the nurse's slot and void the payment link in the backend.
+    if (isSupervisor) Object.assign(patch, { status: "cancelled", closure: { outcome: "confirmed", note, by: me.name, at: now } });
+    else patch.status = "declined";
+    MadaOrders.update(id, patch);
+    $("cNote").value = ""; closeCancel(); render(); navCount();
+    toast(tx(isSupervisor ? "cancelledSup" : "cancelledAgent", { id }));
+    scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // The customer page (another tab) writes to the same storage: refresh when it changes.
+  window.addEventListener("storage", e => { if (!e.key || e.key === "mada-orders") { render(); navCount(); } });
+  // Countdown on the payment link; redraw when it runs out.
+  setInterval(() => {
+    let out = false;
+    document.querySelectorAll(".cd[data-exp]").forEach(el => { const ms = new Date(el.dataset.exp) - Date.now(); el.textContent = mmss(ms); if (ms <= 0) out = true; });
+    if (out) render();
+  }, 1000);
+
+  // ---------- Supervisor closes the case ----------
+  function openClose() {
+    const o = MadaOrders.get(id), emg = o.medical === "emergency", outs = emg ? MadaOrders.OUTCOMES : MadaOrders.CANCEL_OUTCOMES;
+    $("closeTitle").querySelector("span").textContent = emg ? t().closeTitle : t().closeReqTitle;
+    $("closeText").textContent = emg ? t().closeText : t().closeReqText;
+    $("closeGo").textContent = emg ? t().closeGo : t().closeReqGo;
+    $("outs").innerHTML = Object.keys(outs).map((k, i) => `<label><input type="radio" name="outcome" value="${k}" ${i === 0 ? "checked" : ""}>${esc(T(outs[k]))}</label>`).join("");
+    $("closeErr").hidden = true; $("closeNote").classList.remove("bad");
+    $("closeOverlay").hidden = false; $("closeNote").focus();
+  }
+  const closeDialog = () => { $("closeOverlay").hidden = true; };
+  $("closeCancel").addEventListener("click", closeDialog);
+  $("closeOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) closeDialog(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("closeOverlay").hidden) closeDialog(); });
+  $("closeGo").addEventListener("click", () => {
+    const note = $("closeNote").value.trim();
+    if (!note) { $("closeErr").hidden = false; $("closeNote").classList.add("bad"); $("closeNote").focus(); return; }
+    if (!isSupervisor) return;
+    // TODO: the backend must also check that only supervisors can close these requests.
+    MadaOrders.update(id, { status: MadaOrders.get(id).medical === "emergency" ? "emergency_closed" : "cancelled", closure: { outcome: document.querySelector("input[name=outcome]:checked").value, note, by: me.name, at: new Date().toISOString() } });
+    closeDialog(); render(); navCount();
+    toast(tx("closedToast", { id }));
+  });
+
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2800); }
+  function navCount() { const n = MadaOrders.needsAction(); $("navCount").hidden = !n; $("navCount").textContent = n; }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | تفاصيل الطلب" : "Mada Care | Request Details";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+    if (!$("closeOverlay").hidden) openClose();
+    if (!$("cancelOverlay").hidden) openCancel();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  navCount();
+</script>
+</body>
+</html>

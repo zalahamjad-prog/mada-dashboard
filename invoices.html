@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Invoices</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Invoices ---------- */
+  .ph-icon.inv { background: var(--green-soft); color: var(--green); }
+  .ph-acts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .kpi { padding: 16px 18px; display: flex; gap: 14px; align-items: center; min-width: 0; }
+  .kpi .ki { width: 44px; height: 44px; border-radius: 11px; display: grid; place-items: center; flex: none; background: var(--primary-soft); color: var(--primary); }
+  .kpi .ki svg { width: 22px; height: 22px; }
+  .kpi .ki.cash { background: var(--green-soft); color: var(--green); }
+  .kpi .ki.card { background: var(--blue-soft); color: var(--blue); }
+  .kpi .ki.cnt { background: var(--purple-soft); color: var(--purple); }
+  .kpi small { display: block; font-size: 12.5px; color: var(--muted); }
+  .kpi b { display: block; font-size: 22px; font-weight: 700; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kpi b .u { font-size: 13px; font-weight: 600; color: var(--muted); margin-inline-start: 4px; }
+  .kpi em { display: block; font-style: normal; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .kpi.main { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .kpi.main .ki { background: rgba(255,255,255,.16); color: #fff; }
+  .kpi.main small, .kpi.main em, .kpi.main b .u { color: rgba(255,255,255,.8); }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 16px; align-items: center; }
+  .search { flex: 1 1 260px; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; min-width: 0; }
+  .search svg { width: 17px; height: 17px; color: var(--muted); }
+  .search input { border: 0; outline: 0; flex: 1; min-width: 0; font-size: 13.5px; background: none; }
+  .search:focus-within { border-color: var(--primary); }
+  .filters select, .filters input[type="date"] { height: 40px; padding: 0 10px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 13.5px; min-width: 0; }
+  .range { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
+  .tbl-wrap { overflow-x: auto; }
+  table.inv { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.inv th { text-align: start; font-size: 12px; font-weight: 600; color: var(--muted); padding: 12px 14px; background: #f8fafb; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.inv td { padding: 12px 14px; border-bottom: 1px solid #eef2f3; vertical-align: top; }
+  table.inv tr:last-child td { border-bottom: 0; }
+  table.inv tr:hover td { background: #fafcfc; }
+  .nw { white-space: nowrap; }
+  .ltr { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+  .idn { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+  .inv-no { font-weight: 600; color: var(--primary); }
+  .sub { display: block; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+  .svc b { display: block; font-weight: 600; }
+  table.inv td.svc { min-width: 230px; }
+  .svc .sub { max-width: 300px; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  table.inv td.pmc .sub { white-space: normal; max-width: 170px; }
+  table.inv td.who { min-width: 130px; }
+  .pm { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pm svg { width: 14px; height: 14px; }
+  .pm.cash { background: var(--green-soft); color: var(--green); }
+  .pm.card { background: var(--blue-soft); color: var(--blue); }
+  .amt { font-weight: 700; white-space: nowrap; }
+  .amt small { font-weight: 500; color: var(--muted); font-size: 11.5px; }
+  .dl { height: 34px; padding: 0 12px; font-size: 12.5px; }
+  .foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 16px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--muted); }
+  .foot b { color: var(--ink); }
+  .empty { padding: 36px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  .empty svg { width: 40px; height: 40px; color: #9fb3b8; display: block; margin: 0 auto 8px; }
+  .src { display: flex; gap: 8px; align-items: flex-start; padding: 12px 16px; font-size: 12.5px; color: var(--muted); }
+  .src svg { width: 16px; height: 16px; margin-top: 1px; }
+  .mlist { display: none; }
+  @media (max-width: 1100px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) {
+    .kpis { gap: 10px; }
+    .kpi { padding: 12px; gap: 10px; }
+    .kpi .ki { width: 36px; height: 36px; }
+    .kpi .ki svg { width: 18px; height: 18px; }
+    .kpi b { font-size: 18px; }
+    .ph-acts { width: 100%; }
+    .ph-acts .btn { flex: 1; }
+    .filters select, .range, .range input { flex: 1 1 auto; }
+    .tbl-wrap { display: none; }
+    .mlist { display: block; }
+    .mi { padding: 14px 16px; border-bottom: 1px solid #eef2f3; display: grid; gap: 8px; }
+    .mi:last-child { border-bottom: 0; }
+    .mi-h { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .mi-h b { display: block; font-size: 14px; }
+    .mi-g { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 12.5px; }
+    .mi-g .lb { color: var(--muted); display: block; font-size: 11px; }
+    .mi-g .pm { margin-bottom: 2px; }
+    .mi .dl { width: 100%; }
+  }
+</style>
+
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" aria-current="page" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon inv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+      <div><h1 data-i18n="title">Invoices</h1><p data-i18n="subtitle">Every payment collected in the Doctor Portal, for the accountant.</p></div>
+    </div>
+    <div class="ph-acts"><button type="button" class="btn btn-ghost" id="csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg><span data-i18n="csv">Export CSV</span></button></div>
+  </div>
+  <section class="kpis" id="kpis"></section>
+  <section class="card">
+    <div class="filters">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input type="search" id="q" data-i18n-ph="searchPh" placeholder="Search by name, file no., mobile or invoice no."></label>
+      <select id="period" aria-label="Period"><option value="all" data-i18n="pAll">All time</option><option value="today" data-i18n="pToday">Today</option><option value="week" data-i18n="pWeek">Last 7 days</option><option value="month" data-i18n="pMonth">This month</option><option value="custom" data-i18n="pCustom">Custom dates</option></select>
+      <div class="range" id="range" hidden><input type="date" id="from" aria-label="From"><span data-i18n="to">to</span><input type="date" id="till" aria-label="To"></div>
+      <select id="method" aria-label="Payment method"><option value="" data-i18n="mAll">All methods</option><option value="cash" data-i18n="pm_cash">Cash</option><option value="card" data-i18n="pm_card">Card (mada)</option></select>
+    </div>
+    <div class="tbl-wrap"><table class="inv"><thead><tr>
+      <th data-i18n="thInv">Invoice No.</th><th data-i18n="thDate">Date</th><th data-i18n="thPatient">Patient</th><th data-i18n="thFile">File No.</th><th data-i18n="thMobile">Mobile</th>
+      <th data-i18n="thService">Service</th><th data-i18n="thMethod">Payment Method</th><th data-i18n="thAmount">Amount</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="mlist" id="mlist"></div>
+    <div class="foot" id="foot"></div>
+  </section>
+  <p class="src"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-i18n="srcNote">Payments show here as soon as the doctor confirms them in the visit (Orders &amp; Services, Collect Payment). A payment the doctor undoes is removed.</span></p>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="patients.js"></script>
+<script src="doctor-orders.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  // SAMPLE DATA ONLY: the demo doctor's three visits with their payments, so example invoices show without opening the Doctor Portal first (runs once).
+  if (me) MadaOrders.seedDoctorDemo("D01"); // does nothing while MadaStore.SAMPLES is false
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Invoices (accountant): one row per payment the doctor collected in the Doctor Portal, read from order.doctorVisit.payment.entries
+  // (doctor-visit.html, Orders & Services > Collect Payment). The services on the invoice are the visit's orders (doctorVisit.steps.orders,
+  // or the draft while the visit is still open) with their catalogue prices (DrOrders). Nothing here changes the payment.
+  // TODO: tax invoice fields (VAT registration number, VAT amount, e-invoice QR) once Mada Care's approved invoice format and tax details are provided.
+  const I18N = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Invoices", subtitle: "Every payment collected in the Doctor Portal, for the accountant.", csv: "Export CSV",
+      kTotal: "Total Collected", kCash: "Cash", kCard: "Card (mada)", kCount: "Invoices", kOf: "{n} invoices", kVisits: "{n} visits",
+      searchPh: "Search by name, file no., mobile or invoice no.", pAll: "All time", pToday: "Today", pWeek: "Last 7 days", pMonth: "This month", pCustom: "Custom dates", to: "to",
+      mAll: "All methods", pm_cash: "Cash", pm_card: "Card (mada)",
+      thInv: "Invoice No.", thDate: "Date", thPatient: "Patient", thFile: "File No.", thMobile: "Mobile", thService: "Service", thMethod: "Payment Method", thAmount: "Amount",
+      sar: "SAR", docVisit: "Doctor Visit with Nursing", nSvc: "{n} services", oneSvc: "1 service", noSvc: "No services listed", dl: "Download Invoice", dlS: "Invoice",
+      byDr: "Collected by {n}", refNo: "Ref.", change: "Change {n}", partOf: "Payment {i} of {n}",
+      empty: "No payments yet. When a doctor collects a payment in a visit, it shows here.", noMatch: "No invoices match these filters.",
+      showing: "Showing {n} of {t} invoices", sumF: "Total shown: {n}",
+      srcNote: "Payments show here as soon as the doctor confirms them in the visit (Orders & Services, Collect Payment). A payment the doctor undoes is removed.",
+      newPay: "New payment received: {n}.", making: "Preparing the invoice...", dlDone: "Downloaded {f}", dlFail: "Couldn't create the PDF here. A print view opened instead.", csvDone: "Downloaded {f}",
+      // invoice document
+      invT: "Invoice", invNo: "Invoice No.", invDate: "Invoice Date", billTo: "Patient", visitT: "Visit", fileNo: "File No.", mobile: "Mobile", bookingNo: "Booking No.", orderNo: "Request No.",
+      doctor: "Doctor", visitDate: "Visit Date", thNo: "#", thSvc: "Service", thCode: "Code", thPrice: "Price", svcTotal: "Services Total",
+      payT: "Payment", method: "Payment Method", paidNow: "Amount Paid", received: "Cash Received", changeT: "Change", cardRef: "Terminal Ref.", collected: "Collected By", paidAt: "Paid At",
+      sumT: "Account Summary", paidAll: "Total Paid", due: "Balance Due", refund: "Refund Due", madeAt: "Issued", noFee: "No fee"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "الفواتير", subtitle: "كل دفعة تنحصّل في نظام الأطباء، للمحاسب.", csv: "تصدير CSV",
+      kTotal: "إجمالي المحصّل", kCash: "كاش", kCard: "شبكة مدى", kCount: "الفواتير", kOf: "عدد الفواتير: {n}", kVisits: "عدد الزيارات: {n}",
+      searchPh: "ابحث بالاسم أو رقم الملف أو الجوال أو رقم الفاتورة", pAll: "كل الفترات", pToday: "اليوم", pWeek: "آخر ٧ أيام", pMonth: "هذا الشهر", pCustom: "تواريخ محددة", to: "إلى",
+      mAll: "كل طرق الدفع", pm_cash: "كاش", pm_card: "شبكة مدى",
+      thInv: "رقم الفاتورة", thDate: "التاريخ", thPatient: "المريض", thFile: "رقم الملف", thMobile: "الجوال", thService: "الخدمة", thMethod: "طريقة الدفع", thAmount: "المبلغ",
+      sar: "ر.س", docVisit: "زيارة طبيب مع تمريض", nSvc: "{n} خدمات", oneSvc: "خدمة واحدة", noSvc: "ما فيه خدمات مسجلة", dl: "تحميل الفاتورة", dlS: "الفاتورة",
+      byDr: "حصّلها {n}", refNo: "مرجع", change: "باقي {n}", partOf: "دفعة {i} من {n}",
+      empty: "ما فيه دفعات للحين. أول ما يحصّل الطبيب دفعة في الزيارة تظهر هنا.", noMatch: "ما فيه فواتير تطابق الفلاتر.",
+      showing: "يظهر {n} من {t} فاتورة", sumF: "إجمالي المعروض: {n}",
+      srcNote: "الدفعات تظهر هنا أول ما يأكدها الطبيب في الزيارة (الطلبات والخدمات، تحصيل الدفع). إذا ألغى الطبيب الدفعة تنشال من هنا.",
+      newPay: "وصلت دفعة جديدة: {n}.", making: "جاري تجهيز الفاتورة...", dlDone: "تم تحميل {f}", dlFail: "ما قدرنا نسوي PDF هنا، فتحنا لك نسخة للطباعة.", csvDone: "تم تحميل {f}",
+      invT: "فاتورة", invNo: "رقم الفاتورة", invDate: "تاريخ الفاتورة", billTo: "المريض", visitT: "الزيارة", fileNo: "رقم الملف", mobile: "الجوال", bookingNo: "رقم الحجز", orderNo: "رقم الطلب",
+      doctor: "الطبيب", visitDate: "تاريخ الزيارة", thNo: "#", thSvc: "الخدمة", thCode: "الرمز", thPrice: "السعر", svcTotal: "إجمالي الخدمات",
+      payT: "الدفع", method: "طريقة الدفع", paidNow: "المبلغ المدفوع", received: "المبلغ المستلم", changeT: "الباقي", cardRef: "مرجع الجهاز", collected: "حصّلها", paidAt: "وقت الدفع",
+      sumT: "ملخص الحساب", paidAll: "إجمالي المدفوع", due: "المتبقي", refund: "مبلغ مسترجع", madeAt: "صدرت", noFee: "بدون رسوم"
+    }
+  };
+  let current = "en", seen = null;
+  const t = () => I18N[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { sum: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>', cash: '<rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/>',
+    card: '<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6 15h4"/>', cnt: '<path d="M9 5h11M9 12h11M9 19h11"/><path d="M4 5h1M4 12h1M4 19h1"/>', dl: '<path d="M12 4v12M7 11l5 5 5-5M5 20h14"/>', empty: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h4"/>' };
+  const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const num = n => Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const money = n => `${num(n)} ${t().sar}`;
+  const fmtDay = d => new Date(d).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" });
+  const fmtTm = d => new Date(d).toLocaleTimeString(loc(), { hour: "2-digit", minute: "2-digit" });
+  const ymd = d => { const x = new Date(d); return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`; };
+  const docOf = o => MadaOrders.DOCTORS.find(d => d.id === (o.booking && o.booking.doctorId));
+  const price = x => x.svc === "ref" || x.svc === "leave" ? 0 : Number(x.price || (DrOrders.item(x.code) || {}).price || 0);
+  // Invoice number: the request number plus the payment's own id, so it stays the same even if another payment on the visit is undone.
+  const invNo = (o, e) => `INV-${String(o.id).replace(/\D/g, "")}-${String(e.id).slice(-4).toUpperCase()}`;
+
+  function invoices() {
+    const out = [];
+    MadaOrders.all().forEach(o => {
+      const dv = o.doctorVisit, entries = (dv && dv.payment && dv.payment.entries) || [];
+      if (!entries.length) return;
+      const src = (dv.steps && dv.steps.orders) || dv.ordersDraft || {}, items = (src.items || []).filter(x => x.svc !== "ref" && x.svc !== "leave");
+      const total = items.reduce((s, x) => s + price(x), 0), paidAll = entries.reduce((s, e) => s + Number(e.amount || 0), 0);
+      const sorted = entries.slice().sort((a, b) => new Date(a.at) - new Date(b.at)), file = (o.mrn && window.MadaPatients && MadaPatients.get(o.mrn)) || {};
+      sorted.forEach((e, k) => out.push({ o, e, k, n: sorted.length, no: invNo(o, e), items, total, paidAll, before: sorted.slice(0, k + 1).reduce((s, x) => s + Number(x.amount || 0), 0),
+        name: o.patient || file.name || (dv.steps && dv.steps.arrival && dv.steps.arrival.name), mrn: o.mrn || file.fileNo || "", mobile: o.mobile || file.mobile || "" }));
+    });
+    return out.sort((a, b) => new Date(b.e.at) - new Date(a.e.at));
+  }
+  function inPeriod(at) {
+    const p = $("period").value, d = new Date(at), now = new Date();
+    if (p === "today") return ymd(d) === ymd(now);
+    if (p === "week") return now - d <= 7 * 864e5;
+    if (p === "month") return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    if (p === "custom") { const f = $("from").value, u = $("till").value, k = ymd(d); return (!f || k >= f) && (!u || k <= u); }
+    return true;
+  }
+  function filtered(all) {
+    const q = $("q").value.trim().toLowerCase(), m = $("method").value, qd = q.replace(/\D/g, "");
+    return all.filter(r => inPeriod(r.e.at) && (!m || r.e.method === m) && (!q ||
+      [T(r.name), r.name && r.name.en, r.name && r.name.ar, r.mrn, r.no, r.o.id, r.o.bookingId].some(v => v && String(v).toLowerCase().includes(q)) || (qd.length >= 3 && String(r.mobile).replace(/\D/g, "").includes(qd))));
+  }
+  const svcLine = r => r.items.length ? r.items.map(x => T(DrOrders.titleOf(x))).join(current === "ar" ? "، " : ", ") : t().noSvc;
+  const svcCount = r => r.items.length === 1 ? t().oneSvc : r.items.length ? tx("nSvc", { n: r.items.length }) : "";
+  const pmTag = e => `<span class="pm ${e.method === "card" ? "card" : "cash"}">${svg(e.method === "card" ? IC.card : IC.cash)}${t()["pm_" + (e.method === "card" ? "card" : "cash")]}</span>`;
+  const payNote = r => [r.e.method === "card" && r.e.ref ? `${t().refNo} ${r.e.ref}` : "", r.n > 1 ? tx("partOf", { i: r.k + 1, n: r.n }) : ""].filter(Boolean).join(" · ");
+
+  function render() {
+    const all = invoices(), list = filtered(all);
+    const sum = (a, m) => a.filter(r => !m || r.e.method === m).reduce((s, r) => s + Number(r.e.amount || 0), 0), cnt = (a, m) => a.filter(r => r.e.method === m).length;
+    const pName = $("period").options[$("period").selectedIndex].textContent, visits = new Set(list.map(r => r.o.id)).size;
+    const kpi = (cls, ic, label, val, sub) => `<div class="card kpi ${cls}"><span class="ki ${cls}">${svg(ic, 1.8)}</span><div style="min-width:0"><small>${label}</small><b>${val}</b><em>${sub}</em></div></div>`;
+    const big = n => `<span class="ltr">${num(n)}</span><span class="u">${t().sar}</span>`;
+    $("kpis").innerHTML = kpi("main", IC.sum, t().kTotal, big(sum(list)), esc(pName)) + kpi("cash", IC.cash, t().kCash, big(sum(list, "cash")), tx("kOf", { n: cnt(list, "cash") }))
+      + kpi("card", IC.card, t().kCard, big(sum(list, "card")), tx("kOf", { n: cnt(list, "card") })) + kpi("cnt", IC.cnt, t().kCount, `<span class="ltr">${list.length}</span>`, tx("kVisits", { n: visits }));
+    const dlBtn = r => `<button type="button" class="btn btn-ghost dl" data-dl="${esc(r.no)}">${svg(IC.dl)}${t().dlS}</button>`;
+    const emptyHtml = `<div class="empty">${svg(IC.empty, 1.6)}${all.length ? t().noMatch : t().empty}</div>`;
+    $("rows").innerHTML = list.length ? list.map(r => { const d = docOf(r.o), note = payNote(r);
+      return `<tr><td><span class="inv-no idn ltr">${esc(r.no)}</span><span class="sub ltr">${esc(r.o.bookingId || r.o.id)}</span></td>
+        <td class="nw">${esc(fmtDay(r.e.at))}<span class="sub">${esc(fmtTm(r.e.at))}</span></td>
+        <td class="who"><b>${esc(T(r.name))}</b>${d ? `<span class="sub">${esc(T(d.name))}</span>` : ""}</td>
+        <td><span class="idn ltr">${esc(r.mrn || "—")}</span></td><td><span class="ltr">${esc(r.mobile || "—")}</span></td>
+        <td class="svc"><b>${t().docVisit}${svcCount(r) ? ` · ${svcCount(r)}` : ""}</b><span class="sub">${esc(svcLine(r))}</span></td>
+        <td class="pmc">${pmTag(r.e)}${note ? `<span class="sub">${esc(note)}</span>` : ""}</td>
+        <td class="amt">${esc(money(r.e.amount))}</td><td>${dlBtn(r)}</td></tr>`; }).join("") : `<tr><td colspan="9">${emptyHtml}</td></tr>`;
+    $("mlist").innerHTML = list.length ? list.map(r => `<div class="mi"><div class="mi-h"><div><b>${esc(T(r.name))}</b><span class="sub"><span class="idn ltr">${esc(r.no)}</span> · <span>${esc(fmtDay(r.e.at))} ${esc(fmtTm(r.e.at))}</span></span></div><span class="amt">${esc(money(r.e.amount))}</span></div>
+        <div class="mi-g"><div><span class="lb">${t().thFile}</span><b class="idn ltr">${esc(r.mrn || "—")}</b></div><div><span class="lb">${t().thMobile}</span><b class="ltr">${esc(r.mobile || "—")}</b></div>
+          <div style="grid-column:1/-1"><span class="lb">${t().thService}</span>${t().docVisit}${svcCount(r) ? ` · ${svcCount(r)}` : ""}<span class="sub">${esc(svcLine(r))}</span></div>
+          <div style="grid-column:1/-1">${pmTag(r.e)}${payNote(r) ? ` <span class="sub ltr" style="display:inline">${esc(payNote(r))}</span>` : ""}</div></div>${dlBtn(r)}</div>`).join("") : emptyHtml;
+    $("foot").innerHTML = all.length ? `<span>${tx("showing", { n: list.length, t: all.length })}</span><span>${tx("sumF", { n: `<b>${esc(money(sum(list)))}</b>` })}</span>` : "";
+    $("foot").hidden = !all.length;
+    render.list = list;
+    return all;
+  }
+
+  // ---------- Invoice PDF (A4, html2pdf as on the other pages; without the library a print view opens) ----------
+  // html2canvas drops the spaces between Arabic words: each Arabic word goes in its own span (same fix as the Doctor Portal PDFs).
+  function fixArabic(wrap) {
+    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) if (/[؀-ۿ]/.test(walk.currentNode.nodeValue)) nodes.push(walk.currentNode);
+    nodes.forEach(nd => {
+      const frag = document.createDocumentFragment();
+      nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+        else { const sp = document.createElement("span"); sp.textContent = part; frag.appendChild(sp); }
+      });
+      nd.replaceWith(frag);
+    });
+  }
+  async function invoicePdf(r) {
+    const rtl = current === "ar", o = r.o, e = r.e, d = docOf(o), file = `Mada-Care-Invoice-${r.no}.pdf`, al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
+    const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`, DT = v => `<span dir="${rtl ? "rtl" : "ltr"}" style="unicode-bidi:isolate">${esc(v)}</span>`, stamp = v => DT(`${fmtDay(v)} ${fmtTm(v)}`);
+    const cell = `padding:8px 10px;border-bottom:1px solid #e6ecee;text-align:${al}`, num2 = `padding:8px 10px;border-bottom:1px solid #e6ecee;text-align:${ar2};white-space:nowrap`;
+    const kv = (k, v) => `<tr><td style="padding:4px 0;color:#6b7a80;width:42%">${esc(k)}</td><td style="padding:4px 0;font-weight:600">${v}</td></tr>`;
+    const amt = n => `${L2R(num(n))} ${esc(t().sar)}`, due = Math.round((r.total - r.paidAll) * 100) / 100;
+    const visitDay = o.appointment && o.appointment.date ? DT(fmtDay(o.appointment.date + "T12:00:00")) : (o.doctorVisit.startedAt ? DT(fmtDay(o.doctorVisit.startedAt)) : "—");
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:748px";
+    // The page box is 748px, the A4 width inside the 6 mm margins, and stays left-to-right (html2canvas clips the edge of a right-to-left box); the content inside takes the language direction.
+    wrap.innerHTML = `<div dir="ltr" style="width:748px;min-height:1020px;padding:30px 34px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px"><div dir="${rtl ? "rtl" : "ltr"}">
+      <table style="width:100%;border-collapse:collapse;border-bottom:3px solid #0b6b5c"><tr>
+        <td style="padding:0 0 14px;width:52px;vertical-align:middle"><img src="assets/mada-logo.png" style="height:52px;width:auto;display:block" alt=""></td>
+        <td style="padding:0 10px 14px;vertical-align:middle;text-align:${al}"><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:11px;color:#0b6b5c">${esc(t().tagline)}</div></td>
+        <td style="padding:0 0 14px;vertical-align:middle;text-align:${ar2}"><div style="font-size:24px;font-weight:700">${esc(t().invT)}</div><div style="margin-top:4px;color:#6b7a80">${esc(t().invNo)}: <b style="color:#15304a">${L2R(r.no)}</b></div><div style="color:#6b7a80">${esc(t().invDate)}: <b style="color:#15304a">${stamp(e.at)}</b></div></td>
+      </tr></table>
+      <div style="display:flex;gap:24px;margin:18px 0">
+        <div style="flex:1;background:#f5f9f8;border-radius:10px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().billTo)}</div><table style="width:100%;border-collapse:collapse">
+          ${kv(rtl ? "الاسم" : "Name", esc(T(r.name)) || "—")}${kv(t().fileNo, r.mrn ? L2R(r.mrn) : "—")}${kv(t().mobile, r.mobile ? L2R(r.mobile) : "—")}</table></div>
+        <div style="flex:1;background:#f5f9f8;border-radius:10px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().visitT)}</div><table style="width:100%;border-collapse:collapse">
+          ${kv(t().bookingNo, L2R(o.bookingId || "—"))}${kv(t().orderNo, L2R(o.id))}${kv(t().doctor, d ? esc(T(d.name)) : "—")}${kv(t().visitDate, visitDay)}</table></div>
+      </div>
+      <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#eef5f3">
+        <th style="${cell};width:30px">${t().thNo}</th><th style="${cell}">${esc(t().thSvc)}</th><th style="${cell}">${esc(t().thCode)}</th><th style="${num2}">${esc(t().thPrice)}</th></tr></thead>
+        <tbody>${r.items.length ? r.items.map((x, i) => `<tr><td style="${cell}">${i + 1}</td><td style="${cell}">${esc(T(DrOrders.titleOf(x)))}${x.note ? `<div style="font-size:11px;color:#6b7a80">${esc(x.note)}</div>` : ""}</td><td style="${cell}">${L2R(x.code || "")}</td><td style="${num2}">${price(x) ? amt(price(x)) : esc(t().noFee)}</td></tr>`).join("")
+          : `<tr><td colspan="4" style="${cell};color:#6b7a80">${esc(t().noSvc)}</td></tr>`}
+        <tr><td colspan="3" style="${cell};font-weight:700;border-bottom:0">${esc(t().svcTotal)}</td><td style="${num2};font-weight:700;border-bottom:0">${amt(r.total)}</td></tr></tbody></table>
+      <div style="display:flex;gap:24px;margin-top:20px;align-items:flex-start">
+        <div style="flex:1;border:1px solid #e3e8ea;border-radius:10px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().payT)}${r.n > 1 ? ` <span style="font-weight:500;color:#6b7a80">· ${esc(tx("partOf", { i: r.k + 1, n: r.n }))}</span>` : ""}</div><table style="width:100%;border-collapse:collapse">
+          ${kv(t().method, esc(t()["pm_" + (e.method === "card" ? "card" : "cash")]))}${kv(t().paidAt, stamp(e.at))}
+          ${e.method === "cash" && Number(e.received) > Number(e.amount) ? kv(t().received, amt(e.received)) + kv(t().changeT, amt(e.received - e.amount)) : ""}
+          ${e.method === "card" && e.ref ? kv(t().cardRef, L2R(e.ref)) : ""}${kv(t().collected, esc(T(e.by)) || "—")}</table></div>
+        <div style="flex:1;border:1px solid #e3e8ea;border-radius:10px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().sumT)}</div><table style="width:100%;border-collapse:collapse">
+          ${kv(t().svcTotal, amt(r.total))}${kv(t().paidAll, amt(r.paidAll))}${kv(due < 0 ? t().refund : t().due, amt(Math.abs(due)))}</table>
+          <div style="margin-top:10px;background:#0b6b5c;color:#fff;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;font-size:14px"><span>${esc(t().paidNow)}</span><b>${amt(e.amount)}</b></div></div>
+      </div>
+      <div style="margin-top:26px;font-size:11px;color:#8a979c">${esc(t().madeAt)} ${stamp(new Date())} · ${esc(T(me && me.name))}</div></div></div>`;
+    document.body.appendChild(wrap); fixArabic(wrap); toast(t().making);
+    const sy = window.scrollY; window.scrollTo(0, 0);
+    try {
+      if (!window.html2pdf) await new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); setTimeout(bad, 15000); });
+      await window.html2pdf().set({ margin: [6, 6], filename: file, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save();
+      toast(tx("dlDone", { f: file }));
+    } catch (x) {
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().dlFail);
+    } finally { wrap.remove(); window.scrollTo(0, sy); }
+  }
+  function csv() {
+    const list = render.list || [], q = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+    const head = [t().thInv, t().thDate, t().thPatient, t().thFile, t().thMobile, t().doctor, t().thService, t().thMethod, t().cardRef, t().thAmount + " (" + t().sar + ")", t().bookingNo];
+    const rows = list.map(r => { const d = docOf(r.o); return [r.no, `${ymd(r.e.at)} ${new Date(r.e.at).toTimeString().slice(0, 5)}`, T(r.name), r.mrn, r.mobile, d ? T(d.name) : "", svcLine(r), t()["pm_" + (r.e.method === "card" ? "card" : "cash")], r.e.ref || "", num(r.e.amount).replace(/,/g, ""), r.o.bookingId || r.o.id]; });
+    const blob = new Blob(["﻿" + [head, ...rows].map(x => x.map(q).join(",")).join("\r\n")], { type: "text/csv;charset=utf-8" }), f = `Mada-Care-Invoices-${ymd(new Date())}.csv`;
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = f; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    toast(tx("csvDone", { f }));
+  }
+  document.addEventListener("click", e => { const b = e.target.closest("[data-dl]"); if (!b) return; const r = (render.list || []).find(x => x.no === b.dataset.dl); if (r) invoicePdf(r); });
+  $("csv").addEventListener("click", csv);
+  ["q", "method", "from", "till"].forEach(id => $(id).addEventListener("input", render));
+  $("period").addEventListener("change", () => { $("range").hidden = $("period").value !== "custom"; render(); });
+  // A payment confirmed in the Doctor Portal (another tab) shows here straight away.
+  window.addEventListener("storage", e => {
+    if (e.key && e.key !== "mada-orders" && e.key !== "mada-patients") return;
+    const all = render(), fresh = all.filter(r => !seen.has(r.no));
+    if (fresh.length) toast(tx("newPay", { n: money(fresh[0].e.amount) }));
+    seen = new Set(all.map(r => r.no));
+  });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = (lang === "ar" ? "مدى كير | " : "Mada Care | ") + t().title;
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    const all = render(); if (!seen) seen = new Set(all.map(r => r.no));
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>

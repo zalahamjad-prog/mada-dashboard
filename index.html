@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #d9e1e3;
+    --page: #eef1f5;
+    --card: #ffffff;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--page);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .shell {
+    width: 100%;
+    max-width: 1100px;
+    min-height: 660px;
+    background: var(--card);
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(16, 35, 43, .08);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  /* ---------- Brand panel ---------- */
+  .brand {
+    position: relative;
+    background: linear-gradient(160deg, #f4faf8 0%, #e9f4f0 55%, #dff0ea 100%);
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo img { width: auto; height: 56px; flex-shrink: 0; }
+  .logo-name { font-size: 26px; font-weight: 600; color: var(--ink); line-height: 1.1; }
+  .logo-tag { font-size: 14px; color: var(--primary); margin-top: 2px; }
+  .brand-copy { margin-top: 90px; position: relative; z-index: 2; max-width: 300px; }
+  .brand-copy h2 { font-size: 22px; font-weight: 600; line-height: 1.3; }
+  .brand-copy p { margin-top: 18px; font-size: 13px; line-height: 1.7; color: #46555b; }
+  .illustration {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 54%;
+    pointer-events: none;
+  }
+  .illustration svg { width: 100%; height: 100%; }
+  .dots {
+    position: absolute;
+    width: 80px; height: 64px;
+    background-image: radial-gradient(#c9dcd6 1.6px, transparent 1.6px);
+    background-size: 14px 14px;
+  }
+  .dots.top { top: 96px; inset-inline-end: 28px; }
+  .dots.bottom { bottom: 64px; inset-inline-start: 34px; }
+
+  /* ---------- Form panel ---------- */
+  .form-panel {
+    position: relative;
+    padding: 36px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .lang {
+    position: absolute;
+    top: 32px; inset-inline-end: 40px;
+  }
+  .lang-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: none; border: 0; cursor: pointer;
+    font: inherit; font-size: 13px; color: #44545a;
+    padding: 6px 8px; border-radius: 8px;
+  }
+  .lang-btn:hover { background: #f3f6f7; }
+  .lang-menu {
+    position: absolute; top: 110%; inset-inline-end: 0;
+    background: #fff; border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(16,35,43,.08);
+    min-width: 140px; padding: 6px; display: none; z-index: 10;
+  }
+  .lang.open .lang-menu { display: block; }
+  .lang-menu button {
+    display: block; width: 100%; text-align: start;
+    background: none; border: 0; font: inherit; font-size: 13px;
+    padding: 8px 10px; border-radius: 6px; cursor: pointer; color: var(--ink);
+  }
+  .lang-menu button:hover, .lang-menu button[aria-selected="true"] { background: var(--primary-soft); color: var(--primary); }
+
+  .form-wrap { width: 100%; max-width: 344px; }
+  .welcome { text-align: center; margin-bottom: 34px; }
+  .welcome h1 { font-size: 24px; font-weight: 600; line-height: 1.3; }
+  .welcome h1 span { display: block; color: var(--primary); }
+  .welcome p { margin-top: 12px; color: var(--muted); font-size: 14px; }
+
+  .field { margin-bottom: 22px; }
+  .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .input {
+    display: flex; align-items: center; gap: 10px;
+    height: 44px; padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 6px; background: #fff;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .input:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); }
+  .input.error { border-color: #d14343; }
+  .input svg { width: 18px; height: 18px; color: #6b7a80; flex-shrink: 0; }
+  .input input {
+    flex: 1; border: 0; outline: 0; font: inherit; font-size: 13px; color: var(--ink); background: transparent; min-width: 0;
+  }
+  .input input::placeholder { color: #8a979c; }
+  .toggle-pw { background: none; border: 0; cursor: pointer; display: flex; padding: 2px; border-radius: 4px; }
+  .toggle-pw:focus-visible { outline: 2px solid var(--primary); }
+  .err-msg { color: #d14343; font-size: 12px; margin-top: 6px; display: none; }
+  .field.invalid .err-msg { display: block; }
+  .field.invalid .input { border-color: #d14343; }
+
+  .forgot { text-align: end; margin-top: -10px; margin-bottom: 26px; }
+  .forgot a { color: var(--primary); font-size: 12.5px; font-weight: 500; text-decoration: none; }
+  .forgot a:hover { text-decoration: underline; }
+
+  .form-error {
+    display: none; margin-bottom: 16px; padding: 10px 12px;
+    background: #fdecec; color: #b42318; border: 1px solid #f6caca; border-radius: 6px;
+    font-size: 13px;
+  }
+  .form-error.show { display: block; }
+  .btn-login {
+    width: 100%; height: 46px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--primary); color: #fff;
+    border: 0; border-radius: 6px; cursor: pointer;
+    font: inherit; font-size: 15px; font-weight: 500;
+    box-shadow: 0 4px 12px rgba(11,107,92,.25);
+    transition: background .15s;
+  }
+  .btn-login:hover { background: var(--primary-dark); }
+  .btn-login svg { width: 20px; height: 20px; }
+  [dir="rtl"] .btn-login svg { transform: scaleX(-1); }
+
+  .divider { display: flex; align-items: center; gap: 14px; margin: 26px 0 18px; color: var(--muted); font-size: 12px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #e4e9eb; }
+  .trust { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12.5px; color: #55656b; }
+  .trust svg { width: 16px; height: 16px; color: var(--primary); }
+
+  /* ---------- First-login password change ---------- */
+  .cp-overlay { position: fixed; inset: 0; z-index: 50; background: linear-gradient(160deg, #f3faf8 0%, #ffffff 45%, #fff4ea 100%); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .cp-overlay[hidden] { display: none; }
+  .cp { width: 100%; max-width: 440px; background: #fff; border-radius: 18px; padding: 30px 30px 22px; box-shadow: 0 20px 50px rgba(16,35,43,.08); border: 1px solid #edf1f2; margin: auto; }
+  .cp-brand { display: grid; justify-items: center; gap: 2px; margin-bottom: 18px; }
+  .cp-brand img { height: 46px; width: auto; }
+  .cp-brand b { font-size: 20px; font-weight: 600; }
+  .cp-brand small { font-size: 11.5px; color: var(--primary); }
+  .cp-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; margin: 0 auto 14px; }
+  .cp-icon svg { width: 28px; height: 28px; }
+  .cp h2 { text-align: center; font-size: 22px; font-weight: 700; }
+  .cp-sub { text-align: center; font-size: 13.5px; color: var(--muted); line-height: 1.6; margin: 8px 0 18px; }
+  .cp-info { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #eef4fd; color: #1e3a5f; font-size: 13px; line-height: 1.55; margin-bottom: 20px; }
+  .cp-info svg { width: 18px; height: 18px; color: #2f6fd6; margin-top: 2px; flex: none; }
+  .cp-info b { display: block; font-weight: 600; }
+  .cp .field { margin-bottom: 16px; }
+  .rules { list-style: none; display: grid; gap: 6px; margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+  .rules li { display: flex; align-items: center; gap: 8px; }
+  .rules li::before { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #c9d4d7; flex: none; box-sizing: border-box; }
+  .rules li.ok { color: var(--ink); }
+  .rules li.ok::before { border: 0; background: #12a37f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center / 11px no-repeat; }
+  .rules li.bad { color: #d14343; }
+  .rules li.bad::before { border-color: #d14343; }
+  .cp .btn-login { margin-top: 6px; background: #0b3a55; box-shadow: 0 4px 12px rgba(11,58,85,.22); }
+  .cp .btn-login:hover { background: #082d42; }
+  .cp-out { display: block; margin: 12px auto 0; background: none; border: 0; cursor: pointer; font: inherit; font-size: 13px; color: var(--muted); padding: 6px 10px; }
+  .cp-out:hover { color: var(--ink); }
+  .cp-done { text-align: center; }
+  .cp-done .big { position: relative; width: 120px; height: 120px; border-radius: 50%; background: #e3f4ee; display: grid; place-items: center; margin: 6px auto 20px; }
+  .cp-done .big span:not(.spark) { width: 82px; height: 82px; border-radius: 50%; background: #c9eadf; display: grid; place-items: center; color: #0f8f6f; }
+  .cp-done .big svg { width: 44px; height: 44px; }
+  .cp-done .spark { position: absolute; inset: -14px; color: #12a37f; }
+  .cp-done .spark svg { width: 100%; height: 100%; }
+  .cp-done h2 { font-size: 24px; }
+  .cp-tips { display: flex; gap: 12px; text-align: start; padding: 14px 16px; border-radius: 12px; background: #f6f8f9; margin-top: 18px; font-size: 12.5px; color: #44545a; }
+  .cp-tips > svg { width: 26px; height: 26px; color: #12a37f; flex: none; }
+  .cp-tips b { display: block; color: var(--ink); font-size: 13.5px; margin-bottom: 4px; }
+  .cp-tips ul { padding-inline-start: 16px; display: grid; gap: 3px; }
+
+  .to-doctor { margin-top: 18px; text-align: center; font-size: 12.5px; color: var(--muted); }
+  .to-doctor a, .form-error a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    body { padding: 0; align-items: stretch; }
+    .shell { grid-template-columns: 1fr; grid-template-rows: auto 1fr; border-radius: 0; min-height: 100vh; box-shadow: none; }
+    .brand { padding: 24px 20px 28px; min-height: auto; }
+    .brand-copy { margin-top: 24px; max-width: none; }
+    .illustration, .dots { display: none; }
+    .form-panel { padding: 32px 16px 40px; justify-content: flex-start; }
+    .shell { position: relative; }
+    .form-panel { position: static; }
+    .lang { top: 30px; inset-inline-end: 12px; }
+  }
+  @media (max-width: 420px) {
+    .brand-copy p { display: none; }
+    .logo-name { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+
+  <!-- Brand / illustration side -->
+  <section class="brand" aria-hidden="false">
+    <a class="logo" href="#" aria-label="Mada care">
+      <img src="assets/mada-logo.png" alt="" width="301" height="320">
+      <div>
+        <div class="logo-name">Mada care</div>
+        <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+      </div>
+    </a>
+
+    <div class="dots top"></div>
+
+    <div class="brand-copy">
+      <h2 data-i18n-html="headline">Smart Care.<br>Stronger Communities.</h2>
+      <p data-i18n="brandText">Mada Care System is your complete platform for managing healthcare services efficiently and compassionately.</p>
+    </div>
+
+    <div class="illustration">
+      <svg viewBox="0 0 500 380" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d4ebe4"/><stop offset="1" stop-color="#bfe0d5"/>
+          </linearGradient>
+          <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#eaf5f1"/><stop offset="1" stop-color="#d3e9e1"/>
+          </linearGradient>
+          <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d9f0e8"/><stop offset="1" stop-color="#a9d8c8"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 120 C120 60 260 70 500 40 L500 380 L0 380z" fill="#e3f1ec" opacity=".6"/>
+        <!-- heartbeat line -->
+        <polyline points="60,170 140,170 152,150 160,190 168,140 178,178 186,170 230,170" fill="none" stroke="#b9d9cf" stroke-width="2"/>
+        <polyline points="420,170 450,170 460,140 470,195 478,160 486,170 500,170" fill="none" stroke="#b9d9cf" stroke-width="2"/>
+        <!-- pedestal -->
+        <ellipse cx="300" cy="330" rx="125" ry="26" fill="#cfe5de"/>
+        <path d="M175 300 v30 a125 26 0 0 0 250 0 v-30z" fill="url(#g2)"/>
+        <ellipse cx="300" cy="300" rx="125" ry="26" fill="#eef7f4"/>
+        <!-- logo sculpture -->
+        <image href="assets/mada-logo.png" x="196" y="8" width="226" height="240" opacity=".35"/>
+        <!-- shield -->
+        <path d="M320 205 l38 14 v28 c0 26-17 44-38 52 -21-8-38-26-38-52 v-28z" fill="url(#shield)" stroke="#9fd0bf" stroke-width="2"/>
+        <rect x="314" y="232" width="12" height="36" rx="3" fill="#fff" opacity=".9"/>
+        <rect x="302" y="244" width="36" height="12" rx="3" fill="#fff" opacity=".9"/>
+      </svg>
+    </div>
+    <div class="dots bottom"></div>
+  </section>
+
+  <!-- Form side -->
+  <section class="form-panel">
+    <div class="lang" id="lang">
+      <button class="lang-btn" type="button" aria-haspopup="listbox" aria-expanded="false" id="langBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+        <span id="langLabel">English</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="lang-menu" role="listbox">
+        <button type="button" role="option" data-lang="en" aria-selected="true">English</button>
+        <button type="button" role="option" data-lang="ar" aria-selected="false">العربية</button>
+      </div>
+    </div>
+
+    <div class="form-wrap">
+      <div class="welcome">
+        <h1><span style="display:inline;color:inherit" data-i18n="welcome">Welcome to</span> <span data-i18n="system">Mada Care System</span></h1>
+        <p data-i18n="subtitle">Please enter your credentials to continue</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field" id="userField">
+          <label for="username" data-i18n="username">Username</label>
+          <div class="input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
+            <input id="username" name="username" type="text" autocomplete="username" data-i18n-ph="usernamePh" placeholder="Enter your username">
+          </div>
+          <div class="err-msg" data-i18n="usernameErr">Please enter your username</div>
+        </div>
+
+        <div class="field" id="passField">
+          <label for="password" data-i18n="password">Password</label>
+          <div class="input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg>
+            <input id="password" name="password" type="password" autocomplete="current-password" data-i18n-ph="passwordPh" placeholder="Enter your password">
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="err-msg" data-i18n="passwordErr">Please enter your password</div>
+        </div>
+
+        <div class="forgot"><a href="#" data-i18n="forgot">Forgot password?</a></div>
+
+        <div class="form-error" id="formError" role="alert" data-i18n="badCreds">Incorrect username or password</div>
+
+        <button class="btn-login" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4"/><path d="M3 12h11M10 8l4 4-4 4"/></svg>
+          <span data-i18n="login">Login</span>
+        </button>
+      </form>
+
+      <div class="divider" data-i18n="or">or</div>
+      <div class="trust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg>
+        <span data-i18n="trust">Secure • Trusted • Reliable</span>
+      </div>
+      <!-- Demo link only: live, the Doctor Portal has its own address. -->
+      <p class="to-doctor"><span data-i18n="doctorQ">Are you a doctor?</span> <a href="doctor-login.html" data-i18n="doctorLink">Go to Doctor Portal</a></p>
+    </div>
+  </section>
+</main>
+
+<div class="cp-overlay" id="cp" hidden role="dialog" aria-modal="true" aria-labelledby="cpTitle">
+  <form class="cp" id="cpForm" novalidate>
+    <div class="cp-brand"><img src="assets/mada-logo.png" alt="" width="301" height="320"><b>Mada care</b><small data-i18n="tagline">Caring Like Family</small></div>
+    <span class="cp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg></span>
+    <h2 id="cpTitle" data-i18n="cpTitle">Reset Your Password</h2>
+    <p class="cp-sub" id="cpHi"></p>
+    <div class="cp-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span><b data-i18n="cpTempT">You are using a temporary password.</b><span data-i18n="cpTempS">Please create a new password to continue using the system.</span></span></div>
+    <div class="field" id="cpNewF">
+      <label for="cpNew" data-i18n="cpNew">New Password</label>
+      <div class="input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg><input id="cpNew" type="password" autocomplete="new-password"><button type="button" class="toggle-pw" data-eye="cpNew" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <ul class="rules" id="rules">
+        <li data-r="len" data-i18n="rLen">At least 8 characters</li>
+        <li data-r="mix" data-i18n="rMix">Include a mix of letters and numbers</li>
+        <li data-r="up" data-i18n="rUp">Include at least one uppercase letter</li>
+        <li data-r="sym" data-i18n="rSym">Include at least one special character (e.g. ! @ # $)</li>
+      </ul>
+      <div class="err-msg" id="cpNewErr"></div>
+    </div>
+    <div class="field" id="cpConfF">
+      <label for="cpConf" data-i18n="cpConfirm">Confirm New Password</label>
+      <div class="input"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.3" fill="currentColor"/></svg><input id="cpConf" type="password" autocomplete="new-password"><button type="button" class="toggle-pw" data-eye="cpConf" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+      <div class="err-msg" data-i18n="cpErrMatch">The passwords don't match.</div>
+    </div>
+    <button class="btn-login" type="submit"><span data-i18n="cpSave">Update Password</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <button type="button" class="cp-out" id="cpOut" data-i18n="cpLogout">Log out</button>
+  </form>
+  <div class="cp cp-done" id="cpDone" hidden>
+    <div class="cp-brand"><img src="assets/mada-logo.png" alt="" width="301" height="320"><b>Mada care</b><small data-i18n="tagline">Caring Like Family</small></div>
+    <div class="big"><span class="spark"><svg viewBox="0 0 148 148" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" aria-hidden="true"><path d="M18 50l10 6M10 74h12M126 26l-6 10M136 44l-12 4"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span></div>
+    <h2 data-i18n="doneT">Password Updated Successfully</h2>
+    <p class="cp-sub" data-i18n="doneS">Your password has been changed. You can now access the portal with your new password.</p>
+    <button class="btn-login" type="button" id="cpGo"><span data-i18n="doneGo">Continue to Portal</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <div class="cp-tips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8.4-8 9.5C7.4 20.4 4 17 4 12V6z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg><div><b data-i18n="tipsT">Keep your account secure</b><ul><li data-i18n="tip1">Do not share your password</li><li data-i18n="tip2">Use a strong and unique password</li><li data-i18n="tip3">Contact IT support if you face any issues</li></ul></div></div>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family",
+      headline: "Smart Care.<br>Stronger Communities.",
+      brandText: "Mada Care System is your complete platform for managing healthcare services efficiently and compassionately.",
+      welcome: "Welcome to", system: "Mada Care System",
+      subtitle: "Please enter your credentials to continue",
+      username: "Employee ID", usernamePh: "e.g. EMP-001", usernameErr: "Please enter your employee ID",
+      password: "Password", passwordPh: "Enter your password", passwordErr: "Please enter your password", badCreds: "Incorrect employee ID or password",
+      forgot: "Forgot password?", login: "Login", or: "or",
+      trust: "Secure • Trusted • Reliable",
+      show: "Show password", hide: "Hide password", label: "English",
+      doctorHere: "Doctors sign in from the Doctor Portal.", doctorLink: "Go to Doctor Portal", doctorQ: "Are you a doctor?",
+      cpTitle: "Reset Your Password", cpHi: "Welcome {n}. For your security, you need to create a new password before continuing.",
+      cpTempT: "You are using a temporary password.", cpTempS: "Please create a new password to continue using the system.",
+      cpNew: "New Password", cpConfirm: "Confirm New Password",
+      rLen: "At least 8 characters", rMix: "Include a mix of letters and numbers", rUp: "Include at least one uppercase letter", rSym: "Include at least one special character (e.g. ! @ # $)",
+      cpErrSame: "Choose a password different from the temporary one.", cpErrMatch: "The passwords don't match.",
+      cpSave: "Update Password", cpLogout: "Log out",
+      doneT: "Password Updated Successfully", doneS: "Your password has been changed. You can now access the portal with your new password.", doneGo: "Continue to Portal",
+      tipsT: "Keep your account secure", tip1: "Do not share your password", tip2: "Use a strong and unique password", tip3: "Contact IT support if you face any issues"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة",
+      headline: "رعاية ذكية.<br>مجتمعات أقوى.",
+      brandText: "نظام مدى كير هو منصتك المتكاملة لإدارة خدمات الرعاية الصحية بكفاءة وإنسانية.",
+      welcome: "مرحباً بك في", system: "نظام مدى كير",
+      subtitle: "يرجى إدخال بيانات الدخول للمتابعة",
+      username: "الرقم الوظيفي", usernamePh: "مثال: EMP-001", usernameErr: "يرجى إدخال الرقم الوظيفي",
+      password: "كلمة المرور", passwordPh: "أدخل كلمة المرور", passwordErr: "يرجى إدخال كلمة المرور", badCreds: "الرقم الوظيفي أو كلمة المرور غير صحيحة",
+      forgot: "نسيت كلمة المرور؟", login: "تسجيل الدخول", or: "أو",
+      trust: "آمن • موثوق • يعتمد عليه",
+      show: "إظهار كلمة المرور", hide: "إخفاء كلمة المرور", label: "العربية",
+      doctorHere: "الأطباء يدخلون من بوابة الطبيب.", doctorLink: "الذهاب لبوابة الطبيب", doctorQ: "أنت طبيب؟",
+      cpTitle: "غيّر كلمة المرور", cpHi: "أهلاً {n}. لحماية حسابك، لازم تنشئ كلمة مرور جديدة قبل ما تكمل.",
+      cpTempT: "أنت تستخدم كلمة مرور مؤقتة.", cpTempS: "أنشئ كلمة مرور جديدة عشان تكمل استخدام النظام.",
+      cpNew: "كلمة المرور الجديدة", cpConfirm: "تأكيد كلمة المرور الجديدة",
+      rLen: "8 خانات على الأقل", rMix: "فيها حروف وأرقام", rUp: "حرف كبير واحد على الأقل", rSym: "رمز خاص واحد على الأقل (مثل ! @ # $)",
+      cpErrSame: "اختر كلمة مرور غير المؤقتة.", cpErrMatch: "كلمتين المرور مو متطابقة.",
+      cpSave: "تحديث كلمة المرور", cpLogout: "تسجيل الخروج",
+      doneT: "تم تغيير كلمة المرور بنجاح", doneS: "تغيرت كلمة المرور، وتقدر الحين تدخل البوابة بكلمة المرور الجديدة.", doneGo: "الدخول للبوابة",
+      tipsT: "حافظ على أمان حسابك", tip1: "لا تشارك كلمة المرور مع أحد", tip2: "استخدم كلمة مرور قوية وخاصة فيك", tip3: "تواصل مع الدعم التقني إذا واجهتك مشكلة"
+    }
+  };
+
+  let current = "en";
+  const pw = document.getElementById("password");
+  const toggle = document.getElementById("togglePw");
+  const eye = document.getElementById("eyeIcon");
+  const eyeOpen = eye.innerHTML;
+  const eyeClosed = '<path d="M3 3l18 18"/><path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7c1.8 0 3.4-.5 4.8-1.3"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+
+  function setLang(lang) {
+    current = lang;
+    const t = i18n[lang];
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-html]").forEach(el => el.innerHTML = t[el.dataset.i18nHtml]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t[el.dataset.i18nPh]);
+    document.getElementById("langLabel").textContent = t.label;
+    toggle.setAttribute("aria-label", pw.type === "password" ? t.show : t.hide);
+    document.querySelectorAll(".lang-menu button").forEach(b => b.setAttribute("aria-selected", b.dataset.lang === lang));
+    document.title = lang === "ar" ? "مدى كير | تسجيل الدخول" : "Mada Care | Login";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    if (!document.getElementById("cp").hidden) openChange();
+  }
+
+  // Language menu
+  const langBox = document.getElementById("lang");
+  const langBtn = document.getElementById("langBtn");
+  langBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    const open = langBox.classList.toggle("open");
+    langBtn.setAttribute("aria-expanded", open);
+  });
+  document.querySelectorAll(".lang-menu button").forEach(b => b.addEventListener("click", () => {
+    setLang(b.dataset.lang);
+    langBox.classList.remove("open");
+    langBtn.setAttribute("aria-expanded", false);
+  }));
+  document.addEventListener("click", () => langBox.classList.remove("open"));
+
+  // Show / hide password
+  toggle.addEventListener("click", () => {
+    const show = pw.type === "password";
+    pw.type = show ? "text" : "password";
+    eye.innerHTML = show ? eyeClosed : eyeOpen;
+    toggle.setAttribute("aria-label", show ? i18n[current].hide : i18n[current].show);
+  });
+
+  // Basic validation (hook your real auth call here)
+  document.getElementById("loginForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const u = document.getElementById("username");
+    const uf = document.getElementById("userField"), pf = document.getElementById("passField");
+    uf.classList.toggle("invalid", !u.value.trim());
+    pf.classList.toggle("invalid", !pw.value);
+    const formError = document.getElementById("formError");
+    formError.classList.remove("show");
+    if (u.value.trim() && pw.value) {
+      // TODO: replace with POST to your authentication endpoint
+      const res = MadaAuth.login(u.value, pw.value);
+      if (res === "wrong-portal") {
+        formError.innerHTML = i18n[current].doctorHere + ' <a href="doctor-login.html">' + i18n[current].doctorLink + "</a>";
+        formError.classList.add("show");
+      } else if (res) {
+        if (MadaAuth.currentUser().mustChangePassword) openChange();
+        else window.location.href = MadaAuth.home();
+      } else {
+        formError.textContent = i18n[current].badCreds;
+        formError.classList.add("show");
+        pw.value = "";
+        pw.focus();
+      }
+    }
+  });
+  ["username", "password"].forEach(id => document.getElementById(id).addEventListener("input", e => {
+    e.target.closest(".field").classList.remove("invalid");
+    document.getElementById("formError").classList.remove("show");
+  }));
+
+  // First login: the staff member must replace the temporary password before going in.
+  const RULES = { len: v => v.length >= 8, mix: v => /[a-z]/i.test(v) && /\d/.test(v), up: v => /[A-Z]/.test(v), sym: v => /[^A-Za-z0-9]/.test(v) };
+  let cpTried = false;
+  function openChange() {
+    const me = MadaAuth.currentUser();
+    document.getElementById("cpHi").textContent = i18n[current].cpHi.replace("{n}", me.firstName[current] || me.name[current]);
+    if (document.getElementById("cp").hidden) {
+      document.getElementById("cp").hidden = false;
+      document.getElementById("cpNew").focus();
+    }
+  }
+  function paintRules() {
+    const v = document.getElementById("cpNew").value;
+    document.querySelectorAll("#rules li").forEach(li => {
+      const ok = RULES[li.dataset.r](v);
+      li.classList.toggle("ok", ok); li.classList.toggle("bad", cpTried && !ok);
+    });
+  }
+  document.getElementById("cpForm").addEventListener("submit", e => {
+    e.preventDefault(); cpTried = true; paintRules();
+    const t = i18n[current], me = MadaAuth.currentUser(), n = document.getElementById("cpNew").value, c = document.getElementById("cpConf").value;
+    const ruleOk = Object.values(RULES).every(r => r(n)), same = me && n === me.password;
+    document.getElementById("cpNewErr").textContent = same ? t.cpErrSame : "";
+    document.getElementById("cpNewF").classList.toggle("invalid", same);
+    document.getElementById("cpConfF").classList.toggle("invalid", ruleOk && !same && n !== c);
+    if (!ruleOk || same || n !== c) return;
+    MadaAuth.changePassword(n);
+    document.getElementById("cpForm").hidden = true;
+    document.getElementById("cpDone").hidden = false;
+    document.getElementById("cpGo").focus();
+  });
+  document.getElementById("cpNew").addEventListener("input", paintRules);
+  ["cpNew", "cpConf"].forEach(id => document.getElementById(id).addEventListener("input", e => e.target.closest(".field").classList.remove("invalid")));
+  document.querySelectorAll("[data-eye]").forEach(b => b.addEventListener("click", () => {
+    const inp = document.getElementById(b.dataset.eye), show = inp.type === "password";
+    inp.type = show ? "text" : "password";
+    b.querySelector("svg").innerHTML = show ? eyeClosed : eyeOpen;
+    b.setAttribute("aria-label", show ? i18n[current].hide : i18n[current].show);
+  }));
+  document.getElementById("cpGo").addEventListener("click", () => { window.location.href = MadaAuth.home(); });
+  document.getElementById("cpOut").addEventListener("click", () => MadaAuth.logout());
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  if (MadaAuth.currentUser()) {
+    if (MadaAuth.currentUser().mustChangePassword) openChange();
+    else window.location.replace(MadaAuth.home());
+  }
+</script>
+</body>
+</html>

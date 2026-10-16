@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Lab Test Details</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 14px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-green { background: var(--green-soft); color: var(--green); }
+  .p-orange { background: var(--orange-soft); color: var(--orange); }
+  .p-red { background: var(--red-soft); color: var(--red); }
+  .p-blue { background: var(--blue-soft); color: var(--blue); }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  .muted { color: var(--muted); font-size: 13px; }
+  .ltr { direction: ltr; unicode-bidi: isolate; }
+
+  /* ---------- Head ---------- */
+  main { max-width: 1180px; }
+  #content { display: grid; gap: 16px; }
+  .head { display: flex; align-items: center; gap: 14px; }
+  .back { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: #fff; display: grid; place-items: center; color: var(--ink); text-decoration: none; flex-shrink: 0; }
+  .back:hover { background: #f1f4f5; }
+  .back svg { width: 20px; height: 20px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .head h1 { font-size: 22px; font-weight: 600; }
+  .head p { margin-top: 2px; font-size: 13px; color: var(--muted); }
+  .missing { text-align: center; padding: 48px 20px; }
+  .missing a { color: var(--primary); font-weight: 600; }
+
+  /* ---------- Summary strip ---------- */
+  .strip { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+  .strip > div { display: flex; align-items: center; gap: 12px; padding: 16px 20px; min-width: 0; }
+  .strip > div + div { border-inline-start: 1px solid var(--border); }
+  .strip svg { width: 22px; height: 22px; color: #44545a; }
+  .strip small { display: block; font-size: 12px; color: var(--muted); }
+  .strip strong { display: block; margin-top: 3px; font-size: 15.5px; font-weight: 600; }
+  .strip a { color: var(--primary); text-decoration: none; }
+  .strip a:hover { text-decoration: underline; }
+  .strip .grow { flex: 1; min-width: 0; }
+  .prog { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 12.5px; }
+  .prog .bar { flex: 1; height: 8px; border-radius: 4px; background: #eef2f3; overflow: hidden; }
+  .prog .bar i { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
+  .alert { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 12px; border: 1px solid #f3c0c0; background: #fff7f7; color: #8f1d1d; font-size: 13.5px; line-height: 1.6; }
+  .alert svg { width: 20px; height: 20px; margin-top: 1px; color: var(--red); }
+  .alert b { display: block; }
+  .alert.blue { border-color: #cfe0fd; background: #f4f8ff; color: #1e4fa3; }
+  .alert.blue svg { color: var(--blue); }
+  .alert.green { border-color: #bfe3cb; background: #f4fbf6; color: #14532d; }
+  .alert.green svg { color: var(--green); }
+
+  /* ---------- Sections ---------- */
+  .sec { padding: 20px 22px 22px; }
+  .sec > h2 { font-size: 16px; font-weight: 600; padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sec > h2 .tag { margin-inline-start: auto; font-size: 12px; font-weight: 500; color: var(--muted); }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 22px; }
+  .facts div { min-width: 0; }
+  .facts dt { font-size: 12px; color: var(--muted); }
+  .facts dd { margin-top: 3px; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; line-height: 1.5; }
+  .facts a { color: var(--primary); font-weight: 600; text-decoration: none; }
+
+  /* ---------- Orders ---------- */
+  .items { display: grid; gap: 14px; }
+  .item { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .item.done { border-color: #bfe3cb; }
+  .it-head { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; }
+  .it-ic { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); flex-shrink: 0; }
+  .it-ic svg { width: 22px; height: 22px; }
+  .it-main { flex: 1; min-width: 0; }
+  .it-type { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .it-title { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; }
+  .it-det { margin-top: 4px; font-size: 13px; color: #44545a; line-height: 1.6; }
+  .stepper { list-style: none; display: flex; padding: 4px 18px 16px; gap: 0; }
+  .stepper li { flex: 1; position: relative; text-align: center; font-size: 12px; color: #8a979c; padding-top: 30px; min-width: 0; }
+  .stepper li::before { content: ""; position: absolute; top: 11px; inset-inline-start: calc(-50% + 14px); inset-inline-end: calc(50% + 14px); height: 2px; background: #e3e8ea; }
+  .stepper li:first-child::before { display: none; }
+  .stepper li .c { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; border-radius: 50%; border: 2px solid #d3dbde; background: #fff; display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+  .stepper li .c svg { width: 13px; height: 13px; }
+  .stepper li.ok { color: var(--ink); }
+  .stepper li.ok .c { background: var(--green); border-color: var(--green); color: #fff; }
+  .stepper li.ok::before, .stepper li.now::before { background: var(--green); }
+  .stepper li.now { color: var(--orange); font-weight: 600; }
+  .stepper li.now .c { border-color: var(--orange); color: var(--orange); }
+  .stepper li span { display: block; padding: 0 4px; line-height: 1.35; }
+  .log { list-style: none; border-top: 1px solid #eef2f3; padding: 12px 18px; display: grid; gap: 8px; background: #fafcfc; }
+  .log li { display: flex; gap: 10px; font-size: 13px; line-height: 1.55; }
+  .log li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-top: 6px; flex-shrink: 0; }
+  .log b { font-weight: 600; }
+  .log .who { color: var(--muted); font-size: 12px; }
+  .log .data { display: block; color: #2c3d43; white-space: pre-line; }
+  .file-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 4px 10px; border-radius: 7px; border: 1px solid #d9e1e3; background: #fff; font-size: 12.5px; color: var(--primary); font-weight: 600; cursor: pointer; }
+  .file-link svg { width: 14px; height: 14px; }
+  .next { border-top: 1px solid #eef2f3; padding: 16px 18px; display: grid; gap: 12px; }
+  .next-h { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; }
+  .next-h svg { width: 16px; height: 16px; color: var(--orange); }
+  .next-h small { font-weight: 400; color: var(--muted); font-size: 12px; }
+  .fgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+  .fgrid .wide { grid-column: 1 / -1; }
+  .lbl { display: block; font-size: 12.5px; font-weight: 600; margin-bottom: 6px; color: #2c3d43; }
+  .lbl em { font-style: normal; font-weight: 400; color: var(--muted); }
+  .inp { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 13.5px; outline: 0; }
+  textarea.inp { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; }
+  .inp:focus, .field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .inp.bad, .field.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1); }
+  select.inp { appearance: none; -webkit-appearance: none; cursor: pointer; padding-inline-end: 32px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; }
+  [dir="rtl"] select.inp { background-position: left 12px center; }
+  .field { display: flex; align-items: center; gap: 4px; height: 42px; padding: 0 4px 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; position: relative; }
+  [dir="rtl"] .field { padding: 0 12px 0 4px; }
+  .field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  .cal { width: 34px; height: 34px; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .cal:hover { background: var(--primary-soft); color: var(--primary); }
+  .cal svg { width: 17px; height: 17px; }
+  .native { position: absolute; inset-inline-end: 0; bottom: 0; width: 34px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
+  .drop { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 8px 12px; border: 1px dashed #c3ccd0; border-radius: 8px; background: #fafcfc; cursor: pointer; font-size: 13px; color: #44545a; }
+  .drop:hover { border-color: var(--primary); background: var(--primary-soft); }
+  .drop svg { width: 18px; height: 18px; color: var(--primary); }
+  .drop input { display: none; }
+  .drop .fname { font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+  .err { font-size: 12.5px; color: var(--red); }
+  .acts { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .acts .from-doc { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  .acts .from-doc svg { width: 14px; height: 14px; }
+  .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+  .btn:disabled { background: #e9edee; color: #7b898e; border-color: #e9edee; cursor: not-allowed; }
+  .btn-doc { background: var(--blue-soft); color: #1e4fa3; border-color: #cfe0fd; }
+  .btn-doc:hover { background: #dce8fd; }
+  .it-done { display: flex; align-items: center; gap: 8px; border-top: 1px solid #d8eedf; padding: 12px 18px; background: #f4fbf6; color: var(--green); font-size: 13px; font-weight: 600; }
+  .it-done svg { width: 16px; height: 16px; }
+
+  /* ---------- Caller answer + contacts ---------- */
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0 26px; }
+  .two > div + div { border-inline-start: 1px solid var(--border); padding-inline-start: 26px; }
+  .quick { list-style: none; display: grid; gap: 8px; }
+  .quick li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; }
+  .quick li svg { width: 17px; height: 17px; color: var(--primary); }
+  .quick li .q-t { flex: 1; min-width: 0; }
+  .quick li .q-t small { display: block; color: var(--muted); font-size: 11.5px; }
+  .say { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: #f6f8f9; font-size: 13px; line-height: 1.7; color: #2c3d43; }
+  .say b { display: block; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 2px; }
+  .contacts { list-style: none; display: grid; gap: 10px; margin-top: 14px; }
+  .contacts li { display: flex; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; line-height: 1.55; }
+  .ch-ic { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); flex-shrink: 0; }
+  .ch-ic svg { width: 16px; height: 16px; }
+  .contacts .who { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .chip { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 11px; background: #eef1f2; color: #44545a; font-size: 11.5px; font-weight: 600; margin-inline-end: 6px; }
+
+  /* ---------- Close + quality ---------- */
+  .close-box { display: grid; gap: 12px; }
+  .stars { display: flex; gap: 6px; direction: ltr; }
+  [dir="rtl"] .stars { flex-direction: row-reverse; justify-content: flex-end; }
+  .stars button { width: 40px; height: 40px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; cursor: pointer; display: grid; place-items: center; color: #c3ccd0; }
+  .stars button svg { width: 22px; height: 22px; }
+  .stars button.on { color: #f59e0b; border-color: #f6d9a8; background: #fffaf0; }
+  .stars button.on svg { fill: currentColor; }
+  .qchecks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .qchecks label { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #d9e1e3; border-radius: 10px; font-size: 13px; cursor: pointer; }
+  .qchecks label:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .qchecks input { width: 16px; height: 16px; accent-color: var(--primary); }
+  .q-sum { display: grid; gap: 10px; }
+  .q-sum .stars-ro { color: #f59e0b; font-size: 18px; letter-spacing: 2px; direction: ltr; unicode-bidi: isolate; }
+  .q-sum ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .q-sum li { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 14px; font-size: 12.5px; background: var(--green-soft); color: var(--green); font-weight: 500; }
+  .q-sum li.no { background: #f0f3f4; color: #8a979c; text-decoration: line-through; }
+  .q-sum li svg { width: 13px; height: 13px; }
+  .flow { list-style: none; display: flex; gap: 0; margin-bottom: 4px; }
+  .flow li { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #8a979c; font-weight: 500; }
+  .flow li + li::before { content: ""; flex: 0 0 18px; height: 2px; background: #e3e8ea; margin-inline-end: 4px; }
+  .flow .c { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #d3dbde; display: grid; place-items: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .flow li.ok { color: var(--green); } .flow li.ok .c { background: var(--green); border-color: var(--green); color: #fff; }
+  .flow li.now { color: var(--orange); font-weight: 600; } .flow li.now .c { border-color: var(--orange); }
+
+  @media (max-width: 980px) {
+    .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .strip > div:nth-child(3) { border-inline-start: 0; }
+    .strip > div:nth-child(n+3) { border-top: 1px solid var(--border); }
+    .two { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .two > div + div { border-inline-start: 0; padding-inline-start: 0; border-top: 1px solid var(--border); padding-top: 20px; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; overflow-x: auto; }
+    .lang-label, .user-meta { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .head h1 { font-size: 19px; }
+    .strip { grid-template-columns: minmax(0, 1fr); }
+    .strip > div + div { border-inline-start: 0; border-top: 1px solid var(--border); }
+    .sec { padding: 16px; }
+    .facts, .fgrid, .qchecks { grid-template-columns: minmax(0, 1fr); }
+    .stepper { padding: 4px 8px 14px; }
+    .stepper li { font-size: 11px; }
+    .it-head { padding: 14px; }
+    .next, .log { padding: 14px; }
+    .flow li { font-size: 11.5px; }
+    .flow li .t { display: none; }
+    .flow li.now .t { display: inline; }
+    .acts .btn { flex: 1; }
+  }
+
+  /* ---------- Lab test page ---------- */
+  .crumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; font-size: 12.5px; color: var(--muted); }
+  .crumbs a { color: var(--muted); text-decoration: none; }
+  .crumbs a:hover { color: var(--primary); text-decoration: underline; }
+  .crumbs span::before { content: "›"; margin-inline-end: 6px; }
+  .role-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; }
+  .role-bar .lbl { margin: 0; }
+  .seg { display: inline-flex; border: 1px solid #d9e1e3; border-radius: 10px; overflow: hidden; background: #fff; }
+  .seg button { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border: 0; background: none; cursor: pointer; font-size: 13px; color: #44545a; }
+  .seg button + button { border-inline-start: 1px solid #d9e1e3; }
+  .seg button svg { width: 16px; height: 16px; }
+  .seg button[aria-pressed="true"] { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .role-bar small { font-size: 12px; color: var(--muted); }
+  .role-bar .perm { margin-inline-start: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: #44545a; }
+  .role-bar .perm svg { width: 15px; height: 15px; color: var(--primary); }
+
+  .hero { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 18px 22px; border: 1px solid; }
+  .hero .ic { width: 52px; height: 52px; border-radius: 50%; background: #fff; display: grid; place-items: center; flex-shrink: 0; }
+  .hero .ic svg { width: 26px; height: 26px; }
+  .hero .txt { flex: 1 1 260px; min-width: 0; }
+  .hero small { display: block; font-size: 12.5px; opacity: .85; }
+  .hero strong { display: block; font-size: 21px; font-weight: 700; margin: 2px 0; line-height: 1.3; }
+  .hero .say { margin-top: 8px; background: rgba(255,255,255,.7); }
+  .hero .clock { text-align: end; font-size: 12.5px; }
+  .hero .clock b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .h-green { background: var(--green-soft); border-color: #bfe3cb; color: #14532d; }
+  .h-orange { background: var(--orange-soft); border-color: #f6d9a8; color: #7a4205; }
+  .h-red { background: var(--red-soft); border-color: #f6caca; color: #8f1d1d; }
+  .h-blue { background: var(--blue-soft); border-color: #cfe0fd; color: #1e4fa3; }
+  .say { padding: 10px 12px; border-radius: 10px; background: #f6f8f9; font-size: 13px; line-height: 1.7; color: #2c3d43; }
+  .say b { display: block; font-size: 12px; font-weight: 600; opacity: .8; }
+
+  .track { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .track li { position: relative; text-align: center; padding: 34px 6px 0; font-size: 12.5px; color: #8a979c; min-width: 0; }
+  .track li::before { content: ""; position: absolute; top: 13px; inset-inline-start: calc(-50% + 16px); inset-inline-end: calc(50% + 16px); height: 2px; background: #e3e8ea; }
+  .track li:first-child::before { display: none; }
+  .track .c { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; border-radius: 50%; border: 2px solid #d3dbde; background: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .track .c svg { width: 14px; height: 14px; }
+  .track li.ok { color: var(--ink); } .track li.ok .c { background: var(--green); border-color: var(--green); color: #fff; } .track li.ok::before, .track li.now::before { background: var(--green); }
+  .track li.now { color: var(--orange); } .track li.now .c { border-color: var(--orange); color: var(--orange); }
+  .track li.late { color: var(--red); } .track li.late .c { border-color: var(--red); color: var(--red); background: var(--red-soft); }
+  .track b { display: block; font-weight: 600; }
+  .track time, .track .by { display: block; font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .track-acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--border); align-items: center; }
+
+  .facts.icons div { display: flex; gap: 12px; align-items: flex-start; }
+  .facts.icons .fi { width: 36px; height: 36px; border-radius: 10px; background: #f1f5f6; color: #44545a; display: grid; place-items: center; flex-shrink: 0; }
+  .facts.icons .fi svg { width: 18px; height: 18px; }
+  .map-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12.5px; font-weight: 600; color: var(--primary); text-decoration: none; }
+  .map-link svg { width: 14px; height: 14px; }
+
+  .empty-res { display: grid; justify-items: center; text-align: center; gap: 8px; padding: 26px 16px; border: 1px dashed #c9d3d6; border-radius: 12px; background: #fafcfc; }
+  .empty-res .ic { width: 52px; height: 52px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; }
+  .empty-res .ic svg { width: 26px; height: 26px; }
+  .empty-res b { font-size: 15.5px; }
+  .empty-res p { font-size: 13px; color: #44545a; max-width: 460px; line-height: 1.6; }
+
+  .analysis { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.8fr) minmax(0, .8fr); gap: 0; border: 1px solid var(--border); border-radius: 12px; }
+  .analysis > div { padding: 16px 18px; min-width: 0; }
+  .analysis > div + div { border-inline-start: 1px solid var(--border); }
+  .an-name { font-size: 15px; font-weight: 600; }
+  .an-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .an-kv small { display: block; font-size: 11.5px; color: var(--muted); }
+  .an-kv b { display: block; margin-top: 3px; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .an-kv b.normal { color: var(--green); } .an-kv b.high, .an-kv b.low { color: var(--orange); } .an-kv b.critical { color: var(--red); }
+  .scale { position: relative; margin: 34px 4px 4px; direction: ltr; }
+  .scale .bars { display: flex; height: 8px; border-radius: 4px; overflow: hidden; }
+  .scale .bars i { display: block; height: 100%; }
+  .scale .seg-l { display: flex; margin-top: 6px; font-size: 11px; color: var(--muted); }
+  .scale .seg-l span { text-align: center; }
+  .scale .ticks { display: flex; justify-content: space-between; margin-top: 4px; font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .scale .pin { position: absolute; top: -30px; transform: translateX(-50%); display: grid; justify-items: center; }
+  .scale .pin b { padding: 2px 8px; border-radius: 6px; border: 1px solid #d9e1e3; background: #fff; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .scale .pin i { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 7px solid var(--ink); margin-top: 2px; }
+  .ring { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin: 8px auto 6px; }
+  .ring span { width: 70px; height: 70px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-weight: 700; font-size: 17px; }
+  .ring-note { text-align: center; font-size: 12px; color: var(--muted); line-height: 1.5; }
+  .an-h { font-size: 12.5px; font-weight: 600; text-align: center; }
+
+  .res-table { margin-top: 16px; overflow-x: auto; }
+  .res-table table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  .res-table th { text-align: start; padding: 11px 12px; font-size: 12px; font-weight: 600; color: #2c3d43; background: #f5f8f8; white-space: nowrap; }
+  .res-table td { padding: 11px 12px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  .res-table tr[data-an] { cursor: pointer; }
+  .res-table tr[data-an]:hover td { background: #fafcfc; }
+  .res-table tr.sel td { background: #f0faf6; }
+  .val { display: inline-grid; place-items: center; min-width: 64px; height: 32px; padding: 0 10px; border: 1px solid #d9e1e3; border-radius: 8px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .val.normal { border-color: #bfe3cb; color: var(--green); } .val.high, .val.low { border-color: #f6d9a8; color: var(--orange); } .val.critical { border-color: #f6caca; color: var(--red); background: #fff7f7; }
+  .p-crit { background: var(--red); color: #fff; }
+  .mini { position: relative; width: 150px; height: 18px; direction: ltr; }
+  .mini::before { content: ""; position: absolute; left: 0; right: 0; top: 8px; height: 2px; background: #e3e8ea; }
+  .mini .nr { position: absolute; top: 7px; height: 4px; background: #9fd2c3; border-radius: 2px; }
+  .mini .dot { position: absolute; top: 4px; width: 10px; height: 10px; border-radius: 50%; transform: translateX(-50%); }
+  .num { font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+  .res-in { width: 96px; height: 36px; padding: 0 10px; border: 1px solid #d9e1e3; border-radius: 8px; font-size: 13.5px; font-weight: 600; text-align: center; outline: 0; font-variant-numeric: tabular-nums; direction: ltr; }
+  .res-in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .pick-tests { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pick-tests label { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 18px; cursor: pointer; font-size: 13px; }
+  .pick-tests label:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .pick-tests input { accent-color: var(--primary); }
+  .foot-acts { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+  .file-card { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; }
+  .file-card .pdf { width: 40px; height: 46px; border-radius: 8px; background: var(--red-soft); color: var(--red); display: grid; place-items: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .file-card .meta { flex: 1; min-width: 0; }
+  .file-card b { display: block; font-size: 13.5px; overflow-wrap: anywhere; }
+  .file-card small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .file-card > svg { width: 20px; height: 20px; color: var(--green); }
+  .share-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .lock-msg { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: #f6f8f9; border: 1px dashed #c9d3d6; font-size: 13px; color: #44545a; line-height: 1.6; }
+  .lock-msg svg { width: 18px; height: 18px; margin-top: 1px; flex-shrink: 0; }
+
+  .approved { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; border: 1px solid #bfe3cb; background: #f4fbf6; color: #14532d; }
+  .approved svg { width: 22px; height: 22px; color: var(--green); flex-shrink: 0; }
+  .approved b { display: block; font-size: 14px; }
+  .approved p { margin-top: 4px; font-size: 13px; line-height: 1.6; white-space: pre-line; color: #2c3d43; }
+  .dnotes { list-style: none; display: grid; gap: 8px; margin-top: 12px; }
+  .dnotes li { padding: 10px 12px; border: 1px solid #cfe0fd; background: #f6f9ff; border-radius: 10px; font-size: 13px; line-height: 1.6; }
+  .dnotes small { display: block; font-size: 11.5px; color: var(--muted); }
+  .esc-list { list-style: none; display: grid; gap: 10px; margin-top: 14px; }
+  .esc-list li { padding: 12px 14px; border: 1px solid #f3c0c0; background: #fff7f7; border-radius: 10px; font-size: 13px; line-height: 1.6; border-inline-start: 4px solid var(--red); }
+  .esc-list li.res { border-color: #bfe3cb; background: #f4fbf6; border-inline-start-color: var(--green); }
+  .esc-list small { display: block; font-size: 11.5px; color: var(--muted); }
+  .demo-link { background: none; border: 0; padding: 0; font: inherit; font-size: 12.5px; color: var(--primary); text-decoration: underline; cursor: pointer; }
+
+  @media (max-width: 980px) {
+    .analysis { grid-template-columns: minmax(0, 1fr); }
+    .analysis > div + div { border-inline-start: 0; border-top: 1px solid var(--border); }
+    .share-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 760px) {
+    .track { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .track li { text-align: start; padding: 0 0 16px 40px; }
+    [dir="rtl"] .track li { padding: 0 40px 16px 0; }
+    .track .c { left: 0; transform: none; }
+    [dir="rtl"] .track .c { left: auto; right: 0; }
+    .track li::before { display: none; }
+    .role-bar .perm { margin-inline-start: 0; }
+    .seg { width: 100%; } .seg button { flex: 1; justify-content: center; padding: 0 8px; }
+    .hero strong { font-size: 18px; }
+    .hero .clock { text-align: start; }
+    .res-table table, .res-table tbody { display: block; }
+    .res-table thead { display: none; }
+    .res-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; padding: 12px 4px; border-bottom: 1px solid #eef2f3; }
+    .res-table td { padding: 0; border: 0; }
+    .res-table td.hide-m { display: none; }
+    .res-table td.span { grid-column: 1 / -1; }
+    .mini { width: 100%; }
+  }
+  /* Nav scrolls sideways when the links do not fit. */
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" aria-current="page" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="head">
+    <a class="back" id="backLink" href="medical-requests.html" data-i18n-aria="back" aria-label="Back to the medical request"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
+    <div><h1 data-i18n="title">Lab Test Details</h1><div class="crumbs" id="crumbs"></div></div>
+  </div>
+  <div id="content"></div>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="nurses.js"></script>
+<script src="orders.js"></script>
+<script src="medical.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const qs = new URLSearchParams(location.search), id = qs.get("id"), itemId = qs.get("item");
+  const isSup = !!(me && me.supervisor);
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      optional: "(optional)", title: "Lab Test Details", back: "Back to the medical request", crMedical: "Medical Requests", crLab: "Lab Tests", missing: "This lab test was not found.", toList: "Back to medical requests",
+      viewAs: "View as", demoRole: "Demo: in the live system the role comes from the login.", r_cs: "Customer Service", r_nurse: "Nurse", r_doctor: "Doctor",
+      perm_cs: "Can follow up, share approved results and escalate. Cannot enter results.", perm_nurse: "Takes the sample and enters the results from the lab system.", perm_doctor: "Reviews the results, approves them or writes a note.",
+      h_ordered: "Waiting for the nurse to take the sample", h_collected: "Sample taken, on its way to the lab", h_received: "Sample at the lab, results not out yet", h_late: "No results {h} hours after the sample reached the lab",
+      h_resulted: "Results entered, waiting for the doctor's approval", h_reviewed: "Approved by the doctor, ready to share with the patient",
+      sinceLab: "At the lab for", hm: "{h}h {m}m",
+      say: "What to tell the patient", say_ordered: "The nurse will take your sample during the visit.", say_collected: "Your sample was taken at {t} and is on its way to the lab.",
+      say_received: "Your sample reached the lab at {t}. Results usually take up to {h} hours, and we will contact you as soon as they are ready.",
+      say_late: "Your sample reached the lab at {t}. The results are taking longer than usual, and we have escalated it to get them to you quickly.",
+      say_resulted: "Your results are out and the doctor is reviewing them now. We will share them as soon as they are approved.",
+      say_reviewed: "Your results are ready and approved by {d}. We can send them to you now.",
+      s1: "1. Sample Tracking", st_ordered: "Ordered by the doctor", st_collected: "Sample collected", st_received: "Sample at the lab", st_resulted: "Results entered", st_reviewed: "Doctor approved",
+      notYet: "Not yet", by: "by {n}", markCollected: "Sample collected", markReceived: "Sample received at the lab", fromLabSys: "In the live system the lab system sends this.", trackSaved: "{s} saved.",
+      s2: "2. Basic Information", reqNo: "Request Number", bkNo: "Booking Number", patient: "Patient Name", mobile: "Mobile Number", visitDate: "Visit Date", location: "Location", viewMap: "View on Map", noLoc: "No location yet", noVisit: "Not scheduled",
+      s3: "3. Test Results", noRes: "Results are not out yet", noRes_cs: "The nurse enters the results from the lab system. You will see them here as soon as they are entered.", noRes_doc: "You can review the results once the nurse enters them.",
+      needLab: "Mark the sample as received at the lab before entering results.", enterTitle: "Enter the results from the lab system", pickTests: "Tests in this order", pickHint: "Choose the tests the doctor ordered.",
+      cNo: "#", cName: "Test Name", cCode: "Test Code", cRes: "Result", cUnit: "Unit", cRange: "Reference Range", cStatus: "Status", cPos: "Position",
+      s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical",
+      fillAll: "Enter a number for every test.", saveRes: "Save Results", resSaved: "Results saved and sent to the doctor.", editRes: "Edit results", cancel: "Cancel",
+      analysis: "Result Analysis", refRange: "Reference Range", curRes: "Current Result", posTitle: "Result Position", nRange: "Normal", hRange: "High", cRange2: "Critical", lRange: "Low",
+      toHigh: "Remaining to High Level", toHighNote: "{v} {u} to reach the high level", aboveHigh: "{v} {u} above the high level", belowLow: "{v} {u} below the normal level", refNote: "Reference ranges may vary by laboratory and patient.",
+      reportLbl: "Laboratory Report", reportHint: "PDF, JPG or PNG, up to 1.5 MB", choose: "Choose a file", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
+      s4: "4. Doctor Review", revWait: "Opens after the nurse enters the results.", revPending: "Waiting for the doctor to review the results.", approvedBy: "Approved by {n} · {t}",
+      docNoteLbl: "Doctor's note", docNotePh: "Example: HbA1c is high, continue Metformin and repeat in 3 months.", approve: "Approve Results", noteOnly: "Add note only", approvedToast: "Results approved. Customer service can share them now.", noteToast: "Note added.", needNote: "Write the note first.", docNotes: "Doctor's notes",
+      s5: "5. Share With the Patient", fileLbl: "Uploaded File", noFile: "No report file uploaded.", uploadedAt: "Uploaded {t} · by {n}", viewFile: "View File", dlFile: "Download Report", dlRes: "Download Results PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
+      lp_title: "Lab Results Report", lp_issued: "Issued", lp_approved: "Approved by the doctor", lp_critChip: "Needs attention", lp_hello: "Results for", lp_sumAll: "All your results are within the normal range.", lp_sumOut: "{n} of {t} results are within the normal range. Your doctor reviewed the rest.",
+      lp_out: "Out of range", lp_scan: "Scan to open your booking", lp_patient: "Patient", lp_file: "File No.", lp_sample: "Sample", lp_resAt: "Results ready", lp_doctor: "Doctor", lp_ordered: "Ordered by", lp_apBy: "Approved by", lp_apAt: "Approved on",
+      lp_results: "Your Results", lp_docNote: "Doctor's Note", lp_noNote: "The doctor reviewed your results with no further comments.", lp_read: "How to Read Your Results",
+      lp_rN: "within the healthy range", lp_rH: "outside the range, follow your doctor's advice", lp_rC: "contact your doctor today",
+      lp_care: "Questions about your results? Our care team is here for you.", lp_foot: "Mada Care · Home healthcare · This report does not replace a visit to your doctor.",
+      lockShare: "Sharing opens after the doctor approves the results.", shareHint: "Download the report or the results sheet and send it to the patient.",
+      s6: "6. Escalation", escText: "If the results are not out {h} hours after the sample reached the lab, escalate to the supervisor to speed up the data entry.", escIn: "Escalation opens in {t} if the results are still not out.", escNotNeeded: "No escalation needed.",
+      escLbl: "What is the problem", escPh: "Example: patient called twice, results still not entered after 26 hours.", escBtn: "Escalate to Supervisor", escSaved: "Escalated to the supervisor.", escOpen: "Open · {n} · {t}", escDone: "Resolved by {n} · {t}", resolve: "Mark resolved", resolvedToast: "Escalation resolved.", resolveNote: "What was done", needEsc: "Write what the problem is.",
+      demoAge: "Demo: make the sample 25 hours at the lab", demoNext: "Demo: {s}", demoSys: "Comes from the nurse, lab and doctor systems.", demoDocNote: "Results reviewed. Continue the current treatment and follow up in 3 months.", supOnly: "The supervisor resolves escalations."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      optional: "(اختياري)", title: "تفاصيل التحاليل", back: "الرجوع للطلب الطبي", crMedical: "الطلبات الطبية", crLab: "التحاليل", missing: "ما لقينا هذا التحليل.", toList: "الرجوع للطلبات الطبية",
+      viewAs: "العرض كـ", demoRole: "تجربة: في النظام الفعلي الصلاحية تجي من تسجيل الدخول.", r_cs: "خدمة العملاء", r_nurse: "الممرض", r_doctor: "الطبيب",
+      perm_cs: "تتابع وتشارك النتائج المعتمدة وتصعّد. ما تقدر تدخل النتائج.", perm_nurse: "يسحب العينة ويدخل النتائج من نظام المختبر.", perm_doctor: "يراجع النتائج ويعتمدها أو يكتب ملاحظة.",
+      h_ordered: "بانتظار الممرض يسحب العينة", h_collected: "تم سحب العينة، وهي في الطريق للمختبر", h_received: "العينة في المختبر، والنتائج ما طلعت بعد", h_late: "ما طلعت النتائج بعد {h} ساعة من وصول العينة للمختبر",
+      h_resulted: "تم إدخال النتائج، بانتظار اعتماد الطبيب", h_reviewed: "اعتمدها الطبيب، وجاهزة للمشاركة مع المريض",
+      sinceLab: "في المختبر من", hm: "{h}س {m}د",
+      say: "وش تقولين للمريض", say_ordered: "الممرض بيسحب العينة وقت الزيارة.", say_collected: "انسحبت عينتك الساعة {t} وهي في الطريق للمختبر.",
+      say_received: "وصلت عينتك للمختبر الساعة {t}. النتائج عادة تطلع خلال {h} ساعة، وبنتواصل معك أول ما تجهز.",
+      say_late: "وصلت عينتك للمختبر الساعة {t}. النتائج تأخرت عن العادة، ورفعنا الموضوع عشان توصلك بسرعة.",
+      say_resulted: "نتائجك طلعت والطبيب يراجعها الحين. بنرسلها لك أول ما يعتمدها.",
+      say_reviewed: "نتائجك جاهزة واعتمدها {d}. نقدر نرسلها لك الحين.",
+      s1: "1. تتبع العينة", st_ordered: "طلبها الطبيب", st_collected: "تم سحب العينة", st_received: "العينة في المختبر", st_resulted: "تم إدخال النتائج", st_reviewed: "اعتمدها الطبيب",
+      notYet: "لم يتم", by: "بواسطة {n}", markCollected: "تم سحب العينة", markReceived: "وصلت العينة للمختبر", fromLabSys: "في النظام الفعلي نظام المختبر يرسل هذي الخطوة.", trackSaved: "تم حفظ: {s}.",
+      s2: "2. المعلومات الأساسية", reqNo: "رقم الطلب", bkNo: "رقم الحجز", patient: "اسم المريض", mobile: "رقم الجوال", visitDate: "تاريخ الزيارة", location: "الموقع", viewMap: "عرض على الخريطة", noLoc: "ما فيه موقع بعد", noVisit: "بدون موعد",
+      s3: "3. نتائج التحاليل", noRes: "النتائج ما طلعت بعد", noRes_cs: "الممرض يدخل النتائج من نظام المختبر، وتظهر لك هنا أول ما تندخل.", noRes_doc: "تقدر تراجع النتائج بعد ما يدخلها الممرض.",
+      needLab: "سجّل وصول العينة للمختبر قبل إدخال النتائج.", enterTitle: "إدخال النتائج من نظام المختبر", pickTests: "التحاليل في هذا الطلب", pickHint: "اختر التحاليل اللي طلبها الطبيب.",
+      cNo: "#", cName: "اسم التحليل", cCode: "الرمز", cRes: "النتيجة", cUnit: "الوحدة", cRange: "المعدل الطبيعي", cStatus: "الحالة", cPos: "الموقع",
+      s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج",
+      fillAll: "اكتب رقم لكل تحليل.", saveRes: "حفظ النتائج", resSaved: "تم حفظ النتائج وإرسالها للطبيب.", editRes: "تعديل النتائج", cancel: "إلغاء",
+      analysis: "تحليل النتيجة", refRange: "المعدل الطبيعي", curRes: "النتيجة الحالية", posTitle: "موقع النتيجة", nRange: "طبيعي", hRange: "مرتفع", cRange2: "حرج", lRange: "منخفض",
+      toHigh: "المتبقي للمستوى المرتفع", toHighNote: "باقي {v} {u} للمستوى المرتفع", aboveHigh: "أعلى من المرتفع بـ {v} {u}", belowLow: "أقل من الطبيعي بـ {v} {u}", refNote: "المعدلات الطبيعية ممكن تختلف حسب المختبر والمريض.",
+      reportLbl: "تقرير المختبر", reportHint: "PDF أو JPG أو PNG، حتى 1.5 ميجا", choose: "اختر ملف", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جرب ملف أصغر.",
+      s4: "4. مراجعة الطبيب", revWait: "تفتح بعد ما يدخل الممرض النتائج.", revPending: "بانتظار الطبيب يراجع النتائج.", approvedBy: "اعتمدها {n} · {t}",
+      docNoteLbl: "ملاحظة الطبيب", docNotePh: "مثال: السكر التراكمي مرتفع، يستمر على الميتفورمين ويعيد التحليل بعد 3 شهور.", approve: "اعتماد النتائج", noteOnly: "إضافة ملاحظة فقط", approvedToast: "تم اعتماد النتائج. خدمة العملاء تقدر تشاركها الحين.", noteToast: "تمت إضافة الملاحظة.", needNote: "اكتب الملاحظة أول.", docNotes: "ملاحظات الطبيب",
+      s5: "5. المشاركة مع المريض", fileLbl: "الملف المرفوع", noFile: "ما فيه ملف تقرير مرفوع.", uploadedAt: "رُفع {t} · بواسطة {n}", viewFile: "عرض الملف", dlFile: "تحميل التقرير", dlRes: "تحميل النتائج PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدمي حفظ كـ PDF من نافذة الطباعة.",
+      lp_title: "تقرير نتائج التحاليل", lp_issued: "صدر", lp_approved: "معتمد من الطبيب", lp_critChip: "يحتاج انتباه", lp_hello: "نتائج", lp_sumAll: "كل نتائجك ضمن المعدل الطبيعي.", lp_sumOut: "{n} من {t} نتائج ضمن المعدل الطبيعي، والطبيب راجع الباقي.",
+      lp_out: "خارج المعدل", lp_scan: "امسح لفتح حجزك", lp_patient: "المريض", lp_file: "رقم الملف", lp_sample: "العينة", lp_resAt: "جاهزية النتائج", lp_doctor: "الطبيب", lp_ordered: "الطبيب الطالب", lp_apBy: "اعتمدها", lp_apAt: "تاريخ الاعتماد",
+      lp_results: "نتائجك", lp_docNote: "ملاحظة الطبيب", lp_noNote: "راجع الطبيب نتائجك بدون ملاحظات إضافية.", lp_read: "كيف تقرأ نتائجك",
+      lp_rN: "ضمن المعدل الصحي", lp_rH: "خارج المعدل، اتبع توجيهات طبيبك", lp_rC: "تواصل مع طبيبك اليوم",
+      lp_care: "عندك سؤال عن نتائجك؟ فريق الرعاية معك.", lp_foot: "مدى كير · رعاية صحية منزلية · هذا التقرير لا يغني عن مراجعة الطبيب.",
+      lockShare: "المشاركة تفتح بعد ما يعتمد الطبيب النتائج.", shareHint: "حمّلي التقرير أو ورقة النتائج وأرسليها للمريض.",
+      s6: "6. التصعيد", escText: "إذا ما طلعت النتائج بعد {h} ساعة من وصول العينة للمختبر، صعّدي للمشرفة عشان تسرّع إدخال البيانات.", escIn: "التصعيد يفتح بعد {t} إذا ما طلعت النتائج.", escNotNeeded: "ما يحتاج تصعيد.",
+      escLbl: "وش المشكلة", escPh: "مثال: المريض اتصل مرتين، والنتائج ما اندخلت بعد 26 ساعة.", escBtn: "تصعيد للمشرفة", escSaved: "تم التصعيد للمشرفة.", escOpen: "مفتوح · {n} · {t}", escDone: "أنهته {n} · {t}", resolve: "تم الحل", resolvedToast: "تم إنهاء التصعيد.", resolveNote: "وش اللي انعمل", needEsc: "اكتبي وش المشكلة.",
+      demoAge: "تجربة: خلّ العينة 25 ساعة في المختبر", demoNext: "تجربة: {s}", demoSys: "تجي من نظام التمريض والمختبر والأطباء.", demoDocNote: "تمت مراجعة النتائج. يستمر على العلاج الحالي ومتابعة بعد 3 شهور.", supOnly: "المشرفة هي اللي تنهي التصعيد."
+    }
+  };
+  let current = "en";
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
+  const T = v => MadaOrders.text(v, current);
+  const who = v => typeof v === "object" && v ? T(v) : (v || "");
+  const svg = (p, sw) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw || 1.8}" aria-hidden="true">${p}</svg>`;
+  const pad = n => String(n).padStart(2, "0");
+  const iso = s => "⁦" + s + "⁩";
+  const fmtD = d => iso(`${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`);
+  const fmtT = d => iso(d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }));
+  const stamp = s => { const d = new Date(s); return `${fmtD(d)} · ${fmtT(d)}`; };
+  const ymdD = s => { const [y, m, d] = s.split("-"); return iso(`${d}/${m}/${y}`); };
+  const fmtMin = m => { const h = Math.floor(m / 60); return iso(`${((h + 11) % 12) + 1}:${pad(m % 60)} ${h >= 12 ? "PM" : "AM"}`); };
+  const num = v => `<span class="num">${esc(v)}</span>`;
+  const I = {
+    cs: '<path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4" height="6" rx="1.5"/><rect x="17.5" y="13" width="4" height="6" rx="1.5"/><path d="M19.5 19a4 4 0 0 1-4 3H13"/>',
+    nurse: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 3.5h4M12 2v3"/>',
+    doctor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0"/>',
+    check: '<path d="m5 12 5 5 9-10"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', warn: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+    flask: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/>', truck: '<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+    shield: '<path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    doc: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>', bk: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2.5 2.5L16 13"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    map: '<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>', upload: '<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>', eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    down: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>', flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>', note: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'
+  };
+
+  // Who is looking. In the demo the role is picked here; the live system takes it from the login.
+  // This page is for the call center (customer service) only. The nurse enters results and the doctor
+  // approves them from their own systems; the nurse and doctor views stay in the code for that later step.
+  const role = "cs";
+  let editing = false, picked = null, selAn = null;
+
+  const getR = () => id && MadaMedical.get(id);
+  const getIt = r => r && r.items.find(x => x.id === itemId && x.type === "lab");
+  const S = MadaMedical.STEPS.lab;
+  const stepOf = it => S[it.step];
+  const logAt = (it, k) => it.log.find(l => S[l.step] === k);
+  const docName = r => { const d = MadaOrders.DOCTORS.find(x => x.id === r.doctorId); return d ? T(d.name) : who(r.byDoctor); };
+
+  function heroHtml(r, it) {
+    const st = stepOf(it), late = MadaMedical.labLate(it), rcv = logAt(it, "received"), col = logAt(it, "collected");
+    const cls = late ? "h-red" : st === "reviewed" ? "h-green" : st === "resulted" ? "h-blue" : "h-orange";
+    const ico = late ? I.warn : st === "reviewed" ? I.shield : st === "resulted" ? I.doctor : st === "received" ? I.flask : st === "collected" ? I.truck : I.clock;
+    const head = late ? tx("h_late", { h: MadaMedical.LAB_LATE_HOURS }) : t()["h_" + st];
+    const ap = logAt(it, "reviewed");
+    const say = late ? tx("say_late", { t: fmtT(new Date(rcv.at)) }) : st === "received" ? tx("say_received", { t: fmtT(new Date(rcv.at)), h: MadaMedical.LAB_LATE_HOURS })
+      : st === "collected" ? tx("say_collected", { t: fmtT(new Date(col.at)) }) : st === "reviewed" ? tx("say_reviewed", { d: who(ap.by) }) : t()["say_" + st];
+    let clock = "";
+    if (rcv && !logAt(it, "resulted")) { const m = Math.floor((Date.now() - new Date(rcv.at)) / 60000); clock = `<div class="clock">${t().sinceLab}<b>${iso(tx("hm", { h: Math.floor(m / 60), m: m % 60 }))}</b></div>`; }
+    return `<section class="card hero ${cls}"><span class="ic">${svg(ico, 2)}</span><div class="txt"><small>${esc(T(it.title))}</small><strong>${esc(head)}</strong>
+      ${role === "cs" ? `<div class="say"><b>${t().say}</b>${esc(say)}</div>` : ""}</div>${clock}</section>`;
+  }
+
+  function trackHtml(r, it) {
+    const late = MadaMedical.labLate(it);
+    const li = S.map((k, i) => {
+      const l = logAt(it, k), ok = i <= it.step, now = i === it.step + 1;
+      const cls = ok ? "ok" : now && late && k === "resulted" ? "late" : now ? "now" : "";
+      return `<li class="${cls}"><span class="c">${ok ? svg(I.check, 3) : i + 1}</span><b>${t()["st_" + k]}</b>${l ? `<time>${stamp(l.at)}</time>${l.by ? `<span class="by">${esc(tx("by", { n: who(l.by) }))}</span>` : ""}` : `<time>${t().notYet}</time>`}</li>`;
+    }).join("");
+    let acts = "";
+    if (role === "nurse" && r.status === "open" && (stepOf(it) === "ordered" || stepOf(it) === "collected"))
+      acts = `<div class="track-acts"><button type="button" class="btn btn-primary btn-sm" data-track="${stepOf(it) === "ordered" ? "collected" : "received"}">${svg(stepOf(it) === "ordered" ? I.flask : I.truck)}${stepOf(it) === "ordered" ? t().markCollected : t().markReceived}</button>${stepOf(it) === "collected" ? `<small class="muted">${t().fromLabSys}</small>` : ""}</div>`;
+    // Demo only: stand in for the nurse, lab and doctor systems so the call center view can be tried.
+    if (MadaStore.SAMPLES && r.status === "open" && stepOf(it) !== "reviewed") acts += `<div class="track-acts"><button type="button" class="demo-link" id="demoNext">${esc(tx("demoNext", { s: t()["st_" + S[it.step + 1]] }))}</button>${stepOf(it) === "received" && !late ? `<button type="button" class="demo-link" id="demoAge">${t().demoAge}</button>` : ""}<small class="muted">${t().demoSys}</small></div>`;
+    return `<section class="card sec"><h2>${t().s1}</h2><ol class="track">${li}</ol>${acts}</section>`;
+  }
+
+  function infoHtml(r, o) {
+    const loc = o && o.location, visit = o && o.appointment ? `${ymdD(o.appointment.date)} · ${fmtMin(o.appointment.minute)}` : t().noVisit;
+    const f = (ic, k, v) => `<div><span class="fi">${svg(ic)}</span><span><dt>${t()[k]}</dt><dd>${v}</dd></span></div>`;
+    return `<section class="card sec"><h2>${t().s2}</h2><dl class="facts icons">
+      ${f(I.doc, "reqNo", `<a href="medical-request.html?id=${encodeURIComponent(r.id)}">${esc(r.id)}</a>`)}
+      ${f(I.bk, "bkNo", o ? `<a href="request-details.html?id=${encodeURIComponent(o.id)}">${esc(o.bookingId || o.id)}</a>` : "—")}
+      ${f(I.user, "patient", esc(T(r.patient) || "—"))}
+      ${f(I.phone, "mobile", num(r.mobile || "—"))}
+      ${f(I.cal, "visitDate", visit)}
+      ${f(I.pin, "location", loc && loc.address ? `${esc(loc.address)}${loc.lat ? `<br><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps?q=${loc.lat},${loc.lng}">${svg(I.map)}${t().viewMap}</a>` : ""}` : t().noLoc)}
+    </dl></section>`;
+  }
+
+  // ----- Results -----
+  const fmtV = v => String(+(+v).toFixed(2));
+  const rangeTxt = a => a.low === 0 ? `< ${a.high}` : `${a.low} - ${a.high}`;
+  function scaleOf(a) { // from 0 (or a bit below low) to the critical high (or 1.5x high)
+    const lo = a.low === 0 ? 0 : Math.max(0, a.critLow != null ? a.critLow : a.low * 0.7), hi = a.critHigh != null ? Math.min(a.critHigh, a.high * 2) : a.high * 1.4;
+    return { lo, hi, at: v => Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100)) };
+  }
+  function miniBar(a, v) {
+    const sc = scaleOf(a), st = MadaMedical.labStatus(a, v);
+    const col = st === "normal" ? "var(--green)" : st === "critical" ? "var(--red)" : "var(--orange)";
+    return `<div class="mini" aria-hidden="true"><span class="nr" style="left:${sc.at(a.low)}%;width:${sc.at(a.high) - sc.at(a.low)}%"></span><span class="dot" style="left:${sc.at(v)}%;background:${col}"></span></div>`;
+  }
+  const PILL = { normal: "p-green", low: "p-orange", high: "p-orange", critical: "p-crit" };
+  function analysisHtml(a, v) {
+    const st = MadaMedical.labStatus(a, v), sc = scaleOf(a), x = sc.at(v);
+    const lowW = sc.at(a.low), nW = sc.at(a.high) - lowW, critX = a.critHigh != null && a.critHigh <= sc.hi ? sc.at(a.critHigh) : 100, hW = critX - sc.at(a.high), cW = 100 - critX;
+    let ring = "", pct, note;
+    if (v > a.high) { pct = 100; note = tx("aboveHigh", { v: fmtV(v - a.high), u: a.unit }); }
+    else if (v < a.low) { pct = 0; note = tx("belowLow", { v: fmtV(a.low - v), u: a.unit }); }
+    else { pct = Math.round((a.high - v) / (a.high - (a.low || 0)) * 100); note = tx("toHighNote", { v: fmtV(a.high - v), u: a.unit }); }
+    const rc = st === "normal" ? "var(--green)" : st === "critical" ? "var(--red)" : "var(--orange)";
+    ring = `<div class="ring" style="background:conic-gradient(${rc} ${pct * 3.6}deg, #eef2f3 0)"><span class="num">${pct}%</span></div><p class="ring-note">${esc(note)}</p>`;
+    return `<div class="analysis">
+      <div><span class="an-name">${esc(T(a.name))}</span><div class="an-kv"><div><small>${t().refRange}</small><b class="num">${esc(rangeTxt(a))} ${esc(a.unit)}</b></div><div><small>${t().curRes}</small><b class="${st} num">${esc(fmtV(v))} ${esc(a.unit)}</b></div></div>
+        <span class="pill ${PILL[st]}" style="margin-top:12px"><span class="dot"></span>${t()["s_" + st]}</span></div>
+      <div><span class="an-h">${t().posTitle}</span><div class="scale">
+        <span class="pin" style="left:${x}%"><b>${esc(fmtV(v))}</b><i></i></span>
+        <div class="bars">${lowW ? `<i style="width:${lowW}%;background:#f6d9a8"></i>` : ""}<i style="width:${nW}%;background:var(--green)"></i><i style="width:${hW}%;background:var(--orange)"></i>${cW > 0 ? `<i style="width:${cW}%;background:var(--red)"></i>` : ""}</div>
+        <div class="seg-l">${lowW ? `<span style="width:${lowW}%">${t().lRange}</span>` : ""}<span style="width:${nW}%">${t().nRange}</span><span style="width:${hW}%">${t().hRange}</span>${cW > 0 ? `<span style="width:${cW}%">${t().cRange2}</span>` : ""}</div>
+        <div class="ticks"><span>${fmtV(sc.lo)}</span><span>${a.high}</span><span style="color:var(--red)">${fmtV(sc.hi)}</span></div></div></div>
+      <div><span class="an-h">${t().toHigh}</span>${ring}</div></div>`;
+  }
+
+  function resultsHtml(r, it) {
+    const res = it.results || null, ans = MadaMedical.analytesOf(it), st = stepOf(it);
+    const canEnter = role === "nurse" && r.status === "open" && (st === "received" || (st === "resulted" && editing));
+    let body = "";
+    if (canEnter) {
+      const tests = picked || it.tests || [];
+      const list = tests.flatMap(c => MadaMedical.ANALYTES[c] || []);
+      const prev = res || {};
+      body = `<p class="lbl">${t().enterTitle}</p>
+        ${(it.tests || []).length ? "" : `<span class="lbl">${t().pickTests}</span><p class="muted" style="margin-bottom:8px">${t().pickHint}</p><div class="pick-tests">${Object.keys(MadaMedical.ANALYTES).map(c => { const lt = MadaLabs.byCode[c]; return `<label><input type="checkbox" data-pick="${c}" ${tests.includes(c) ? "checked" : ""}>${esc(lt ? T(lt.name) : c)}</label>`; }).join("")}</div>`}
+        ${list.length ? `<div class="res-table"><table><thead><tr><th>${t().cNo}</th><th>${t().cName}</th><th>${t().cCode}</th><th>${t().cRes}</th><th>${t().cUnit}</th><th>${t().cRange}</th><th>${t().cStatus}</th></tr></thead><tbody>
+          ${list.map((a, i) => `<tr><td class="hide-m">${i + 1}</td><td class="span"><b>${esc(T(a.name))}</b></td><td class="hide-m">${esc(a.code)}</td><td><input class="res-in" inputmode="decimal" data-res="${a.code}" value="${prev[a.code] != null ? esc(prev[a.code]) : ""}" aria-label="${esc(T(a.name))}"></td><td class="num">${esc(a.unit)}</td><td class="num hide-m">${esc(rangeTxt(a))}</td><td><span class="pill" id="st-${a.code}">${prev[a.code] != null ? `<span class="dot"></span>${t()["s_" + MadaMedical.labStatus(a, prev[a.code])]}` : "—"}</span></td></tr>`).join("")}
+        </tbody></table></div>` : ""}
+        <div style="margin-top:16px"><span class="lbl">${t().reportLbl} <em>${t().optional || ""}</em></span><label class="drop">${svg(I.upload)}<span><span class="fname" id="repName">${it.report ? esc(it.report.name) : t().choose}</span> <span class="muted">· ${t().reportHint}</span></span><input type="file" id="repFile" accept="application/pdf,image/png,image/jpeg"></label></div>
+        <div class="err" id="resErr" hidden></div>
+        <div class="foot-acts">${editing ? `<button type="button" class="btn btn-ghost" id="resCancel">${t().cancel}</button>` : ""}<button type="button" class="btn btn-primary" id="resSave" ${list.length ? "" : "disabled"}>${svg(I.check, 2.2)}${t().saveRes}</button></div>`;
+    } else if (!res) {
+      const m = role === "nurse" ? (st === "ordered" || st === "collected" ? t().needLab : "") : role === "doctor" ? t().noRes_doc : t().noRes_cs;
+      body = `<div class="empty-res"><span class="ic">${svg(I.flask)}</span><b>${t().noRes}</b>${m ? `<p>${esc(m)}</p>` : ""}</div>`;
+    } else {
+      const withV = ans.filter(a => res[a.code] != null);
+      if (!selAn || !withV.some(a => a.code === selAn)) selAn = (withV.find(a => MadaMedical.labStatus(a, res[a.code]) !== "normal") || withV[0] || {}).code;
+      const a0 = withV.find(a => a.code === selAn);
+      body = `${a0 ? `<span class="lbl">${t().analysis}</span>${analysisHtml(a0, +res[a0.code])}` : ""}
+        <div class="res-table"><table><thead><tr><th>${t().cNo}</th><th>${t().cName}</th><th>${t().cCode}</th><th>${t().cRes}</th><th>${t().cUnit}</th><th>${t().cRange}</th><th>${t().cStatus}</th><th>${t().cPos}</th></tr></thead><tbody>
+          ${withV.map((a, i) => { const v = +res[a.code], s = MadaMedical.labStatus(a, v); return `<tr data-an="${a.code}" class="${a.code === selAn ? "sel" : ""}"><td class="hide-m">${i + 1}</td><td class="span"><b>${esc(T(a.name))}</b></td><td class="hide-m">${esc(a.code)}</td><td><span class="val ${s} num">${esc(fmtV(v))}</span></td><td class="num">${esc(a.unit)}</td><td class="num hide-m">${esc(rangeTxt(a))}</td><td><span class="pill ${PILL[s]}"><span class="dot"></span>${t()["s_" + s]}</span></td><td class="span">${miniBar(a, v)}</td></tr>`; }).join("")}
+        </tbody></table></div><p class="muted" style="margin-top:10px">* ${t().refNote}</p>
+        ${role === "nurse" && st === "resulted" && r.status === "open" ? `<div class="foot-acts"><button type="button" class="btn btn-ghost btn-sm" id="resEdit">${svg(I.note)}${t().editRes}</button></div>` : ""}`;
+    }
+    return `<section class="card sec" id="resSec"><h2>${t().s3}</h2>${body}</section>`;
+  }
+
+  function reviewHtml(r, it) {
+    const st = stepOf(it), ap = logAt(it, "reviewed"), notes = it.docNotes || [];
+    let body;
+    if (!it.results) body = `<p class="muted">${t().revWait}</p>`;
+    else {
+      body = ap ? `<div class="approved">${svg(I.shield, 2)}<div><b>${esc(tx("approvedBy", { n: who(ap.by), t: stamp(ap.at) }))}</b>${ap.data && ap.data.docNote ? `<p dir="auto">${esc(ap.data.docNote)}</p>` : ""}</div></div>`
+        : role === "doctor" && r.status === "open" ? `<div><label class="lbl" for="docNote">${t().docNoteLbl} <em>${t().optional || ""}</em></label><textarea class="inp" id="docNote" maxlength="600" dir="auto" placeholder="${esc(t().docNotePh)}"></textarea></div>
+            <div class="err" id="docErr" hidden></div>
+            <div class="foot-acts"><button type="button" class="btn btn-ghost" id="docNoteOnly">${svg(I.note)}${t().noteOnly}</button><button type="button" class="btn btn-primary" id="docApprove">${svg(I.shield)}${t().approve}</button></div>`
+        : `<div class="alert blue">${svg(I.clock)}<div><b>${t().revPending}</b></div></div>`;
+      if (notes.length) body += `<span class="lbl" style="margin-top:14px">${t().docNotes}</span><ul class="dnotes">${notes.slice().reverse().map(n => `<li><small>${esc(who(n.by))} · ${stamp(n.at)}</small><span dir="auto">${esc(n.text)}</span></li>`).join("")}</ul>`;
+    }
+    return `<section class="card sec"><h2>${t().s4}</h2>${body}</section>`;
+  }
+
+  function shareHtml(r, it) {
+    const approved = !!logAt(it, "reviewed"), canOpen = role !== "cs" || approved, f = it.report;
+    const fileBox = f ? `<div class="file-card"><span class="pdf">${esc((f.name.split(".").pop() || "").toUpperCase().slice(0, 4))}</span><div class="meta"><b>${esc(f.name)}</b><small>${esc(f.size < 102400 ? Math.max(1, Math.round(f.size / 1024)) + " KB" : (f.size / 1048576).toFixed(2) + " MB")} · ${esc(tx("uploadedAt", { t: stamp(f.at), n: who(f.by) }))}</small></div>${svg(I.check, 2.4)}</div>
+      <div class="acts" style="margin-top:10px"><button type="button" class="btn btn-ghost btn-sm" data-open-file ${canOpen ? "" : "disabled"}>${svg(I.eye)}${t().viewFile}</button></div>` : `<p class="muted">${t().noFile}</p>`;
+    const share = approved ? `<p class="muted" style="margin-bottom:12px">${t().shareHint}</p><div class="acts">${f ? `<button type="button" class="btn btn-primary btn-sm" data-dl-file>${svg(I.down)}${t().dlFile}</button>` : ""}<button type="button" class="btn ${f ? "btn-ghost" : "btn-primary"} btn-sm" id="dlRes">${svg(I.down)}${t().dlRes}</button></div>`
+      : `<div class="lock-msg">${svg(I.lock)}<span>${t().lockShare}</span></div>`;
+    return `<section class="card sec"><h2>${t().s5}</h2><div class="share-grid"><div><span class="lbl">${t().fileLbl}</span>${fileBox}</div><div>${share}</div></div></section>`;
+  }
+
+  function escHtml(r, it) {
+    const late = MadaMedical.labLate(it), rcv = logAt(it, "received"), list = it.escalations || [];
+    let body = `<p class="muted" style="margin-bottom:12px">${esc(tx("escText", { h: MadaMedical.LAB_LATE_HOURS }))}</p>`;
+    if (role === "cs" && r.status === "open") {
+      if (late) body += `<div><label class="lbl" for="escNote">${t().escLbl}</label><textarea class="inp" id="escNote" maxlength="500" dir="auto" placeholder="${esc(t().escPh)}"></textarea></div><div class="err" id="escErr" hidden></div>
+        <div class="foot-acts"><button type="button" class="btn btn-danger" id="escBtn" style="background:var(--red);color:#fff">${svg(I.flag)}${t().escBtn}</button></div>`;
+      else if (rcv && !it.results) { const left = MadaMedical.LAB_LATE_HOURS * 60 - Math.floor((Date.now() - new Date(rcv.at)) / 60000); body += `<div class="lock-msg">${svg(I.clock)}<span>${esc(tx("escIn", { t: tx("hm", { h: Math.floor(left / 60), m: left % 60 }) }))}</span></div>`; }
+      else body += `<div class="lock-msg">${svg(I.check)}<span>${t().escNotNeeded}</span></div>`;
+    }
+    if (list.length) body += `<ul class="esc-list">${list.map((e, i) => `<li class="${e.resolved ? "res" : ""}"><small>${esc(e.resolved ? tx("escDone", { n: who(e.resolved.by), t: stamp(e.resolved.at) }) : tx("escOpen", { n: who(e.by), t: stamp(e.at) }))}</small><span dir="auto">${esc(e.note)}</span>${e.resolved && e.resolved.note ? `<small style="margin-top:4px">${esc(e.resolved.note)}</small>` : ""}
+      ${!e.resolved ? isSup ? `<div class="acts" style="margin-top:8px"><input class="inp" style="flex:1;min-width:160px;height:36px" id="resNote${i}" maxlength="200" dir="auto" placeholder="${esc(t().resolveNote)}"><button type="button" class="btn btn-primary btn-sm" data-resolve="${i}">${svg(I.check, 2.2)}${t().resolve}</button></div>` : `<small style="margin-top:4px">${t().supOnly}</small>` : ""}</li>`).join("")}</ul>`;
+    return `<section class="card sec"><h2>${t().s6}</h2>${body}</section>`;
+  }
+
+  function render() {
+    const r = getR(), it = getIt(r);
+    $("crumbs").innerHTML = `<a href="medical-requests.html">${t().crMedical}</a>${r ? `<span><a href="medical-request.html?id=${encodeURIComponent(r.id)}">${esc(r.id)}</a></span>` : ""}<span>${t().crLab}</span>`;
+    if (r) $("backLink").href = "medical-request.html?id=" + encodeURIComponent(r.id);
+    if (!it) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="medical-requests.html">${t().toList}</a></p></section>`; return; }
+    const o = MadaOrders.get(r.orderId);
+    $("content").innerHTML = `
+      ${heroHtml(r, it)}${trackHtml(r, it)}${infoHtml(r, o)}${resultsHtml(r, it)}${reviewHtml(r, it)}${shareHtml(r, it)}${escHtml(r, it)}`;
+  }
+
+  // ---------- Actions ----------
+  const readFile = f => new Promise((ok, no) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = no; fr.readAsDataURL(f); });
+  function openStored(f, download) {
+    const url = MadaStore.get(f.key); if (!url) return;
+    const bin = atob(url.split(",")[1]), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    const href = URL.createObjectURL(new Blob([buf], { type: f.type || "application/octet-stream" }));
+    if (download) { const a = document.createElement("a"); a.href = href; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }
+    else window.open(href, "_blank");
+  }
+  const PDF_LOGO = "data:image/png;base64,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";
+  const H2P = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+  const loadH2p = () => window.html2pdf ? Promise.resolve() : new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = H2P; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); });
+  const QR_JS = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js";
+  const loadQr = () => window.qrcode ? Promise.resolve() : new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = QR_JS; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); });
+  // QR code to the customer's booking page (empty when the QR library can't load).
+  function qrImg(url) {
+    try { const q = window.qrcode(0, "M"); q.addData(url); q.make(); return q.createDataURL(4, 0); } catch (e) { return ""; }
+  }
+  const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, bad) => setTimeout(() => bad(new Error("timeout")), ms))]);
+  // The PDF renderer draws each line left to right, which drops the spaces between Arabic words and
+  // moves punctuation: give every word and mark its own box so the browser's layout is kept.
+  function fixArabic(wrap) {
+    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) if (walk.currentNode.nodeValue.trim()) nodes.push(walk.currentNode);
+    nodes.forEach(nd => {
+      const frag = document.createDocumentFragment();
+      nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+        else {
+          // Brackets in Arabic text are shown mirrored on screen; the PDF renderer does not mirror them.
+          const ltrBox = nd.parentElement && nd.parentElement.closest('[dir="ltr"]');
+          const sp = document.createElement("span");
+          sp.textContent = ltrBox ? part : part.replace(/[()]/g, c => c === "(" ? ")" : "(");
+          frag.appendChild(sp);
+        }
+      });
+      nd.replaceWith(frag);
+    });
+  }
+
+  // Branded results report the patient can share with family.
+  function labPdfHtml(r, it, qr) {
+    const clean = v => String(v == null ? "" : v).replace(/[⁦⁩‎]/g, "");
+    const rtl = current === "ar", al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
+    const G = "#0b6b5c", GD = "#07463d", INK = "#10232b", MU = "#6b7a80", LINE = "#e3e8ea", SOFT = "#f4f8f7", GOLD = "#c8a45a";
+    const COL = { normal: ["#15803d", "#e7f6ec"], low: ["#b45309", "#fef3e2"], high: ["#b45309", "#fef3e2"], critical: ["#dc2626", "#fdecec"] };
+    const res = it.results || {}, ans = MadaMedical.analytesOf(it).filter(a => res[a.code] != null);
+    const st = a => MadaMedical.labStatus(a, res[a.code]);
+    const nNorm = ans.filter(a => st(a) === "normal").length, nOut = ans.length - nNorm, nCrit = ans.filter(a => st(a) === "critical").length;
+    const ap = logAt(it, "reviewed"), col = logAt(it, "collected"), rcv = logAt(it, "received"), rsl = logAt(it, "resulted");
+    const when = l => l ? clean(stamp(l.at)) : "—";
+    const o = MadaOrders.get(r.orderId) || {}, now = new Date(), issued = clean(stamp(now.toISOString()));
+    const ltr = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`;
+    const ic = path => `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${G}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px">${path}</svg>`;
+    const head = (icon, title) => `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="width:28px;height:28px;border-radius:8px;background:#e6f3ef;display:inline-flex;align-items:center;justify-content:center">${ic(icon)}</span><span style="font-size:13px;font-weight:700;color:${INK}">${title}</span></div>`;
+    const kv = (k, v) => `<div style="padding:3px 0"><div style="color:${MU};font-size:10.5px">${k}</div><div style="font-weight:600;color:${INK};font-size:12px">${v}</div></div>`;
+    const card = (icon, title, body) => `<div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:12px 14px;background:#fff">${head(icon, title)}${body}</div>`;
+    const chip = (txt, fg, bg) => `<span style="display:inline-block;padding:4px 11px;border-radius:12px;background:${bg};color:${fg};font-weight:700;font-size:11px;margin-inline-end:6px">${txt}</span>`;
+    const ls = rtl ? "" : "letter-spacing:.14em;text-transform:uppercase;";
+    const I2 = { user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', flask: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/>',
+      doc: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0"/>', list: '<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+      note: '<path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', shield: '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>' };
+    // Bar: green normal band, dot where the result falls (always drawn left to right).
+    const bar = a => { const sc = scaleOf(a), v = +res[a.code], s = st(a), x = sc.at(v), l = sc.at(a.low), w = sc.at(a.high) - l;
+      return `<div dir="ltr" style="position:relative;width:120px;height:14px;display:inline-block;vertical-align:middle"><div style="position:absolute;left:0;right:0;top:6px;height:3px;border-radius:2px;background:#e9eef0"></div><div style="position:absolute;left:${l}%;width:${w}%;top:5px;height:5px;border-radius:3px;background:#9fd2c3"></div><div style="position:absolute;left:${x}%;top:2px;width:11px;height:11px;margin-left:-5.5px;border-radius:50%;background:${COL[s][0]};border:2px solid #fff;box-shadow:0 0 0 1px ${COL[s][0]}"></div></div>`; };
+    const big = (n, label, fg, bg) => `<div style="flex:1;border-radius:12px;background:${bg};padding:10px 12px;text-align:center"><div style="font-size:24px;font-weight:700;color:${fg};line-height:1.1">${n}</div><div style="font-size:11px;color:${fg};font-weight:600;margin-top:2px">${label}</div></div>`;
+    const doc = MadaOrders.DOCTORS.find(d => d.id === r.doctorId);
+    return `<div dir="${rtl ? "rtl" : "ltr"}" style="width:744px;padding:14px 18px 8px;background:#fff;color:${INK};font-family:${rtl ? "Tajawal, Inter" : "Inter, Tajawal"}, Arial, sans-serif;text-align:${al};line-height:1.38">
+      <div style="border-radius:16px;padding:16px 20px;background:linear-gradient(135deg, ${G} 0%, ${GD} 100%);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:18px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:58px;height:58px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center"><img src="${PDF_LOGO}" style="height:40px;width:auto" alt=""></span>
+          <div><div style="font-size:21px;font-weight:700">Mada Care</div><div style="font-size:11.5px;opacity:.85">${esc(t().tagline)}</div></div>
+        </div>
+        <div style="text-align:${ar2}">
+          <div style="font-size:11px;${ls}opacity:.9;color:#f3e3bd">${t().lp_title}</div>
+          <div style="font-size:26px;font-weight:700;margin:2px 0">${ltr(r.id)}</div>
+          <div style="font-size:11px;opacity:.85">${t().bkNo} ${ltr(r.bookingId || o.bookingId || r.orderId)} · ${esc(t().lp_issued)} ${ltr(issued)}</div>
+        </div>
+      </div>
+      <div style="height:3px;background:${GOLD};border-radius:2px;margin:0 24px"></div>
+
+      <div style="margin:12px 2px 10px">${chip(t().lp_approved, "#15803d", "#e7f6ec")}${nCrit ? chip(t().lp_critChip, "#dc2626", "#fdecec") : ""}<span style="font-size:13px;font-weight:700">${esc(T(it.title))}</span></div>
+
+      <div class="pdf-avoid" style="display:flex;align-items:stretch;gap:12px;border:1px solid ${LINE};border-radius:14px;padding:12px 14px;background:${SOFT}">
+        <div style="flex:1.3;min-width:0;display:flex;flex-direction:column;justify-content:center">
+          <div style="font-size:11.5px;color:${MU}">${t().lp_hello}</div>
+          <div style="font-size:19px;font-weight:700;margin:2px 0">${esc(T(r.patient) || "—")}</div>
+          <div style="font-size:12px;color:#2c3d43">${esc(nOut ? tx("lp_sumOut", { n: nNorm, t: ans.length }) : t().lp_sumAll)}</div>
+        </div>
+        <div style="flex:1.4;display:flex;gap:8px">${big(nNorm, t().s_normal, "#15803d", "#e7f6ec")}${big(nOut - nCrit, t().lp_out, "#b45309", "#fef3e2")}${big(nCrit, t().s_critical, "#dc2626", "#fdecec")}</div>
+        ${qr ? `<div style="text-align:center;flex-shrink:0;width:96px"><img src="${qr}" style="width:76px;height:76px;background:#fff;padding:5px;border-radius:10px;border:1px solid ${LINE}" alt=""><div style="font-size:9.5px;color:${MU};margin-top:3px">${t().lp_scan}</div></div>` : ""}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px">
+        ${card(I2.user, t().lp_patient, kv(t().patient, esc(T(r.patient) || "—")) + kv(t().lp_file, ltr(r.mrn || "—")) + kv(t().mobile, ltr(r.mobile || "—")))}
+        ${card(I2.flask, t().lp_sample, kv(t().st_collected, ltr(when(col))) + kv(t().st_received, ltr(when(rcv))) + kv(t().lp_resAt, ltr(when(rsl))))}
+        ${card(I2.doc, t().lp_doctor, kv(t().lp_ordered, esc(doc ? T(doc.name) : who(r.byDoctor) || "—")) + kv(t().lp_apBy, esc(ap ? who(ap.by) : "—")) + kv(t().lp_apAt, ltr(when(ap))))}
+      </div>
+
+      <div class="pdf-avoid" style="margin-top:10px;border:1px solid ${LINE};border-radius:12px;overflow:hidden">
+        <div style="padding:12px 16px 2px">${head(I2.list, t().lp_results)}</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px">
+          <tr style="background:${SOFT};color:#44545a"><th style="text-align:${al};padding:8px 14px;font-weight:600">${t().cName}</th><th style="text-align:center;padding:8px 8px;font-weight:600">${t().cRes}</th><th style="text-align:${al};padding:8px 8px;font-weight:600">${t().cRange}</th><th style="text-align:center;padding:8px 8px;font-weight:600">${t().cStatus}</th><th style="text-align:center;padding:8px 14px;font-weight:600">${t().cPos}</th></tr>
+          ${ans.map(a => { const s = st(a), [fg, bg] = COL[s]; return `<tr${s !== "normal" ? ` style="background:${s === "critical" ? "#fff8f8" : "#fffcf6"}"` : ""}>
+            <td style="padding:6px 14px;border-top:1px solid #eef2f3"><b style="font-weight:600">${esc(T(a.name))}</b><div style="color:${MU};font-size:10px">${ltr(a.code)}</div></td>
+            <td style="padding:6px 8px;border-top:1px solid #eef2f3;text-align:center;white-space:nowrap"><b style="font-size:14px;color:${fg}">${ltr(fmtV(res[a.code]))}</b> <span style="color:${MU};font-size:10.5px">${ltr(a.unit)}</span></td>
+            <td style="padding:6px 8px;border-top:1px solid #eef2f3;white-space:nowrap;color:#44545a">${ltr(rangeTxt(a) + " " + a.unit)}</td>
+            <td style="padding:6px 8px;border-top:1px solid #eef2f3;text-align:center"><span style="display:inline-block;padding:3px 10px;border-radius:11px;background:${bg};color:${fg};font-weight:700;font-size:10.5px">${t()["s_" + s]}</span></td>
+            <td style="padding:6px 14px;border-top:1px solid #eef2f3;text-align:center">${bar(a)}</td></tr>`; }).join("")}
+        </table>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;margin-top:10px">
+        <div class="pdf-avoid" style="border:1px solid #bfe3cb;border-radius:12px;padding:12px 14px;background:#f6fcf8">${head(I2.note, t().lp_docNote)}
+          <div style="font-size:12px;color:#2c3d43;line-height:1.6">${esc((ap && ap.data && ap.data.docNote) || t().lp_noNote)}</div>
+          ${(it.docNotes || []).map(n => `<div style="font-size:11.5px;color:#2c3d43;margin-top:6px;padding-top:6px;border-top:1px dashed #bfe3cb">${esc(n.text)}</div>`).join("")}
+          <div style="margin-top:8px;font-size:11px;color:#15803d;font-weight:600">${ic(I2.shield)} ${esc(ap ? tx("approvedBy", { n: who(ap.by), t: "" }).replace(/ · $/, "") : "")}</div></div>
+        <div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:12px 14px">${head(I2.info, t().lp_read)}
+          <div style="display:grid;gap:6px;font-size:11.5px">
+            ${[["normal", t().lp_rN], ["high", t().lp_rH], ["critical", t().lp_rC]].map(([k, d]) => `<div style="display:flex;gap:8px;align-items:flex-start"><span style="width:10px;height:10px;border-radius:50%;background:${COL[k][0]};margin-top:4px;flex-shrink:0"></span><span><b style="font-weight:600">${t()["s_" + k]}${k === "high" ? " / " + t().s_low : ""}</b> · <span style="color:${MU}">${esc(d)}</span></span></div>`).join("")}
+            <div style="color:${MU};font-size:10.5px;margin-top:2px">${esc(t().refNote)}</div>
+          </div></div>
+      </div>
+
+      <div style="margin-top:10px;font-size:11px;color:#44545a">${esc(t().lp_care)}</div>
+      <div style="margin-top:6px;padding-top:8px;border-top:1px solid ${LINE};display:flex;justify-content:space-between;gap:12px;font-size:10px;color:#8a979c">
+        <span>${esc(t().lp_foot)}</span><span>${esc(t().lp_issued)} ${ltr(issued)}</span></div>
+    </div>`;
+  }
+  async function downloadLabPdf(r, it) {
+    const file = `Mada-Care-Lab-Results-${r.id}.pdf`, btn = $("dlRes");
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1";
+    btn.disabled = true; toast(t().pdfMaking);
+    // The QR opens the patient's booking page. The PDF is still made if the QR library can't load.
+    let qr = ""; try { await withTimeout(loadQr(), 6000); qr = qrImg(new URL("pay.html?id=" + encodeURIComponent(r.orderId), location.href).href); } catch (e) {}
+    wrap.innerHTML = labPdfHtml(r, it, qr);
+    document.body.appendChild(wrap);
+    if (current === "ar") fixArabic(wrap);
+    // The page is drawn from the top: when the page is scrolled down the PDF comes out blank.
+    const sy = window.scrollY; window.scrollTo(0, 0);
+    try {
+      await loadH2p();
+      await withTimeout(window.html2pdf().set({ margin: [6, 6], filename: file, pagebreak: { mode: ["css"] }, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save(), 20000);
+      toast(tx("pdfDone", { f: file }));
+    } catch (e) {
+      // No PDF library (offline): open the same page for the browser's "Save as PDF".
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().pdfFail);
+    } finally { wrap.remove(); btn.disabled = false; window.scrollTo(0, sy); }
+  }
+
+  const content = $("content");
+  content.addEventListener("input", e => {
+    const inp = e.target.closest("[data-res]"); if (!inp) return;
+    inp.value = inp.value.replace(/[^\d.]/g, "");
+    const a = Object.values(MadaMedical.ANALYTES).flat().find(x => x.code === inp.dataset.res), s = MadaMedical.labStatus(a, inp.value), pill = $("st-" + a.code);
+    pill.className = "pill " + (s ? PILL[s] : ""); pill.innerHTML = s ? `<span class="dot"></span>${t()["s_" + s]}` : "—";
+  });
+  content.addEventListener("change", e => {
+    if (e.target.id === "repFile") { const f = e.target.files[0]; $("repName").textContent = f ? f.name : t().choose; }
+    if (e.target.matches("[data-pick]")) { picked = [...document.querySelectorAll("[data-pick]:checked")].map(c => c.dataset.pick); render(); }
+  });
+  content.addEventListener("click", async e => {
+    const r = getR(), it = getIt(r); if (!it) return;
+    const tb = e.target.closest("[data-track]");
+    if (tb) { MadaMedical.advance(id, itemId, me.name, null); render(); toast(tx("trackSaved", { s: t()["st_" + tb.dataset.track] })); return; }
+    if (e.target.closest("#demoNext")) {
+      const nk = S[it.step + 1];
+      if (nk === "resulted") { // sample values a lab system might send
+        const SAMPLE_V = { HGB: 13.8, WBC: 11.2, PLT: 450, LYM: 18, GLU: 96, A1C: 7.4, CHOL: 185, LDL: 142, HDL: 45, TG: 160, CREA: 0.9, UREA: 30, VITD: 18, ALT: 32, AST: 28, ALP: 90, TBIL: 0.8 };
+        const tests = (it.tests && it.tests.length) ? it.tests : ["CBC"], results = {};
+        tests.flatMap(c => MadaMedical.ANALYTES[c] || []).forEach(a => results[a.code] = SAMPLE_V[a.code] != null ? SAMPLE_V[a.code] : a.high);
+        MadaMedical.patchItem(id, itemId, { tests, results, enteredBy: { en: "Nurse Huda Al-Otaibi", ar: "الممرضة هدى العتيبي" }, enteredAt: new Date().toISOString() });
+      }
+      const by = nk === "reviewed" ? (MadaOrders.DOCTORS.find(d => d.id === r.doctorId) || {}).name || r.byDoctor : nk === "received" ? { en: "Lab system", ar: "نظام المختبر" } : { en: "Nurse Huda Al-Otaibi", ar: "الممرضة هدى العتيبي" };
+      MadaMedical.advance(id, itemId, by, nk === "reviewed" ? { docNote: t().demoDocNote } : null);
+      render(); toast(tx("trackSaved", { s: t()["st_" + nk] })); return;
+    }
+    if (e.target.closest("#demoAge")) { // demo only: pretend the sample reached the lab 25 hours ago
+      MadaMedical.patchItem(id, itemId, x => ({ log: x.log.map(l => S[l.step] === "received" ? { ...l, at: new Date(Date.now() - 25 * 3600000).toISOString() } : S[l.step] === "collected" ? { ...l, at: new Date(Date.now() - 26 * 3600000).toISOString() } : l) }));
+      render(); return;
+    }
+    const row = e.target.closest("[data-an]");
+    if (row) { selAn = row.dataset.an; render(); $("resSec").scrollIntoView({ block: "start", behavior: "smooth" }); return; }
+    if (e.target.closest("#resEdit")) { editing = true; render(); return; }
+    if (e.target.closest("#resCancel")) { editing = false; picked = null; render(); return; }
+    if (e.target.closest("#resSave")) {
+      const results = {}; let bad = false;
+      document.querySelectorAll("[data-res]").forEach(inp => { const v = inp.value.trim(); if (v === "" || isNaN(v)) { bad = true; inp.style.borderColor = "var(--red)"; } else results[inp.dataset.res] = +v; });
+      const err = $("resErr");
+      if (bad) { err.textContent = t().fillAll; err.hidden = false; return; }
+      const f = $("repFile").files[0]; let report = it.report || null;
+      if (f) {
+        if (f.size > 1.5 * 1024 * 1024) { err.textContent = t().tooBig; err.hidden = false; return; }
+        const key = `mada-mr-file-${id}-${itemId}-report`;
+        try { MadaStore.set(key, await readFile(f)); } catch (er) { err.textContent = t().noRoom; err.hidden = false; return; }
+        report = { name: f.name, type: f.type, size: f.size, key, at: new Date().toISOString(), by: me.name };
+      }
+      // TODO: in the live system the nurse's entry comes from the lab system (or is typed here and sent to it).
+      const tests = picked || it.tests;
+      MadaMedical.patchItem(id, itemId, { results, report, tests, enteredBy: me.name, enteredAt: new Date().toISOString() });
+      if (stepOf(it) === "received") MadaMedical.advance(id, itemId, me.name, null);
+      editing = false; picked = null; render(); toast(t().resSaved); return;
+    }
+    if (e.target.closest("#docApprove") || e.target.closest("#docNoteOnly")) {
+      const note = $("docNote").value.trim(), approve = !!e.target.closest("#docApprove"), dn = docName(r) || me.name;
+      if (!approve && !note) { $("docErr").textContent = t().needNote; $("docErr").hidden = false; return; }
+      // TODO: the doctor approves from the doctors app; this panel stands in for it in the demo.
+      if (approve) MadaMedical.advance(id, itemId, dn, note ? { docNote: note } : null);
+      else MadaMedical.patchItem(id, itemId, x => ({ docNotes: [...(x.docNotes || []), { by: dn, at: new Date().toISOString(), text: note }] }));
+      render(); toast(approve ? t().approvedToast : t().noteToast); return;
+    }
+    if (e.target.closest("[data-open-file]")) { openStored(it.report, false); return; }
+    if (e.target.closest("[data-dl-file]")) { openStored(it.report, true); return; }
+    if (e.target.closest("#dlRes")) { downloadLabPdf(r, it); return; }
+    if (e.target.closest("#escBtn")) {
+      const note = $("escNote").value.trim();
+      if (!note) { $("escErr").textContent = t().needEsc; $("escErr").hidden = false; return; }
+      // TODO: notify the supervisor (in-app alert, SMS or email) when an escalation is raised.
+      MadaMedical.patchItem(id, itemId, x => ({ escalations: [...(x.escalations || []), { note, by: me.name, at: new Date().toISOString() }] }));
+      render(); toast(t().escSaved); return;
+    }
+    const rs = e.target.closest("[data-resolve]");
+    if (rs) {
+      const i = +rs.dataset.resolve, note = ($("resNote" + i).value || "").trim();
+      MadaMedical.patchItem(id, itemId, x => ({ escalations: x.escalations.map((q, j) => j === i ? { ...q, resolved: { by: me.name, at: new Date().toISOString(), note } } : q) }));
+      render(); toast(t().resolvedToast);
+    }
+  });
+
+  window.addEventListener("storage", e => {
+    if (e.key && e.key !== "mada-medical" && e.key !== "mada-orders") return;
+    const a = document.activeElement; if (a && (a.tagName === "TEXTAREA" || a.tagName === "INPUT") && a.value) return;
+    render();
+  });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = (lang === "ar" ? "مدى كير | تفاصيل التحاليل" : "Mada Care | Lab Test Details");
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  MadaMedical.linkBookings();
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  setInterval(() => { const a = document.activeElement; if (!(a && (a.tagName === "TEXTAREA" || a.tagName === "INPUT"))) render(); }, 60000);
+</script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Policies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Policies ---------- */
+  .pol-tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .pol-tabs button { flex: none; height: 44px; padding: 0 16px; border: 0; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .pol-tabs button[aria-selected="true"] { color: var(--primary); border-color: var(--primary); }
+  .pol { padding: 22px 24px; display: grid; gap: 16px; }
+  .pol-h { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+  .pol-h h2 { font-size: 18px; font-weight: 600; }
+  .pol-h p { display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; color: var(--muted); }
+  .pol-h p svg { width: 15px; height: 15px; }
+  .pol-meta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pol-meta label { display: grid; gap: 5px; font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .pol-meta label i, .col label i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .pol-meta .in { width: 170px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .ta { height: auto; min-height: 140px; padding: 10px 12px; line-height: 1.7; resize: vertical; }
+  .col .ta { font-family: inherit; }
+  .col[dir="rtl"] { font-family: "Tajawal", "Inter", system-ui, sans-serif; }
+  .col[dir="ltr"] { font-family: "Inter", "Tajawal", system-ui, sans-serif; }
+  .sec { border: 1px solid var(--border); border-radius: 12px; padding: 16px; background: #fbfcfc; }
+  .intro-b { background: #f6fbf9; border-color: #cfe7de; }
+  .intro-b .opt { font-style: normal; font-weight: 400; color: var(--muted); font-size: 12.5px; }
+  .intro-b .hint { font-size: 13px; color: var(--muted); margin: -6px 0 12px; }
+  .secs-t { font-size: 15px; font-weight: 700; color: #15304a; margin: 6px 0 -4px; }
+  .sec.bad { border-color: #f3b4b4; background: #fffafa; }
+  .sec-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .sec-h b { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 600; }
+  .sec-h b span { width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-size: 12.5px; }
+  .sec-a { display: flex; gap: 6px; }
+  .ib { width: 34px; height: 34px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; display: grid; place-items: center; cursor: pointer; color: #44545a; }
+  .ib svg { width: 16px; height: 16px; }
+  .ib:disabled { opacity: .4; cursor: default; }
+  .ib.red { color: var(--red); border-color: #f3c4c4; }
+  .sec-g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .col { display: grid; gap: 6px; align-content: start; }
+  .col label { font-size: 12.5px; font-weight: 600; color: #44545a; margin-top: 4px; }
+  .err { display: block; margin-top: 6px; font-size: 12.5px; color: var(--red); }
+  .add-sec { display: flex; align-items: center; justify-content: center; gap: 8px; height: 48px; border: 1.5px dashed #b9d9cf; border-radius: 12px; background: #f6fbf9; color: var(--primary); font-size: 14px; font-weight: 600; cursor: pointer; }
+  .add-sec svg { width: 18px; height: 18px; }
+  .pol-f { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid #eef2f3; }
+  .pol-st { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+  .pol-st svg { width: 16px; height: 16px; color: var(--primary); }
+  .pol-st .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+  .pol-b { display: flex; gap: 10px; }
+  @media (max-width: 760px) {
+    .pol { padding: 16px; }
+    .sec-g { grid-template-columns: minmax(0, 1fr); }
+    .pol-meta, .pol-meta label, .pol-meta .in { width: 100%; }
+    .pol-b, .pol-b .btn { width: 100%; } .pol-b .btn { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" aria-current="page" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></span>
+      <div><h1 data-i18n="title">Policies</h1><p data-i18n="subtitle">Write the approved Terms &amp; Conditions and Privacy text that doctors see in the Doctor Portal.</p></div>
+    </div>
+  </div>
+  <div class="pol-tabs" role="tablist" id="tabs"></div>
+  <section class="card pol" id="ed"></section>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Doctor Portal policy text, written here by the admin and shown on doctor-account.html (#terms, #privacy).
+  // MadaStore "mada-policies": { terms|privacy: { version, date, intro: {en, ar}, sections: [{ title: {en, ar}, text: {en, ar} }], updatedAt, updatedBy } }.
+  // Text is kept as typed; a blank line starts a new paragraph.
+  // TODO: keep policy versions in the backend so each doctor's acceptance can be tied to a version.
+  const KEY = "mada-policies", DOCS = ["terms", "privacy"];
+  // Privacy starts with the four headings the Doctor Portal asks for; the admin can rename, add or remove sections.
+  const START = {
+    terms: [{ title: { en: "", ar: "" } }],
+    privacy: [
+      { title: { en: "Patient Privacy & Confidentiality", ar: "خصوصية المريض وسرية معلوماته" } },
+      { title: { en: "Protection of Medical Records", ar: "حماية السجلات الطبية" } },
+      { title: { en: "Authorized Access to Patient Information", ar: "الوصول المصرح به لمعلومات المريض" } },
+      { title: { en: "Secure Handling of Patient Documents & Images", ar: "التعامل الآمن مع مستندات وصور المريض" } }
+    ]
+  };
+  const blankSec = s => ({ title: { en: "", ar: "", ...(s && s.title) }, text: { en: "", ar: "", ...(s && s.text) } });
+  const stored = () => { try { return MadaStore.getJSON(KEY) || {}; } catch (e) { return {}; } };
+  const load = k => { const d = stored()[k]; const x = d && d.sections && d.sections.length ? JSON.parse(JSON.stringify(d)) : { version: "", date: "", sections: START[k].map(blankSec) }; x.intro = { en: "", ar: "", ...x.intro }; return x; };
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Policies", subtitle: "Write the approved Terms & Conditions and Privacy text that doctors see in the Doctor Portal.",
+      terms: "Terms & Conditions", privacy: "Privacy & Confidentiality", shownAt: "Shown to doctors in My Account",
+      version: "Version", versionPh: "e.g. 1.0", date: "Effective Date", optional: "(optional)",
+      sec: "Section {n}", titleEn: "Title (English)", titleAr: "Title (Arabic)", textEn: "Text (English)", textAr: "Text (Arabic)",
+      titlePhEn: "Section title", titlePhAr: "عنوان القسم", textPhEn: "Write the approved text. Leave a blank line between paragraphs.", textPhAr: "اكتب النص المعتمد. اترك سطراً فارغاً بين الفقرات.",
+      addSec: "Add Section", removeSec: "Remove section", removeQ: "Remove this section?", up: "Move up", down: "Move down",
+      save: "Save & Publish", discard: "Discard Changes", unsaved: "Unsaved changes", saved: "Published. Doctors now see the new text.", savedAt: "Last published {d} by {n}", never: "Not published yet. Doctors see “Approved text not added yet”.",
+      errPair: "Write both the title and the text for this language, or leave both empty.", errEmpty: "Add the title and text in at least one language.", fixErr: "Please complete the highlighted sections.", noSecs: "Add at least one section.", storeErr: "Couldn't save. Please try again.",
+      preview: "Preview in Doctor Portal",
+      introT: "Introduction", introHint: "Shown at the top of the page, before the sections. Each section opens and closes on the doctor's screen.", introEn: "Introduction (English)", introAr: "Introduction (Arabic)", introPhEn: "Write the approved opening paragraph.", introPhAr: "اكتب الفقرة الافتتاحية المعتمدة.", secsT: "Sections"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "السياسات", subtitle: "اكتب نص الشروط والأحكام والخصوصية المعتمد اللي يشوفه الأطباء في بوابة الطبيب.",
+      terms: "الشروط والأحكام", privacy: "الخصوصية والسرية", shownAt: "تظهر للأطباء في صفحة حسابي",
+      version: "الإصدار", versionPh: "مثال: 1.0", date: "تاريخ السريان", optional: "(اختياري)",
+      sec: "القسم {n}", titleEn: "العنوان (إنجليزي)", titleAr: "العنوان (عربي)", textEn: "النص (إنجليزي)", textAr: "النص (عربي)",
+      titlePhEn: "Section title", titlePhAr: "عنوان القسم", textPhEn: "Write the approved text. Leave a blank line between paragraphs.", textPhAr: "اكتب النص المعتمد. اترك سطراً فارغاً بين الفقرات.",
+      addSec: "إضافة قسم", removeSec: "حذف القسم", removeQ: "تبي تحذف هذا القسم؟", up: "تحريك للأعلى", down: "تحريك للأسفل",
+      save: "حفظ ونشر", discard: "تجاهل التغييرات", unsaved: "فيه تغييرات ما انحفظت", saved: "تم النشر. الأطباء يشوفون النص الجديد الحين.", savedAt: "آخر نشر {d} بواسطة {n}", never: "ما انشر للحين. الأطباء يشوفون «النص المعتمد ما انضاف للحين».",
+      errPair: "اكتب العنوان والنص لهذي اللغة، أو خلهم الاثنين فاضيين.", errEmpty: "أضف العنوان والنص بلغة وحدة على الأقل.", fixErr: "كمّل الأقسام المحددة بالأحمر.", noSecs: "أضف قسم واحد على الأقل.", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
+      preview: "معاينة في بوابة الطبيب",
+      introT: "المقدمة", introHint: "تظهر أعلى الصفحة قبل الأقسام. كل قسم ينفتح وينقفل عند الطبيب.", introEn: "المقدمة (إنجليزي)", introAr: "المقدمة (عربي)", introPhEn: "Write the approved opening paragraph.", introPhAr: "اكتب الفقرة الافتتاحية المعتمدة.", secsT: "الأقسام"
+    }
+  };
+  let current = "en", doc = "terms", d = load("terms"), dirty = false, tried = false;
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { plus: '<path d="M12 5v14M5 12h14"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>',
+    check: '<path d="m5 12 5 5 9-10"/>', eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>' };
+  const fmt = iso => new Date(iso).toLocaleString(current === "ar" ? "ar-SA-u-nu-latn" : "en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+
+  // A language is complete when both title and text are written; half-filled is an error.
+  function secErr(s) {
+    const has = l => [s.title[l].trim(), s.text[l].trim()], e = {};
+    ["en", "ar"].forEach(l => { const [a, b] = has(l); if (!!a !== !!b) { e[l] = true; e[l + (a ? "Text" : "Title")] = true; } });
+    if (!e.en && !e.ar && !["en", "ar"].some(l => has(l)[0])) e.empty = true;
+    return e;
+  }
+  function render() {
+    $("tabs").innerHTML = DOCS.map(k => `<button type="button" role="tab" aria-selected="${k === doc}" data-doc="${k}">${t()[k]}</button>`).join("");
+    const pub = stored()[doc], errs = d.sections.map(s => tried ? secErr(s) : {});
+    const ta = (id, v, ph, dir, bad) => `<textarea class="in ta ${bad ? "bad" : ""}" data-f="${id}" dir="${dir}" placeholder="${esc(ph)}" rows="6">${esc(v)}</textarea>`;
+    const ti = (id, v, ph, dir, bad) => `<input class="in ${bad ? "bad" : ""}" data-f="${id}" dir="${dir}" value="${esc(v)}" placeholder="${esc(ph)}" maxlength="120">`;
+    $("ed").innerHTML = `<div class="pol-h"><div><h2>${t()[doc]}</h2><p>${svg(IC.eye, 2)}${t().shownAt}</p></div>
+        <div class="pol-meta"><label><span>${t().version} <i>${t().optional}</i></span><input class="in" id="ver" value="${esc(d.version)}" placeholder="${t().versionPh}" maxlength="20" dir="ltr"></label>
+        <label><span>${t().date} <i>${t().optional}</i></span><input class="in" type="date" id="eff" value="${esc(d.date)}"></label></div></div>
+      <div class="sec intro-b"><div class="sec-h"><b>${t().introT} <i class="opt">${t().optional}</i></b></div><p class="hint">${t().introHint}</p>
+        <div class="sec-g"><div class="col" dir="ltr"><label>${t().introEn}</label><textarea class="in ta" data-in="en" dir="ltr" rows="4" placeholder="${esc(t().introPhEn)}">${esc(d.intro.en)}</textarea></div>
+          <div class="col" dir="rtl"><label>${t().introAr}</label><textarea class="in ta" data-in="ar" dir="rtl" rows="4" placeholder="${esc(t().introPhAr)}">${esc(d.intro.ar)}</textarea></div></div></div>
+      <h3 class="secs-t">${t().secsT}</h3>
+      ${d.sections.map((s, i) => { const e = errs[i]; return `<div class="sec ${e.empty || e.en || e.ar ? "bad" : ""}" data-i="${i}">
+        <div class="sec-h"><b><span>${i + 1}</span>${tx("sec", { n: i + 1 })}</b><div class="sec-a">
+          <button type="button" class="ib" data-act="up" ${i ? "" : "disabled"} aria-label="${t().up}" title="${t().up}">${svg(IC.up, 2)}</button>
+          <button type="button" class="ib" data-act="down" ${i < d.sections.length - 1 ? "" : "disabled"} aria-label="${t().down}" title="${t().down}">${svg(IC.down, 2)}</button>
+          <button type="button" class="ib red" data-act="del" aria-label="${t().removeSec}" title="${t().removeSec}">${svg(IC.trash, 2)}</button></div></div>
+        <div class="sec-g">
+          <div class="col" dir="ltr"><label>${t().titleEn}</label>${ti("title.en", s.title.en, t().titlePhEn, "ltr", e.enTitle || e.empty)}<label>${t().textEn}</label>${ta("text.en", s.text.en, t().textPhEn, "ltr", e.enText || e.empty)}${e.en ? `<span class="err">${t().errPair}</span>` : ""}</div>
+          <div class="col" dir="rtl"><label>${t().titleAr}</label>${ti("title.ar", s.title.ar, t().titlePhAr, "rtl", e.arTitle)}<label>${t().textAr}</label>${ta("text.ar", s.text.ar, t().textPhAr, "rtl", e.arText)}${e.ar ? `<span class="err">${t().errPair}</span>` : ""}</div>
+        </div>${e.empty ? `<span class="err">${t().errEmpty}</span>` : ""}</div>`; }).join("")}
+      <button type="button" class="add-sec" id="addSec">${svg(IC.plus, 2.2)}${t().addSec}</button>
+      ${foot(pub)}`;
+  }
+  function foot(pub) {
+    return `<div class="pol-f" id="polF"><p class="pol-st">${dirty ? `<span class="dot"></span>${t().unsaved}` : pub && pub.updatedAt ? `${svg(IC.check, 2.4)}${tx("savedAt", { d: fmt(pub.updatedAt), n: esc(pub.updatedBy && (pub.updatedBy[current] || pub.updatedBy.en) || "") })}` : `${svg(IC.info, 2)}${t().never}`}</p>
+        <div class="pol-b">${dirty ? `<button type="button" class="btn btn-ghost" id="discard">${t().discard}</button>` : ""}<button type="button" class="btn btn-primary" id="save">${svg(IC.check, 2.2)}${t().save}</button></div></div>`;
+  }
+  function read() {
+    d.version = $("ver").value.trim(); d.date = $("eff").value;
+    document.querySelectorAll("[data-in]").forEach(f => d.intro[f.dataset.in] = f.value);
+    document.querySelectorAll(".sec[data-i]").forEach(el => { const s = d.sections[+el.dataset.i]; el.querySelectorAll("[data-f]").forEach(f => { const [a, l] = f.dataset.f.split("."); s[a][l] = f.value; }); });
+  }
+  function save() {
+    read(); tried = true;
+    if (!d.sections.length) return toast(t().noSecs);
+    if (d.sections.some(s => Object.keys(secErr(s)).length)) { render(); toast(t().fixErr); const b = document.querySelector(".sec[data-i].bad"); if (b) b.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+    const clean = s => ({ title: { en: s.title.en.trim(), ar: s.title.ar.trim() }, text: { en: s.text.en.replace(/\s+$/, ""), ar: s.text.ar.replace(/\s+$/, "") } });
+    const all = stored(); all[doc] = { version: d.version, date: d.date, intro: { en: d.intro.en.trim(), ar: d.intro.ar.trim() }, sections: d.sections.map(clean), updatedAt: new Date().toISOString(), updatedBy: me ? me.name : null };
+    try { MadaStore.setJSON(KEY, all); if (!MadaStore.getJSON(KEY) || !MadaStore.getJSON(KEY)[doc]) throw 0; } catch (e) { return toast(t().storeErr); }
+    d = load(doc); dirty = false; tried = false; render(); toast(t().saved);
+  }
+  document.addEventListener("input", e => { if (e.target.closest("#ed") && !dirty) { dirty = true; $("polF").outerHTML = foot(stored()[doc]); } });
+  $("ed").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.id === "save") return save();
+    if (b.id === "discard") { d = load(doc); dirty = false; tried = false; return render(); }
+    if (b.id === "addSec") { read(); d.sections.push(blankSec()); dirty = true; render(); const n = document.querySelectorAll(".sec[data-i]"); n[n.length - 1].scrollIntoView({ block: "center", behavior: "smooth" }); n[n.length - 1].querySelector("input").focus({ preventScroll: true }); return; }
+    const i = +b.closest(".sec").dataset.i; read();
+    if (b.dataset.act === "del") { const s = d.sections[i]; if ((s.title.en + s.title.ar + s.text.en + s.text.ar).trim() && !confirm(t().removeQ)) return; d.sections.splice(i, 1); }
+    else { const j = b.dataset.act === "up" ? i - 1 : i + 1; [d.sections[i], d.sections[j]] = [d.sections[j], d.sections[i]]; }
+    dirty = true; render();
+  });
+  $("tabs").addEventListener("click", e => { const b = e.target.closest("[data-doc]"); if (!b || b.dataset.doc === doc) return; if (dirty) { read(); if (!confirm(t().unsaved + ". " + t().discard + "?")) return; } doc = b.dataset.doc; d = load(doc); dirty = false; tried = false; history.replaceState(null, "", "#" + doc); render(); });
+  window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    if ($("ver")) read();
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | السياسات" : "Mada Care | Policies";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  if (location.hash === "#privacy") { doc = "privacy"; d = load(doc); }
+  setLang(saved);
+</script>
+</body>
+</html>

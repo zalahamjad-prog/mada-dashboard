@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Add Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Stats ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .stat { display: flex; align-items: center; gap: 16px; padding: 18px 20px; }
+  .stat-icon { width: 54px; height: 54px; border-radius: 12px; display: grid; place-items: center; }
+  .stat-icon svg { width: 26px; height: 26px; }
+  .s-green { background: var(--primary-soft); color: var(--primary); }
+  .s-orange { background: var(--orange-soft); color: var(--orange); }
+  .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); }
+  .s-purple { background: var(--purple-soft); color: var(--purple); }
+  .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .stat-label { display: block; font-size: 13px; color: #44545a; font-weight: 500; }
+  .stat-value { display: block; font-size: 24px; font-weight: 700; margin: 2px 0; }
+  .stat-note { display: block; font-size: 12px; color: var(--muted); }
+
+  /* ---------- Filters ---------- */
+  .filters { padding: 18px 20px; display: grid; gap: 16px; }
+  .f-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr) minmax(0, .85fr) minmax(0, 1fr) minmax(0, 1.6fr); gap: 16px 20px; align-items: end; }
+  .f-label { display: block; margin-bottom: 8px; font-size: 12.5px; font-weight: 600; color: #2c3d43; }
+  .field { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; width: 100%; }
+  .field:focus-within, select.field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .field svg { width: 17px; height: 17px; color: var(--muted); }
+  .field input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13px; }
+  .field input::placeholder { color: #8a979c; }
+  .date-f { position: relative; padding-inline-end: 4px; }
+  .date-f input[type="text"] { font-variant-numeric: tabular-nums; }
+  .cal { width: 34px; height: 34px; display: grid; place-items: center; border: 0; background: none; border-radius: 6px; cursor: pointer; color: var(--muted); }
+  .cal:hover { background: var(--primary-soft); color: var(--primary); }
+  .native { position: absolute; inset-inline-end: 0; bottom: 0; width: 34px; height: 1px; opacity: 0; pointer-events: none; border: 0; padding: 0; }
+  .field.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1); }
+  .f-err { margin-top: 6px; font-size: 12px; color: var(--red); }
+  select.field { appearance: none; -webkit-appearance: none; cursor: pointer; font-size: 13px; font-weight: 500; outline: 0; padding-inline-end: 32px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; }
+  [dir="rtl"] select.field { background-position: left 12px center; }
+  .f-search { align-self: end; }
+  .f-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .f-foot .push { margin-inline-start: auto; display: flex; gap: 10px; }
+  .more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 20px; padding-top: 16px; border-top: 1px dashed var(--border); }
+  .btn[aria-expanded="true"] { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .f-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--primary); color: #fff; font-size: 10.5px; line-height: 18px; text-align: center; }
+
+  /* ---------- List ---------- */
+  .list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px 14px; flex-wrap: wrap; }
+  .list-head h2 { font-size: 17px; font-weight: 600; }
+  .list-head p { margin-top: 3px; font-size: 13px; color: var(--muted); }
+  .list-tools { display: flex; gap: 10px; position: relative; }
+  .cols-menu { position: absolute; top: calc(100% + 6px); inset-inline-end: 0; z-index: 10; width: 220px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 28px rgba(16,35,43,.1); padding: 6px; }
+  .cols-menu label { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+  .cols-menu label:hover { background: #f5f8f8; }
+  .cols-menu input { accent-color: var(--primary); width: 15px; height: 15px; }
+  .table-wrap { padding: 0 20px 6px; overflow-x: auto; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; }
+  th { text-align: start; padding: 0; font-size: 12.5px; font-weight: 600; color: #2c3d43; background: #f5f8f8; white-space: nowrap; }
+  th:first-child { border-start-start-radius: 8px; border-end-start-radius: 8px; }
+  th:last-child { border-start-end-radius: 8px; border-end-end-radius: 8px; }
+  th .sort { display: inline-flex; align-items: center; gap: 8px; width: 100%; padding: 13px 14px; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; text-align: start; }
+  th .sort svg { width: 13px; height: 13px; color: #9aa7ab; }
+  th .sort[aria-sort="ascending"] svg, th .sort[aria-sort="descending"] svg { color: var(--primary); }
+  th.plain { padding: 13px 14px; }
+  td { padding: 13px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tbody tr:hover td { background: #fafcfc; }
+  .oid { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .oid:hover { text-decoration: underline; }
+  .bid { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .svc { display: flex; align-items: center; gap: 10px; }
+  .svc-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; }
+  .svc-icon svg { width: 17px; height: 17px; }
+  .sub { display: block; margin-top: 2px; font-size: 11.5px; color: var(--muted); }
+  .muted { color: var(--muted); }
+  .sub.rs { color: var(--orange); font-weight: 600; }
+  .rs-item s { color: var(--muted); }
+  .mobile { direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+  .nowrap { white-space: nowrap; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-green { background: var(--green-soft); color: var(--green); }
+  .p-orange { background: var(--orange-soft); color: var(--orange); }
+  .p-red { background: var(--red-soft); color: var(--red); }
+  .p-blue { background: var(--blue-soft); color: var(--blue); }
+  .act { width: 32px; height: 32px; display: inline-grid; place-items: center; border: 1px solid #e0e7e9; border-radius: 8px; background: #fff; color: #44545a; text-decoration: none; }
+  .act:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .act svg { width: 16px; height: 16px; }
+  td.c-acts, th.c-acts { text-align: center; }
+
+  /* ---------- Empty state ---------- */
+  .empty { display: grid; justify-items: center; text-align: center; padding: 30px 20px 40px; }
+  .empty-art { width: 170px; height: 140px; }
+  .empty h3 { margin-top: 10px; font-size: 21px; font-weight: 700; }
+  .empty p { margin-top: 8px; font-size: 14px; line-height: 1.6; color: #44545a; max-width: 420px; }
+  .empty .btn { margin-top: 22px; height: 46px; padding: 0 30px; font-size: 14.5px; font-weight: 600; }
+  .empty .link { margin-top: 16px; font-size: 13.5px; font-weight: 600; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; cursor: pointer; }
+  .empty.small .empty-art { width: 120px; height: 100px; }
+  .empty.small h3 { font-size: 17px; }
+
+  /* ---------- Time to visit ---------- */
+  .left { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .left svg { width: 14px; height: 14px; }
+  .l-green { color: var(--green); } .l-orange { color: var(--orange); } .l-red { color: var(--red); } .l-blue { color: var(--blue); }
+  .oid-btn { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+
+  @media (max-width: 1180px) {
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .f-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .f-row .f-search { grid-column: 1 / -1; }
+    .user-meta { display: none; }
+  }
+  @media (max-width: 980px) {
+    .table-wrap { padding: 0; }
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-svc { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { text-align: end; }
+    .table-wrap td.c-acts::before { display: none !important; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .page-head .btn { width: 100%; }
+    .stats { gap: 10px; }
+    .stat { padding: 12px; gap: 10px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 10px; }
+    .stat-icon svg { width: 20px; height: 20px; }
+    .stat-value { font-size: 20px; }
+    .filters { padding: 16px; }
+    .f-row, .more { grid-template-columns: minmax(0, 1fr); }
+    .f-foot .push { margin-inline-start: 0; width: 100%; }
+    .f-foot .push .btn, .f-foot > .btn { flex: 1; }
+    .list-head { padding: 16px; }
+    .list-tools { width: 100%; }
+    .list-tools .btn { flex: 1; }
+    .empty h3 { font-size: 19px; }
+    .empty .btn { width: 100%; }
+  }
+  /* Nav scrolls sideways when the links do not fit. */
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .count-tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; background: #f0f3f4; color: #44545a; font-size: 12px; font-weight: 600; margin-inline-start: 10px; vertical-align: middle; }
+  .dir-tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .dir-tools .field { width: 300px; }
+  .dir-tools select.field { width: auto; min-width: 150px; }
+  .pname { font-weight: 600; }
+  .ava { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 12.5px; font-weight: 700; flex: none; }
+  .a-m { background: var(--blue-soft); color: var(--blue); } .a-f { background: #fdecf4; color: #be185d; } .a-x { background: #f0f3f4; color: #5b6b70; }
+  .who { display: flex; align-items: center; gap: 10px; }
+  .p-gray { background: #f0f3f4; color: #5b6b70; }
+  .list-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-top: 1px solid #eef2f3; flex-wrap: wrap; }
+  .per-page { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #44545a; }
+  .per-page select.field { width: 76px; height: 36px; }
+  .pager { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pager button { min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13px; display: grid; place-items: center; }
+  .pager button svg { width: 15px; height: 15px; }
+  [dir="rtl"] .pager .arrow svg { transform: scaleX(-1); }
+  .pager button[aria-current="page"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .pager button:disabled { opacity: .45; cursor: default; }
+  tbody tr.is-new td { background: #f0faf6; }
+  @media (max-width: 1180px) { .stats.three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 760px) {
+    .ph-icon { width: 40px; height: 40px; }
+    .stats.three { grid-template-columns: minmax(0, 1fr); }
+    .dir-tools, .dir-tools .field, .dir-tools select.field, .dir-tools .btn { width: 100%; }
+    .list-foot { padding: 14px 16px; }
+    }
+  /* ---------- Add staff ---------- */
+  main > * { min-width: 0; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+  .back-link svg { width: 16px; height: 16px; }
+  [dir="rtl"] .back-link svg { transform: scaleX(-1); }
+  .form { max-width: 880px; width: 100%; margin-inline: auto; display: grid; gap: 18px; }
+  .sec { padding: 22px; }
+  .sec-h { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .sec-h .n { width: 26px; height: 26px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); font-size: 12.5px; font-weight: 700; display: grid; place-items: center; }
+  .sec-h h2 { font-size: 16px; font-weight: 600; }
+  .sec-p { font-size: 13px; color: var(--muted); margin-bottom: 18px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .f { display: grid; gap: 6px; align-content: start; min-width: 0; }
+  .f.full { grid-column: 1 / -1; }
+  .f > label, .f > .lbl { font-size: 13px; font-weight: 600; }
+  .f .opt { font-weight: 400; color: var(--muted); }
+  .f .req { color: var(--red); }
+  .in, .sel { height: 44px; width: 100%; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; }
+  .in:focus, .sel:focus { outline: 0; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); }
+  .in.ltr { direction: ltr; text-align: start; }
+  [dir="rtl"] .in.ltr { text-align: right; }
+  .hint { font-size: 12px; color: var(--muted); }
+  .err { font-size: 12px; color: var(--red); display: none; }
+  .f.bad .in, .f.bad .sel, .f.bad .chips { border-color: var(--red); }
+  .f.bad .chips { border: 1px solid var(--red); border-radius: 8px; padding: 4px; }
+  .f.bad .err { display: block; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { height: 40px; padding: 0 16px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; cursor: pointer; font-size: 13.5px; }
+  .chip:hover { border-color: #b7c6ca; }
+  .chip[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .chip:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .roles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .role { display: grid; gap: 6px; justify-items: center; text-align: center; padding: 14px 8px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; cursor: pointer; font-size: 13px; font-weight: 500; }
+  .role svg { width: 24px; height: 24px; color: var(--muted); }
+  .role[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .role[aria-checked="true"] svg { color: var(--primary); }
+  .role small { font-size: 11px; font-weight: 400; color: var(--muted); }
+  .photo-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-bottom: 20px; }
+  .photo { width: 96px; height: 96px; border-radius: 50%; background: #f0f3f4; border: 2px dashed #cfd9dc; display: grid; place-items: center; overflow: hidden; color: #9aa7ab; flex: none; }
+  .photo svg { width: 40px; height: 40px; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  .photo.has { border: 2px solid var(--primary-soft); }
+  .photo-acts { display: grid; gap: 8px; }
+  .photo-acts .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+  .btn-link { background: none; border: 0; color: var(--red); cursor: pointer; font-size: 13px; font-weight: 500; padding: 0 6px; }
+  .pw { display: flex; gap: 8px; }
+  .pw .in { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; letter-spacing: .5px; }
+  .icon-btn { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; cursor: pointer; color: #44545a; }
+  .icon-btn:hover { background: #f5f8f8; }
+  .icon-btn svg { width: 18px; height: 18px; }
+  .switch-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 1px solid var(--border); border-radius: 10px; background: #fafcfc; }
+  .switch-row b { display: block; font-size: 14px; }
+  .switch-row span.s { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .switch { position: relative; width: 50px; height: 28px; flex: none; border: 0; border-radius: 14px; background: #cfd9dc; cursor: pointer; transition: background .15s; }
+  .switch::after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: inset-inline-start .15s; }
+  .switch[aria-checked="true"] { background: var(--primary); }
+  .switch[aria-checked="true"]::after { inset-inline-start: 25px; }
+  .switch:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .st-label { font-size: 12.5px; font-weight: 600; margin-inline-end: 10px; }
+  .st-on { color: var(--green); } .st-off { color: var(--muted); }
+  .note { display: flex; gap: 10px; padding: 12px 14px; border-radius: 10px; background: var(--blue-soft); color: #1e4f9c; font-size: 12.5px; line-height: 1.6; margin-top: 16px; }
+  .note svg { width: 18px; height: 18px; margin-top: 1px; }
+  .form-foot { display: flex; justify-content: flex-end; gap: 10px; }
+  /* Saved dialog */
+  .overlay { position: fixed; inset: 0; z-index: 50; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .dlg { width: 100%; max-width: 440px; background: #fff; border-radius: 14px; padding: 26px; display: grid; gap: 14px; text-align: center; }
+  .dlg .ok { width: 56px; height: 56px; border-radius: 50%; background: var(--green-soft); color: var(--green); display: grid; place-items: center; margin: 0 auto; }
+  .dlg .ok svg { width: 28px; height: 28px; }
+  .dlg h3 { font-size: 18px; }
+  .dlg p { font-size: 13px; color: #44545a; line-height: 1.6; }
+  .creds { display: grid; gap: 8px; text-align: start; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #fafcfc; }
+  .creds div { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; }
+  .creds span { color: var(--muted); }
+  .creds b { direction: ltr; unicode-bidi: isolate; font-family: ui-monospace, Menlo, monospace; overflow-wrap: anywhere; }
+  .dlg .acts { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  @media (max-width: 760px) {
+    .sec { padding: 16px; }
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .roles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .form-foot .btn { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" aria-current="page" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <a class="back-link" href="staff.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span data-i18n="back">Back to Staff</span></a>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M3 20a7 7 0 0 1 12.5-4.3"/><path d="M19 14v6M16 17h6"/></svg></span>
+      <div><h1 data-i18n="title">Add Staff Member</h1><p data-i18n="subtitle">Their details, their role, and the account they log in with.</p></div>
+    </div>
+  </div>
+
+  <form class="form" id="form" novalidate>
+    <!-- 1. Staff details -->
+    <section class="card sec">
+      <div class="sec-h"><span class="n">1</span><h2 data-i18n="s1">Staff Details</h2></div>
+      <p class="sec-p" data-i18n="s1p">Who this person is and how to reach them.</p>
+      <div class="photo-row">
+        <div class="photo" id="photoBox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+        <div class="photo-acts">
+          <b style="font-size:13px" data-i18n="photo">Staff photo</b>
+          <div class="row">
+            <label class="btn btn-ghost btn-sm" for="photoIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span id="photoBtnTx" data-i18n="photoAdd">Upload photo</span></label>
+            <button type="button" class="btn-link" id="photoDel" hidden data-i18n="photoDel">Remove</button>
+          </div>
+          <span class="hint" data-i18n="photoHint">JPG or PNG. It shows on their account and in the staff list.</span>
+          <span class="err" id="photoErr" data-i18n="photoErr">Choose an image file.</span>
+          <input type="file" id="photoIn" accept="image/*" hidden>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="f" id="fNameAr"><label for="nameAr"><span data-i18n="nameAr">Full name (Arabic)</span> <span class="req">*</span></label><input class="in" id="nameAr" dir="rtl" autocomplete="off"><span class="err" data-i18n="nameErr">Enter the full name.</span></div>
+        <div class="f" id="fNameEn"><label for="nameEn"><span data-i18n="nameEn">Full name (English)</span> <span class="req">*</span></label><input class="in ltr" id="nameEn" dir="ltr" autocomplete="off"><span class="err" data-i18n="nameErr">Enter the full name.</span></div>
+        <div class="f" id="fMobile"><label for="mobile"><span data-i18n="mobile">Mobile number</span> <span class="req">*</span></label><input class="in ltr" id="mobile" dir="ltr" inputmode="numeric" maxlength="10" placeholder="05XXXXXXXX" autocomplete="off"><span class="err" data-i18n="mobileErr">Enter a 10-digit mobile starting with 05.</span></div>
+        <div class="f" id="fEmail"><label for="email"><span data-i18n="email">Email</span> <span class="opt" data-i18n="optional">(optional)</span></label><input class="in ltr" id="email" dir="ltr" type="email" placeholder="name@madacare.sa" autocomplete="off"><span class="err" data-i18n="emailErr">Enter a valid email.</span></div>
+        <div class="f" id="fIdType"><span class="lbl"><span data-i18n="idType">ID type</span> <span class="req">*</span></span>
+          <div class="chips" role="radiogroup" id="idTypes"><button type="button" class="chip" role="radio" aria-checked="true" data-v="national" data-i18n="id_national">National ID</button><button type="button" class="chip" role="radio" aria-checked="false" data-v="iqama" data-i18n="id_iqama">Iqama</button></div></div>
+        <div class="f" id="fIdNo"><label for="idNo"><span data-i18n="idNo">ID number</span> <span class="req">*</span></label><input class="in ltr" id="idNo" dir="ltr" inputmode="numeric" maxlength="10" autocomplete="off"><span class="err" id="idErr"></span></div>
+        <div class="f full" id="fGender"><span class="lbl"><span data-i18n="gender">Gender</span> <span class="req">*</span></span>
+          <div class="chips" role="radiogroup" id="genders"><button type="button" class="chip" role="radio" aria-checked="false" data-v="m" data-i18n="g_m">Male</button><button type="button" class="chip" role="radio" aria-checked="false" data-v="f" data-i18n="g_f">Female</button></div><span class="err" data-i18n="genderErr">Choose the gender.</span></div>
+      </div>
+    </section>
+
+    <!-- 2. Job -->
+    <section class="card sec">
+      <div class="sec-h"><span class="n">2</span><h2 data-i18n="s2">Job</h2></div>
+      <p class="sec-p" data-i18n="s2p">The role decides what this person sees in the system.</p>
+      <div class="grid">
+        <div class="f full" id="fRole"><span class="lbl"><span data-i18n="role">Role</span> <span class="req">*</span></span>
+          <div class="roles" role="radiogroup" id="roles"></div><span class="err" data-i18n="roleErr">Choose the role.</span></div>
+        <div class="f" id="fSpec" hidden><label for="spec"><span data-i18n="spec">Specialty</span> <span class="req">*</span></label><input class="in" id="spec" autocomplete="off"><span class="err" data-i18n="specErr">Enter the specialty.</span></div>
+        <div class="f" id="fLic" hidden><label for="lic"><span data-i18n="lic">SCFHS license number</span> <span class="req">*</span></label><input class="in ltr" id="lic" dir="ltr" autocomplete="off"><span class="hint" data-i18n="licHint">Saudi Commission for Health Specialties.</span><span class="err" data-i18n="licErr">Enter the license number.</span></div>
+        <div class="f" id="fCity"><label for="city"><span data-i18n="city">City</span> <span class="req">*</span></label><select class="sel" id="city"></select><span class="err" data-i18n="cityErr">Choose the city.</span></div>
+        <div class="f" id="fStart"><label for="start"><span data-i18n="start">Start date</span> <span class="req">*</span></label><input class="in ltr" id="start" type="date" dir="ltr"><span class="err" data-i18n="startErr">Choose the start date.</span></div>
+      </div>
+    </section>
+
+    <!-- 3. Account -->
+    <section class="card sec">
+      <div class="sec-h"><span class="n">3</span><h2 data-i18n="s3">Account</h2></div>
+      <p class="sec-p" data-i18n="s3p">What they use to log in to Mada Care.</p>
+      <div class="grid">
+        <div class="f"><label for="empId" data-i18n="cId">Employee ID</label><input class="in ltr" id="empId" dir="ltr" readonly><span class="hint" data-i18n="idHint">Given by the system. They log in with it.</span></div>
+        <div class="f"><label for="pw" data-i18n="pw">Temporary password</label>
+          <div class="pw"><input class="in" id="pw" dir="ltr" readonly><button type="button" class="icon-btn" id="pwNew" data-i18n-aria="pwNew" aria-label="New password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.9-3M4 4v4h4M4 13a8 8 0 0 0 14.9 3M20 20v-4h-4"/></svg></button><button type="button" class="icon-btn" id="pwCopy" data-i18n-aria="copy" aria-label="Copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg></button></div>
+          <span class="hint" data-i18n="pwHint">Made by the system. They change it the first time they log in.</span></div>
+        <div class="f full">
+          <div class="switch-row">
+            <div><b data-i18n="activeT">Account activation</b><span class="s" id="activeS"></span></div>
+            <div style="display:flex;align-items:center"><span class="st-label" id="stLabel"></span><button type="button" class="switch" id="active" role="switch" aria-checked="true" data-i18n-aria="activeT" aria-label="Account activation"></button></div>
+          </div>
+        </div>
+      </div>
+      <div class="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-i18n="permNote">What each role can see and do is set in the role permissions, the next step.</span></div>
+    </section>
+
+    <div class="form-foot">
+      <a class="btn btn-ghost" href="staff.html" data-i18n="cancel">Cancel</a>
+      <button type="submit" class="btn btn-primary" id="saveBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg><span data-i18n="save">Save Staff Member</span></button>
+    </div>
+  </form>
+</main>
+
+<div class="overlay" id="done" hidden role="dialog" aria-modal="true" aria-labelledby="doneT">
+  <div class="dlg">
+    <span class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg></span>
+    <h3 id="doneT"></h3>
+    <p id="doneP"></p>
+    <div class="creds">
+      <div><span data-i18n="cId">Employee ID</span><b id="dId"></b></div>
+      <div><span data-i18n="pw">Temporary password</span><b id="dPw"></b></div>
+    </div>
+    <div class="acts">
+      <button type="button" class="btn btn-ghost" id="dCopy"><span data-i18n="copyLogin">Copy login details</span></button>
+      <a class="btn btn-primary" id="dGo" href="staff.html" data-i18n="toList">Go to Staff</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="staff.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const ICONS = {
+    admin: '<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+    supervisor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/><path d="m12 12 1.2 2.5L12 18l-1.2-3.5z"/>',
+    agent: '<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19c0 1.5-2 2.5-5 2.5"/>',
+    doctor: '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    nurse: '<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/><path d="M12 10v5M9.5 12.5h5"/>',
+    lab: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/>',
+    driver: '<rect x="2" y="7" width="13" height="10" rx="1.5"/><path d="M15 10h4l3 3v4h-7"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17.5" cy="17.5" r="2"/>',
+    quality: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'
+  };
+  const CITIES = ["jeddah", "riyadh"];
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      back: "Back to Staff", title: "Add Staff Member", subtitle: "Their details, their role, and the account they log in with.",
+      s1: "Staff Details", s1p: "Who this person is and how to reach them.",
+      photo: "Staff photo", photoAdd: "Upload photo", photoChange: "Change photo", photoDel: "Remove", photoHint: "JPG or PNG. It shows on their account and in the staff list.", photoErr: "Choose an image file.",
+      nameAr: "Full name (Arabic)", nameEn: "Full name (English)", nameErr: "Enter the full name.", mobile: "Mobile number", mobileErr: "Enter a 10-digit mobile starting with 05.", mobileUsed: "Another staff member has this mobile.",
+      email: "Email", optional: "(optional)", emailErr: "Enter a valid email.",
+      idType: "ID type", id_national: "National ID", id_iqama: "Iqama", idNo: "ID number", idErrNat: "Enter the 10-digit National ID starting with 1.", idErrIq: "Enter the 10-digit Iqama number starting with 2.",
+      gender: "Gender", g_m: "Male", g_f: "Female", genderErr: "Choose the gender.",
+      s2: "Job", s2p: "The role decides what this person sees in the system.", role: "Role", roleErr: "Choose the role.",
+      role_admin: "Administrator", role_supervisor: "Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
+      spec: "Specialty", specErr: "Enter the specialty.", specPh_doctor: "e.g. Family Medicine", specPh_nurse: "e.g. Home Care Nursing", specPh_lab: "e.g. Phlebotomy",
+      lic: "SCFHS license number", licHint: "Saudi Commission for Health Specialties.", licErr: "Enter the license number.",
+      city: "City", cityPh: "Select city", city_jeddah: "Jeddah", city_riyadh: "Riyadh", cityErr: "Choose the city.", start: "Start date", startErr: "Choose the start date.",
+      s3: "Account", s3p: "What they use to log in to Mada Care.", idHint: "Given by the system. They log in with it.", pw: "Temporary password", pwNew: "New password", copy: "Copy", copied: "Copied.",
+      pwHint: "Made by the system. They must change it the first time they log in.",
+      activeT: "Account activation", activeOn: "Active: they can log in as soon as you save.", activeOff: "Inactive: the account is saved but cannot log in until you activate it.", st_on: "Active", st_off: "Inactive",
+      permNote: "What each role can see and do is set in the role permissions, the next step.",
+      cancel: "Cancel", save: "Save Staff Member", fixErr: "Check the highlighted fields.",
+      doneT: "{n} added", doneOn: "Send them these login details. They log in with the employee ID, and must change the password the first time.", doneOff: "The account is inactive, so they can't log in until you activate it.",
+      cId: "Employee ID", copyLogin: "Copy login details", toList: "Go to Staff", loginTx: "Mada Care login\nEmployee ID: {u}\nTemporary password: {p}"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      back: "رجوع للموظفين", title: "إضافة موظف", subtitle: "بياناته، ودوره، والحساب اللي يدخل فيه.",
+      s1: "بيانات الموظف", s1p: "مين هو الموظف وكيف نتواصل معه.",
+      photo: "صورة الموظف", photoAdd: "رفع صورة", photoChange: "تغيير الصورة", photoDel: "حذف", photoHint: "JPG أو PNG. تظهر في حسابه وفي قائمة الموظفين.", photoErr: "اختر ملف صورة.",
+      nameAr: "الاسم الكامل (عربي)", nameEn: "الاسم الكامل (إنجليزي)", nameErr: "اكتب الاسم الكامل.", mobile: "رقم الجوال", mobileErr: "اكتب رقم جوال من 10 أرقام يبدأ بـ 05.", mobileUsed: "هذا الجوال مسجل لموظف ثاني.",
+      email: "الإيميل", optional: "(اختياري)", emailErr: "اكتب إيميل صحيح.",
+      idType: "نوع الهوية", id_national: "هوية وطنية", id_iqama: "إقامة", idNo: "رقم الهوية", idErrNat: "اكتب رقم الهوية الوطنية من 10 أرقام يبدأ بـ 1.", idErrIq: "اكتب رقم الإقامة من 10 أرقام يبدأ بـ 2.",
+      gender: "الجنس", g_m: "ذكر", g_f: "أنثى", genderErr: "اختر الجنس.",
+      s2: "الوظيفة", s2p: "الدور يحدد وش يشوف الموظف في النظام.", role: "الدور", roleErr: "اختر الدور.",
+      role_admin: "مدير النظام", role_supervisor: "مشرف", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
+      spec: "التخصص", specErr: "اكتب التخصص.", specPh_doctor: "مثال: طب الأسرة", specPh_nurse: "مثال: تمريض منزلي", specPh_lab: "مثال: سحب دم",
+      lic: "رقم ترخيص الهيئة", licHint: "الهيئة السعودية للتخصصات الصحية.", licErr: "اكتب رقم الترخيص.",
+      city: "المدينة", cityPh: "اختر المدينة", city_jeddah: "جدة", city_riyadh: "الرياض", cityErr: "اختر المدينة.", start: "تاريخ المباشرة", startErr: "اختر تاريخ المباشرة.",
+      s3: "الحساب", s3p: "اللي يدخل فيه على نظام مدى كير.", idHint: "يعطيه النظام، والموظف يدخل فيه.", pw: "كلمة المرور المؤقتة", pwNew: "كلمة مرور جديدة", copy: "نسخ", copied: "تم النسخ.",
+      pwHint: "يولدها النظام، ولازم الموظف يغيرها أول ما يدخل.",
+      activeT: "تنشيط الحساب", activeOn: "نشط: يقدر يدخل النظام أول ما تحفظ.", activeOff: "غير نشط: ينحفظ الحساب بس ما يقدر يدخل لين تنشطه.", st_on: "نشط", st_off: "غير نشط",
+      permNote: "وش يشوف كل دور ووش يقدر يسوي نحدده في صلاحيات الأدوار، الخطوة الجاية.",
+      cancel: "إلغاء", save: "حفظ الموظف", fixErr: "راجع الخانات المحددة.",
+      doneT: "تمت إضافة {n}", doneOn: "أرسل له بيانات الدخول هذي. يدخل بالرقم الوظيفي، ولازم يغير كلمة المرور أول مرة.", doneOff: "الحساب غير نشط، فما يقدر يدخل لين تنشطه.",
+      cId: "الرقم الوظيفي", copyLogin: "نسخ بيانات الدخول", toList: "الذهاب للموظفين", loginTx: "الدخول على مدى كير\nالرقم الوظيفي: {u}\nكلمة المرور المؤقتة: {p}"
+    }
+  };
+  let current = "en";
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
+  const state = { idType: "national", gender: null, role: null, photo: null, active: true };
+
+  // Choice chips (ID type, gender) and role cards.
+  function radio(groupId, key) {
+    $(groupId).addEventListener("click", e => {
+      const b = e.target.closest("[data-v]"); if (!b) return;
+      state[key] = b.dataset.v;
+      $(groupId).querySelectorAll("[data-v]").forEach(x => x.setAttribute("aria-checked", x === b));
+      onChange(key);
+    });
+  }
+  function renderRoles() {
+    $("roles").innerHTML = MadaStaff.ROLES.map(r => `<button type="button" class="role" role="radio" aria-checked="${state.role === r}" data-v="${r}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${ICONS[r]}</svg>${t()["role_" + r]}</button>`).join("");
+  }
+  function onChange(key) {
+    if (key === "role") {
+      const med = MadaStaff.MEDICAL.includes(state.role);
+      $("fSpec").hidden = $("fLic").hidden = !med;
+      if (med) $("spec").placeholder = t()["specPh_" + state.role];
+    }
+    if (submitted) validate();
+  }
+  radio("idTypes", "idType"); radio("genders", "gender"); radio("roles", "role");
+
+  // Photo: shrunk to 256px so it fits in browser storage. TODO: upload to the server instead.
+  $("photoIn").addEventListener("change", () => {
+    const f = $("photoIn").files[0]; $("photoIn").value = "";
+    $("photoErr").style.display = "none";
+    if (!f) return;
+    if (!/^image\//.test(f.type)) { $("photoErr").style.display = "block"; return; }
+    const img = new Image(), url = URL.createObjectURL(f);
+    img.onload = () => {
+      const s = 256, c = document.createElement("canvas"), side = Math.min(img.width, img.height);
+      c.width = c.height = s;
+      c.getContext("2d").drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, s, s);
+      state.photo = c.toDataURL("image/jpeg", 0.85); URL.revokeObjectURL(url); renderPhoto();
+    };
+    img.onerror = () => { $("photoErr").style.display = "block"; URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+  $("photoDel").addEventListener("click", () => { state.photo = null; renderPhoto(); });
+  const personSvg = $("photoBox").innerHTML;
+  function renderPhoto() {
+    $("photoBox").innerHTML = state.photo ? `<img src="${state.photo}" alt="">` : personSvg;
+    $("photoBox").classList.toggle("has", !!state.photo);
+    $("photoDel").hidden = !state.photo;
+    $("photoBtnTx").textContent = state.photo ? t().photoChange : t().photoAdd;
+  }
+
+  // Account
+  $("empId").value = MadaStaff.nextId();
+  $("pw").value = MadaStaff.tempPassword();
+  $("pwNew").addEventListener("click", () => { $("pw").value = MadaStaff.tempPassword(); });
+  $("pwCopy").addEventListener("click", () => copy($("pw").value));
+  $("active").addEventListener("click", () => { state.active = !state.active; renderActive(); });
+  function renderActive() {
+    $("active").setAttribute("aria-checked", state.active);
+    $("stLabel").textContent = state.active ? t().st_on : t().st_off;
+    $("stLabel").className = "st-label " + (state.active ? "st-on" : "st-off");
+    $("activeS").textContent = state.active ? t().activeOn : t().activeOff;
+  }
+  ["mobile", "idNo"].forEach(id => $(id).addEventListener("input", () => { $(id).value = $(id).value.replace(/\D/g, ""); if (submitted) validate(); }));
+  ["nameAr", "nameEn", "email", "spec", "lic", "city", "start"].forEach(id => $(id).addEventListener("input", () => { if (submitted) validate(); }));
+
+  let submitted = false;
+  function mark(fid, bad, msg, errId) {
+    $(fid).classList.toggle("bad", bad);
+    if (msg) $(errId).textContent = msg;
+    return !bad;
+  }
+  function validate() {
+    const v = id => $(id).value.trim(), staff = MadaStaff.all(), med = MadaStaff.MEDICAL.includes(state.role);
+    const mob = v("mobile"), idn = v("idNo");
+    const mobUsed = /^05\d{8}$/.test(mob) && staff.some(s => s.mobile === mob);
+    $("fMobile").querySelector(".err").textContent = mobUsed ? t().mobileUsed : t().mobileErr;
+    const idOk = new RegExp("^" + (state.idType === "iqama" ? "2" : "1") + "\\d{9}$").test(idn);
+    const checks = [
+      mark("fNameAr", v("nameAr").split(/\s+/).filter(Boolean).length < 2),
+      mark("fNameEn", v("nameEn").split(/\s+/).filter(Boolean).length < 2),
+      mark("fMobile", !/^05\d{8}$/.test(mob) || mobUsed),
+      mark("fEmail", !!v("email") && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email"))),
+      mark("fIdNo", !idOk, state.idType === "iqama" ? t().idErrIq : t().idErrNat, "idErr"),
+      mark("fGender", !state.gender),
+      mark("fRole", !state.role),
+      mark("fSpec", med && !v("spec")),
+      mark("fLic", med && !v("lic")),
+      mark("fCity", !v("city")),
+      mark("fStart", !v("start"))
+    ];
+    return checks.every(Boolean);
+  }
+
+  $("form").addEventListener("submit", e => {
+    e.preventDefault(); submitted = true;
+    if (!validate()) { toast(t().fixErr); const b = document.querySelector(".f.bad"); if (b) b.scrollIntoView({ behavior: "smooth", block: "center" }); return; }
+    const v = id => $(id).value.trim(), med = MadaStaff.MEDICAL.includes(state.role);
+    const rec = MadaStaff.add({
+      name: { en: v("nameEn"), ar: v("nameAr") }, mobile: v("mobile"), email: v("email") || null,
+      idType: state.idType, idNumber: v("idNo"), gender: state.gender, role: state.role,
+      specialty: med ? v("spec") : null, license: med ? v("lic") : null, city: v("city"), startDate: v("start"),
+      photo: state.photo, password: $("pw").value, mustChangePassword: true,
+      status: state.active ? "active" : "disabled", createdBy: me ? me.username : null
+    });
+    showDone(rec);
+  });
+  let saved = null;
+  function showDone(rec) {
+    saved = rec; $("toast").hidden = true;
+    $("doneT").textContent = tx("doneT", { n: rec.name[current] });
+    $("doneP").textContent = rec.status === "active" ? t().doneOn : t().doneOff;
+    $("dId").textContent = rec.id; $("dPw").textContent = rec.password;
+    $("dGo").href = "staff.html?new=" + encodeURIComponent(rec.id);
+    $("done").hidden = false; $("dGo").focus();
+  }
+  $("dCopy").addEventListener("click", () => saved && copy(tx("loginTx", { u: saved.id, p: saved.password })));
+
+  function copy(text) {
+    const done = () => toast(t().copied);
+    try { navigator.clipboard.writeText(text).then(done, done); } catch (e) { done(); }
+  }
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | إضافة موظف" : "Mada Care | Add Staff";
+    const cv = $("city").value;
+    $("city").innerHTML = `<option value="">${t().cityPh}</option>` + CITIES.map(c => `<option value="${c}">${t()["city_" + c]}</option>`).join("");
+    $("city").value = cv;
+    renderRoles(); renderPhoto(); renderActive(); onChange("role");
+    if (saved && !$("done").hidden) showDone(saved);
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  $("start").value = new Date().toISOString().slice(0, 10);
+  let lang0 = "en";
+  try { lang0 = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(lang0);
+</script>
+</body>
+</html>

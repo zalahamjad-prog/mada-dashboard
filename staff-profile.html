@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Staff Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Laboratory catalogue ---------- */
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; width: fit-content; }
+  .back svg { width: 16px; height: 16px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 8px; }
+  .ico { height: 48px; border: 1.5px solid #d9e1e3; border-radius: 10px; display: grid; place-items: center; cursor: pointer; color: #44545a; background: #fff; position: relative; }
+  .ico input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .ico svg { width: 22px; height: 22px; }
+  .ico:hover { background: #f5f8f8; }
+  .ico:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .ico:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .cic { width: 36px; height: 36px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); display: grid; place-items: center; flex: none; }
+  .cic svg { width: 19px; height: 19px; }
+  .chip svg { width: 17px; height: 17px; color: var(--purple); }
+  .chip[aria-checked="true"] svg { color: var(--primary); }
+  .ph-icon.rad { background: var(--purple-soft); color: var(--purple); }
+  .ph-icon.nurse { background: var(--green-soft); color: var(--green); }
+  .cic.g { background: var(--green-soft); color: var(--green); }
+  .chip.g svg { color: var(--green); }
+  .chip.g[aria-checked="true"] svg { color: var(--primary); }
+  .nm-i { display: flex; align-items: center; gap: 10px; min-width: 240px; }
+  .nm-i .cic { width: 32px; height: 32px; }
+  .nm-i .cic svg { width: 17px; height: 17px; }
+  .tag.rx { background: var(--orange-soft); color: var(--orange); }
+  .tag.norx { background: var(--green-soft); color: var(--green); }
+  .ph-icon.lab { background: var(--blue-soft); color: var(--blue); }
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border: 0; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .tabs button small { min-width: 22px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tabs button[aria-selected="true"] { color: var(--primary); border-color: var(--primary); }
+  .tabs button[aria-selected="true"] small { background: var(--primary-soft); }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .bar .grow { flex: 1; }
+  .search { position: relative; flex: 1; min-width: 200px; max-width: 360px; }
+  .search svg { position: absolute; top: 50%; inset-inline-start: 12px; width: 17px; height: 17px; transform: translateY(-50%); color: var(--muted); }
+  .search input { padding-inline-start: 38px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .in[readonly] { background: #f3f6f7; color: #44545a; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  textarea.in { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; font-family: inherit; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 9px; background: #fff; cursor: pointer; font-size: 13.5px; color: var(--ink); }
+  .chip small { color: var(--muted); font-size: 12px; }
+  .chip[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  /* Categories */
+  .cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .cg { padding: 18px 20px; display: grid; gap: 14px; }
+  .cg-h { display: flex; align-items: center; gap: 12px; }
+  .cg-h .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .cg-h .ic svg { width: 21px; height: 21px; }
+  .cg-h .ic.t { background: var(--blue-soft); color: var(--blue); }
+  .cg-h .ic.p { background: var(--purple-soft); color: var(--purple); }
+  .cg-h h2 { font-size: 16px; font-weight: 600; }
+  .cg-h p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .cg-h .btn { margin-inline-start: auto; height: 36px; padding: 0 12px; }
+  .cl { display: grid; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cr { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-top: 1px solid #eef2f3; }
+  .cr:first-child { border-top: 0; }
+  .cr .nm { flex: 1; min-width: 0; }
+  .cr .nm b { display: block; font-size: 14px; font-weight: 600; }
+  .cr .nm span { display: block; font-size: 12.5px; color: var(--muted); }
+  .cnt { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib { width: 34px; height: 34px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; display: grid; place-items: center; cursor: pointer; color: #44545a; flex: none; }
+  .ib svg { width: 16px; height: 16px; }
+  .ib:disabled { opacity: .4; cursor: not-allowed; }
+  .ib.red { color: var(--red); border-color: #f3c4c4; }
+  .empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  /* Tables */
+  #view, #view > div, #view > div > * { min-width: 0; }
+  .table-wrap { overflow-x: auto; max-width: 100%; position: relative; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: start; font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; background: #fbfcfc; }
+  td { padding: 12px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.off td { color: #8a979c; }
+  td .nm b { display: block; font-weight: 600; }
+  td .nm span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #44545a; direction: ltr; unicode-bidi: isolate; }
+  .num { white-space: nowrap; }
+  .tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.none { background: var(--green-soft); color: var(--green); }
+  .tag.fast { background: var(--red-soft); color: var(--red); }
+  .tag.morning, .tag.optional { background: var(--orange-soft); color: var(--orange); }
+  .tag.cat { background: #f1f4f5; color: #44545a; font-weight: 500; }
+  .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .st.on { color: var(--green); }
+  .st.off { color: #8a979c; }
+  /* Modal */
+  .md-back { position: fixed; inset: 0; z-index: 70; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .md { width: min(640px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(16,35,43,.25); display: grid; grid-template-rows: auto 1fr auto; }
+  .md-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .md-h h2 { font-size: 17px; font-weight: 600; }
+  .md-b { padding: 18px 22px; display: grid; gap: 14px; }
+  .md-f { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: #fff; }
+  .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .fld { display: grid; gap: 6px; align-content: start; }
+  .fld > label, .fld > .lbl { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fld i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .err { font-size: 12.5px; color: var(--red); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  .types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .type { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid #d9e1e3; border-radius: 10px; cursor: pointer; }
+  .type input { margin-top: 3px; accent-color: var(--primary); }
+  .type b { display: block; font-size: 14px; font-weight: 600; }
+  .type span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .type:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .sw { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; width: fit-content; }
+  .sw input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .pick { border: 1px solid #d9e1e3; border-radius: 10px; max-height: 240px; overflow: auto; }
+  .pick label { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #eef2f3; font-size: 13.5px; cursor: pointer; }
+  .pick label:first-child { border-top: 0; }
+  .pick label:hover { background: #f8fafa; }
+  .pick input { width: 17px; height: 17px; accent-color: var(--primary); flex: none; }
+  .pick .grow { flex: 1; min-width: 0; }
+  .pick small { color: var(--muted); }
+  .pick-sum { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+  .pick.bad { border-color: var(--red); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pr-list { display: grid; gap: 10px; }
+  .pr { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #fbfcfc; display: grid; gap: 10px; }
+  .pr.bad { border-color: #f3b4b4; background: #fffafa; }
+  .pr-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; color: #44545a; }
+  .pr-h .code { font-weight: 400; }
+  .pr-g { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .pr .fld > label { font-size: 11.5px; }
+  .pr .in { height: 38px; font-size: 13.5px; }
+  .pr-add { display: flex; align-items: center; justify-content: center; gap: 8px; height: 42px; border: 1.5px dashed #b9d9cf; border-radius: 10px; background: #f6fbf9; color: var(--primary); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .pr-add svg { width: 17px; height: 17px; }
+  .sec-t { font-size: 14px; font-weight: 700; color: #15304a; margin-top: 4px; }
+  .sec-t + .hint { margin-top: -8px; }
+  .tag.miss { background: var(--red-soft); color: var(--red); }
+  .rng { font-size: 12.5px; color: #44545a; white-space: nowrap; }
+  @media (max-width: 760px) { .pr-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .foot { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .foot svg { width: 15px; height: 15px; color: var(--primary); }
+  @media (max-width: 900px) { .cat-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) {
+    .cg { padding: 16px; }
+    .row2, .types { grid-template-columns: minmax(0, 1fr); }
+    .md-h, .md-b, .md-f { padding-inline: 16px; }
+    .md-f .btn { flex: 1; }
+    .search { max-width: none; min-width: 0; flex-basis: 100%; }
+    .bar .btn { flex: 1; }
+  }
+  /* ---------- Staff profile ---------- */
+  .sp-head { display: flex; align-items: center; gap: 18px; padding: 20px 22px; }
+  .sp-ava { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); font-size: 24px; font-weight: 600; }
+  .sp-ava.f { background: #fdeef5; color: #c2185b; }
+  .sp-who { min-width: 0; }
+  .sp-who h1 { font-size: 22px; font-weight: 600; }
+  .sp-who p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .sp-meta { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 13px; color: #44545a; }
+  .sp-meta > span { display: inline-flex; align-items: center; gap: 6px; }
+  .sp-meta svg { width: 15px; height: 15px; color: var(--muted); }
+  .tabs button svg { width: 17px; height: 17px; }
+  .tabs button small.alert { background: var(--red-soft); color: var(--red); }
+  .sp-card { padding: 20px 22px; display: grid; gap: 16px; }
+  .sp-sh { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .sp-sh h2 { font-size: 16px; font-weight: 600; }
+  .sp-sh p { margin-top: 3px; font-size: 12.5px; color: var(--muted); }
+  .sp-sum { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sp-dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 24px; }
+  .sp-dl dt { font-size: 12px; color: var(--muted); }
+  .sp-dl dd { margin-top: 4px; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+  .card.sp-card .table-wrap { border: 1px solid var(--border); border-radius: 10px; }
+  .tag svg { width: 13px; height: 13px; margin-inline-end: 4px; }
+  .tag.x-expired { background: var(--red-soft); color: var(--red); }
+  .tag.x-soon { background: var(--orange-soft); color: var(--orange); }
+  .tag.x-valid, .tag.v-yes { background: var(--green-soft); color: var(--green); }
+  .tag.x-none { background: #f1f4f5; color: #6b7a80; font-weight: 500; }
+  .tag.v-no { background: #f1f4f5; color: #44545a; }
+  td .nm span .tag { margin-top: 4px; }
+  .muted { color: var(--muted); }
+  .sp-card td:first-child { min-width: 150px; }
+  td.note { max-width: 260px; font-size: 13px; color: #44545a; }
+  td.acts { white-space: nowrap; text-align: end; }
+  td.acts .ib { display: inline-grid; margin-inline-start: 6px; }
+  .flink { display: inline-flex; align-items: center; gap: 6px; max-width: 200px; border: 0; background: none; padding: 0; color: var(--primary); font-size: 13px; font-weight: 500; cursor: pointer; }
+  .flink span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; }
+  .flink svg { width: 16px; height: 16px; }
+  .empty svg { width: 40px; height: 40px; color: #9fb3b8; display: block; margin: 0 auto 8px; }
+  .empty.big { padding: 36px 16px; display: grid; justify-items: center; gap: 6px; }
+  .empty.big h3 { font-size: 16px; color: var(--ink); }
+  .empty.big .btn { margin-top: 10px; }
+  .fdrop { display: flex; align-items: center; justify-content: center; gap: 8px; height: 56px; border: 1.5px dashed #b9d9cf; border-radius: 10px; background: #f6fbf9; color: var(--primary); font-size: 13.5px; font-weight: 600; cursor: pointer; position: relative; }
+  .fdrop.bad { border-color: var(--red); }
+  .fdrop svg { width: 18px; height: 18px; }
+  .fdrop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .fbox { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fbfcfc; }
+  .fbox > svg { width: 18px; height: 18px; color: var(--primary); }
+  .fbox .fn { flex: 1; min-width: 0; font-size: 13.5px; font-weight: 500; overflow-wrap: anywhere; }
+  .fbox .fn small { display: block; font-size: 12px; color: var(--muted); font-weight: 400; }
+  .btn.sm { height: 34px; padding: 0 12px; font-size: 13px; cursor: pointer; }
+  .seg { display: inline-flex; border: 1px solid #d9e1e3; border-radius: 9px; overflow: hidden; width: fit-content; }
+  .seg label { position: relative; padding: 9px 22px; font-size: 13.5px; cursor: pointer; }
+  .seg label + label { border-inline-start: 1px solid #d9e1e3; }
+  .seg label.on { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .seg label:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: -2px; }
+  .chip[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .chip svg { width: 15px; height: 15px; }
+  .hrs { display: grid; gap: 8px; }
+  .hr { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fbfcfc; }
+  .hr.bad { border-color: #f3b4b4; background: #fffafa; }
+  .hr > b { width: 84px; font-size: 13.5px; }
+  .hr label { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
+  .hr .in { width: 130px; height: 38px; }
+  .hr .hd { font-size: 12.5px; color: #44545a; }
+  .hr .err { flex-basis: 100%; }
+  .link { border: 0; background: none; padding: 0; color: var(--primary); font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .wk { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+  .wd { border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: grid; gap: 6px; align-content: start; min-height: 104px; }
+  .wd.on { border-color: #b9d9cf; background: #f6fbf9; }
+  .wd.off { background: #fafbfb; }
+  .wd b { font-size: 13.5px; }
+  .wd .wt { font-size: 12.5px; color: #44545a; line-height: 1.5; }
+  .wd .wt small { display: block; color: var(--muted); }
+  .wd .wh { font-size: 12px; font-weight: 600; color: var(--primary); }
+  .wk-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; font-size: 13px; color: #44545a; }
+  .wk-sum span { display: inline-flex; align-items: center; gap: 6px; }
+  .wk-sum svg { width: 16px; height: 16px; color: var(--primary); }
+  .num { white-space: nowrap; }
+  @media (max-width: 1100px) { .wk { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 760px) {
+    .sp-head { padding: 16px; gap: 14px; align-items: flex-start; }
+    .sp-ava { width: 56px; height: 56px; font-size: 19px; }
+    .sp-who h1 { font-size: 19px; }
+    .sp-card { padding: 16px; }
+    .sp-dl { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .sp-sh .btn { width: 100%; }
+    .wk { grid-template-columns: minmax(0, 1fr); }
+    .wd { min-height: 0; grid-template-columns: 90px 1fr auto; align-items: center; }
+    .hr > b { width: 100%; }
+    .hr .in { width: 120px; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" aria-current="page" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <a class="back" href="staff.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span data-i18n="back">Staff</span></a>
+  <section class="card sp-head" id="head"></section>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <section id="view"></section>
+</main>
+<div class="md-back" id="mdBack" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="staff.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Staff profile (staff-profile.html?id=EMP-001): details, documents and the weekly work schedule.
+  // Documents and schedule are kept on the staff record (MadaStaff.update); document files are kept apart in MadaStore "mada-staff-files" { [docId]: dataURL }
+  // so the staff list that sign-in reads stays small. Demo only: files live in this browser. TODO: upload to secure file storage.
+  const FILES = "mada-staff-files", MAXB = 2 * 1024 * 1024, SOON = 30;
+  const DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  const id = new URLSearchParams(location.search).get("id");
+  let s = id ? MadaStaff.get(id) : null;
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      back: "Staff", notFound: "This staff member wasn't found.", backList: "Back to staff",
+      tabInfo: "Details", tabDocs: "Documents", tabSched: "Work Schedule",
+      role_admin: "Administrator", role_supervisor: "Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
+      st_active: "Active", st_disabled: "Inactive",
+      fId: "Employee ID", fRole: "Role", fMobile: "Mobile", fEmail: "Email", fIdType: "ID type", id_national: "National ID", id_iqama: "Iqama", fIdNo: "ID number", fGender: "Gender", g_m: "Male", g_f: "Female",
+      fSpec: "Specialty", fLic: "SCFHS license number", fCity: "City", city_jeddah: "Jeddah", city_riyadh: "Riyadh", fStart: "Start date",
+      docsT: "Documents", docsD: "Licenses, IDs, certificates and other staff documents.", addDoc: "Add Document", editDoc: "Edit Document",
+      thDoc: "Document", thExp: "Expiry Date", thFile: "File", thVer: "Verified", thNote: "Note", thAct: "Actions",
+      noDocs: "No documents yet. Add the first one.", noExp: "No expiry", expired: "Expired", soon: "Expires in {n} days", soon1: "Expires tomorrow", soon0: "Expires today", valid: "Valid",
+      verYes: "Verified", verNo: "Not verified", noFile: "No file", view: "View",
+      sumExpired: "{n} expired", sumSoon: "{n} expiring soon", sumUnver: "{n} not verified",
+      docName: "Document name", docNamePh: "e.g. SCFHS license, Iqama, BLS certificate", expiry: "Expiry date", file: "File", fileHint: "PDF or image, up to 2 MB.", pickFile: "Choose file", replace: "Replace", removeFile: "Remove file",
+      fileBig: "The file is larger than 2 MB.", fileType: "Choose a PDF or an image.",
+      verQ: "Has the document been verified?", yes: "Yes", no: "No", note: "Note", notePh: "e.g. Checked against the original", optional: "(optional)",
+      delDoc: "Delete document", delDocQ: "Delete “{n}”?", docDeleted: "Document deleted.",
+      schedT: "Work Schedule", schedD: "The days and hours this person works each week.", createSched: "Create Schedule", editSched: "Edit Schedule",
+      noSched: "No work schedule yet.", noSchedD: "Pick the working days, then set the hours for each day.",
+      day_sun: "Sunday", day_mon: "Monday", day_tue: "Tuesday", day_wed: "Wednesday", day_thu: "Thursday", day_fri: "Friday", day_sat: "Saturday",
+      off: "Off", hrsN: "{n} h", weekTotal: "Total per week", workDays: "{n} working days", workDays1: "1 working day", nextDay: "next day",
+      pickDays: "Working days", hoursT: "Hours for each day", from: "From", to: "To", copyAll: "Use these hours for all days", pickOne: "Choose at least one day.", sameTime: "Start and end can't be the same.",
+      lastUpd: "Last updated {d} by {n}",
+      save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", storeErr: "Couldn't save. The browser storage may be full.", req: "Required."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      back: "الموظفين", notFound: "ما لقينا هذا الموظف.", backList: "رجوع للموظفين",
+      tabInfo: "البيانات", tabDocs: "الوثائق", tabSched: "جدول الدوام",
+      role_admin: "مدير النظام", role_supervisor: "مشرف", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
+      st_active: "نشط", st_disabled: "غير نشط",
+      fId: "الرقم الوظيفي", fRole: "الدور", fMobile: "الجوال", fEmail: "البريد الإلكتروني", fIdType: "نوع الهوية", id_national: "هوية وطنية", id_iqama: "إقامة", fIdNo: "رقم الهوية", fGender: "الجنس", g_m: "ذكر", g_f: "أنثى",
+      fSpec: "التخصص", fLic: "رقم ترخيص الهيئة", fCity: "المدينة", city_jeddah: "جدة", city_riyadh: "الرياض", fStart: "تاريخ المباشرة",
+      docsT: "الوثائق", docsD: "التراخيص والهويات والشهادات وباقي وثائق الموظف.", addDoc: "إضافة وثيقة", editDoc: "تعديل الوثيقة",
+      thDoc: "الوثيقة", thExp: "تاريخ الانتهاء", thFile: "الملف", thVer: "التحقق", thNote: "ملاحظة", thAct: "الإجراءات",
+      noDocs: "ما فيه وثائق للحين. أضف أول وثيقة.", noExp: "بدون انتهاء", expired: "منتهية", soon: "تنتهي بعد {n} يوم", soon1: "تنتهي بكرة", soon0: "تنتهي اليوم", valid: "سارية",
+      verYes: "تم التحقق", verNo: "لم يتم التحقق", noFile: "بدون ملف", view: "عرض",
+      sumExpired: "{n} منتهية", sumSoon: "{n} قريبة الانتهاء", sumUnver: "{n} بدون تحقق",
+      docName: "اسم الوثيقة", docNamePh: "مثال: ترخيص الهيئة، الإقامة، شهادة BLS", expiry: "تاريخ الانتهاء", file: "الملف", fileHint: "PDF أو صورة، حتى 2 ميجا.", pickFile: "اختر ملف", replace: "استبدال", removeFile: "حذف الملف",
+      fileBig: "الملف أكبر من 2 ميجا.", fileType: "اختر ملف PDF أو صورة.",
+      verQ: "هل تم التحقق من الوثيقة؟", yes: "نعم", no: "لا", note: "ملاحظة", notePh: "مثال: تمت المطابقة مع الأصل", optional: "(اختياري)",
+      delDoc: "حذف الوثيقة", delDocQ: "تبي تحذف «{n}»؟", docDeleted: "انحذفت الوثيقة.",
+      schedT: "جدول الدوام", schedD: "الأيام والساعات اللي يداوم فيها كل أسبوع.", createSched: "إنشاء جدول", editSched: "تعديل الجدول",
+      noSched: "ما فيه جدول دوام للحين.", noSchedD: "اختر أيام الدوام، وبعدها حدد ساعات كل يوم.",
+      day_sun: "الأحد", day_mon: "الاثنين", day_tue: "الثلاثاء", day_wed: "الأربعاء", day_thu: "الخميس", day_fri: "الجمعة", day_sat: "السبت",
+      off: "إجازة", hrsN: "{n} ساعة", weekTotal: "المجموع في الأسبوع", workDays: "{n} أيام دوام", workDays1: "يوم دوام واحد", nextDay: "اليوم التالي",
+      pickDays: "أيام الدوام", hoursT: "ساعات كل يوم", from: "من", to: "إلى", copyAll: "طبّق هذي الساعات على كل الأيام", pickOne: "اختر يوم واحد على الأقل.", sameTime: "وقت البداية والنهاية ما يصير نفس الوقت.",
+      lastUpd: "آخر تحديث {d} بواسطة {n}",
+      save: "حفظ", cancel: "إلغاء", close: "إغلاق", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. يمكن مساحة المتصفح ممتلئة.", req: "مطلوب."
+    }
+  };
+  let current = "en", tab = "info", modal = null;
+  const t = () => i18n[current];
+  const tx = (k, v) => (v && v.n === 1 && t()[k + "1"] || v && v.n === 0 && t()[k + "0"] || t()[k]).replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const T = v => v && typeof v === "object" ? (v[current] || v.en || "") : (v || "");
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', check: '<path d="m5 12 5 5 9-10"/>', doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    clip: '<path d="m21 12-8.5 8.5a5 5 0 0 1-7-7L14 5a3.3 3.3 0 0 1 4.7 4.7L10.2 18a1.7 1.7 0 0 1-2.4-2.4L15.5 8"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>', alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>' };
+  const initials = n => (n || "?").trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  const LOC = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const fmtDate = v => { if (!v) return "—"; const d = new Date(v + (v.length === 10 ? "T12:00:00" : "")); return isNaN(d) ? v : d.toLocaleDateString(LOC(), { day: "numeric", month: "short", year: "numeric" }); };
+  const fmtTime = v => { const [h, m] = v.split(":").map(Number); const ap = h < 12 ? (current === "ar" ? "ص" : "AM") : (current === "ar" ? "م" : "PM"); return `${h % 12 || 12}:${String(m).padStart(2, "0")} ${ap}`; };
+  const mins = v => { const [h, m] = v.split(":").map(Number); return h * 60 + m; };
+  const span = d => { let x = mins(d.to) - mins(d.from); if (x <= 0) x += 1440; return x; };
+  const hrs = m => Math.round(m / 6) / 10;
+  const daysLeft = v => { const a = new Date(); a.setHours(12, 0, 0, 0); return Math.round((new Date(v + "T12:00:00") - a) / 864e5); };
+  const expState = d => !d.expiry ? "none" : daysLeft(d.expiry) < 0 ? "expired" : daysLeft(d.expiry) <= SOON ? "soon" : "valid";
+  const docs = () => (s && s.docs) || [];
+  const files = () => MadaStore.getJSON(FILES, {});
+
+  function render() {
+    if (!s) { $("head").innerHTML = `<div class="empty">${esc(t().notFound)} <a href="staff.html">${esc(t().backList)}</a></div>`; $("tabs").innerHTML = ""; $("view").innerHTML = ""; return; }
+    const name = T(s.name), dl = docs(), alerts = dl.filter(d => expState(d) === "expired").length;
+    $("head").innerHTML = `${s.photo ? `<img class="sp-ava" src="${esc(s.photo)}" alt="">` : `<span class="sp-ava ${s.gender === "f" ? "f" : ""}">${esc(initials(name))}</span>`}
+      <div class="sp-who"><h1>${esc(name)}</h1><p><span class="code">${esc(s.id)}</span> · ${esc(t()["role_" + s.role] || s.role)}${s.specialty ? ` · ${esc(s.specialty)}` : ""}</p>
+        <div class="sp-meta"><span>${svg(IC.phone, 1.8)}<bdi dir="ltr">${esc(s.mobile || "—")}</bdi></span><span class="st ${s.status === "disabled" ? "off" : "on"}">${s.status === "disabled" ? t().st_disabled : t().st_active}</span></div></div>`;
+    const n = { info: "", docs: dl.length, sched: "" };
+    $("tabs").innerHTML = [["info", "tabInfo", IC.user], ["docs", "tabDocs", IC.doc], ["sched", "tabSched", IC.cal]].map(([k, l, ic]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${svg(ic, 1.8)}${t()[l]}${n[k] !== "" ? `<small class="${k === "docs" && alerts ? "alert" : ""}">${n[k]}</small>` : ""}</button>`).join("");
+    $("view").innerHTML = tab === "docs" ? docsView() : tab === "sched" ? schedView() : infoView();
+  }
+  function infoView() {
+    const rows = [["fId", `<span class="code">${esc(s.id)}</span>`], ["fRole", esc(t()["role_" + s.role] || s.role)], ["fMobile", `<bdi dir="ltr">${esc(s.mobile || "—")}</bdi>`], ["fEmail", `<bdi dir="ltr">${esc(s.email || "—")}</bdi>`],
+      ["fIdType", esc(t()["id_" + s.idType] || "—")], ["fIdNo", `<bdi dir="ltr">${esc(s.idNumber || "—")}</bdi>`], ["fGender", esc(t()["g_" + s.gender] || "—")], ["fCity", esc(t()["city_" + s.city] || s.city || "—")], ["fStart", esc(fmtDate(s.startDate))]];
+    if (s.specialty) rows.splice(2, 0, ["fSpec", esc(s.specialty)]);
+    if (s.license) rows.splice(3, 0, ["fLic", `<bdi dir="ltr">${esc(s.license)}</bdi>`]);
+    return `<section class="card sp-card"><dl class="sp-dl">${rows.map(([k, v]) => `<div><dt>${t()[k]}</dt><dd>${v}</dd></div>`).join("")}</dl></section>`;
+  }
+  function expTag(d) {
+    const st = expState(d), n = d.expiry ? daysLeft(d.expiry) : 0;
+    const label = st === "none" ? t().noExp : st === "expired" ? t().expired : st === "soon" ? tx("soon", { n }) : t().valid;
+    return `<span class="tag x-${st}">${esc(label)}</span>`;
+  }
+  function docsView() {
+    const dl = docs(), ex = dl.filter(d => expState(d) === "expired").length, so = dl.filter(d => expState(d) === "soon").length, un = dl.filter(d => !d.verified).length;
+    const sum = [ex && `<span class="tag x-expired">${svg(IC.alert, 2)}${tx("sumExpired", { n: ex })}</span>`, so && `<span class="tag x-soon">${tx("sumSoon", { n: so })}</span>`, un && `<span class="tag v-no">${tx("sumUnver", { n: un })}</span>`].filter(Boolean).join("");
+    return `<section class="card sp-card"><div class="sp-sh"><div><h2>${t().docsT}</h2><p>${t().docsD}</p></div><button type="button" class="btn btn-primary" data-adddoc>${svg(IC.plus, 2.2)}${t().addDoc}</button></div>
+      ${sum ? `<div class="sp-sum">${sum}</div>` : ""}
+      ${dl.length ? `<div class="table-wrap"><table><thead><tr><th>${t().thDoc}</th><th>${t().thExp}</th><th>${t().thFile}</th><th>${t().thVer}</th><th>${t().thNote}</th><th><span class="sr">${t().thAct}</span></th></tr></thead><tbody>
+        ${dl.map(d => `<tr><td><div class="nm"><b>${esc(d.name)}</b><span>${esc(fmtDate((d.addedAt || "").slice(0, 10)))}</span></div></td>
+          <td><div class="nm"><b class="num">${d.expiry ? esc(fmtDate(d.expiry)) : "—"}</b><span>${expTag(d)}</span></div></td>
+          <td>${d.file ? `<button type="button" class="flink" data-open="${esc(d.id)}" title="${esc(d.file.name)}">${svg(IC.clip, 1.9)}<span>${esc(d.file.name)}</span></button>` : `<span class="muted">${t().noFile}</span>`}</td>
+          <td><span class="tag ${d.verified ? "v-yes" : "v-no"}">${d.verified ? svg(IC.check, 2.4) : ""}${d.verified ? t().verYes : t().verNo}</span></td>
+          <td class="note">${d.note ? esc(d.note) : `<span class="muted">—</span>`}</td>
+          <td class="acts"><button type="button" class="ib" data-editdoc="${esc(d.id)}" aria-label="${t().editDoc}: ${esc(d.name)}" title="${t().editDoc}">${svg(IC.edit)}</button><button type="button" class="ib red" data-deldoc="${esc(d.id)}" aria-label="${t().delDoc}: ${esc(d.name)}" title="${t().delDoc}">${svg(IC.trash)}</button></td></tr>`).join("")}</tbody></table></div>`
+        : `<div class="empty">${svg(IC.doc, 1.5)}<p>${t().noDocs}</p></div>`}</section>`;
+  }
+  function schedView() {
+    const sc = s.schedule;
+    if (!sc || !Object.keys(sc.days || {}).length) return `<section class="card sp-card"><div class="empty big">${svg(IC.cal, 1.4)}<h3>${t().noSched}</h3><p>${t().noSchedD}</p><button type="button" class="btn btn-primary" data-sched>${svg(IC.plus, 2.2)}${t().createSched}</button></div></section>`;
+    const on = DAYS.filter(k => sc.days[k]), total = on.reduce((a, k) => a + span(sc.days[k]), 0);
+    return `<section class="card sp-card"><div class="sp-sh"><div><h2>${t().schedT}</h2><p>${t().schedD}</p></div><button type="button" class="btn btn-ghost" data-sched>${svg(IC.edit, 2)}${t().editSched}</button></div>
+      <div class="wk">${DAYS.map(k => { const d = sc.days[k]; return `<div class="wd ${d ? "on" : "off"}"><b>${t()["day_" + k]}</b>${d ? `<span class="wt"><bdi>${fmtTime(d.from)} – ${fmtTime(d.to)}</bdi>${mins(d.to) <= mins(d.from) ? `<small>(${t().nextDay})</small>` : ""}</span><span class="wh">${tx("hrsN", { n: hrs(span(d)) })}</span>` : `<span class="wt muted">${t().off}</span>`}</div>`; }).join("")}</div>
+      <div class="wk-sum"><span>${svg(IC.clock, 1.9)}${t().weekTotal}: <b>${tx("hrsN", { n: hrs(total) })}</b></span><span>${tx("workDays", { n: on.length })}</span>
+        ${sc.updatedAt ? `<span class="muted">${esc(tx("lastUpd", { d: new Date(sc.updatedAt).toLocaleString(LOC(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }), n: sc.updatedBy ? T(sc.updatedBy) : "" }))}</span>` : ""}</div></section>`;
+  }
+
+  // ---------- Modals ----------
+  function modalHTML() {
+    const m = modal, f = m.f, e = m.err, T2 = t();
+    let title, body;
+    if (m.kind === "doc") {
+      title = m.isNew ? T2.addDoc : T2.editDoc;
+      body = `<div class="fld"><label for="dName">${T2.docName}</label><input class="in ${e.name ? "bad" : ""}" id="dName" value="${esc(f.name)}" placeholder="${esc(T2.docNamePh)}" maxlength="80" ${e.name ? 'aria-invalid="true" aria-describedby="dName-e"' : ""}>${e.name ? `<span class="err" id="dName-e">${e.name}</span>` : ""}</div>
+        <div class="fld"><label for="dExp">${T2.expiry} <i>${T2.optional}</i></label><input class="in" type="date" id="dExp" value="${esc(f.expiry)}" dir="ltr"></div>
+        <div class="fld"><span class="lbl">${T2.file} <i>${T2.optional}</i></span>
+          ${f.file ? `<div class="fbox">${svg(IC.clip, 1.9)}<span class="fn">${esc(f.file.name)}<small>${Math.max(1, Math.round(f.file.size / 1024))} KB</small></span><label class="btn btn-ghost sm">${T2.replace}<input type="file" id="dFile" accept="application/pdf,image/*" hidden></label><button type="button" class="ib red" data-rmfile aria-label="${T2.removeFile}" title="${T2.removeFile}">${svg(IC.trash)}</button></div>`
+            : `<label class="fdrop ${e.file ? "bad" : ""}">${svg(IC.clip, 1.9)}<span>${T2.pickFile}</span><input type="file" id="dFile" accept="application/pdf,image/*"></label>`}
+          <span class="hint">${T2.fileHint}</span>${e.file ? `<span class="err">${e.file}</span>` : ""}</div>
+        <div class="fld"><span class="lbl" id="verL">${T2.verQ}</span><div class="seg" role="radiogroup" aria-labelledby="verL">${[[true, T2.yes], [false, T2.no]].map(([v, l]) => `<label class="${f.verified === v ? "on" : ""}"><input type="radio" name="ver" value="${v}" ${f.verified === v ? "checked" : ""}>${l}</label>`).join("")}</div></div>
+        <div class="fld"><label for="dNote">${T2.note} <i>${T2.optional}</i></label><textarea class="in" id="dNote" maxlength="300" placeholder="${esc(T2.notePh)}" dir="auto">${esc(f.note)}</textarea></div>`;
+    } else {
+      title = s.schedule && Object.keys(s.schedule.days || {}).length ? T2.editSched : T2.createSched;
+      const on = DAYS.filter(k => f.days[k]);
+      body = `<div class="fld"><span class="lbl" id="dayL">${T2.pickDays}</span><div class="chips" role="group" aria-labelledby="dayL">${DAYS.map(k => `<button type="button" class="chip" aria-pressed="${!!f.days[k]}" data-day="${k}">${f.days[k] ? svg(IC.check, 2.4) : ""}${T2["day_" + k]}</button>`).join("")}</div>${e.days ? `<span class="err">${e.days}</span>` : ""}</div>
+        ${on.length ? `<div class="fld"><span class="lbl">${T2.hoursT}</span><div class="hrs">${on.map((k, i) => { const d = f.days[k], bad = e["d_" + k]; return `<div class="hr ${bad ? "bad" : ""}"><b>${T2["day_" + k]}</b>
+            <label><span>${T2.from}</span><input class="in" type="time" data-from="${k}" value="${d.from}" dir="ltr" aria-label="${T2["day_" + k]} ${T2.from}"></label>
+            <label><span>${T2.to}</span><input class="in" type="time" data-to="${k}" value="${d.to}" dir="ltr" aria-label="${T2["day_" + k]} ${T2.to}"></label>
+            <span class="hd">${d.from && d.to && d.from !== d.to ? tx("hrsN", { n: hrs(span(d)) }) + (mins(d.to) < mins(d.from) ? ` · ${T2.nextDay}` : "") : ""}</span>
+            ${i === 0 && on.length > 1 ? `<button type="button" class="link" data-copy="${k}">${T2.copyAll}</button>` : ""}${bad ? `<span class="err">${bad}</span>` : ""}</div>`; }).join("")}</div></div>` : ""}`;
+    }
+    return `<div class="md" role="dialog" aria-modal="true" aria-labelledby="mdT"><div class="md-h"><h2 id="mdT">${title}</h2><button type="button" class="ib" data-close aria-label="${T2.close}">${svg(IC.x, 2)}</button></div>
+      <div class="md-b">${body}</div><div class="md-f"><button type="button" class="btn btn-ghost" data-close>${T2.cancel}</button><button type="button" class="btn btn-primary" id="mdSave">${svg(IC.check, 2.2)}${T2.save}</button></div></div>`;
+  }
+  let opener = null;
+  function openModal(m) { opener = document.activeElement; modal = { err: {}, ...m }; drawModal(); const f = $("mdBack").querySelector("#dName, .chip"); if (f) f.focus(); }
+  function drawModal() { $("mdBack").innerHTML = modalHTML(); $("mdBack").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeModal() { modal = null; $("mdBack").hidden = true; $("mdBack").innerHTML = ""; document.body.style.overflow = ""; if (opener && document.contains(opener)) opener.focus(); }
+  function readModal() {
+    if (!modal) return; const f = modal.f;
+    if (modal.kind === "doc") {
+      if ($("dName")) f.name = $("dName").value; if ($("dExp")) f.expiry = $("dExp").value; if ($("dNote")) f.note = $("dNote").value;
+      const v = $("mdBack").querySelector('input[name="ver"]:checked'); if (v) f.verified = v.value === "true";
+    } else {
+      $("mdBack").querySelectorAll("[data-from]").forEach(i => { f.days[i.dataset.from].from = i.value; });
+      $("mdBack").querySelectorAll("[data-to]").forEach(i => { f.days[i.dataset.to].to = i.value; });
+    }
+  }
+  const redraw = focusSel => { readModal(); drawModal(); const el = focusSel && $("mdBack").querySelector(focusSel); if (el) el.focus(); };
+  function persist(patch) {
+    try { s = MadaStaff.update(s.id, patch); return true; } catch (x) { toast(t().storeErr); s = MadaStaff.get(id); return false; }
+  }
+  function saveModal() {
+    readModal(); const m = modal, f = m.f, e = {};
+    if (m.kind === "doc") {
+      if (!f.name.trim()) e.name = t().req;
+      m.err = e; if (Object.keys(e).length) return redraw("[aria-invalid]");
+      const fl = files(), did = m.isNew ? "DOC-" + Date.now().toString(36) : m.id;
+      if (f.fileData) fl[did] = f.fileData; else if (!f.file) delete fl[did];
+      try { MadaStore.setJSON(FILES, fl); if (f.fileData && MadaStore.getJSON(FILES, {})[did] !== f.fileData) throw 0; } catch (x) { return toast(t().storeErr); }
+      const old = m.isNew ? { addedAt: new Date().toISOString(), addedBy: me ? me.name : null } : docs().find(d => d.id === did);
+      const verChanged = !old.verified !== !f.verified;
+      const rec = { ...old, id: did, name: f.name.trim(), expiry: f.expiry || "", file: f.file ? { name: f.file.name, type: f.file.type, size: f.file.size } : null, verified: !!f.verified, note: f.note.trim(),
+        ...(verChanged || m.isNew ? { verifiedBy: f.verified ? (me ? me.name : null) : null, verifiedAt: f.verified ? new Date().toISOString() : null } : {}) };
+      const list = docs().slice(); if (m.isNew) list.push(rec); else list[list.findIndex(d => d.id === did)] = rec;
+      if (!persist({ docs: list })) return;
+    } else {
+      const on = DAYS.filter(k => f.days[k]);
+      if (!on.length) e.days = t().pickOne;
+      on.forEach(k => { const d = f.days[k]; if (!d.from || !d.to) e["d_" + k] = t().req; else if (d.from === d.to) e["d_" + k] = t().sameTime; });
+      m.err = e; if (Object.keys(e).length) return redraw();
+      const days = {}; on.forEach(k => { days[k] = { from: f.days[k].from, to: f.days[k].to }; });
+      if (!persist({ schedule: { days, updatedAt: new Date().toISOString(), updatedBy: me ? me.name : null } })) return;
+    }
+    closeModal(); render(); toast(t().saved);
+  }
+  function pickFile(input) {
+    const file = input.files && input.files[0]; if (!file || !modal) return;
+    readModal(); modal.err.file = null;
+    if (!/^(application\/pdf|image\/)/.test(file.type)) { modal.err.file = t().fileType; return redraw(); }
+    if (file.size > MAXB) { modal.err.file = t().fileBig; return redraw(); }
+    const r = new FileReader();
+    r.onload = () => { if (!modal) return; modal.f.file = { name: file.name, type: file.type, size: file.size }; modal.f.fileData = r.result; redraw(); };
+    r.readAsDataURL(file);
+  }
+  function openFile(did) {
+    const d = docs().find(x => x.id === did), data = files()[did]; if (!d || !data) return;
+    try { const bin = atob(data.split(",")[1]), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      const url = URL.createObjectURL(new Blob([u8], { type: d.file.type })); const w = window.open(url, "_blank");
+      if (!w) { const a = document.createElement("a"); a.href = url; a.download = d.file.name; a.click(); } setTimeout(() => URL.revokeObjectURL(url), 60000);
+    } catch (x) { toast(t().storeErr); }
+  }
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.tab) { tab = b.dataset.tab; history.replaceState(null, "", `?id=${encodeURIComponent(id)}${tab === "info" ? "" : "#" + tab}`); render(); return; }
+    if (b.hasAttribute("data-adddoc")) return openModal({ kind: "doc", isNew: true, f: { name: "", expiry: "", file: null, fileData: null, verified: false, note: "" } });
+    if (b.dataset.editdoc) { const d = docs().find(x => x.id === b.dataset.editdoc); return openModal({ kind: "doc", id: d.id, f: { name: d.name, expiry: d.expiry || "", file: d.file, fileData: null, verified: !!d.verified, note: d.note || "" } }); }
+    if (b.dataset.deldoc) {
+      const d = docs().find(x => x.id === b.dataset.deldoc); if (!confirm(tx("delDocQ", { n: d.name }))) return;
+      if (persist({ docs: docs().filter(x => x.id !== d.id) })) { const fl = files(); delete fl[d.id]; try { MadaStore.setJSON(FILES, fl); } catch (x) {} render(); toast(t().docDeleted); } return;
+    }
+    if (b.dataset.open) return openFile(b.dataset.open);
+    if (b.hasAttribute("data-rmfile")) { readModal(); modal.f.file = null; modal.f.fileData = null; return redraw(); }
+    if (b.hasAttribute("data-sched")) { const cur = (s.schedule && s.schedule.days) || {}; const days = {}; DAYS.forEach(k => { if (cur[k]) days[k] = { ...cur[k] }; });
+      return openModal({ kind: "sched", f: { days } }); }
+    if (b.dataset.day) { readModal(); const k = b.dataset.day, f = modal.f, on = DAYS.filter(x => f.days[x]);
+      if (f.days[k]) delete f.days[k]; else f.days[k] = on.length ? { ...f.days[on[0]] } : { from: "08:00", to: "16:00" };
+      delete modal.err.days; delete modal.err["d_" + k]; return redraw(`[data-day="${k}"]`); }
+    if (b.dataset.copy) { readModal(); const src = modal.f.days[b.dataset.copy]; Object.keys(modal.f.days).forEach(k => { modal.f.days[k] = { ...src }; delete modal.err["d_" + k]; }); return redraw(`[data-copy]`); }
+    if (b.hasAttribute("data-close")) return closeModal();
+    if (b.id === "mdSave") return saveModal();
+  });
+  document.addEventListener("change", e => {
+    if (!modal) return;
+    if (e.target.id === "dFile") return pickFile(e.target);
+    if (e.target.name === "ver") return redraw(`input[name="ver"][value="${e.target.value}"]`);
+    if (e.target.dataset.from || e.target.dataset.to) { const k = e.target.dataset.from || e.target.dataset.to; delete modal.err["d_" + k]; return redraw(`[data-${e.target.dataset.from ? "from" : "to"}="${k}"]`); }
+  });
+  document.addEventListener("input", e => { if (modal && e.target.id === "dName" && e.target.classList.contains("bad")) { e.target.classList.remove("bad"); e.target.removeAttribute("aria-invalid"); const er = $("dName-e"); if (er) er.remove(); delete modal.err.name; } });
+  $("mdBack").addEventListener("mousedown", e => { if (e.target === $("mdBack")) closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal) closeModal(); });
+  window.addEventListener("storage", e => { if (!modal && (!e.key || e.key === MadaStaff.KEY)) { s = MadaStaff.get(id); render(); } });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    readModal();
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = (lang === "ar" ? "مدى كير | " : "Mada Care | ") + (s ? T(s.name) : t().back);
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render(); if (modal) drawModal();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  if (["#docs", "#sched"].includes(location.hash)) tab = location.hash.slice(1);
+  setLang(saved);
+</script>
+</body>
+</html>

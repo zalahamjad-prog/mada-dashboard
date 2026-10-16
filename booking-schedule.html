@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Booking Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Laboratory catalogue ---------- */
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; width: fit-content; }
+  .back svg { width: 16px; height: 16px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 8px; }
+  .ico { height: 48px; border: 1.5px solid #d9e1e3; border-radius: 10px; display: grid; place-items: center; cursor: pointer; color: #44545a; background: #fff; position: relative; }
+  .ico input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .ico svg { width: 22px; height: 22px; }
+  .ico:hover { background: #f5f8f8; }
+  .ico:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .ico:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .cic { width: 36px; height: 36px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); display: grid; place-items: center; flex: none; }
+  .cic svg { width: 19px; height: 19px; }
+  .chip svg { width: 17px; height: 17px; color: var(--purple); }
+  .chip[aria-checked="true"] svg { color: var(--primary); }
+  .ph-icon.rad { background: var(--purple-soft); color: var(--purple); }
+  .ph-icon.nurse { background: var(--green-soft); color: var(--green); }
+  .cic.g { background: var(--green-soft); color: var(--green); }
+  .chip.g svg { color: var(--green); }
+  .chip.g[aria-checked="true"] svg { color: var(--primary); }
+  .nm-i { display: flex; align-items: center; gap: 10px; min-width: 240px; }
+  .nm-i .cic { width: 32px; height: 32px; }
+  .nm-i .cic svg { width: 17px; height: 17px; }
+  .tag.rx { background: var(--orange-soft); color: var(--orange); }
+  .tag.norx { background: var(--green-soft); color: var(--green); }
+  .ph-icon.lab { background: var(--blue-soft); color: var(--blue); }
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border: 0; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .tabs button small { min-width: 22px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tabs button[aria-selected="true"] { color: var(--primary); border-color: var(--primary); }
+  .tabs button[aria-selected="true"] small { background: var(--primary-soft); }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .bar .grow { flex: 1; }
+  .search { position: relative; flex: 1; min-width: 200px; max-width: 360px; }
+  .search svg { position: absolute; top: 50%; inset-inline-start: 12px; width: 17px; height: 17px; transform: translateY(-50%); color: var(--muted); }
+  .search input { padding-inline-start: 38px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .in[readonly] { background: #f3f6f7; color: #44545a; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  textarea.in { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; font-family: inherit; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 9px; background: #fff; cursor: pointer; font-size: 13.5px; color: var(--ink); }
+  .chip small { color: var(--muted); font-size: 12px; }
+  .chip[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  /* Categories */
+  .cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .cg { padding: 18px 20px; display: grid; gap: 14px; }
+  .cg-h { display: flex; align-items: center; gap: 12px; }
+  .cg-h .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .cg-h .ic svg { width: 21px; height: 21px; }
+  .cg-h .ic.t { background: var(--blue-soft); color: var(--blue); }
+  .cg-h .ic.p { background: var(--purple-soft); color: var(--purple); }
+  .cg-h h2 { font-size: 16px; font-weight: 600; }
+  .cg-h p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .cg-h .btn { margin-inline-start: auto; height: 36px; padding: 0 12px; }
+  .cl { display: grid; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cr { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-top: 1px solid #eef2f3; }
+  .cr:first-child { border-top: 0; }
+  .cr .nm { flex: 1; min-width: 0; }
+  .cr .nm b { display: block; font-size: 14px; font-weight: 600; }
+  .cr .nm span { display: block; font-size: 12.5px; color: var(--muted); }
+  .cnt { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib { width: 34px; height: 34px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; display: grid; place-items: center; cursor: pointer; color: #44545a; flex: none; }
+  .ib svg { width: 16px; height: 16px; }
+  .ib:disabled { opacity: .4; cursor: not-allowed; }
+  .ib.red { color: var(--red); border-color: #f3c4c4; }
+  .empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  .nowrap { white-space: nowrap; }
+  .empty svg { width: 40px; height: 40px; color: #9fb3b8; display: block; margin: 0 auto 8px; }
+  /* Tables */
+  #view, #view > div, #view > div > * { min-width: 0; }
+  .table-wrap { overflow-x: auto; max-width: 100%; position: relative; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: start; font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; background: #fbfcfc; }
+  td { padding: 12px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.off td { color: #8a979c; }
+  td .nm b { display: block; font-weight: 600; }
+  td .nm span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #44545a; direction: ltr; unicode-bidi: isolate; }
+  .num { white-space: nowrap; }
+  .tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.none { background: var(--green-soft); color: var(--green); }
+  .tag.fast { background: var(--red-soft); color: var(--red); }
+  .tag.morning, .tag.optional { background: var(--orange-soft); color: var(--orange); }
+  .tag.cat { background: #f1f4f5; color: #44545a; font-weight: 500; }
+  .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .st.on { color: var(--green); }
+  .st.off { color: #8a979c; }
+  /* Modal */
+  .md-back { position: fixed; inset: 0; z-index: 70; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .md { width: min(640px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(16,35,43,.25); display: grid; grid-template-rows: auto 1fr auto; }
+  .md-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .md-h h2 { font-size: 17px; font-weight: 600; }
+  .md-b { padding: 18px 22px; display: grid; gap: 14px; }
+  .md-f { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: #fff; }
+  .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .fld { display: grid; gap: 6px; align-content: start; }
+  .fld > label, .fld > .lbl { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fld i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .err { font-size: 12.5px; color: var(--red); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  .types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .type { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid #d9e1e3; border-radius: 10px; cursor: pointer; }
+  .type input { margin-top: 3px; accent-color: var(--primary); }
+  .type b { display: block; font-size: 14px; font-weight: 600; }
+  .type span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .type:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .sw { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; width: fit-content; }
+  .sw input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .pick { border: 1px solid #d9e1e3; border-radius: 10px; max-height: 240px; overflow: auto; }
+  .pick label { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #eef2f3; font-size: 13.5px; cursor: pointer; }
+  .pick label:first-child { border-top: 0; }
+  .pick label:hover { background: #f8fafa; }
+  .pick input { width: 17px; height: 17px; accent-color: var(--primary); flex: none; }
+  .pick .grow { flex: 1; min-width: 0; }
+  .pick small { color: var(--muted); }
+  .pick-sum { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+  .pick.bad { border-color: var(--red); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pr-list { display: grid; gap: 10px; }
+  .pr { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #fbfcfc; display: grid; gap: 10px; }
+  .pr.bad { border-color: #f3b4b4; background: #fffafa; }
+  .pr-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; color: #44545a; }
+  .pr-h .code { font-weight: 400; }
+  .pr-g { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .pr .fld > label { font-size: 11.5px; }
+  .pr .in { height: 38px; font-size: 13.5px; }
+  .pr-add { display: flex; align-items: center; justify-content: center; gap: 8px; height: 42px; border: 1.5px dashed #b9d9cf; border-radius: 10px; background: #f6fbf9; color: var(--primary); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .pr-add svg { width: 17px; height: 17px; }
+  .sec-t { font-size: 14px; font-weight: 700; color: #15304a; margin-top: 4px; }
+  .sec-t + .hint { margin-top: -8px; }
+  .tag.miss { background: var(--red-soft); color: var(--red); }
+  .rng { font-size: 12.5px; color: #44545a; white-space: nowrap; }
+  @media (max-width: 760px) { .pr-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .foot { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .foot svg { width: 15px; height: 15px; color: var(--primary); }
+  @media (max-width: 900px) { .cat-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) {
+    .cg { padding: 16px; }
+    .row2, .types { grid-template-columns: minmax(0, 1fr); }
+    .md-h, .md-b, .md-f { padding-inline: 16px; }
+    .md-f .btn { flex: 1; }
+    .search { max-width: none; min-width: 0; flex-basis: 100%; }
+    .bar .btn { flex: 1; }
+  }
+  /* ---------- Booking schedule ---------- */
+  .btn.sm { height: 40px; padding: 0 14px; font-size: 13px; cursor: pointer; }
+  .seg { display: inline-flex; border: 1px solid #d9e1e3; border-radius: 9px; overflow: hidden; width: fit-content; background: #fff; }
+  .seg label { position: relative; padding: 0 18px; height: 38px; display: grid; place-items: center; font-size: 13.5px; cursor: pointer; }
+  .seg label + label { border-inline-start: 1px solid #d9e1e3; }
+  .seg label.on { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .seg label:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: -2px; }
+  .chip[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  td.acts, th.acts { white-space: nowrap; text-align: end; }
+  td.acts .ib { display: inline-grid; margin-inline-start: 6px; }
+  .muted { color: var(--muted); }
+  .ph-acts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .fl { padding: 16px 18px; display: grid; gap: 14px; }
+  .fl-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .fl-row .fld { flex: 1; min-width: 220px; max-width: 360px; }
+  .wnav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-inline-start: auto; }
+  .wnav .ib { width: 40px; height: 40px; }
+  [dir="rtl"] .wnav .ib svg { transform: scaleX(-1); }
+  .wnav .wl { min-width: 170px; text-align: center; font-size: 14px; font-weight: 600; }
+  .chip .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .k-doctor { --k: var(--blue); --ks: var(--blue-soft); }
+  .k-nursing { --k: var(--green); --ks: var(--green-soft); }
+  .k-blood { --k: var(--red); --ks: var(--red-soft); }
+  .k-iv { --k: var(--purple); --ks: var(--purple-soft); }
+  .k-followup, .k-care, .k-internal { --k: var(--orange); --ks: var(--orange-soft); }
+  .k-none { --k: #6b7a80; --ks: #f1f4f5; }
+  .chip .dot { background: var(--k); }
+  .pc { padding: 16px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .pc-ava { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; font-size: 16px; flex: none; }
+  .pc-ava.doctor { background: var(--blue-soft); color: var(--blue); }
+  .pc-ava.nurse { background: var(--green-soft); color: var(--green); }
+  .pc-who { flex: 1; min-width: 180px; }
+  .pc-who b { display: block; font-size: 16px; font-weight: 600; }
+  .pc-who span { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .pc-stats { display: flex; gap: 8px 22px; flex-wrap: wrap; font-size: 13px; color: #44545a; }
+  .pc-stats span { display: inline-flex; align-items: center; gap: 6px; }
+  .pc-stats svg { width: 16px; height: 16px; color: var(--primary); }
+  .pc-stats b { font-weight: 600; color: var(--ink); }
+  .pc a { font-size: 13px; font-weight: 500; color: var(--primary); }
+  .strip { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+  .sd { border: 1px solid var(--border); border-radius: 10px; background: #fff; padding: 10px 12px; display: grid; gap: 3px; text-align: start; cursor: pointer; }
+  .sd:hover { border-color: #b9d9cf; }
+  .sd b { font-size: 13px; font-weight: 600; }
+  .sd .dn { font-size: 12px; color: var(--muted); }
+  .sd .dc { display: flex; align-items: baseline; gap: 5px; margin-top: 4px; color: var(--primary); }
+  .sd .dc strong { font-size: 22px; font-weight: 700; line-height: 1; }
+  .sd .dc small { font-size: 12px; font-weight: 500; }
+  .sd .dc.z { color: #a8b4b8; }
+  .sd.today b::after { content: " •"; color: var(--primary); }
+  .sd[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); box-shadow: inset 0 0 0 1px var(--primary); }
+  .lh { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .lh h2 { font-size: 16px; font-weight: 600; }
+  .lh p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .free { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: #44545a; }
+  .free .tag { background: var(--green-soft); color: var(--green); font-weight: 500; unicode-bidi: isolate; }
+  .free .tag.off { background: #f1f4f5; color: #6b7a80; }
+  tr.dg td { background: #f6f9f9; font-size: 13px; font-weight: 600; color: #15304a; padding: 9px 14px; }
+  tr.dg td span { font-weight: 400; color: var(--muted); margin-inline-start: 8px; }
+  tr.cx td { color: #8a979c; }
+  tr.cx td .tm, tr.cx td .bid { text-decoration: line-through; }
+  .tm { white-space: nowrap; font-weight: 600; }
+  .tm small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
+  .bid { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; white-space: nowrap; direction: ltr; unicode-bidi: isolate; }
+  .bid-wrap { display: grid; gap: 4px; justify-items: start; }
+  .tag.int { background: var(--orange-soft); color: var(--orange); }
+  .sv { display: flex; align-items: center; gap: 10px; min-width: 190px; }
+  .sv .si { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--ks); color: var(--k); flex: none; }
+  .sv .si svg { width: 17px; height: 17px; }
+  .sv b { display: block; font-size: 13.5px; font-weight: 600; }
+  .sv span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pt { min-width: 150px; }
+  .pt b { display: block; font-weight: 600; }
+  .pt span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; direction: ltr; unicode-bidi: isolate; text-align: start; }
+  [dir="rtl"] .pt span { text-align: end; }
+  .who { display: block; min-width: 130px; font-size: 13px; }
+  .who.na { color: #9aa7ab; font-style: italic; }
+  .who.hl { color: var(--primary); font-weight: 600; }
+  .tag.s-upcoming { background: var(--orange-soft); color: var(--orange); }
+  .tag.s-completed { background: var(--green-soft); color: var(--green); }
+  .tag.s-cancelled { background: var(--red-soft); color: var(--red); }
+  .tag.s-unscheduled { background: var(--blue-soft); color: var(--blue); }
+  .note-unsch { padding: 12px 18px; border-top: 1px solid var(--border); font-size: 12.5px; color: #44545a; display: flex; align-items: center; gap: 8px; }
+  .note-unsch svg { width: 16px; height: 16px; color: var(--blue); }
+  .note-unsch a { color: var(--primary); font-weight: 500; }
+  /* Modals */
+  .md.wide { width: min(720px, 100%); }
+  .nsum { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px 16px; padding: 14px 16px; border-radius: 12px; background: var(--primary-soft); border: 1px solid #b9d9cf; }
+  .nsum dt { font-size: 11.5px; color: #44545a; }
+  .nsum dd { margin-top: 3px; font-size: 14px; font-weight: 600; color: var(--ink); overflow-wrap: anywhere; }
+  .nsum dd.na { color: #8a979c; font-weight: 500; }
+  .nsum dd .bid { font-size: 13px; font-weight: 600; color: var(--primary); }
+  .nsum .nsum-n { grid-column: 1 / -1; font-size: 12px; color: #44545a; display: flex; align-items: center; gap: 6px; }
+  .nsum .nsum-n svg { width: 14px; height: 14px; color: var(--primary); }
+  .tslots { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+  .tslot { height: 40px; border-radius: 9px; border: 1px solid #9fd3b3; background: var(--green-soft); color: var(--green); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .tslot:hover { background: #d6efdf; }
+  .tslot[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .tslot:disabled { background: #f6f8f8; border-color: #e6ebec; color: #a8b4b8; cursor: not-allowed; text-decoration: line-through; }
+  .tslots.bad { outline: 1.5px solid var(--red); outline-offset: 4px; border-radius: 8px; }
+  .tag.s-sent { background: var(--blue-soft); color: var(--blue); }
+  .sumb { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; background: #fbfcfc; }
+  .sumb dt { font-size: 11.5px; color: var(--muted); }
+  .sumb dd { font-size: 13.5px; font-weight: 500; margin-top: 2px; overflow-wrap: anywhere; }
+  .cand label.dis { cursor: not-allowed; color: #9aa7ab; }
+  .cand label.dis:hover { background: none; }
+  .cand .tag { flex: none; }
+  .tag.a-free, .tag.a-open { background: var(--green-soft); color: var(--green); }
+  .tag.a-open { background: #eef6f3; }
+  .tag.a-busy { background: var(--red-soft); color: var(--red); }
+  .tag.a-off { background: #f1f4f5; color: #6b7a80; }
+  .tag.a-cur { background: var(--blue-soft); color: var(--blue); }
+  .row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .pick.pts { max-height: 210px; }
+  .pick .mrn { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; direction: ltr; unicode-bidi: isolate; }
+  .chk { display: grid; gap: 6px; padding: 12px 14px; border-radius: 10px; font-size: 13px; }
+  .chk.ok { background: var(--green-soft); color: var(--green); }
+  .chk.bad { background: var(--red-soft); color: #b42318; }
+  .chk.info { background: #f1f4f5; color: #44545a; }
+  .chk div { display: flex; align-items: flex-start; gap: 8px; }
+  .chk svg { width: 16px; height: 16px; margin-top: 2px; }
+  .chk ul { margin: 0; padding-inline-start: 24px; display: grid; gap: 3px; }
+  .md-b .err:empty { display: none; }
+  @media (max-width: 1100px) { .strip { gap: 6px; } .sd { padding: 10px 8px; } .sd .mm { display: none; } .sd .dc small { display: none; } }
+  /* Available hours */
+  .hrs-c { padding: 16px 18px; display: grid; gap: 12px; }
+  .hrs-h { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
+  .hrs-h h2 { font-size: 16px; font-weight: 600; }
+  .hrs-h p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .lg { display: flex; gap: 6px 14px; flex-wrap: wrap; font-size: 12px; color: #44545a; }
+  .lg span { display: inline-flex; align-items: center; gap: 6px; }
+  .lg i { width: 12px; height: 12px; border-radius: 4px; border: 1px solid; }
+  .lg .f { background: var(--green-soft); border-color: #9fd3b3; }
+  .lg .b { background: var(--red-soft); border-color: #f3b4b4; }
+  .lg .x { background: #f1f4f5; border-color: #dfe5e7; }
+  .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+  .slot { display: grid; gap: 2px; padding: 9px 10px; border-radius: 9px; border: 1px solid; text-align: start; font-size: 13.5px; font-weight: 600; }
+  .slot small { font-size: 11.5px; font-weight: 500; }
+  .slot.free { background: var(--green-soft); border-color: #9fd3b3; color: var(--green); cursor: pointer; }
+  .slot.free:hover { background: #d6efdf; }
+  .slot.free:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .slot.busy { background: var(--red-soft); border-color: #f3b4b4; color: #b42318; }
+  .slot.busy small { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .slot.past { background: #f6f8f8; border-color: #e6ebec; color: #a8b4b8; }
+  .hrs-e { display: flex; align-items: center; gap: 10px; padding: 14px; border-radius: 10px; background: #f6f9f9; font-size: 13.5px; color: #44545a; }
+  .hrs-e svg { width: 20px; height: 20px; color: var(--primary); }
+  .hrs-e a { color: var(--primary); font-weight: 500; }
+  .tag.src-sys { background: var(--blue-soft); color: var(--blue); }
+  @media (max-width: 760px) {
+    .ph-acts { width: 100%; }
+    .ph-acts .btn { flex: 1; }
+    .fl { padding: 14px; }
+    .fl-row .fld { max-width: none; min-width: 0; flex-basis: 100%; }
+    .wnav { margin-inline-start: 0; width: 100%; }
+    .wnav .wl { flex: 1; min-width: 0; }
+    .wnav .seg { width: 100%; display: grid; grid-template-columns: 1fr 1fr; text-align: center; }
+    .strip { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+    .sd { padding: 8px 4px; text-align: center; justify-items: center; gap: 2px; }
+    .sd .dn { font-size: 11px; }
+    .sd b { font-size: 14px; }
+    .sd .dc { justify-content: center; }
+    .sd .dc strong { font-size: 18px; }
+    .hrs-c { padding: 14px; }
+    .slots { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .slot { padding: 8px; font-size: 12.5px; }
+    .lh { padding: 14px; }
+    .sumb, .row3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .nsum { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: 12px; }
+    .tslots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .md-f .btn { white-space: normal; height: auto; min-height: 42px; padding: 8px 12px; text-align: center; line-height: 1.3; }
+    .md-f .btn-primary { flex: 2; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" aria-current="page" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h3M7 17.5h3M14 14h3"/></svg></span>
+      <div>
+        <h1 data-i18n="title">Booking Schedule</h1>
+        <p data-i18n="subtitle">Every booking by day, doctor and nurse.</p>
+      </div>
+    </div>
+    <div class="ph-acts">
+      <a class="btn btn-ghost" href="bookings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span data-i18n="listView">Bookings List</span></a>
+      <button class="btn btn-primary" id="addBtn" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="addBooking">Add Internal Booking</span></button>
+    </div>
+  </div>
+  <section class="card fl">
+    <div class="fl-row">
+      <div class="fld"><label for="fPerson" data-i18n="person">Doctor or nurse</label><select class="in" id="fPerson"></select></div>
+      <div class="wnav">
+        <button class="ib" id="prev" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="wl" id="wLabel" aria-live="polite"></div>
+        <button class="ib" id="next" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        <button class="btn btn-ghost sm" id="today" type="button" data-i18n="today">Today</button>
+        <div class="seg" id="mode" role="radiogroup"></div>
+      </div>
+    </div>
+    <div class="chips" id="fKinds" role="group"></div>
+  </section>
+  <section class="card" id="pcard" hidden></section>
+  <div class="strip" id="strip"></div>
+  <section class="card hrs-c" id="hrs" hidden></section>
+  <section class="card" id="list"></section>
+</main>
+<div class="md-back" id="mdBack" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="nurses.js"></script>
+<script src="orders.js"></script>
+<script src="staff.js"></script>
+<script src="patients.js"></script>
+<script src="schedule.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Booking schedule: paid bookings and internal bookings (doctor follow-ups, nursing care plans) on one week view,
+  // filtered by doctor or nurse. Staff can move a booking to another doctor or nurse, or add an internal booking,
+  // which makes that time busy for the person. Data and rules live in schedule.js.
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Booking Schedule", subtitle: "Every booking by day, doctor and nurse.", listView: "Bookings List", addBooking: "Add Internal Booking",
+      person: "Doctor or nurse", allStaff: "All doctors and nurses", grpDoctors: "Doctors", grpNurses: "Nurses", inactive: "inactive",
+      today: "Today", prevW: "Previous week", nextW: "Next week", prevD: "Previous day", nextD: "Next day", mDay: "Day", mWeek: "Week",
+      k_all: "All", k_doctor: "Doctor Visit", k_nursing: "Nursing", k_blood: "Lab Samples", k_iv: "IV Therapy", k_internal: "Internal", k_followup: "Doctor Follow-up", k_care: "Nursing Care Plan", k_none: "Service",
+      role_doctor: "Doctor", role_nurse: "Nurse",
+      nBk: "{n} bookings", nBk1: "1 booking", nBk0: "No bookings", off: "Off", noSched: "No schedule",
+      pcWeek: "This week", pcHours: "Work hours", pcNoSched: "No work schedule set", pcProfile: "Work schedule", hrsW: "{h} h / week", bkOne: "booking", bkMany: "bookings", thSrc: "Source", srcSys: "System", srcInt: "Internal",
+      hrsT: "Available Hours", hrsPick: "Choose a doctor or nurse above to see their available hours for this day.", hrsNoSched: "{p} has no work schedule yet, so every time is open.", hrsOff: "{p} is off on this day.",
+      hrsFree: "{n} of {all} slots free", lgFree: "Available", lgBusy: "Booked", lgPast: "Passed", hrsAdd: "Add an internal booking at this time",
+      hours: "Work hours: {h}", dayOff: "Day off", freeT: "Free:", noFree: "No free time left", fullyFree: "Free all day",
+      thTime: "Time", thBk: "Booking No.", thOrd: "Order No.", thSvc: "Service", thPt: "Patient", thDr: "Doctor", thNr: "Nurse", thSt: "Status", thAct: "Actions",
+      internal: "Internal", notAssigned: "Not assigned", noOrder: "—", more: "+{n} more", minsN: "{n} min",
+      s_upcoming: "Upcoming", s_completed: "Completed", s_cancelled: "Cancelled", s_unscheduled: "No time yet",
+      emptyDay: "No bookings on this day.", emptyWeek: "No bookings this week.", emptyFilt: "Try another service or person.",
+      unsch: "{n} paid bookings have no time yet.", unsch1: "1 paid booking has no time yet.", openList: "Open the bookings list",
+      aReassign: "Reassign", aOpen: "Open booking {id}", aCancel: "Cancel internal booking",
+      rTitle: "Reassign {id}", rDoctor: "Doctor", rNurse: "Nurse", rNoteL: "Reason", rNotePh: "e.g. Doctor on leave, patient asked for a female nurse", optional: "(optional)",
+      rSame: "Choose a different doctor or nurse.", rDone: "Booking moved to {n}.", rNone: "No nurse", rNoneDoc: "No doctor",
+      a_free: "Available", a_open: "No schedule set", a_busy: "Busy · {id}", a_off: "Off duty", a_cur: "Current",
+      sWhen: "Date and time", sPt: "Patient", sSvc: "Service",
+      nTitle: "Add Internal Booking", nType: "Booking type",
+      tFollow: "Doctor follow-up", tFollowD: "A doctor books a follow-up visit for a patient.",
+      tCare: "Nursing care plan", tCareD: "The head nurse assigns a nurse to a patient's treatment plan, like giving medication.",
+      nPt: "Patient", nPtSearch: "Search by name, file number or mobile", nPtNone: "No patient matches.", nDoctor: "Doctor", nNurse: "Nurse", pickDoctor: "Choose a doctor", pickNurse: "Choose a nurse", nurseOpt: "No nurse",
+      nTask: "Task", nTaskPh: "e.g. Give IV antibiotic, wound dressing", nDate: "Date", nTime: "Start time", nDur: "Duration", nRepeat: "Repeat daily for", daysN: "{n} days", days1: "1 day",
+      nNote: "Note", nNotePh: "e.g. Check blood pressure before the dose",
+      chkOk: "The time is free for everyone on this booking.", chkOk1: "The time is free on all {n} days.", chkBad: "This time can't be booked:", chkInfo: "Choose the person, date and time to check availability.",
+      cBusy: "{d}: {p} is busy ({id}).", cOff: "{d}: {p} is off duty at this time.", cPast: "The time has already passed.",
+      saved: "Booking {id} approved and sent (order {o}).", savedN: "{n} bookings approved and sent ({a} to {b}), order {o}.",
+      nReason: "Reason for the follow-up", nReasonPh: "e.g. Review lab results, check blood pressure after new medication", approveDr: "Approve and send to doctor", approveNr: "Approve and send to nurse",
+      notChosen: "Not chosen yet", numsNote: "Internal numbers (INT / IBK) are separate from call center numbers (ORD / BK) and are issued when you approve.",
+      slPickDr: "Choose the doctor to see their available times.", slPickNr: "Choose the nurse to see their available times.", slPickDate: "Choose a date.", slOff: "Day off on this date. Choose another date.",
+      slNone: "No times left on this date. Choose another date.", slNoSched: "No work schedule set for this person, so any time can be chosen.", slReq: "Choose a time.",
+      s_sentDr: "Sent to doctor", s_sentNr: "Sent to nurse", cancelQ: "Cancel internal booking {id}?", thDate: "Date", thFile: "File No.", thType: "Booking Type", srcCC: "Call Center", cancelled: "Booking {id} cancelled.",
+      save: "Save", cancel: "Cancel", close: "Close", req: "Required.", storeErr: "Couldn't save. The browser storage may be full."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "جدول الحجوزات", subtitle: "كل الحجوزات حسب اليوم والطبيب والممرضة.", listView: "قائمة الحجوزات", addBooking: "إضافة حجز داخلي",
+      person: "الطبيب أو الممرضة", allStaff: "كل الأطباء والممرضات", grpDoctors: "الأطباء", grpNurses: "التمريض", inactive: "غير نشط",
+      today: "اليوم", prevW: "الأسبوع السابق", nextW: "الأسبوع التالي", prevD: "اليوم السابق", nextD: "اليوم التالي", mDay: "يوم", mWeek: "أسبوع",
+      k_all: "الكل", k_doctor: "زيارة طبيب", k_nursing: "تمريض", k_blood: "سحب عينات", k_iv: "محاليل وريدية", k_internal: "داخلي", k_followup: "متابعة طبيب", k_care: "خطة علاج تمريضية", k_none: "خدمة",
+      role_doctor: "طبيب", role_nurse: "ممرضة",
+      nBk: "{n} حجوزات", nBk1: "حجز واحد", nBk0: "لا يوجد حجوزات", off: "إجازة", noSched: "بدون جدول",
+      pcWeek: "هذا الأسبوع", pcHours: "ساعات الدوام", pcNoSched: "ما فيه جدول دوام", pcProfile: "جدول الدوام", hrsW: "{h} ساعة بالأسبوع", bkOne: "حجز", bkMany: "حجوزات", thSrc: "المصدر", srcSys: "النظام", srcInt: "داخلي",
+      hrsT: "الساعات المتاحة", hrsPick: "اختر طبيب أو ممرضة من فوق عشان تشوف الساعات المتاحة له في هذا اليوم.", hrsNoSched: "{p} ما عنده جدول دوام للحين، فكل الأوقات مفتوحة.", hrsOff: "{p} إجازة في هذا اليوم.",
+      hrsFree: "{n} من {all} فترة متاحة", lgFree: "متاح", lgBusy: "محجوز", lgPast: "انتهى", hrsAdd: "إضافة حجز داخلي في هذا الوقت",
+      hours: "الدوام: {h}", dayOff: "إجازة", freeT: "متاح:", noFree: "ما بقى وقت متاح", fullyFree: "متاح طول اليوم",
+      thTime: "الوقت", thBk: "رقم الحجز", thOrd: "رقم الطلب", thSvc: "الخدمة", thPt: "المريض", thDr: "الطبيب", thNr: "الممرضة", thSt: "الحالة", thAct: "الإجراءات",
+      internal: "داخلي", notAssigned: "لم يُعيَّن", noOrder: "—", more: "+{n} أخرى", minsN: "{n} دقيقة",
+      s_upcoming: "قادم", s_completed: "مكتمل", s_cancelled: "ملغي", s_unscheduled: "بدون موعد",
+      emptyDay: "ما فيه حجوزات في هذا اليوم.", emptyWeek: "ما فيه حجوزات هذا الأسبوع.", emptyFilt: "جرّب خدمة أو شخص ثاني.",
+      unsch: "{n} حجوزات مدفوعة بدون موعد للحين.", unsch1: "حجز مدفوع واحد بدون موعد للحين.", openList: "افتح قائمة الحجوزات",
+      aReassign: "تحويل", aOpen: "فتح الحجز {id}", aCancel: "إلغاء الحجز الداخلي",
+      rTitle: "تحويل {id}", rDoctor: "الطبيب", rNurse: "الممرضة", rNoteL: "السبب", rNotePh: "مثال: الطبيب في إجازة، المريضة طلبت ممرضة", optional: "(اختياري)",
+      rSame: "اختر طبيب أو ممرضة غير الحالي.", rDone: "تم تحويل الحجز إلى {n}.", rNone: "بدون ممرضة", rNoneDoc: "بدون طبيب",
+      a_free: "متاح", a_open: "بدون جدول", a_busy: "مشغول · {id}", a_off: "خارج الدوام", a_cur: "الحالي",
+      sWhen: "التاريخ والوقت", sPt: "المريض", sSvc: "الخدمة",
+      nTitle: "إضافة حجز داخلي", nType: "نوع الحجز",
+      tFollow: "متابعة طبيب", tFollowD: "الطبيب يحجز زيارة متابعة لمريض.",
+      tCare: "خطة علاج تمريضية", tCareD: "رئيسة التمريض تعيّن ممرضة لخطة علاج المريض، مثل إعطاء الأدوية.",
+      nPt: "المريض", nPtSearch: "ابحث بالاسم أو رقم الملف أو الجوال", nPtNone: "ما فيه مريض مطابق.", nDoctor: "الطبيب", nNurse: "الممرضة", pickDoctor: "اختر الطبيب", pickNurse: "اختر الممرضة", nurseOpt: "بدون ممرضة",
+      nTask: "المهمة", nTaskPh: "مثال: إعطاء مضاد حيوي وريدي، تغيير ضماد", nDate: "التاريخ", nTime: "وقت البداية", nDur: "المدة", nRepeat: "تكرار يومي لمدة", daysN: "{n} أيام", days1: "يوم واحد",
+      nNote: "ملاحظة", nNotePh: "مثال: قياس الضغط قبل الجرعة",
+      chkOk: "الوقت متاح لكل المعيّنين على الحجز.", chkOk1: "الوقت متاح في كل الأيام ({n}).", chkBad: "ما يمكن الحجز في هذا الوقت:", chkInfo: "اختر الشخص والتاريخ والوقت عشان نتحقق من الإتاحة.",
+      cBusy: "{d}: {p} مشغول ({id}).", cOff: "{d}: {p} خارج الدوام في هذا الوقت.", cPast: "الوقت هذا فات.",
+      saved: "تم اعتماد الحجز {id} وإرساله (طلب {o}).", savedN: "تم اعتماد {n} حجوزات وإرسالها ({a} إلى {b})، طلب {o}.",
+      nReason: "سبب المتابعة", nReasonPh: "مثال: مراجعة نتائج التحاليل، متابعة الضغط بعد الدواء الجديد", approveDr: "اعتماد وإرسال للطبيب", approveNr: "اعتماد وإرسال للممرضة",
+      notChosen: "لم يُحدد", numsNote: "أرقام الحجز الداخلي (INT / IBK) تسلسل مستقل عن أرقام الكول سنتر (ORD / BK)، وتصدر عند الاعتماد.",
+      slPickDr: "اختر الطبيب عشان تظهر أوقاته المتاحة.", slPickNr: "اختر الممرضة عشان تظهر أوقاتها المتاحة.", slPickDate: "اختر التاريخ.", slOff: "إجازة في هذا التاريخ. اختر تاريخ ثاني.",
+      slNone: "ما بقى أوقات في هذا التاريخ. اختر تاريخ ثاني.", slNoSched: "ما فيه جدول دوام لهذا الشخص، فتقدر تختار أي وقت.", slReq: "اختر الوقت.",
+      s_sentDr: "مرسل للطبيب", s_sentNr: "مرسل للممرضة", cancelQ: "تبي تلغي الحجز الداخلي {id}؟", thDate: "التاريخ", thFile: "رقم الملف", thType: "نوع الحجز", srcCC: "كول سنتر", cancelled: "تم إلغاء الحجز {id}.",
+      save: "حفظ", cancel: "إلغاء", close: "إغلاق", req: "مطلوب.", storeErr: "ما قدرنا نحفظ. يمكن مساحة المتصفح ممتلئة."
+    }
+  };
+  let current = "en", modal = null, opener = null;
+  const t = () => i18n[current];
+  const tx = (k, v) => (v && v.n === 1 && t()[k + "1"] || v && v.n === 0 && t()[k + "0"] || t()[k]).replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const T = v => v && typeof v === "object" ? (v[current] || v.en || "") : (v || "");
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = {
+    doctor: '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    nursing: '<path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"/><path d="M12 9.5v5M9.5 12h5"/>',
+    blood: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    iv: '<rect x="7" y="2.5" width="10" height="11" rx="2"/><path d="M10 6.5h4M12 13.5v3M12 16.5c0 3 3 3 3 5"/>',
+    followup: '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    care: '<rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2"/><path d="m9 14 2 2 4-4"/>',
+    none: '<circle cx="12" cy="12" r="8"/>',
+    swap: '<path d="M7 7h12l-3-3M17 17H5l3 3"/>', eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    check: '<path d="m5 12 5 5 9-10"/>', alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>'
+  };
+  const KINDS = ["all", "doctor", "nursing", "blood", "iv", "internal"];
+  const kindGroup = k => k === "followup" || k === "care" ? "internal" : k;
+  const LOC = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const pd = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+  const ymd = MadaSchedule.ymd;
+  const addDays = (s, n) => { const d = pd(s); d.setDate(d.getDate() + n); return ymd(d); };
+  const weekStart = s => addDays(s, -pd(s).getDay());
+  const fmtD = (s, o) => pd(s).toLocaleDateString(LOC(), o || { weekday: "short", day: "numeric", month: "short" });
+  const fmtMin = m => { m = ((m % 1440) + 1440) % 1440; const h = Math.floor(m / 60), mm = m % 60, ap = h < 12 ? (current === "ar" ? "ص" : "AM") : (current === "ar" ? "م" : "PM"); return `${h % 12 || 12}:${String(mm).padStart(2, "0")} ${ap}`; };
+  const rng = (a, b) => `${fmtMin(a)} – ${fmtMin(b)}`;
+  const initials = n => (n || "?").replace(/^(Dr\.|Nurse|د\.|الممرضة)\s*/, "").trim().split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  const pname = id => { const p = id && MadaSchedule.person(id); return p ? T(p.name) : ""; };
+  const todayS = () => ymd(new Date());
+
+  // ---------- State (kept in the address so a link opens the same view) ----------
+  const q = new URLSearchParams(location.search);
+  let st = { person: q.get("person") || "", kind: KINDS.includes(q.get("kind")) ? q.get("kind") : "all", date: /^\d{4}-\d{2}-\d{2}$/.test(q.get("date") || "") ? q.get("date") : todayS(), mode: q.get("view") === "week" ? "week" : "day" };
+  function keepUrl() {
+    const p = new URLSearchParams();
+    if (st.person) p.set("person", st.person);
+    if (st.kind !== "all") p.set("kind", st.kind);
+    if (st.date !== todayS()) p.set("date", st.date);
+    if (st.mode === "week") p.set("view", "week");
+    history.replaceState(null, "", location.pathname + (p.toString() ? "?" + p : ""));
+  }
+
+  // ---------- Data ----------
+  let all = [];
+  const load = () => { all = MadaSchedule.entries(); };
+  const matches = e => (!st.person || e.doctorId === st.person || e.nurseId === st.person) && (st.kind === "all" || kindGroup(e.kind) === st.kind);
+  const onDay = (d, list) => (list || all).filter(e => e.date === d && matches(e)).sort((a, b) => a.minute - b.minute || (a.status === "cancelled") - (b.status === "cancelled"));
+
+  function itemName(it) {
+    const p = it.kind === "test" ? MadaLabs.byCode[it.code] : it.kind === "pkg" ? MadaLabs.pkgById[it.code] : it.kind === "nursing" ? MadaNursing.byCode[it.code] : it.kind === "iv" ? MadaIV.byCode[it.code] : null;
+    return p ? T(p.name) : it.code;
+  }
+  function svcSub(e) {
+    if (e.kind === "care") return T(e.task);
+    if (e.kind === "followup") return T(e.reason) || T(e.note) || "";
+    const n = e.items.map(itemName).filter(Boolean);
+    return n.length ? n[0] + (n.length > 1 ? " " + tx("more", { n: n.length - 1 }) : "") : "";
+  }
+
+  // ---------- Filters ----------
+  function drawPeople() {
+    const ps = MadaSchedule.people(), opt = p => `<option value="${esc(p.id)}" ${st.person === p.id ? "selected" : ""}>${esc(T(p.name))}${p.active ? "" : " · " + t().inactive}</option>`;
+    if (st.person && !ps.some(p => p.id === st.person)) st.person = "";
+    $("fPerson").innerHTML = `<option value="">${esc(t().allStaff)}</option>` +
+      `<optgroup label="${esc(t().grpDoctors)}">${ps.filter(p => p.role === "doctor").map(opt).join("")}</optgroup>` +
+      `<optgroup label="${esc(t().grpNurses)}">${ps.filter(p => p.role === "nurse").map(opt).join("")}</optgroup>`;
+  }
+  function drawKinds() {
+    $("fKinds").setAttribute("aria-label", t().thSvc);
+    $("fKinds").innerHTML = KINDS.map(k => {
+      const n = all.filter(e => e.date && e.date >= weekStart(st.date) && e.date <= addDays(weekStart(st.date), 6) && (k === "all" || kindGroup(e.kind) === k) && (!st.person || e.doctorId === st.person || e.nurseId === st.person) && e.status !== "cancelled").length;
+      return `<button type="button" class="chip k-${k}" data-kind="${k}" aria-pressed="${st.kind === k}">${k === "all" ? "" : '<span class="dot"></span>'}${esc(t()["k_" + k])} <small>${n}</small></button>`;
+    }).join("");
+  }
+  function drawNav() {
+    const ws = weekStart(st.date), we = addDays(ws, 6), wk = st.mode === "week";
+    $("wLabel").textContent = wk ? `${fmtD(ws, { day: "numeric", month: "short" })} – ${fmtD(we, { day: "numeric", month: "short", year: "numeric" })}` : fmtD(st.date, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    $("prev").setAttribute("aria-label", wk ? t().prevW : t().prevD); $("prev").title = $("prev").getAttribute("aria-label");
+    $("next").setAttribute("aria-label", wk ? t().nextW : t().nextD); $("next").title = $("next").getAttribute("aria-label");
+    $("mode").setAttribute("aria-label", t().mWeek);
+    $("mode").innerHTML = ["day", "week"].map(m => `<label class="${st.mode === m ? "on" : ""}"><input type="radio" name="mode" value="${m}" ${st.mode === m ? "checked" : ""}>${esc(t()[m === "day" ? "mDay" : "mWeek"])}</label>`).join("");
+  }
+
+  // ---------- Person card ----------
+  function drawPerson() {
+    const p = st.person && MadaSchedule.person(st.person), el = $("pcard");
+    if (!p) { el.hidden = true; el.innerHTML = ""; return; }
+    const ws = weekStart(st.date), days = [...Array(7)].map((_, i) => addDays(ws, i));
+    const n = days.reduce((s, d) => s + all.filter(e => e.date === d && e.status !== "cancelled" && (e.doctorId === p.id || e.nurseId === p.id)).length, 0);
+    const hs = days.map(d => MadaSchedule.hoursOn(p.id, d)), sched = hs.some(h => h !== undefined);
+    const wkMin = hs.reduce((s, h) => s + (h ? h.to - h.from : 0), 0);
+    el.hidden = false;
+    el.className = "card pc";
+    el.innerHTML = `<span class="pc-ava ${p.role}">${esc(initials(T(p.name)))}</span>
+      <div class="pc-who"><b>${esc(T(p.name))}</b><span>${esc([t()["role_" + p.role], T(p.spec)].filter(Boolean).join(" · "))}</span></div>
+      <div class="pc-stats">
+        <span>${svg(IC.cal)}${esc(t().pcWeek)}: <b>${esc(tx("nBk", { n }))}</b></span>
+        <span>${svg(IC.clock)}${esc(t().pcHours)}: <b>${sched ? esc(tx("hrsW", { h: Math.round(wkMin / 6) / 10 })) : esc(t().pcNoSched)}</b></span>
+        ${p.staff ? `<a href="staff-profile.html?id=${encodeURIComponent(p.id)}#sched">${esc(t().pcProfile)}</a>` : ""}
+      </div>`;
+  }
+
+  // ---------- Week strip ----------
+  function drawStrip() {
+    const ws = weekStart(st.date), td = todayS();
+    $("strip").innerHTML = [...Array(7)].map((_, i) => {
+      const d = addDays(ws, i), n = onDay(d).filter(e => e.status !== "cancelled").length;
+      return `<button type="button" class="sd${d === td ? " today" : ""}" data-day="${d}" aria-pressed="${st.mode === "day" && d === st.date}">
+        <span class="dn">${esc(fmtD(d, { weekday: "short" }))}</span><b>${esc(fmtD(d, { day: "numeric" }))}<span class="mm"> ${esc(fmtD(d, { month: "short" }))}</span></b>
+        <span class="dc${n ? "" : " z"}"><strong>${n}</strong><small>${esc(n === 1 ? t().bkOne : t().bkMany)}</small><span class="sr"> ${esc(tx("nBk", { n }))}</span></span></button>`;
+    }).join("");
+  }
+
+  // ---------- List ----------
+  // Available hours for the chosen person on the chosen day: every 30 minutes of their work hours, free or booked.
+  function drawHours() {
+    const el = $("hrs");
+    if (st.mode !== "day") { el.hidden = true; el.innerHTML = ""; return; }
+    el.hidden = false;
+    const p = st.person && MadaSchedule.person(st.person), dayT = fmtD(st.date, { weekday: "long", day: "numeric", month: "long" });
+    const box = (ic, msg) => `<div class="hrs-h"><div><h2>${esc(t().hrsT)}</h2><p>${esc(dayT)}</p></div></div><div class="hrs-e">${svg(ic)}<span>${msg}</span></div>`;
+    if (!p) { el.innerHTML = box(IC.info, esc(t().hrsPick)); return; }
+    const h = MadaSchedule.hoursOn(p.id, st.date);
+    if (h === undefined) { el.innerHTML = box(IC.info, esc(tx("hrsNoSched", { p: T(p.name) })) + (p.staff ? ` <a href="staff-profile.html?id=${encodeURIComponent(p.id)}#sched">${esc(t().pcProfile)}</a>` : "")); return; }
+    if (h === null) { el.innerHTML = box(IC.cal, esc(tx("hrsOff", { p: T(p.name) }))); return; }
+    const now = new Date(), past = m => { const d = pd(st.date); d.setMinutes(m); return d <= now; };
+    const slots = []; for (let m = h.from; m + 30 <= h.to; m += 30) {
+      const c = MadaSchedule.clashes(p.id, st.date, m, 30, null, all)[0];
+      slots.push({ m, c, st: c ? "busy" : past(m) ? "past" : "free" });
+    }
+    const free = slots.filter(x => x.st === "free").length;
+    el.innerHTML = `<div class="hrs-h"><div><h2>${esc(t().hrsT)} · ${esc(T(p.name))}</h2><p>${esc(dayT)} · ${esc(tx("hours", { h: rng(h.from, h.to) }))} · ${esc(tx("hrsFree", { n: free, all: slots.length }))}</p></div>
+      <div class="lg"><span><i class="f"></i>${esc(t().lgFree)}</span><span><i class="b"></i>${esc(t().lgBusy)}</span><span><i class="x"></i>${esc(t().lgPast)}</span></div></div>
+      <div class="slots">${slots.map(x => x.st === "free"
+        ? `<button type="button" class="slot free" data-slot="${x.m}" title="${esc(t().hrsAdd)}"><span>${esc(fmtMin(x.m))}</span><small>${esc(t().lgFree)}</small></button>`
+        : `<div class="slot ${x.st}"><span>${esc(fmtMin(x.m))}</span><small>${esc(x.st === "busy" ? x.c.bookingId : t().lgPast)}</small></div>`).join("")}</div>`;
+  }
+  const who = (id, role) => id ? `<span class="who${id === st.person ? " hl" : ""}">${esc(pname(id) || id)}</span>` : `<span class="who na">${esc(role === "doctor" ? "—" : t().notAssigned)}</span>`;
+  function row(e) {
+    const canMove = e.status === "upcoming";
+    const acts = [canMove ? `<button type="button" class="ib" data-move="${esc(e.key)}" title="${esc(t().aReassign)}" aria-label="${esc(t().aReassign + " " + e.bookingId)}">${svg(IC.swap)}</button>` : "",
+      e.src === "order" ? `<button type="button" class="ib" data-open="${esc(e.id)}" title="${esc(tx("aOpen", { id: e.bookingId }))}" aria-label="${esc(tx("aOpen", { id: e.bookingId }))}">${svg(IC.eye)}</button>` : "",
+      e.src === "internal" && canMove ? `<button type="button" class="ib red" data-cancel="${esc(e.id)}" title="${esc(t().aCancel)}" aria-label="${esc(t().aCancel + " " + e.id)}">${svg(IC.x)}</button>` : ""].join("");
+    const needsDoc = e.kind === "doctor" || e.kind === "followup";
+    return `<tr class="${e.status === "cancelled" ? "cx" : ""}">
+      <td><span class="tm">${esc(fmtMin(e.minute))}<small>${esc(tx("minsN", { n: e.mins }))}</small></span></td>
+      <td><span class="nowrap">${esc(fmtD(e.date, { day: "numeric", month: "short", year: "numeric" }))}</span></td>
+      <td><span class="bid">${esc(e.bookingId)}</span></td>
+      <td>${e.orderId ? `<span class="bid">${esc(e.orderId)}</span>` : `<span class="muted">${t().noOrder}</span>`}</td>
+      <td>${e.src === "internal" ? `<span class="tag int">${esc(t().srcInt)}</span>` : `<span class="tag src-sys">${esc(t().srcCC)}</span>`}</td>
+      <td>${e.mrn ? `<span class="bid">${esc(e.mrn)}</span>` : `<span class="muted">—</span>`}</td>
+      <td><div class="sv k-${esc(e.kind)}"><span class="si">${svg(IC[e.kind] || IC.none)}</span><div><b>${esc(t()["k_" + e.kind] || t().k_none)}</b>${svcSub(e) ? `<span title="${esc(svcSub(e))}">${esc(svcSub(e))}</span>` : ""}</div></div></td>
+      <td><div class="pt"><b>${esc(T(e.patient) || "—")}</b>${e.mobile ? `<span>${esc(e.mobile)}</span>` : ""}</div></td>
+      <td>${needsDoc ? who(e.doctorId, "doctor") : `<span class="who na">—</span>`}</td>
+      <td>${who(e.nurseId, "nurse")}</td>
+      <td>${e.src === "internal" && e.status === "upcoming" && e.sentTo ? `<span class="tag s-sent">${esc(t()[e.sentTo === "doctor" ? "s_sentDr" : "s_sentNr"])}</span>` : `<span class="tag s-${e.status}">${esc(t()["s_" + e.status])}</span>`}</td>
+      <td class="acts">${acts}</td></tr>`;
+  }
+  function drawList() {
+    const ws = weekStart(st.date), days = st.mode === "week" ? [...Array(7)].map((_, i) => addDays(ws, i)) : [st.date];
+    const groups = days.map(d => [d, onDay(d)]).filter(([, l]) => l.length || st.mode === "day");
+    const total = groups.reduce((s, [, l]) => s + l.filter(e => e.status !== "cancelled").length, 0);
+    const day = st.mode === "day", h = st.person && day ? MadaSchedule.hoursOn(st.person, st.date) : undefined;
+    const head = `<div class="lh"><div><h2>${esc(day ? fmtD(st.date, { weekday: "long", day: "numeric", month: "long" }) : $("wLabel").textContent)}</h2><p>${esc(tx("nBk", { n: total }))}${st.person && day && h ? " · " + esc(tx("hours", { h: rng(h.from, h.to) })) : ""}</p></div>
+      </div>`;
+    const rows = groups.flatMap(([d, l]) => (day ? [] : [`<tr class="dg"><td colspan="12">${esc(fmtD(d, { weekday: "long", day: "numeric", month: "long" }))}<span>${esc(tx("nBk", { n: l.filter(e => e.status !== "cancelled").length }))}</span></td></tr>`]).concat(l.map(row)));
+    const empty = !groups.some(([, l]) => l.length);
+    const unsch = all.filter(e => e.status === "unscheduled" && matches(e)).length;
+    $("list").innerHTML = head + (empty
+      ? `<div class="empty">${svg(IC.cal)}${esc(day ? t().emptyDay : t().emptyWeek)}${st.person || st.kind !== "all" ? `<br>${esc(t().emptyFilt)}` : ""}</div>`
+      : `<div class="table-wrap"><table><thead><tr><th>${t().thTime}</th><th>${t().thDate}</th><th>${t().thBk}</th><th>${t().thOrd}</th><th>${t().thType}</th><th>${t().thFile}</th><th>${t().thSvc}</th><th>${t().thPt}</th><th>${t().thDr}</th><th>${t().thNr}</th><th>${t().thSt}</th><th class="acts">${t().thAct}</th></tr></thead><tbody>${rows.join("")}</tbody></table></div>`)
+      + (unsch ? `<div class="note-unsch">${svg(IC.info)}<span>${esc(tx("unsch", { n: unsch }))} <a href="bookings.html">${esc(t().openList)}</a></span></div>` : "");
+  }
+  function render() { load(); drawPeople(); drawNav(); drawKinds(); drawPerson(); drawStrip(); drawHours(); drawList(); keepUrl(); }
+
+  // ---------- Reassign ----------
+  function candidates(role, e) {
+    return MadaSchedule.people().filter(p => p.role === role && (p.active || p.id === e[role === "doctor" ? "doctorId" : "nurseId"])).map(p => {
+      const cur = p.id === e[role === "doctor" ? "doctorId" : "nurseId"];
+      const a = cur ? "cur" : MadaSchedule.availability(p.id, e.date, e.minute, e.mins, e.key, all);
+      const c = a === "busy" ? MadaSchedule.clashes(p.id, e.date, e.minute, e.mins, e.key, all)[0] : null;
+      return { p, a, c };
+    }).sort((x, y) => ["cur", "free", "open", "busy", "off"].indexOf(x.a) - ["cur", "free", "open", "busy", "off"].indexOf(y.a));
+  }
+  function candList(role, e, sel) {
+    const cs = candidates(role, e), name = role === "doctor" ? "rDoc" : "rNur";
+    return `<div class="pick cand" role="radiogroup" aria-label="${esc(t()[role === "doctor" ? "rDoctor" : "rNurse"])}">${cs.map(({ p, a, c }) => {
+      const dis = a === "busy" || a === "off";
+      const tag = a === "busy" ? tx("a_busy", { id: c.bookingId }) : t()["a_" + a];
+      return `<label class="${dis ? "dis" : ""}"><input type="radio" name="${name}" value="${esc(p.id)}" ${sel === p.id ? "checked" : ""} ${dis ? "disabled" : ""}><span class="grow">${esc(T(p.name))}${T(p.spec) ? ` <small>· ${esc(T(p.spec))}</small>` : ""}</span><span class="tag a-${a}">${esc(tag)}</span></label>`;
+    }).join("")}</div>`;
+  }
+  function moveHTML(m) {
+    const e = m.e, doc = e.kind === "doctor" || e.kind === "followup";
+    return `<div class="md wide" role="dialog" aria-modal="true" aria-labelledby="mdT">
+      <div class="md-h"><h2 id="mdT">${esc(tx("rTitle", { id: e.bookingId }))}</h2><button type="button" class="ib" data-close aria-label="${esc(t().close)}">${svg(IC.x)}</button></div>
+      <div class="md-b">
+        <dl class="sumb"><div><dt>${esc(t().sWhen)}</dt><dd>${esc(fmtD(e.date))} · ${esc(rng(e.minute, e.minute + e.mins))}</dd></div><div><dt>${esc(t().sPt)}</dt><dd>${esc(T(e.patient) || "—")}</dd></div><div><dt>${esc(t().sSvc)}</dt><dd>${esc(t()["k_" + e.kind] || t().k_none)}</dd></div></dl>
+        ${doc ? `<div class="fld"><span class="lbl">${esc(t().rDoctor)}</span>${candList("doctor", e, m.doctorId)}</div>` : ""}
+        <div class="fld"><span class="lbl">${esc(t().rNurse)}</span>${candList("nurse", e, m.nurseId)}</div>
+        <div class="fld"><label for="rNote">${esc(t().rNoteL)} <i>${esc(t().optional)}</i></label><textarea class="in" id="rNote" placeholder="${esc(t().rNotePh)}">${esc(m.note)}</textarea></div>
+        <div class="err" id="mErr" role="alert">${m.err ? esc(m.err) : ""}</div>
+      </div>
+      <div class="md-f"><button type="button" class="btn btn-ghost" data-close>${esc(t().cancel)}</button><button type="button" class="btn btn-primary" id="mdSave">${esc(t().save)}</button></div></div>`;
+  }
+  function saveMove() {
+    readModal();
+    const m = modal, e = m.e, ch = [];
+    if ((e.kind === "doctor" || e.kind === "followup") && m.doctorId && m.doctorId !== e.doctorId) ch.push(["doctor", m.doctorId]);
+    if (m.nurseId && m.nurseId !== e.nurseId) ch.push(["nurse", m.nurseId]);
+    if (!ch.length) { m.err = t().rSame; return drawModal(); }
+    try {
+      let cur = e;
+      ch.forEach(([role, id]) => { MadaSchedule.reassign(cur, role, id, m.note.trim(), me.name); load(); cur = all.find(x => x.key === e.key); });
+    } catch (x) { m.err = t().storeErr; return drawModal(); }
+    closeModal(); render(); toast(tx("rDone", { n: ch.map(([, id]) => pname(id)).join(current === "ar" ? "، " : ", ") }));
+  }
+
+  // ---------- Add internal booking ----------
+  const DURS = [30, 45, 60, 90, 120];
+  function patients() {
+    const map = new Map();
+    MadaPatients.all().forEach(p => map.set(p.fileNo, { mrn: p.fileNo, name: typeof p.name === "string" ? { en: p.name, ar: p.name } : p.name, mobile: p.mobile }));
+    // Patients from earlier requests (newest first; the sample requests repeat names, so one entry per name).
+    const names = new Set([...map.values()].map(p => T(p.name)));
+    MadaOrders.all().slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt)).forEach(o => {
+      if (!o.mrn || !o.patient || map.has(o.mrn) || (o.sample && names.has(o.patient.en))) return;
+      map.set(o.mrn, { mrn: o.mrn, name: o.patient, mobile: o.mobile }); names.add(o.patient.en);
+    });
+    return [...map.values()].sort((a, b) => T(a.name).localeCompare(T(b.name)));
+  }
+  function newBooking(minute, at) {
+    const p = st.person && MadaSchedule.person(st.person), td = todayS();
+    const date = at || (st.mode === "day" && st.date >= td ? st.date : td);
+    const kind = p && p.role === "nurse" ? "care" : "followup";
+    openModal({ kind: "new", f: { type: kind, mrn: "", q: "", doctorId: p && p.role === "doctor" ? p.id : "", nurseId: p && p.role === "nurse" ? p.id : "", task: "", reason: "", date, minute: minute == null ? null : minute, mins: kind === "care" ? 30 : 60, days: 1, note: "" }, err: {} });
+  }
+  function dates(f) { return [...Array(f.type === "care" ? Math.max(1, Math.min(30, f.days | 0)) : 1)].map((_, i) => addDays(f.date, i)); }
+  function problems(f) {
+    if (!f.date || f.minute == null) return null;
+    const ids = (f.type === "followup" ? [f.doctorId, f.nurseId] : [f.nurseId]).filter(Boolean);
+    if (!ids.length) return null;
+    const now = new Date(), out = [];
+    const start = pd(f.date); start.setMinutes(f.minute);
+    if (start < now) out.push(t().cPast);
+    dates(f).forEach(d => ids.forEach(id => {
+      const a = MadaSchedule.availability(id, d, f.minute, f.mins, null, all);
+      if (a === "busy") out.push(tx("cBusy", { d: fmtD(d), p: pname(id), id: MadaSchedule.clashes(id, d, f.minute, f.mins, null, all)[0].bookingId }));
+      if (a === "off") out.push(tx("cOff", { d: fmtD(d), p: pname(id) }));
+    }));
+    return out;
+  }
+  function chkHTML(f) {
+    const pr = problems(f);
+    if (!pr) return `<div class="chk info"><div>${svg(IC.info)}<span>${esc(t().chkInfo)}</span></div></div>`;
+    if (!pr.length) { const n = dates(f).length; return `<div class="chk ok"><div>${svg(IC.check)}<span>${esc(n > 1 ? tx("chkOk1", { n }) : t().chkOk)}</span></div></div>`; }
+    return `<div class="chk bad"><div>${svg(IC.alert)}<span>${esc(t().chkBad)}</span></div><ul>${pr.slice(0, 8).map(x => `<li>${esc(x)}</li>`).join("")}${pr.length > 8 ? `<li>${esc(tx("more", { n: pr.length - 8 }))}</li>` : ""}</ul></div>`;
+  }
+  function ptList(f) {
+    const qq = f.q.trim().toLowerCase(), ps = patients().filter(p => !qq || [p.mrn, p.mobile, p.name && p.name.en, p.name && p.name.ar].filter(Boolean).join(" ").toLowerCase().includes(qq));
+    if (f.mrn && !ps.some(p => p.mrn === f.mrn)) { const sel = patients().find(p => p.mrn === f.mrn); if (sel) ps.unshift(sel); }
+    return ps.length ? ps.slice(0, 60).map(p => `<label><input type="radio" name="nPt" value="${esc(p.mrn)}" ${f.mrn === p.mrn ? "checked" : ""}><span class="grow">${esc(T(p.name))}</span><small class="mrn">${esc(p.mrn)}</small></label>`).join("") : `<div class="empty">${esc(t().nPtNone)}</div>`;
+  }
+  function newHTML(m) {
+    const f = m.f, er = m.err, ps = MadaSchedule.people().filter(p => p.active);
+    const sel = (id, role, val, ph, optional) => `<select class="in${er[id] ? " bad" : ""}" id="${id}" ${er[id] ? 'aria-invalid="true"' : ""}><option value="">${esc(ph)}</option>${ps.filter(p => p.role === role).map(p => `<option value="${esc(p.id)}" ${val === p.id ? "selected" : ""}>${esc(T(p.name))}</option>`).join("")}</select>`;
+    const e = k => er[k] ? `<span class="err" id="${k}-e">${esc(er[k])}</span>` : "";
+    return `<div class="md wide" role="dialog" aria-modal="true" aria-labelledby="mdT">
+      <div class="md-h"><h2 id="mdT">${esc(t().nTitle)}</h2><button type="button" class="ib" data-close aria-label="${esc(t().close)}">${svg(IC.x)}</button></div>
+      <div class="md-b">
+        <div id="nSum">${sumHTML(f)}</div>
+        <div class="fld"><span class="lbl">${esc(t().nType)}</span><div class="types" role="radiogroup" aria-label="${esc(t().nType)}">
+          <label class="type"><input type="radio" name="nType" value="followup" ${f.type === "followup" ? "checked" : ""}><div><b>${esc(t().tFollow)}</b><span>${esc(t().tFollowD)}</span></div></label>
+          <label class="type"><input type="radio" name="nType" value="care" ${f.type === "care" ? "checked" : ""}><div><b>${esc(t().tCare)}</b><span>${esc(t().tCareD)}</span></div></label></div></div>
+        <div class="fld"><span class="lbl" id="nPtL">${esc(t().nPt)}</span>
+          <div class="search" style="max-width:none">${svg(IC.search)}<input class="in" id="nPtQ" type="search" value="${esc(f.q)}" placeholder="${esc(t().nPtSearch)}" aria-labelledby="nPtL"></div>
+          <div class="pick pts${er.mrn ? " bad" : ""}" id="nPtList" role="radiogroup" aria-labelledby="nPtL">${ptList(f)}</div>${e("mrn")}</div>
+        ${f.type === "followup"
+          ? `<div class="row2"><div class="fld"><label for="nDoc">${esc(t().nDoctor)}</label>${sel("nDoc", "doctor", f.doctorId, t().pickDoctor)}${e("nDoc")}</div>
+             <div class="fld"><label for="nNur">${esc(t().nNurse)} <i>${esc(t().optional)}</i></label>${sel("nNur", "nurse", f.nurseId, t().nurseOpt)}</div></div>
+             <div class="fld"><label for="nReason">${esc(t().nReason)}</label><textarea class="in${er.nReason ? " bad" : ""}" id="nReason" placeholder="${esc(t().nReasonPh)}" maxlength="400">${esc(f.reason)}</textarea>${e("nReason")}</div>`
+          : `<div class="fld"><label for="nNur">${esc(t().nNurse)}</label>${sel("nNur", "nurse", f.nurseId, t().pickNurse)}${e("nNur")}</div>
+             <div class="fld"><label for="nTask">${esc(t().nTask)}</label><input class="in${er.nTask ? " bad" : ""}" id="nTask" value="${esc(f.task)}" placeholder="${esc(t().nTaskPh)}" maxlength="120">${e("nTask")}</div>`}
+        <div class="row3">
+          <div class="fld"><label for="nDate">${esc(t().nDate)}</label><input class="in${er.nDate ? " bad" : ""}" id="nDate" type="date" min="${todayS()}" value="${esc(f.date)}">${e("nDate")}</div>
+          <div class="fld"><label for="nDur">${esc(t().nDur)}</label><select class="in" id="nDur">${DURS.map(m => `<option value="${m}" ${f.mins === m ? "selected" : ""}>${esc(tx("minsN", { n: m }))}</option>`).join("")}</select></div>
+          ${f.type === "care" ? `<div class="fld"><label for="nDays">${esc(t().nRepeat)}</label><select class="in" id="nDays">${[...Array(30)].map((_, i) => `<option value="${i + 1}" ${f.days === i + 1 ? "selected" : ""}>${esc(tx("daysN", { n: i + 1 }))}</option>`).join("")}</select></div>` : ""}
+        </div>
+        <div class="fld"><span class="lbl" id="nTimeL">${esc(t().nTime)}</span><div id="nSlots">${slotPick(f, er)}</div>${e("nTime")}</div>
+        <div class="fld"><label for="nNote">${esc(t().nNote)} <i>${esc(t().optional)}</i></label><textarea class="in" id="nNote" placeholder="${esc(t().nNotePh)}" maxlength="400">${esc(f.note)}</textarea></div>
+        <div id="nChk" aria-live="polite">${chkHTML(f)}</div>
+        <div class="err" id="mErr" role="alert">${m.errMsg ? esc(m.errMsg) : ""}</div>
+      </div>
+      <div class="md-f"><button type="button" class="btn btn-ghost" data-close>${esc(t().cancel)}</button><button type="button" class="btn btn-primary" id="mdSave">${svg(IC.check)}${esc(t()[f.type === "followup" ? "approveDr" : "approveNr"])}</button></div></div>`;
+  }
+  // Order and booking numbers (issued on approval), the person, date and time, at the top of the form.
+  function sumHTML(f) {
+    const n = MadaSchedule.peek(dates(f).length), pid = f.type === "followup" ? f.doctorId : f.nurseId;
+    const dd = (l, v, raw) => `<div><dt>${esc(l)}</dt><dd class="${v ? "" : "na"}">${v ? (raw ? v : esc(v)) : esc(t().notChosen)}</dd></div>`;
+    return `<dl class="nsum">${dd(t().thOrd, `<span class="bid">${esc(n.orderId)}</span>`, true)}${dd(t().thBk, `<span class="bid">${esc(n.first === n.last ? n.first : n.first + " – " + n.last)}</span>`, true)}
+      ${dd(t()[f.type === "followup" ? "nDoctor" : "nNurse"], pid ? pname(pid) : "")}${dd(t().nDate, f.date ? fmtD(f.date) : "")}${dd(t().nTime, f.minute != null ? rng(f.minute, f.minute + f.mins) : "")}
+      <p class="nsum-n">${svg(IC.info)}${esc(t().numsNote)}</p></dl>`;
+  }
+  // Start times from the doctor's (or nurse's) work schedule on the chosen date; busy or off-duty times can't be picked.
+  function slotPick(f, er) {
+    const id = f.type === "followup" ? f.doctorId : f.nurseId;
+    const msg = k => `<div class="hrs-e">${svg(IC.info)}<span>${esc(t()[k])}</span></div>`;
+    if (!id) return msg(f.type === "followup" ? "slPickDr" : "slPickNr");
+    if (!f.date) return msg("slPickDate");
+    const h = MadaSchedule.hoursOn(id, f.date);
+    if (h === null) return msg("slOff");
+    const ids = (f.type === "followup" ? [f.doctorId, f.nurseId] : [f.nurseId]).filter(Boolean), now = new Date();
+    const from = h === undefined ? 360 : h.from, to = h === undefined ? 1410 : h.to, out = [];
+    for (let m = from; m + f.mins <= to + (h === undefined ? 30 : 0); m += 30) {
+      const d = pd(f.date); d.setMinutes(m); if (d <= now) continue;
+      const ok = dates(f).every(day => ids.every(x => ["free", "open"].includes(MadaSchedule.availability(x, day, m, f.mins, null, all))));
+      out.push({ m, ok });
+    }
+    if (f.minute != null && !out.some(x => x.m === f.minute && x.ok)) f.minute = null;
+    if (!out.length) return msg("slNone");
+    return `${h === undefined ? msg("slNoSched") : ""}<div class="tslots${er && er.nTime ? " bad" : ""}" role="group" aria-labelledby="nTimeL">${out.map(x =>
+      `<button type="button" class="tslot" data-tslot="${x.m}" aria-pressed="${f.minute === x.m}" ${x.ok ? "" : `disabled title="${esc(t().lgBusy)}"`}>${esc(fmtMin(x.m))}</button>`).join("")}</div>`;
+  }
+  function saveNew() {
+    readModal();
+    const m = modal, f = m.f, er = {};
+    if (!f.mrn) er.mrn = t().req;
+    if (f.type === "followup" && !f.doctorId) er.nDoc = t().req;
+    if (f.type === "care" && !f.nurseId) er.nNur = t().req;
+    if (f.type === "care" && !f.task.trim()) er.nTask = t().req;
+    if (f.type === "followup" && !f.reason.trim()) er.nReason = t().req;
+    if (!f.date) er.nDate = t().req;
+    if (f.date && f.minute == null) er.nTime = t().slReq;
+    m.err = er; m.errMsg = "";
+    if (Object.keys(er).length) { drawModal(); const b = $("mdBack").querySelector(".bad, .pick.bad input"); if (b) b.focus(); else { const sl = $("nSlots"); if (sl) sl.scrollIntoView({ block: "nearest" }); } return; }
+    const pr = problems(f);
+    if (pr && pr.length) { m.errMsg = ""; drawModal(); const c = $("nChk"); if (c) c.scrollIntoView({ block: "nearest" }); return; }
+    const p = patients().find(x => x.mrn === f.mrn), planId = f.type === "care" && dates(f).length > 1 ? "PL-" + Date.now().toString(36).toUpperCase() : null;
+    let made;
+    try {
+      made = MadaSchedule.addInternal(dates(f).map(d => ({ kind: f.type, doctorId: f.type === "followup" ? f.doctorId : null, nurseId: f.nurseId || null,
+        patient: { name: p.name, mrn: p.mrn, mobile: p.mobile || "" }, date: d, minute: f.minute, mins: f.mins,
+        task: f.type === "care" ? f.task.trim() : "", reason: f.type === "followup" ? f.reason.trim() : "", note: f.note.trim(), planId, by: me.name,
+        sentTo: f.type === "followup" ? "doctor" : "nurse", sentAt: new Date().toISOString() })));
+    } catch (x) { m.errMsg = t().storeErr; return drawModal(); }
+    closeModal(); st.date = f.date; st.mode = made.length > 1 ? "week" : "day"; render();
+    toast(made.length > 1 ? tx("savedN", { n: made.length, a: made[0].bookingId, b: made[made.length - 1].bookingId, o: made[0].orderId }) : tx("saved", { id: made[0].bookingId, o: made[0].orderId }));
+  }
+
+  // ---------- Modal plumbing ----------
+  function modalHTML() { return modal.kind === "move" ? moveHTML(modal) : newHTML(modal); }
+  function openModal(m) { opener = document.activeElement; modal = { note: "", err: null, ...m }; drawModal(); const f = $("mdBack").querySelector("input:checked, input:not([disabled]), select"); if (f) f.focus(); }
+  function drawModal() { $("mdBack").innerHTML = modalHTML(); $("mdBack").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeModal() { modal = null; $("mdBack").hidden = true; $("mdBack").innerHTML = ""; document.body.style.overflow = ""; if (opener && document.contains(opener)) opener.focus(); }
+  function readModal() {
+    if (!modal) return;
+    const v = id => { const el = $(id); return el ? el.value : null; };
+    if (modal.kind === "move") {
+      const d = $("mdBack").querySelector('input[name="rDoc"]:checked'), n = $("mdBack").querySelector('input[name="rNur"]:checked');
+      if (d) modal.doctorId = d.value; if (n) modal.nurseId = n.value; if ($("rNote")) modal.note = $("rNote").value; return;
+    }
+    const f = modal.f, ty = $("mdBack").querySelector('input[name="nType"]:checked'), pt = $("mdBack").querySelector('input[name="nPt"]:checked');
+    if (ty) f.type = ty.value; if (pt) f.mrn = pt.value;
+    if (v("nPtQ") != null) f.q = v("nPtQ");
+    if (v("nDoc") != null) f.doctorId = v("nDoc");
+    if (v("nNur") != null) f.nurseId = v("nNur");
+    if (v("nTask") != null) f.task = v("nTask");
+    if (v("nDate") != null) f.date = v("nDate");
+    if (v("nReason") != null) f.reason = v("nReason");
+    if (v("nDur") != null) f.mins = +v("nDur");
+    if (v("nDays") != null) f.days = +v("nDays");
+    if (v("nNote") != null) f.note = v("nNote");
+  }
+  const redraw = sel => { readModal(); drawModal(); const el = sel && $("mdBack").querySelector(sel); if (el) el.focus(); };
+  const clearErr = k => { if (!modal || !modal.err || !modal.err[k]) return; delete modal.err[k]; const el = $(k === "mrn" ? "nPtList" : k); if (el) { el.classList.remove("bad"); el.removeAttribute("aria-invalid"); } const er = $(k + "-e"); if (er) er.remove(); };
+
+  // ---------- Events ----------
+  $("fPerson").addEventListener("change", e => { st.person = e.target.value; render(); });
+  $("prev").addEventListener("click", () => { st.date = addDays(st.date, st.mode === "week" ? -7 : -1); render(); });
+  $("next").addEventListener("click", () => { st.date = addDays(st.date, st.mode === "week" ? 7 : 1); render(); });
+  $("today").addEventListener("click", () => { st.date = todayS(); render(); });
+  $("mode").addEventListener("change", e => { st.mode = e.target.value; render(); $("mode").querySelector("input:checked").focus(); });
+  $("fKinds").addEventListener("click", e => { const b = e.target.closest("[data-kind]"); if (b) { st.kind = b.dataset.kind; render(); $("fKinds").querySelector(`[data-kind="${st.kind}"]`).focus(); } });
+  $("strip").addEventListener("click", e => { const b = e.target.closest("[data-day]"); if (b) { st.date = b.dataset.day; st.mode = "day"; render(); $("strip").querySelector(`[data-day="${st.date}"]`).focus(); } });
+  $("addBtn").addEventListener("click", () => newBooking());
+  $("hrs").addEventListener("click", e => { const b = e.target.closest("[data-slot]"); if (b) { const m = +b.dataset.slot; newBooking(m % 1440, m >= 1440 ? addDays(st.date, 1) : st.date); } });
+  $("list").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.open) location.href = "request-details.html?id=" + encodeURIComponent(b.dataset.open);
+    if (b.dataset.move) { const x = all.find(y => y.key === b.dataset.move); if (x) openModal({ kind: "move", e: x, doctorId: x.doctorId, nurseId: x.nurseId }); }
+    if (b.dataset.cancel) {
+      const cx = all.find(y => y.id === b.dataset.cancel); if (!confirm(tx("cancelQ", { id: cx ? cx.bookingId : b.dataset.cancel }))) return;
+      try { MadaSchedule.updateInternal(b.dataset.cancel, { status: "cancelled", cancelledBy: me.name, cancelledAt: new Date().toISOString() }); } catch (x) { return toast(t().storeErr); }
+      render(); toast(tx("cancelled", { id: b.dataset.cancel }));
+    }
+  });
+  $("mdBack").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.hasAttribute("data-close")) return closeModal();
+    if (b.id === "mdSave") return modal.kind === "move" ? saveMove() : saveNew();
+    if (b.dataset.tslot) { readModal(); modal.f.minute = +b.dataset.tslot; clearErr("nTime"); return refreshNew(`[data-tslot="${b.dataset.tslot}"]`); }
+  });
+  // Redraws the parts of the new-booking form that depend on the person, date and time.
+  function refreshNew(focusSel) {
+    const f = modal.f, put = (id, h) => { if ($(id).innerHTML !== h) $(id).innerHTML = h; };
+    const sl = slotPick(f, modal.err); put("nSlots", sl); put("nSum", sumHTML(f)); put("nChk", chkHTML(f));
+    const el = focusSel && $("mdBack").querySelector(focusSel); if (el) el.focus();
+  }
+  $("mdBack").addEventListener("change", e => {
+    if (!modal) return;
+    const el = e.target;
+    if (modal.kind === "move") { if (modal.err) { modal.err = null; const m = $("mErr"); if (m) m.textContent = ""; } return; }
+    if (el.name === "nType") { readModal(); modal.err = {}; if (modal.f.type === "care" && modal.f.mins === 60) modal.f.mins = 30; if (modal.f.type === "followup" && modal.f.mins === 30) modal.f.mins = 60;
+      drawModal(); const r = $("mdBack").querySelector(`input[name="nType"][value="${el.value}"]`); if (r) r.focus(); return; }
+    readModal();
+    if (el.name === "nPt") clearErr("mrn");
+    if (el.id) clearErr(el.id);
+    if ($("nSlots") && ["nDoc", "nNur", "nDate", "nDur", "nDays"].includes(el.id)) refreshNew();
+  });
+  $("mdBack").addEventListener("input", e => {
+    if (!modal || modal.kind !== "new") return;
+    if (e.target.id === "nPtQ") { readModal(); $("nPtList").innerHTML = ptList(modal.f); }
+    if (e.target.id === "nTask") { readModal(); clearErr("nTask"); }
+    if (e.target.id === "nReason") { readModal(); clearErr("nReason"); }
+  });
+  $("mdBack").addEventListener("mousedown", e => { if (e.target === $("mdBack")) closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal) closeModal(); });
+  window.addEventListener("storage", e => { if (!modal && (!e.key || [MadaSchedule.KEY, "mada-orders", MadaStaff.KEY].includes(e.key))) render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    readModal();
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = (lang === "ar" ? "مدى كير | " : "Mada Care | ") + t().title;
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render(); if (modal) drawModal();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>
