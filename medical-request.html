@@ -459,6 +459,8 @@
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
       required: "Fill in the required fields.", badDate: "Enter the date as DD/MM/YYYY.", badRange: "The end date is before the start date.", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
       itemDone: "Done", itemRejected: "The patient declined the referral. The doctor can see the reason.", f_decision: "Does the patient agree to the referral?", dc_approved: "Patient agrees", dc_rejected: "Patient declined", f_refFile: "Attach a document", f_refNote: "Note or reason",
+      f_svcDate: "Service date", f_time: "Time", f_provider: "Responsible for the service", f_cost: "Service cost (SAR)", f_payWhen: "Payment", pw_: "Choose", pw_before: "Paid before the service", pw_after: "Paid after the service",
+      d_provider: "Responsible: {v}", d_cost: "Cost: {v} SAR", d_payWhen: "Payment: {v}", d_appt: "Appointment: {v}", badCost: "Enter the cost as a number.", procEmpty: "Fill in at least one field.",
       s_consent: "Patient consent", s_procedures: "Referral procedures", a_consent: "Save the patient's answer", a_procedures: "Add procedure", f_procNote: "What was done", procAdd: "Log another procedure", procSaved: "Procedure saved.",
       refT: "Doctor's referral", refPdf: "Download referral form", rf_spec: "Specialty", rf_pri: "Priority", rf_routine: "Routine", rf_urgent: "Urgent", rf_dest: "Destination", rf_mada: "Mada Care service", rf_ext: "External healthcare provider", rf_prov: "Preferred provider", rf_reason: "Reason for referral", rf_rec: "Clinical recommendation", rf_notes: "Additional notes", rf_by: "Referring doctor",
       pdfT: "Medical Referral Form", pdfNo: "Referral No.", pdfDate: "Date", pdfPatient: "Patient Information", pdfName: "Name", pdfVisit: "Visit", pdfRef: "Referral Details", pdfSign: "Doctor's signature", pdfStamp: "Stamp", pdfMade: "Printed from Mada Care on", making: "Preparing the PDF...", dlDone: "{f} downloaded.", dlFail: "Could not make the PDF here. A print view opened instead.", f_req_approved: "(needed if approved)", f_req_rejected: "(needed if not approved)", stepSaved: "{s} saved.", openFile: "Open file", by: "by {n}",
@@ -504,6 +506,8 @@
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
       required: "عبّي الخانات المطلوبة.", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.", badRange: "تاريخ النهاية قبل تاريخ البداية.", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جربي ملف أصغر.",
       itemDone: "مكتمل", itemRejected: "المريض رفض التحويل، والطبيب يشوف السبب.", f_decision: "هل المريض موافق على التحويل؟", dc_approved: "المريض موافق", dc_rejected: "المريض رافض", f_refFile: "إرفاق مستند", f_refNote: "ملاحظة أو السبب",
+      f_svcDate: "موعد تقديم الخدمة", f_time: "الوقت", f_provider: "المسؤول عن تقديم الخدمة", f_cost: "تكلفة الخدمة (ريال)", f_payWhen: "الدفع", pw_: "اختر", pw_before: "مدفوعة قبل الخدمة", pw_after: "تُدفع بعد الخدمة",
+      d_provider: "المسؤول: {v}", d_cost: "التكلفة: {v} ريال", d_payWhen: "الدفع: {v}", d_appt: "الموعد: {v}", badCost: "اكتب التكلفة رقم.", procEmpty: "عبّي خانة وحدة على الأقل.",
       s_consent: "موافقة المريض", s_procedures: "إجراءات التحويل", a_consent: "حفظ رد المريض", a_procedures: "إضافة إجراء", f_procNote: "وش تم", procAdd: "تسجيل إجراء جديد", procSaved: "تم حفظ الإجراء.",
       refT: "تحويل الطبيب", refPdf: "تحميل نموذج التحويل", rf_spec: "التخصص", rf_pri: "الأولوية", rf_routine: "عادي", rf_urgent: "عاجل", rf_dest: "جهة التحويل", rf_mada: "خدمة من مدى كير", rf_ext: "جهة صحية خارجية", rf_prov: "مقدم الخدمة المفضل", rf_reason: "سبب التحويل", rf_rec: "التوصية السريرية", rf_notes: "ملاحظات إضافية", rf_by: "الطبيب المحوّل",
       pdfT: "نموذج تحويل طبي", pdfNo: "رقم التحويل", pdfDate: "التاريخ", pdfPatient: "بيانات المريض", pdfName: "الاسم", pdfVisit: "الزيارة", pdfRef: "تفاصيل التحويل", pdfSign: "توقيع الطبيب", pdfStamp: "الختم", pdfMade: "طُبع من مدى كير في", making: "جاري تجهيز ملف PDF...", dlDone: "تم تحميل {f}.", dlFail: "ما قدرنا نسوي PDF هنا، فتحنا صفحة الطباعة بدالها.", f_req_approved: "(مطلوب إذا موافق)", f_req_rejected: "(مطلوب إذا غير موافق)", stepSaved: "تم حفظ: {s}.", openFile: "فتح الملف", by: "بواسطة {n}",
@@ -569,7 +573,8 @@
   const VISIT_FORM = { booked: [{ k: "date", ty: "date", req: 1 }, { k: "note", ty: "text" }], done: [{ k: "note", ty: "text" }] };
   const FORM = {
     referral: { consent: [{ k: "decision", ty: "select", opts: ["approved", "rejected"], lp: "dc_", lk: "f_decision", req: 1 }, { k: "note", ty: "text", req: "rejected", lk: "f_refNote" }],
-      procedures: [{ k: "facility", ty: "text" }, { k: "date", ty: "date" }, { k: "file", ty: "file", lk: "f_refFile" }, { k: "note", ty: "area", req: 1, lk: "f_procNote" }],
+      procedures: [{ k: "date", ty: "date", lk: "f_svcDate" }, { k: "time", ty: "time" }, { k: "provider", ty: "text" }, { k: "facility", ty: "text" },
+        { k: "cost", ty: "num" }, { k: "payWhen", ty: "select", opts: ["", "before", "after"], lp: "pw_" }, { k: "file", ty: "file", lk: "f_refFile" }, { k: "note", ty: "area", lk: "f_procNote" }],
       attended: [{ k: "note", ty: "text" }] },
     doctor: VISIT_FORM, nursing: VISIT_FORM, physio: VISIT_FORM, iv: VISIT_FORM,
     lab: { collected: [{ k: "note", ty: "text" }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
@@ -594,6 +599,8 @@
     const wide = fd.ty === "area" || fd.ty === "file" ? " wide" : "";
     if (fd.ty === "area") return `<div class="${wide}">${lab}<textarea class="inp" id="${fid}" maxlength="600" dir="auto"></textarea></div>`;
     if (fd.ty === "date") return `<div>${lab}${dateField(fid)}</div>`;
+    if (fd.ty === "time") return `<div>${lab}<input type="time" class="inp ltr" id="${fid}" dir="ltr"></div>`;
+    if (fd.ty === "num") return `<div>${lab}<input class="inp ltr" id="${fid}" inputmode="decimal" maxlength="10" dir="ltr" placeholder="0"></div>`;
     if (fd.ty === "select") return `<div>${lab}<select class="inp" id="${fid}">${fd.opts.map(o => `<option value="${o}">${t()[(fd.lp || "ch_") + o]}</option>`).join("")}</select></div>`;
     if (fd.ty === "file") return `<div class="wide"><span class="lbl">${t()[fd.lk || "f_file"]} <em>${t().optional}</em></span><label class="drop">${svg(I.upload)}<span><span class="fname" id="${fid}-name">${t().f_fileChoose}</span> <span class="muted">· ${t().f_fileHint}</span></span><input type="file" id="${fid}" accept="application/pdf,image/*"></label></div>`;
     return `<div class="${fd.k === "note" ? "wide" : ""}">${lab}<input class="inp${fd.ltr ? " ltr" : ""}" id="${fid}" maxlength="120" dir="${fd.ltr ? "ltr" : "auto"}"></div>`;
@@ -607,12 +614,16 @@
     if (d.result) parts.push(esc(d.result));
     if (d.docNote) parts.push(esc(d.docNote));
     if (d.specialty) parts.push(esc(tx("d_specialty", { v: d.specialty })));
+    if (d.provider) parts.push(esc(tx("d_provider", { v: d.provider })));
     if (d.facility) parts.push(esc(tx("d_facility", { v: d.facility })));
+    if (d.cost) parts.push(tx("d_cost", { v: `<span class="ltr">${esc(d.cost)}</span>` }));
+    if (d.payWhen) parts.push(esc(tx("d_payWhen", { v: t()["pw_" + d.payWhen] })));
     if (d.center) parts.push(esc(tx("d_center", { v: d.center })));
     if (d.pharmacy) parts.push(esc(tx("d_pharmacy", { v: d.pharmacy })));
     if (d.leaveNo) parts.push(tx("d_leaveNo", { v: `<span class="ltr">${esc(d.leaveNo)}</span>` }));
     if (d.from && d.to) parts.push(tx("d_range", { a: ymdD(d.from), b: ymdD(d.to) }));
-    else if (d.date) parts.push(tx("d_date", { v: ymdD(d.date) }));
+    else if (d.date) parts.push(tx(d.time ? "d_appt" : "d_date", { v: ymdD(d.date) + (d.time ? " · " + iso(d.time) : "") }));
+    else if (d.time) parts.push(tx("d_appt", { v: iso(d.time) }));
     if (d.channel) parts.push(esc(tx("d_channel", { v: t()["ch_" + d.channel] })));
     if (d.note) parts.push(esc(d.note));
     const file = d.file ? `<button type="button" class="file-link" data-file="${esc(d.file.key)}" data-type="${esc(d.file.type)}">${svg(I.file)}${esc(d.file.name)}</button>` : "";
@@ -622,8 +633,8 @@
   function itemHtml(r, it) {
     const steps = MadaMedical.STEPS[it.type], done = MadaMedical.isDone(it), open = r.status === "open";
     const sp = it.rejected ? it.log[it.log.length - 1].step : it.step;
-    const stepper = `<ol class="stepper">${steps.map((s, i) => `<li class="${i <= sp ? "ok" : i === sp + 1 && !done ? "now" : ""}"><span class="c">${i <= sp ? svg(I.check, 3) : i + 1}</span><span>${t()["s_" + s]}</span></li>`).join("")}</ol>`;
-    const log = `<ul class="log">${it.log.map(l => `<li><div><b>${l.data && l.data.decision === "rejected" ? t().dc_rejected : t()["s_" + steps[l.step]]}</b> <span class="who">· ${stamp(l.at)}${l.by ? " · " + esc(tx("by", { n: who(l.by) })) : ""}</span>${dataTxt(l.data, r.id, it, l.step)}</div></li>`).join("")}</ul>`;
+    const stepper = `<ol class="stepper">${steps.slice(0, it.rejected ? sp + 1 : steps.length).map((s, i) => `<li class="${i <= sp ? "ok" : i === sp + 1 && !done ? "now" : ""}"><span class="c">${i <= sp ? svg(I.check, 3) : i + 1}</span><span>${t()["s_" + s]}</span></li>`).join("")}</ol>`;
+    const log = `<ul class="log">${it.log.map(l => `<li><div><b>${t()["s_" + steps[l.step]]}</b> <span class="who">· ${stamp(l.at)}${l.by ? " · " + esc(tx("by", { n: who(l.by) })) : ""}</span>${dataTxt(l.data, r.id, it, l.step)}</div></li>`).join("")}</ul>`;
     let foot = "";
     if (it.type === "lab") foot = `${MadaMedical.labLate(it) ? `<div class="it-warn">${svg(I.warn, 2)}${t().labLate}</div>` : ""}${MadaMedical.openEsc(it).length ? `<div class="it-warn">${svg(I.warn, 2)}${t().labEsc}</div>` : ""}<a class="vd-card lab-link" href="lab-test.html?id=${encodeURIComponent(r.id)}&item=${encodeURIComponent(it.id)}"><span class="it-ic">${svg(TY_ICON.lab)}</span><span><b>${t().openLab}</b><small>${t().openLabSub}</small></span>${svg('<path d="m9 6 6 6-6 6"/>', 2)}</a>`;
     else if (done) foot = it.rejected ? `<div class="it-done no">${svg(I.warn, 2.2)}${t().itemRejected}</div>` : `<div class="it-done">${svg(I.check, 2.4)}${t().itemDone}</div>`;
@@ -650,7 +661,7 @@
   // What the doctor wrote on the referral (Doctor Portal > Orders > Referrals), with the referral form to download.
   function refBox(r, it) {
     const o = it.order, ri = DrOrders.refInfo(o), row = (k, v) => v ? `<div><dt>${t()[k]}</dt><dd dir="auto">${v}</dd></div>` : "";
-    return `<div class="ref-box"><div class="ref-h"><b>${svg(I.doc)}${t().refT}</b><button type="button" class="btn btn-ghost btn-sm" data-refpdf="${esc(it.id)}">${svg(I.upload)}${t().refPdf}</button></div>
+    return `<div class="ref-box"><div class="ref-h"><b>${svg(I.doc)}${t().refT}</b><button type="button" class="btn btn-ghost btn-sm" data-refpdf="${esc(it.id)}">${svg('<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>')}${t().refPdf}</button></div>
       <dl class="facts">${row("rf_spec", esc(T(ri.spec)))}${row("rf_pri", `<span class="pill ${o.priority === "urgent" ? "p-red" : "p-blue"}">${t()["rf_" + (o.priority === "urgent" ? "urgent" : "routine")]}</span>`)}
         ${row("rf_dest", t()[o.dest === "ext" ? "rf_ext" : "rf_mada"])}${row("rf_prov", ri.provider ? esc(T(ri.provider)) : "")}
         ${row("rf_reason", esc(o.reason || ""))}${row("rf_rec", esc(o.rec || ""))}${row("rf_notes", esc(o.notes || ""))}${row("rf_by", esc(who(r.byDoctor) || ""))}</dl></div>`;
@@ -829,24 +840,25 @@
   async function refPdf(r, it) {
     const rtl = current === "ar", o = it.order || {}, ri = DrOrders.refInfo(o), mo = MadaOrders.get(r.orderId), al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
     const no = `${r.id}-${it.id}`, file = `Mada-Care-Referral-${no}.pdf`;
-    const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`, DT = v => `<span dir="${rtl ? "rtl" : "ltr"}" style="unicode-bidi:isolate">${esc(v)}</span>`;
+    // Dates and numbers sit in their own left-to-right box, without the invisible direction marks the page uses: Safari's html2canvas otherwise draws "7:57 PM" over itself.
+    const L2R = v => `<span dir="ltr" style="display:inline-block">${esc(String(v).replace(/[\u2066-\u2069\u200e\u200f]/g, "")).replace(/ /g, "&nbsp;")}</span>`, DT = L2R;
     const kv = (k, v) => `<tr><td style="padding:6px 0;color:#6b7a80;width:34%;vertical-align:top">${esc(k)}</td><td style="padding:6px 0;font-weight:600;white-space:pre-line">${v || "—"}</td></tr>`;
     const box = (h, rows) => `<div style="border:1px solid #e3e8ea;border-radius:10px;padding:12px 14px;margin-top:14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:4px">${esc(h)}</div><table style="width:100%;border-collapse:collapse">${rows}</table></div>`;
-    const visit = mo && mo.appointment ? DT(`${ymdD(mo.appointment.date)} · ${fmtMin(mo.appointment.minute)}`) : DT(stamp(r.createdAt));
+    const visit = mo && mo.appointment ? L2R(`${ymdD(mo.appointment.date)} · ${fmtMin(mo.appointment.minute)}`) : L2R(stamp(r.createdAt));
     const wrap = document.createElement("div");
     wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:748px";
     wrap.innerHTML = `<div dir="ltr" style="width:748px;min-height:1020px;padding:30px 34px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px"><div dir="${rtl ? "rtl" : "ltr"}">
       <table style="width:100%;border-collapse:collapse;border-bottom:3px solid #0b6b5c"><tr>
         <td style="padding:0 0 14px;width:52px;vertical-align:middle"><img src="assets/mada-logo.png" style="height:52px;width:auto;display:block" alt=""></td>
         <td style="padding:0 10px 14px;vertical-align:middle;text-align:${al}"><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:11px;color:#0b6b5c">${esc(t().tagline)}</div></td>
-        <td style="padding:0 0 14px;vertical-align:middle;text-align:${ar2}"><div style="font-size:22px;font-weight:700">${esc(t().pdfT)}</div><div style="margin-top:4px;color:#6b7a80">${esc(t().pdfNo)}: <b style="color:#15304a">${L2R(no)}</b></div><div style="color:#6b7a80">${esc(t().pdfDate)}: <b style="color:#15304a">${DT(stamp(r.createdAt))}</b></div></td>
+        <td style="padding:0 0 14px;vertical-align:middle;text-align:${ar2}"><div style="font-size:22px;font-weight:700">${esc(t().pdfT)}</div><div style="margin-top:4px;color:#6b7a80">${esc(t().pdfNo)}: <b style="color:#15304a">${L2R(no)}</b></div><div style="color:#6b7a80">${esc(t().pdfDate)}: <b style="color:#15304a">${L2R(stamp(r.createdAt))}</b></div></td>
       </tr></table>
       ${box(t().pdfPatient, kv(t().pdfName, esc(T(r.patient))) + kv(t().mrn, r.mrn ? L2R(r.mrn) : "") + kv(t().mobile, r.mobile ? L2R(r.mobile) : "") + kv(t().booking, L2R(r.bookingId || r.orderId || "—")) + kv(t().pdfVisit, visit))}
       ${box(t().pdfRef, kv(t().rf_spec, esc(T(ri.spec))) + kv(t().rf_pri, esc(t()["rf_" + (o.priority === "urgent" ? "urgent" : "routine")])) + kv(t().rf_dest, esc(t()[o.dest === "ext" ? "rf_ext" : "rf_mada"])) + kv(t().rf_prov, ri.provider ? esc(T(ri.provider)) : "") + kv(t().rf_reason, esc(o.reason || "")) + kv(t().rf_rec, esc(o.rec || "")) + kv(t().rf_notes, esc(o.notes || "")))}
       <table style="width:100%;border-collapse:collapse;margin-top:34px"><tr>
         <td style="width:50%;vertical-align:top;padding-${rtl ? "left" : "right"}:20px"><div style="color:#6b7a80">${esc(t().rf_by)}</div><div style="font-weight:700;margin-top:4px">${esc(who(r.byDoctor)) || "—"}</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfSign)}</div></td>
         <td style="width:50%;vertical-align:top"><div style="color:#6b7a80">&nbsp;</div><div style="margin-top:4px">&nbsp;</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfStamp)}</div></td></tr></table>
-      <div style="margin-top:26px;font-size:11px;color:#8a979c">${esc(t().pdfMade)} ${DT(stamp(new Date()))} · ${esc(T(me && me.name))}</div></div></div>`;
+      <div style="margin-top:26px;font-size:11px;color:#8a979c">${esc(t().pdfMade)} ${L2R(stamp(new Date()))} · ${esc(T(me && me.name))}</div></div></div>`;
     document.body.appendChild(wrap); fixArabic(wrap); toast(t().making);
     const sy = window.scrollY; window.scrollTo(0, 0);
     try {
@@ -869,10 +881,12 @@
       if (fd.ty === "file") { const f = fileOf(el); if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
       let v = el.value.trim();
       if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
+      if (fd.ty === "num" && v) { v = v.replace(/[٠-٩]/g, c => "٠١٢٣٤٥٦٧٨٩".indexOf(c)); if (!/^\d+(\.\d{1,2})?$/.test(v)) { bad = true; msg = t().badCost; el.classList.add("bad"); continue; } }
       if ((fd.req === 1 || (fd.req && fd.req === dec)) && !v) { bad = true; (el.closest(".field") || el).classList.add("bad"); continue; }
       if (v) data[fd.k] = v;
     }
     if (!bad && data.from && data.to && data.to < data.from) { bad = true; msg = t().badRange; }
+    if (!bad && fields === FORM.referral.procedures && !Object.keys(data).length) { bad = true; msg = t().procEmpty; }
     if (bad) { err.textContent = msg; err.hidden = false; return null; }
     if (data.file) {
       const key = `mada-mr-file-${r.id}-${it.id}-${it.step + 1}-${Date.now().toString(36)}`;

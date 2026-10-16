@@ -379,7 +379,9 @@
   }
   async function invoicePdf(r) {
     const rtl = current === "ar", o = r.o, e = r.e, d = docOf(o), file = `Mada-Care-Invoice-${r.no}.pdf`, al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
-    const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`, DT = v => `<span dir="${rtl ? "rtl" : "ltr"}" style="unicode-bidi:isolate">${esc(v)}</span>`, stamp = v => DT(`${fmtDay(v)} ${fmtTm(v)}`);
+    // Each date, time and number is its own inline box without direction marks: Safari's html2canvas otherwise draws mixed-direction text over itself.
+    const clean = v => String(v).replace(/[\u2066-\u2069\u200e\u200f]/g, "").replace(/ /g, "\u00a0");
+    const L2R = v => `<span dir="ltr" style="display:inline-block">${esc(clean(v))}</span>`, DT = v => `<span dir="${rtl ? "rtl" : "ltr"}" style="display:inline-block">${esc(clean(v))}</span>`, stamp = v => `${DT(fmtDay(v))} ${DT(fmtTm(v))}`;
     const cell = `padding:8px 10px;border-bottom:1px solid #e6ecee;text-align:${al}`, num2 = `padding:8px 10px;border-bottom:1px solid #e6ecee;text-align:${ar2};white-space:nowrap`;
     const kv = (k, v) => `<tr><td style="padding:4px 0;color:#6b7a80;width:42%">${esc(k)}</td><td style="padding:4px 0;font-weight:600">${v}</td></tr>`;
     const amt = n => `${L2R(num(n))} ${esc(t().sar)}`, due = Math.round((r.total - r.paidAll) * 100) / 100;
