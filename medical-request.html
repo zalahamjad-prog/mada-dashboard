@@ -190,6 +190,11 @@
   .btn-doc:hover { background: #dce8fd; }
   .it-done { display: flex; align-items: center; gap: 8px; border-top: 1px solid #d8eedf; padding: 12px 18px; background: #f4fbf6; color: var(--green); font-size: 13px; font-weight: 600; }
   .it-done svg { width: 16px; height: 16px; }
+  .ref-box { margin: 0 18px 14px; border: 1px solid #d7ebe4; border-radius: 12px; background: #f7fcfa; padding: 12px 14px; }
+  .ref-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+  .ref-h b { display: flex; align-items: center; gap: 8px; color: var(--primary); font-size: 14px; } .ref-h b svg { width: 18px; height: 18px; }
+  .ref-box .facts { margin: 0; } .ref-box dd { white-space: pre-line; }
+  .next.proc { border-bottom: 1px dashed var(--border); }
   .it-done.no { border-top-color: #f3c0c0; background: #fff7f7; color: var(--red); }
   .dc { display: inline-block; font-weight: 700; } .dc-ok { color: var(--green); } .dc-no { color: var(--red); }
 
@@ -415,6 +420,7 @@
 <script src="nurses.js"></script>
 <script src="orders.js"></script>
 <script src="medical.js"></script>
+<script src="doctor-orders.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -452,7 +458,10 @@
       f_center: "Radiology center", f_specialty: "Specialty", f_facility: "Hospital or clinic", f_date: "Date", f_pharmacy: "Pharmacy", f_leaveNo: "Sehha leave number", f_from: "From", f_to: "To", f_channel: "Sent by",
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
       required: "Fill in the required fields.", badDate: "Enter the date as DD/MM/YYYY.", badRange: "The end date is before the start date.", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
-      itemDone: "Done", itemRejected: "Not approved, the doctor can see the reason", f_decision: "Our decision", dc_approved: "Approved", dc_rejected: "Not approved", f_refFile: "Attach the referral letter", f_refNote: "Note or reason", f_req_approved: "(needed if approved)", f_req_rejected: "(needed if not approved)", stepSaved: "{s} saved.", openFile: "Open file", by: "by {n}",
+      itemDone: "Done", itemRejected: "The patient declined the referral. The doctor can see the reason.", f_decision: "Does the patient agree to the referral?", dc_approved: "Patient agrees", dc_rejected: "Patient declined", f_refFile: "Attach a document", f_refNote: "Note or reason",
+      s_consent: "Patient consent", s_procedures: "Referral procedures", a_consent: "Save the patient's answer", a_procedures: "Add procedure", f_procNote: "What was done", procAdd: "Log another procedure", procSaved: "Procedure saved.",
+      refT: "Doctor's referral", refPdf: "Download referral form", rf_spec: "Specialty", rf_pri: "Priority", rf_routine: "Routine", rf_urgent: "Urgent", rf_dest: "Destination", rf_mada: "Mada Care service", rf_ext: "External healthcare provider", rf_prov: "Preferred provider", rf_reason: "Reason for referral", rf_rec: "Clinical recommendation", rf_notes: "Additional notes", rf_by: "Referring doctor",
+      pdfT: "Medical Referral Form", pdfNo: "Referral No.", pdfDate: "Date", pdfPatient: "Patient Information", pdfName: "Name", pdfVisit: "Visit", pdfRef: "Referral Details", pdfSign: "Doctor's signature", pdfStamp: "Stamp", pdfMade: "Printed from Mada Care on", making: "Preparing the PDF...", dlDone: "{f} downloaded.", dlFail: "Could not make the PDF here. A print view opened instead.", f_req_approved: "(needed if approved)", f_req_rejected: "(needed if not approved)", stepSaved: "{s} saved.", openFile: "Open file", by: "by {n}",
       d_center: "Center: {v}", d_specialty: "Specialty: {v}", d_facility: "At: {v}", d_date: "Date: {v}", d_pharmacy: "Pharmacy: {v}", d_leaveNo: "Leave No.: {v}", d_range: "{a} to {b}", d_channel: "Sent by {v}",
       s3: "3. Customer Follow-up", quickTitle: "Quick answer for the caller", sayLbl: "What to tell the patient", sayAllDone: "All orders are done.", sayWaiting: "Waiting: {l}.", sayReady: "Ready: {l}.",
       contactLbl: "Log a call or message", cChannel: "Channel", cTopic: "Topic", cNote: "What was said", cNotePh: "Example: patient asked if the lab result is out, told them it is ready and the doctor will review it today.",
@@ -494,7 +503,10 @@
       f_center: "مركز الأشعة", f_specialty: "التخصص", f_facility: "المستشفى أو العيادة", f_date: "التاريخ", f_pharmacy: "الصيدلية", f_leaveNo: "رقم إجازة صحة", f_from: "من", f_to: "إلى", f_channel: "أُرسلت عن طريق",
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
       required: "عبّي الخانات المطلوبة.", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.", badRange: "تاريخ النهاية قبل تاريخ البداية.", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جربي ملف أصغر.",
-      itemDone: "مكتمل", itemRejected: "غير موافق عليه، والطبيب يشوف السبب", f_decision: "قرارنا", dc_approved: "موافق", dc_rejected: "غير موافق", f_refFile: "إرفاق خطاب التحويل", f_refNote: "ملاحظة أو السبب", f_req_approved: "(مطلوب إذا موافق)", f_req_rejected: "(مطلوب إذا غير موافق)", stepSaved: "تم حفظ: {s}.", openFile: "فتح الملف", by: "بواسطة {n}",
+      itemDone: "مكتمل", itemRejected: "المريض رفض التحويل، والطبيب يشوف السبب.", f_decision: "هل المريض موافق على التحويل؟", dc_approved: "المريض موافق", dc_rejected: "المريض رافض", f_refFile: "إرفاق مستند", f_refNote: "ملاحظة أو السبب",
+      s_consent: "موافقة المريض", s_procedures: "إجراءات التحويل", a_consent: "حفظ رد المريض", a_procedures: "إضافة إجراء", f_procNote: "وش تم", procAdd: "تسجيل إجراء جديد", procSaved: "تم حفظ الإجراء.",
+      refT: "تحويل الطبيب", refPdf: "تحميل نموذج التحويل", rf_spec: "التخصص", rf_pri: "الأولوية", rf_routine: "عادي", rf_urgent: "عاجل", rf_dest: "جهة التحويل", rf_mada: "خدمة من مدى كير", rf_ext: "جهة صحية خارجية", rf_prov: "مقدم الخدمة المفضل", rf_reason: "سبب التحويل", rf_rec: "التوصية السريرية", rf_notes: "ملاحظات إضافية", rf_by: "الطبيب المحوّل",
+      pdfT: "نموذج تحويل طبي", pdfNo: "رقم التحويل", pdfDate: "التاريخ", pdfPatient: "بيانات المريض", pdfName: "الاسم", pdfVisit: "الزيارة", pdfRef: "تفاصيل التحويل", pdfSign: "توقيع الطبيب", pdfStamp: "الختم", pdfMade: "طُبع من مدى كير في", making: "جاري تجهيز ملف PDF...", dlDone: "تم تحميل {f}.", dlFail: "ما قدرنا نسوي PDF هنا، فتحنا صفحة الطباعة بدالها.", f_req_approved: "(مطلوب إذا موافق)", f_req_rejected: "(مطلوب إذا غير موافق)", stepSaved: "تم حفظ: {s}.", openFile: "فتح الملف", by: "بواسطة {n}",
       d_center: "المركز: {v}", d_specialty: "التخصص: {v}", d_facility: "الجهة: {v}", d_date: "التاريخ: {v}", d_pharmacy: "الصيدلية: {v}", d_leaveNo: "رقم الإجازة: {v}", d_range: "من {a} إلى {b}", d_channel: "أُرسلت عن طريق {v}",
       s3: "3. متابعة العميل", quickTitle: "رد سريع للمتصل", sayLbl: "وش تقولين للمريض", sayAllDone: "كل الطلبات خلصت.", sayWaiting: "ننتظر: {l}.", sayReady: "جاهز: {l}.",
       contactLbl: "تسجيل اتصال أو رسالة", cChannel: "الطريقة", cTopic: "الموضوع", cNote: "وش دار في المكالمة", cNotePh: "مثال: المريض سأل هل طلعت نتيجة التحاليل، قلت له جاهزة والطبيب بيراجعها اليوم.",
@@ -556,7 +568,9 @@
   // What staff enter for each next step. "doctor: true" steps come from the doctors system (demo button here).
   const VISIT_FORM = { booked: [{ k: "date", ty: "date", req: 1 }, { k: "note", ty: "text" }], done: [{ k: "note", ty: "text" }] };
   const FORM = {
-    referral: { referred: [{ k: "decision", ty: "select", opts: ["approved", "rejected"], lp: "dc_", req: 1 }, { k: "specialty", ty: "text", req: "approved" }, { k: "facility", ty: "text", req: "approved" }, { k: "date", ty: "date" }, { k: "file", ty: "file", lk: "f_refFile" }, { k: "note", ty: "text", req: "rejected", lk: "f_refNote" }], attended: [{ k: "note", ty: "text" }] },
+    referral: { consent: [{ k: "decision", ty: "select", opts: ["approved", "rejected"], lp: "dc_", lk: "f_decision", req: 1 }, { k: "note", ty: "text", req: "rejected", lk: "f_refNote" }],
+      procedures: [{ k: "facility", ty: "text" }, { k: "date", ty: "date" }, { k: "file", ty: "file", lk: "f_refFile" }, { k: "note", ty: "area", req: 1, lk: "f_procNote" }],
+      attended: [{ k: "note", ty: "text" }] },
     doctor: VISIT_FORM, nursing: VISIT_FORM, physio: VISIT_FORM, iv: VISIT_FORM,
     lab: { collected: [{ k: "note", ty: "text" }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
     radiology: { scheduled: [{ k: "center", ty: "text", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
@@ -575,8 +589,8 @@
   }
   const dateField = fid => `<div class="field date-f"><input type="text" id="${fid}" inputmode="numeric" maxlength="10" placeholder="${esc(t().datePh)}" autocomplete="off" data-date><button type="button" class="cal" data-for="${fid}" aria-label="${esc(t().pickDate)}">${svg(I.cal)}</button><input type="date" class="native" id="${fid}Pick" tabindex="-1" aria-hidden="true"></div>`;
 
-  function fieldHtml(it, fd) {
-    const fid = `f-${it.id}-${fd.k}`, lab = `<label class="lbl" for="${fid}">${t()[fd.lk || "f_" + fd.k]} ${fd.req === 1 ? "" : `<em>${t()[fd.req ? "f_req_" + fd.req : "optional"]}</em>`}</label>`;
+  function fieldHtml(it, fd, pre) {
+    const fid = `f-${it.id}-${pre || ""}${fd.k}`, lab = `<label class="lbl" for="${fid}">${t()[fd.lk || "f_" + fd.k]} ${fd.req === 1 ? "" : `<em>${t()[fd.req ? "f_req_" + fd.req : "optional"]}</em>`}</label>`;
     const wide = fd.ty === "area" || fd.ty === "file" ? " wide" : "";
     if (fd.ty === "area") return `<div class="${wide}">${lab}<textarea class="inp" id="${fid}" maxlength="600" dir="auto"></textarea></div>`;
     if (fd.ty === "date") return `<div>${lab}${dateField(fid)}</div>`;
@@ -615,7 +629,13 @@
     else if (done) foot = it.rejected ? `<div class="it-done no">${svg(I.warn, 2.2)}${t().itemRejected}</div>` : `<div class="it-done">${svg(I.check, 2.4)}${t().itemDone}</div>`;
     else if (open) {
       const nk = nextKey(it), fm = formOf(it);
-      foot = `<div class="next" data-item="${esc(it.id)}">
+      // Referral procedures: staff log what they did as often as needed, then mark the service delivered.
+      const proc = it.type === "referral" && stepKey(it) === "procedures" ? `<div class="next proc" data-item="${esc(it.id)}">
+        <div class="next-h">${svg(I.note)}${esc(t().procAdd)}</div>
+        <div class="fgrid">${FORM.referral.procedures.map(fd => fieldHtml(it, fd, "p")).join("")}</div>
+        <div class="err" id="perr-${esc(it.id)}" hidden></div>
+        <div class="acts"><button type="button" class="btn btn-ghost btn-sm" data-proc="${esc(it.id)}">${svg('<path d="M12 5v14M5 12h14"/>', 2.2)}${t().a_procedures}</button></div></div>` : "";
+      foot = proc + `<div class="next" data-item="${esc(it.id)}">
         <div class="next-h">${svg(I.clock)}${esc(tx("nextStep", { s: t()["s_" + nk] }))}${fm.doctor ? ` <small>· ${t().byDoctorSys}</small>` : ""}</div>
         ${fm.f.length ? `<div class="fgrid">${fm.f.map(fd => fieldHtml(it, fd)).join("")}</div>` : ""}
         <div class="err" id="err-${esc(it.id)}" hidden></div>
@@ -625,7 +645,15 @@
     return `<article class="item${done ? " done" : ""}" id="item-${esc(it.id)}">
       <div class="it-head"><span class="it-ic">${svg(TY_ICON[it.type])}</span><div class="it-main"><span class="it-type">${t()["ty_" + it.type]}</span><b class="it-title">${esc(T(it.title))}</b>${it.details ? `<p class="it-det">${esc(T(it.details))}</p>` : ""}</div>
         <span class="pill ${it.rejected ? "p-red" : done ? "p-green" : "p-orange"}"><span class="dot"></span>${it.rejected ? t().dc_rejected : t()["s_" + stepKey(it)]}</span></div>
-      ${stepper}${log}${foot}</article>`;
+      ${it.type === "referral" && it.order ? refBox(r, it) : ""}${stepper}${log}${foot}</article>`;
+  }
+  // What the doctor wrote on the referral (Doctor Portal > Orders > Referrals), with the referral form to download.
+  function refBox(r, it) {
+    const o = it.order, ri = DrOrders.refInfo(o), row = (k, v) => v ? `<div><dt>${t()[k]}</dt><dd dir="auto">${v}</dd></div>` : "";
+    return `<div class="ref-box"><div class="ref-h"><b>${svg(I.doc)}${t().refT}</b><button type="button" class="btn btn-ghost btn-sm" data-refpdf="${esc(it.id)}">${svg(I.upload)}${t().refPdf}</button></div>
+      <dl class="facts">${row("rf_spec", esc(T(ri.spec)))}${row("rf_pri", `<span class="pill ${o.priority === "urgent" ? "p-red" : "p-blue"}">${t()["rf_" + (o.priority === "urgent" ? "urgent" : "routine")]}</span>`)}
+        ${row("rf_dest", t()[o.dest === "ext" ? "rf_ext" : "rf_mada"])}${row("rf_prov", ri.provider ? esc(T(ri.provider)) : "")}
+        ${row("rf_reason", esc(o.reason || ""))}${row("rf_rec", esc(o.rec || ""))}${row("rf_notes", esc(o.notes || ""))}${row("rf_by", esc(who(r.byDoctor) || ""))}</dl></div>`;
   }
 
   function followReason(r) {
@@ -789,6 +817,71 @@
   });
   const readFile = f => new Promise((ok, no) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = no; fr.readAsDataURL(f); });
 
+  // Referral form (A4 PDF): what the doctor wrote, with the patient and visit. Same html2pdf setup as the invoices.
+  function fixArabic(wrap) {
+    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) if (/[\u0600-\u06FF]/.test(walk.currentNode.nodeValue)) nodes.push(walk.currentNode);
+    nodes.forEach(nd => { const frag = document.createDocumentFragment();
+      nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => { if (!part) return;
+        if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part)); else { const sp = document.createElement("span"); sp.textContent = part; frag.appendChild(sp); } });
+      nd.replaceWith(frag); });
+  }
+  async function refPdf(r, it) {
+    const rtl = current === "ar", o = it.order || {}, ri = DrOrders.refInfo(o), mo = MadaOrders.get(r.orderId), al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right";
+    const no = `${r.id}-${it.id}`, file = `Mada-Care-Referral-${no}.pdf`;
+    const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`, DT = v => `<span dir="${rtl ? "rtl" : "ltr"}" style="unicode-bidi:isolate">${esc(v)}</span>`;
+    const kv = (k, v) => `<tr><td style="padding:6px 0;color:#6b7a80;width:34%;vertical-align:top">${esc(k)}</td><td style="padding:6px 0;font-weight:600;white-space:pre-line">${v || "—"}</td></tr>`;
+    const box = (h, rows) => `<div style="border:1px solid #e3e8ea;border-radius:10px;padding:12px 14px;margin-top:14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:4px">${esc(h)}</div><table style="width:100%;border-collapse:collapse">${rows}</table></div>`;
+    const visit = mo && mo.appointment ? DT(`${ymdD(mo.appointment.date)} · ${fmtMin(mo.appointment.minute)}`) : DT(stamp(r.createdAt));
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:748px";
+    wrap.innerHTML = `<div dir="ltr" style="width:748px;min-height:1020px;padding:30px 34px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px"><div dir="${rtl ? "rtl" : "ltr"}">
+      <table style="width:100%;border-collapse:collapse;border-bottom:3px solid #0b6b5c"><tr>
+        <td style="padding:0 0 14px;width:52px;vertical-align:middle"><img src="assets/mada-logo.png" style="height:52px;width:auto;display:block" alt=""></td>
+        <td style="padding:0 10px 14px;vertical-align:middle;text-align:${al}"><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:11px;color:#0b6b5c">${esc(t().tagline)}</div></td>
+        <td style="padding:0 0 14px;vertical-align:middle;text-align:${ar2}"><div style="font-size:22px;font-weight:700">${esc(t().pdfT)}</div><div style="margin-top:4px;color:#6b7a80">${esc(t().pdfNo)}: <b style="color:#15304a">${L2R(no)}</b></div><div style="color:#6b7a80">${esc(t().pdfDate)}: <b style="color:#15304a">${DT(stamp(r.createdAt))}</b></div></td>
+      </tr></table>
+      ${box(t().pdfPatient, kv(t().pdfName, esc(T(r.patient))) + kv(t().mrn, r.mrn ? L2R(r.mrn) : "") + kv(t().mobile, r.mobile ? L2R(r.mobile) : "") + kv(t().booking, L2R(r.bookingId || r.orderId || "—")) + kv(t().pdfVisit, visit))}
+      ${box(t().pdfRef, kv(t().rf_spec, esc(T(ri.spec))) + kv(t().rf_pri, esc(t()["rf_" + (o.priority === "urgent" ? "urgent" : "routine")])) + kv(t().rf_dest, esc(t()[o.dest === "ext" ? "rf_ext" : "rf_mada"])) + kv(t().rf_prov, ri.provider ? esc(T(ri.provider)) : "") + kv(t().rf_reason, esc(o.reason || "")) + kv(t().rf_rec, esc(o.rec || "")) + kv(t().rf_notes, esc(o.notes || "")))}
+      <table style="width:100%;border-collapse:collapse;margin-top:34px"><tr>
+        <td style="width:50%;vertical-align:top;padding-${rtl ? "left" : "right"}:20px"><div style="color:#6b7a80">${esc(t().rf_by)}</div><div style="font-weight:700;margin-top:4px">${esc(who(r.byDoctor)) || "—"}</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfSign)}</div></td>
+        <td style="width:50%;vertical-align:top"><div style="color:#6b7a80">&nbsp;</div><div style="margin-top:4px">&nbsp;</div><div style="margin-top:34px;border-top:1px solid #9aa7ab;padding-top:6px;color:#6b7a80">${esc(t().pdfStamp)}</div></td></tr></table>
+      <div style="margin-top:26px;font-size:11px;color:#8a979c">${esc(t().pdfMade)} ${DT(stamp(new Date()))} · ${esc(T(me && me.name))}</div></div></div>`;
+    document.body.appendChild(wrap); fixArabic(wrap); toast(t().making);
+    const sy = window.scrollY; window.scrollTo(0, 0);
+    try {
+      if (!window.html2pdf) await new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); setTimeout(bad, 15000); });
+      await window.html2pdf().set({ margin: [6, 6], filename: file, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save();
+      toast(tx("dlDone", { f: file }));
+    } catch (x) {
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().dlFail);
+    } finally { wrap.remove(); window.scrollTo(0, sy); }
+  }
+
+  // Read and check one step's fields (ids f-<item>-<pre><key>). Returns the data, or null after showing the error.
+  async function collect(it, fields, pre, err, r) {
+    const data = {}; let bad = false, msg = t().required;
+    const dEl = $(`f-${it.id}-${pre}decision`), dec = dEl ? dEl.value : null;
+    for (const fd of fields) {
+      const el = $(`f-${it.id}-${pre}${fd.k}`);
+      if (fd.ty === "file") { const f = fileOf(el); if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
+      let v = el.value.trim();
+      if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
+      if ((fd.req === 1 || (fd.req && fd.req === dec)) && !v) { bad = true; (el.closest(".field") || el).classList.add("bad"); continue; }
+      if (v) data[fd.k] = v;
+    }
+    if (!bad && data.from && data.to && data.to < data.from) { bad = true; msg = t().badRange; }
+    if (bad) { err.textContent = msg; err.hidden = false; return null; }
+    if (data.file) {
+      const key = `mada-mr-file-${r.id}-${it.id}-${it.step + 1}-${Date.now().toString(36)}`;
+      try { MadaStore.set(key, await readFile(data.file.src)); } catch (er) { err.textContent = t().noRoom; err.hidden = false; return null; }
+      data.file = { name: data.file.name, type: data.file.type, size: data.file.size, key };
+    }
+    return data;
+  }
+
   content.addEventListener("click", async e => {
     const cal = e.target.closest(".cal");
     if (cal) { const p = $(cal.dataset.for + "Pick"); p.value = fromDmy($(cal.dataset.for).value) || ""; try { p.showPicker(); } catch (er) { p.focus(); p.click(); } return; }
@@ -800,35 +893,29 @@
       window.open(URL.createObjectURL(new Blob([buf], { type: fl.dataset.type || "application/octet-stream" })), "_blank"); return;
     }
 
+    const rp = e.target.closest("[data-refpdf]");
+    if (rp) { const r = MadaMedical.get(id), it = r.items.find(x => x.id === rp.dataset.refpdf); if (it) refPdf(r, it); return; }
+
+    const pb = e.target.closest("[data-proc]");
+    if (pb) {
+      const r = MadaMedical.get(id), it = r.items.find(x => x.id === pb.dataset.proc), err = $("perr-" + it.id);
+      const data = await collect(it, FORM.referral.procedures, "p", err, r); if (!data) return;
+      MadaMedical.logStep(r.id, it.id, me.name, data);
+      render(); toast(t().procSaved); const card = $("item-" + it.id); if (card) card.scrollIntoView({ block: "nearest" }); return;
+    }
+
     const adv = e.target.closest("[data-adv]");
     if (adv) {
       const r = MadaMedical.get(id), it = r.items.find(x => x.id === adv.dataset.adv), fm = formOf(it), err = $("err-" + it.id);
-      const data = {}; let bad = false, msg = t().required;
-      const dEl = $(`f-${it.id}-decision`), dec = dEl ? dEl.value : null;
-      for (const fd of fm.f) {
-        const el = $(`f-${it.id}-${fd.k}`);
-        if (fd.ty === "file") { const f = fileOf(el); if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
-        let v = el.value.trim();
-        if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
-        if ((fd.req === 1 || (fd.req && fd.req === dec)) && !v) { bad = true; (el.closest(".field") || el).classList.add("bad"); continue; }
-        if (v) data[fd.k] = v;
-      }
-      if (!bad && data.from && data.to && data.to < data.from) { bad = true; msg = t().badRange; }
-      if (bad) { err.textContent = msg; err.hidden = false; return; }
-      if (data.file) {
-        const key = `mada-mr-file-${r.id}-${it.id}-${it.step + 1}`;
-        try { MadaStore.set(key, await readFile(data.file.src)); } catch (er) { err.textContent = t().noRoom; err.hidden = false; return; }
-        data.file = { name: data.file.name, type: data.file.type, size: data.file.size, key };
-      }
+      const data = await collect(it, fm.f, "", err, r); if (!data) return;
       // TODO: a "doctor" step arrives from the doctors system; this button only stands in for it in the demo.
       const by = fm.doctor ? (r.byDoctor || (MadaOrders.DOCTORS.find(d => d.id === r.doctorId) || {}).name) : me.name;
       const nk = nextKey(it);
       MadaMedical.advance(r.id, it.id, by, Object.keys(data).length ? data : null);
-      render(); toast(tx("stepSaved", { s: t()["s_" + nk] }));
+      render(); toast(it.type === "referral" && nk === "procedures" ? t().procSaved : tx("stepSaved", { s: t()["s_" + nk] }));
       const card = $("item-" + it.id); if (card) card.scrollIntoView({ block: "nearest" });
       return;
     }
-
     if (e.target.closest("#vdToggle")) { vdOpen = !vdOpen; render(); return; }
     const tile = e.target.closest("[data-ty]");
     if (tile) { openTy = tile.dataset.ty; addOpen = false; render(); return; }
