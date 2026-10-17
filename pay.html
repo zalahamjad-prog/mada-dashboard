@@ -1057,6 +1057,7 @@
 <script src="ivtherapy.js"></script>
 <script src="orders.js"></script>
 <script src="coupons.js"></script>
+<script src="rx-docs.js"></script>
 <script>
   // Customer payment page, opened from the SMS link: the customer sets the exact visit location and pays.
   // Demo: reads and writes the order in this browser (MadaOrders). In production this is a public page
@@ -1190,6 +1191,8 @@
       ${kind !== "ok" ? `<a class="btn btn-ghost" href="tel:920000000">${t().callUs}</a>` : ""}</section>`;
   }
 
+  // Prescription photos for services that need one (rx-docs.js).
+  const rxOpts = { get lang() { return lang; }, canEdit: true, camera: true, by: { en: "Customer", ar: "العميل" }, toast: m => toast(m), done: () => render() };
   function render() {
     order = id ? MadaOrders.get(id) : null;
     const o = order;
@@ -1206,6 +1209,8 @@
         ${p.amount != null ? `<div class="row"><span>${t().paidAmount}</span><b>${money(p.amount)} ${t().sar}</b></div>` : ""}</div>
         <button type="button" class="inv-btn" id="invBtn">${svg('<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>')}${t().invBtn}</button>`);
       $("invBtn").addEventListener("click", () => invoicePdf(o));
+      // The prescription can still be sent after paying (until the visit is done).
+      if (MadaRx.needs(o).length && o.status !== "completed") { $("main").insertAdjacentHTML("beforeend", MadaRx.card(o, rxOpts)); MadaRx.bind($("main"), o, rxOpts); }
       return;
     }
     if (o.status === "cancelled" || o.status === "declined") { $("main").innerHTML = stateCard("bad", t().cancelledTitle, t().cancelledSub); return; }
@@ -1238,6 +1243,7 @@
         : `<button type="button" class="need-loc" id="addrBtn"><span class="ic">${svg(ICO.pin)}</span><span><b>${t().needLoc}</b><small>${t().needLocSub}</small></span></button>`}
     </section>
 
+    ${MadaRx.card(o, rxOpts)}
     <section class="card">
       <div class="team-head"><h3>${t().team}</h3><span class="lic">${svg(ICO.shield)}${t().licensed}</span></div>
       <p class="team-sub">${t().teamSub}</p>
@@ -1276,7 +1282,7 @@
     $("paybar").hidden = false;
     $("payBtn").innerHTML = has ? esc(tx("payBtn", { t: lang === "ar" ? nf0.format(pr.total) : pr.total })) : `${svg(ICO.pin)}${out ? t().payOutArea : t().payNeedLoc}`;
     $("payBtn").classList.toggle("btn-dark", !has);
-    bind(o);
+    bind(o); MadaRx.bind($("main"), o, rxOpts);
     if (has || out) miniMap(L);
   }
 

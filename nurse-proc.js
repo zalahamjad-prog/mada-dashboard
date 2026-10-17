@@ -3,6 +3,7 @@
 //   care   (Nursing):    { items: [{ code, done, reason }], note, at, by }
 //   iv     (IV Therapy): { site, start, end, reaction: "none" | "yes", details, note, items, at, by }
 // The booked items come from order.items (codes from labs.js, nursing.js and ivtherapy.js).
+// Nursing and IV steps also show the prescription the patient uploaded (rx-docs.js), when a booked item needs one.
 const NrProc = (() => {
   const I = {
     tube: '<path d="M9 3h6M10 3v13a2 2 0 0 0 4 0V3"/><path d="M10 10h4"/>',
@@ -107,6 +108,7 @@ const NrProc = (() => {
           ${(o.doctorVisit || {}).status === "done" ? "" : `<button type="button" class="hx-btn out sm" id="npEdit">${S(I.pen)}${t().edit}</button>`}</div><div class="nu-cb">${booked}${summary(o, k, sv)}</div></section>`;
     return `<div class="nu np">
       <div class="ex-top"><span class="ex-tic">${S(ic)}</span><div><h1>${t()[h]}</h1><p>${t()[s]}</p></div><span class="ex-stp">${tx("stepOf", c.stepOf)}</span></div>
+      ${c.rx && k !== "sample" ? MadaRx.card(o, c.rx) : ""}
       ${card}
       <div class="ex-foot"><button type="button" class="hx-btn out pl-prevb" id="npPrev"><span class="flip">${S(I.back)}</span><span><b>${t().prev}</b><small>${E(c.prevName || "")}</small></span></button><span class="hx-sp"></span>
         <button type="button" class="hx-btn dark" id="npCont">${editing ? t().cont : t().next}${S(I.arrow)}</button></div>
@@ -115,6 +117,7 @@ const NrProc = (() => {
   function bind(root, o, c, k) {
     ctx = c;
     const $ = s => root.querySelector(s), all = (s, f) => root.querySelectorAll(s).forEach(f);
+    if (c.rx && k !== "sample") MadaRx.bind(root, o, c.rx);
     all("[data-np]", b => b.addEventListener("click", () => {
       const key = b.dataset.np, v = b.dataset.v;
       if (key.startsWith("row")) st.rows[+key.slice(3)].done = v === "y"; else st[key] = v;

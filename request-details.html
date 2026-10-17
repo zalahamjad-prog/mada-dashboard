@@ -539,6 +539,7 @@
 <script src="patients.js"></script>
 <script src="orders.js"></script>
 <script src="nurses.js"></script>
+<script src="rx-docs.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const isSupervisor = !!(me && me.supervisor);
@@ -793,6 +794,8 @@
     const b = document.querySelector('.nav a[href="bookings.html"]'); if (isBk) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
     document.title = (current === "ar" ? "مدى كير | " : "Mada Care | ") + (isBk ? t().bkTitle : t().title);
   }
+  // Prescription photos (rx-docs.js): sent by the customer from the payment link, or added here (e.g. received on WhatsApp).
+  const rxOpts = { get lang() { return current; }, canEdit: true, get by() { return me.name; }, toast: m => toast(m), done: () => render() };
   function render() {
     const o = id && MadaOrders.get(id);
     if (!o) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="requests.html">${t().toList}</a></p></section>`; return; }
@@ -816,7 +819,7 @@
       $("content").innerHTML = html + fullHtml(o);
       Object.keys(keep).forEach(k => { if ($(k)) $(k).value = keep[k]; });
       $("copyId").addEventListener("click", () => { try { navigator.clipboard.writeText(o.id); } catch (e) {} toast(t().copied); });
-      bindBooking(o); bindLocation(o); bindRest(o);
+      bindBooking(o); bindLocation(o); bindRest(o); MadaRx.bind($("content"), o, rxOpts);
       if (o.bookingId) { bindBk(o); $("pdfBtn").addEventListener("click", () => downloadPdf(MadaOrders.get(id))); }
       headFor(o);
       return;
@@ -1354,6 +1357,7 @@
           <div><span class="lbl">${t().decision}</span>${dec}</div>
         </div>
         ${itemsTable(o)}
+        ${MadaRx.card(o, rxOpts)}
         ${banner}
       </div>
       <div class="after"><b>${t().statusLbl}</b><span class="pill ${stPill}">${esc(t()["st_" + st] || st)}</span>${o.staff ? `<span class="who">${esc(tx("createdByLbl", { n: T(o.staff) }))}</span>` : ""}</div>

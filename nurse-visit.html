@@ -534,6 +534,7 @@
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
 <script src="ivtherapy.js"></script>
+<script src="rx-docs.js"></script>
 <script src="nurse-proc.js"></script>
 <script>
   const me = MadaAuth.requireAuth("nurse");
@@ -1017,6 +1018,9 @@
     ...stepNav(k),
     get prevName() { return t()["s_" + this.prevKey]; },
     get lang() { return current; }, svg, esc, loc, toast: m => toast(m), rerender() { render(); },
+    // The prescription card: the nurse can view it and add a photo when the patient has not sent one. Finished visits are view only.
+    get rx() { const done = ((MadaOrders.get(id) || {}).doctorVisit || {}).status === "done";
+      return { lang: current, nurse: true, canEdit: !done && !VIEW, canRemove: false, camera: true, by: me.name, toast: m => toast(m), done: () => render() }; },
     save(key, d) { const dv = MadaOrders.get(id).doctorVisit; putVisit({ steps: { ...(dv.steps || {}), [key]: { ...d, at: new Date().toISOString(), by: me.name } } }); },
     go: goStep
   });
