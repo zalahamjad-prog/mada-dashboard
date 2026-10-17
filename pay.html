@@ -1056,6 +1056,7 @@
 <script src="nursing.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="orders.js"></script>
+<script src="coupons.js"></script>
 <script>
   // Customer payment page, opened from the SMS link: the customer sets the exact visit location and pays.
   // Demo: reads and writes the order in this browser (MadaOrders). In production this is a public page
@@ -1066,7 +1067,6 @@
   const imgKey = oid => "mada-order-img-" + oid;
   const VAT = 0.15;
   // SAMPLE DATA ONLY: discount codes for the demo. The backend must validate codes.
-  const CODES = !MadaStore.SAMPLES ? {} : { MADA10: { pct: 10 }, WELCOME50: { amount: 50 } };
   // SAMPLE DATA ONLY: profile details for the team cards.
   const PROFILE = !MadaStore.SAMPLES ? {} : { D01: { yrs: 8, rate: 4.9 }, D02: { yrs: 11, rate: 4.8 }, D03: { yrs: 14, rate: 4.9 }, N01: { yrs: 5, rate: 4.8 }, N02: { yrs: 7, rate: 4.9 }, N03: { yrs: 4, rate: 4.7 } };
   const CITY_CENTER = MadaOrders.COVERAGE[0].center;
@@ -1087,7 +1087,7 @@
       m_tamara: "تمارا", m_tamaraD: "قسّم دفعتك على 4 دفعات بدون فوائد، حسب الشروط والأهلية.", m_tabby: "تابي", m_tabbyD: "ادفع على 4 دفعات بدون فوائد، حسب الشروط والأهلية.",
       cardNo: "رقم البطاقة", cardExp: "MM/YY", cardCvv: "CVV", cardName: "الاسم على البطاقة", cardErr: "تأكد من بيانات البطاقة.",
       promo: "كود الخصم", promoSub: "عندك كود خصم؟ أدخل الكود هنا للاستفادة من الخصم على زيارتك.", promoPh: "أدخل الكود", apply: "تطبيق الخصم", remove: "إزالة",
-      promoOk: "تم تطبيق الخصم.", promoBad: "الكود غير صحيح أو منتهي.", promoEmpty: "اكتب الكود أولاً.",
+      promoOk: "تم تطبيق الخصم.", pe_bad: "الكود غير صحيح.", pe_off: "هذا الكود موقوف حالياً.", pe_soon: "هذا الكود ما بدأ للحين.", pe_expired: "هذا الكود منتهي.", pe_used: "هذا الكود وصل الحد الأقصى للاستخدام.", pe_once: "استخدمت هذا الكود من قبل.", pe_service: "هذا الكود ما ينطبق على هذي الخدمة.", pe_min: "هذا الكود لطلبات {m} ريال وأكثر.", promoBad: "الكود غير صحيح أو منتهي.", promoEmpty: "اكتب الكود أولاً.",
       summary: "ملخص الدفع", visitValue: "قيمة الزيارة", discount: "الخصم", vat: "ضريبة القيمة المضافة 15%", vatEx: "ضريبة القيمة المضافة", totalDue: "الإجمالي المستحق", sar: "ريال",
       policyLink: "سياسة الإلغاء والاسترجاع", foot: "مدى كير | رعايتك أقرب", secure: "دفعك آمن، وبياناتك محمية.",
       payBtn: "ادفع {t} ريال وأكّد زيارتك", payNeedLoc: "حدد موقع الزيارة أولاً", processing: "جاري تنفيذ الدفع…",
@@ -1119,7 +1119,7 @@
       m_tamara: "Tamara", m_tamaraD: "Split into 4 interest-free payments, subject to eligibility.", m_tabby: "Tabby", m_tabbyD: "Pay in 4 interest-free payments, subject to eligibility.",
       cardNo: "Card number", cardExp: "MM/YY", cardCvv: "CVV", cardName: "Name on card", cardErr: "Check the card details.",
       promo: "Discount code", promoSub: "Have a discount code? Enter it here to get a discount on your visit.", promoPh: "Enter code", apply: "Apply", remove: "Remove",
-      promoOk: "Discount applied.", promoBad: "This code is not valid or has expired.", promoEmpty: "Enter the code first.",
+      promoOk: "Discount applied.", pe_bad: "This code is not valid.", pe_off: "This code is paused right now.", pe_soon: "This code isn't active yet.", pe_expired: "This code has expired.", pe_used: "This code has reached its usage limit.", pe_once: "You have already used this code.", pe_service: "This code doesn't apply to this service.", pe_min: "This code is for orders of {m} SAR or more.", promoBad: "This code is not valid or has expired.", promoEmpty: "Enter the code first.",
       summary: "Payment summary", visitValue: "Visit price", discount: "Discount", vat: "VAT 15%", vatEx: "VAT", totalDue: "Total due", sar: "SAR",
       policyLink: "Cancellation and refund policy", foot: "Mada Care | Care, closer to you", secure: "Your payment is secure and your data is protected.",
       payBtn: "Pay {t} SAR and confirm your visit", payNeedLoc: "Set the visit location first", processing: "Processing your payment…",
@@ -1165,7 +1165,7 @@
   function priceOf(o) {
     const base = o.total > 0 ? o.total : o.service === "doctor" ? 350 : 0, rate = MadaOrders.vatRate(o);
     let disc = 0;
-    if (promo) disc = promo.pct ? base * promo.pct / 100 : Math.min(base, promo.amount);
+    if (promo) disc = MadaCoupons.discount(promo, base);
     const net = base - disc, vat = Math.round(net * rate * 100) / 100;
     return { base, disc, vat, rate, total: Math.round((net + vat) * 100) / 100 };
   }
@@ -1357,10 +1357,11 @@
     }
     if ($("promoApply")) {
       const apply = () => {
-        const code = $("promoIn").value.trim().toUpperCase(), c = CODES[code];
+        const code = MadaCoupons.norm($("promoIn").value);
         if (!code) { $("promoMsg").textContent = t().promoEmpty; $("promoMsg").hidden = false; return; }
-        if (!c) { $("promoMsg").textContent = t().promoBad; $("promoMsg").hidden = false; $("promoIn").classList.add("bad"); return; }
-        promo = { code, ...c }; render();
+        const r = MadaCoupons.check(code, order, priceOf(order).base);
+        if (!r.ok) { $("promoMsg").textContent = tx("pe_" + r.err, { m: r.c && r.c.minOrder }); $("promoMsg").hidden = false; $("promoIn").classList.add("bad"); return; }
+        promo = r.c; render();
       };
       $("promoApply").addEventListener("click", apply);
       $("promoIn").addEventListener("keydown", e => { if (e.key === "Enter") apply(); });
@@ -1630,7 +1631,7 @@
     // TODO: hand over to the payment gateway (Apple Pay, card, Tamara or Tabby) and wait for its callback.
     setTimeout(() => {
       const now = new Date().toISOString(), cur = MadaOrders.get(id);
-      MadaOrders.update(id, { payment: "paid", payLink: { ...cur.payLink, paidAt: now }, paidInfo: { method, amount: pr.total, promo: promo ? promo.code : null, at: now } });
+      MadaOrders.update(id, { payment: "paid", payLink: { ...cur.payLink, paidAt: now }, paidInfo: { method, amount: pr.total, promo: promo ? promo.code : null, couponId: promo ? promo.id : null, discount: pr.disc || 0, at: now } });
       $("processing").hidden = true; scrollTo(0, 0); render();
     }, 1400);
   });

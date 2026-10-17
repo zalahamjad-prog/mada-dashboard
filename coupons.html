@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Coupons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Coupons ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  .st { padding: 16px 18px; display: flex; gap: 14px; align-items: center; }
+  .st i { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+  .st i svg { width: 22px; height: 22px; }
+  .st b { display: block; font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .st span { font-size: 12.5px; color: var(--muted); }
+  .i-g { background: var(--primary-soft); color: var(--primary); } .i-b { background: var(--blue-soft); color: var(--blue); } .i-o { background: var(--orange-soft); color: var(--orange); } .i-p { background: var(--purple-soft); color: var(--purple); }
+  .bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tabs button { height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 13px; font-weight: 600; color: #44545a; }
+  .tabs button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .tabs button em { font-style: normal; opacity: .65; margin-inline-start: 4px; }
+  .srch { position: relative; width: 280px; max-width: 100%; }
+  .srch svg { position: absolute; top: 50%; inset-inline-start: 12px; transform: translateY(-50%); width: 17px; height: 17px; color: var(--muted); }
+  .srch input { width: 100%; height: 40px; padding-inline: 38px 12px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; font-size: 14px; outline: 0; }
+  .srch input:focus { border-color: var(--primary); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+  .cp { position: relative; display: flex; flex-direction: column; overflow: hidden; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+  .cp:hover { box-shadow: 0 10px 28px rgba(16,35,43,.09); transform: translateY(-1px); }
+  .cp.off { opacity: .62; }
+  .cp-top { position: relative; padding: 18px 18px 16px; color: #fff; background: linear-gradient(135deg, var(--c1), var(--c2)); }
+  .cp[data-type="doctor"] { --c1: #0b6b5c; --c2: #15937c; }
+  .cp[data-type="staff"] { --c1: #3b5bdb; --c2: #5c7cfa; }
+  .cp[data-type="other"] { --c1: #9c4fd6; --c2: #c77dff; }
+  .cp.off .cp-top { --c1: #6b7a80; --c2: #8a979c; }
+  .cp-top::before, .cp-top::after { content: ""; position: absolute; bottom: -9px; width: 18px; height: 18px; border-radius: 50%; background: var(--page); }
+  .cp-top::before { left: -9px; } .cp-top::after { right: -9px; }
+  .cp-h { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .cp-val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -.5px; }
+  .cp-val small { font-size: 15px; font-weight: 600; margin-inline-start: 3px; }
+  .cp-cap { font-size: 12px; opacity: .85; margin-top: 4px; }
+  .chip { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 12px; background: rgba(255,255,255,.2); font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+  .chip svg { width: 13px; height: 13px; }
+  .cp-code { margin-top: 14px; display: flex; align-items: center; gap: 8px; }
+  .cp-code b { font-family: "Inter", ui-monospace, monospace; font-size: 17px; font-weight: 700; letter-spacing: 1.5px; padding: 6px 12px; border: 1.5px dashed rgba(255,255,255,.65); border-radius: 8px; direction: ltr; }
+  .cp-copy { width: 32px; height: 32px; border-radius: 8px; border: 0; background: rgba(255,255,255,.18); color: #fff; display: grid; place-items: center; cursor: pointer; }
+  .cp-copy:hover { background: rgba(255,255,255,.3); }
+  .cp-copy svg { width: 16px; height: 16px; }
+  .cp-body { padding: 16px 18px 14px; display: grid; gap: 12px; border-top: 2px dashed var(--border); flex: 1; }
+  .own { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .own .av { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 12.5px; font-weight: 700; flex: none; background: var(--primary-soft); color: var(--primary); }
+  .cp[data-type="staff"] .own .av { background: var(--blue-soft); color: var(--blue); }
+  .cp[data-type="other"] .own .av { background: var(--purple-soft); color: var(--purple); }
+  .own b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .own small { font-size: 12px; color: var(--muted); }
+  .meta { display: grid; gap: 5px; font-size: 12.5px; color: #44545a; }
+  .meta span { display: flex; align-items: center; gap: 7px; }
+  .meta svg { width: 14px; height: 14px; color: var(--muted); flex: none; }
+  .meta .warn { color: var(--orange); } .meta .bad { color: var(--red); }
+  .use { display: grid; gap: 6px; }
+  .use-h { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--muted); }
+  .use-h b { color: var(--ink); font-weight: 600; }
+  .prog { height: 6px; border-radius: 3px; background: #eef2f3; overflow: hidden; }
+  .prog i { display: block; height: 100%; border-radius: 3px; background: var(--primary); }
+  .cp-f { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px 10px 18px; border-top: 1px solid #f0f3f4; }
+  [dir="rtl"] .cp-f { padding: 10px 18px 10px 14px; }
+  .cp-f .lbl2 { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; }
+  .acts { display: flex; gap: 2px; }
+  .ib { width: 34px; height: 34px; border: 0; border-radius: 8px; background: none; display: grid; place-items: center; cursor: pointer; color: #6b7a80; }
+  .ib:hover { background: #f3f6f7; color: var(--ink); }
+  .ib.red:hover { color: var(--red); background: var(--red-soft); }
+  .ib:disabled { opacity: .35; cursor: default; background: none; }
+  .ib svg { width: 17px; height: 17px; }
+  .sw { position: relative; width: 38px; height: 22px; flex: none; }
+  .sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+  .sw span { position: absolute; inset: 0; border-radius: 11px; background: #cfd8db; transition: background .15s; }
+  .sw span:after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: transform .15s; }
+  .sw input:checked + span { background: var(--primary); }
+  .sw input:checked + span:after { transform: translateX(16px); }
+  [dir="rtl"] .sw input:checked + span:after { transform: translateX(-16px); }
+  .sw input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .empty { padding: 56px 24px; text-align: center; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+  .empty svg { width: 46px; height: 46px; color: #b9c6ca; margin-bottom: 10px; }
+  .empty b { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
+  .empty .btn { margin-top: 16px; }
+  /* Form and details */
+  .ov { position: fixed; inset: 0; z-index: 1000; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .ov[hidden] { display: none; }
+  .md { width: min(600px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; background: #fff; border-radius: 16px; box-shadow: 0 20px 50px rgba(16,35,43,.25); display: grid; }
+  .md-h { position: sticky; top: 0; z-index: 2; background: #fff; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 22px; border-bottom: 1px solid #eef2f3; }
+  .md-h h3 { font-size: 17px; font-weight: 600; }
+  .md-b { padding: 18px 22px; display: grid; gap: 16px; }
+  .md-f { position: sticky; bottom: 0; background: #fff; display: flex; gap: 10px; justify-content: flex-end; padding: 14px 22px; border-top: 1px solid #eef2f3; }
+  .fl { display: grid; gap: 7px; }
+  .fl > label, .fl > .lb { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fl i.o { font-style: normal; font-weight: 400; color: var(--muted); }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; color: var(--ink); }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .in.code { font-family: "Inter", ui-monospace, monospace; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; direction: ltr; }
+  textarea.in { height: 70px; padding: 10px 12px; resize: vertical; font-family: inherit; }
+  .err { font-size: 12.5px; color: var(--red); }
+  .hint { font-size: 12px; color: var(--muted); }
+  .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg button { flex: 1 1 0; min-width: 100px; display: flex; align-items: center; justify-content: center; gap: 7px; height: 44px; border: 1.5px solid #d9e1e3; border-radius: 10px; background: #fff; cursor: pointer; font-size: 13.5px; font-weight: 600; color: #44545a; }
+  .seg button svg { width: 17px; height: 17px; }
+  .seg button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chips button { height: 36px; padding: 0 14px; border: 1.5px solid #d9e1e3; border-radius: 18px; background: #fff; cursor: pointer; font-size: 13px; font-weight: 600; color: #44545a; }
+  .chips button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .code-row { display: flex; gap: 8px; }
+  .code-row .in { flex: 1; min-width: 0; }
+  .chk { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; }
+  .chk input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .prev { border-radius: 12px; padding: 14px 16px; color: #fff; background: linear-gradient(135deg, #0b6b5c, #15937c); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .prev.staff { background: linear-gradient(135deg, #3b5bdb, #5c7cfa); } .prev.other { background: linear-gradient(135deg, #9c4fd6, #c77dff); }
+  .prev b { font-size: 24px; font-weight: 700; } .prev span { font-family: "Inter", monospace; font-weight: 700; letter-spacing: 1.4px; border: 1.5px dashed rgba(255,255,255,.6); border-radius: 8px; padding: 5px 10px; direction: ltr; }
+  .prev small { display: block; font-size: 12px; opacity: .85; margin-top: 2px; }
+  .ul { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ul th { text-align: start; font-size: 12px; color: var(--muted); font-weight: 600; padding: 8px 6px; border-bottom: 1px solid var(--border); }
+  .ul td { padding: 10px 6px; border-bottom: 1px solid #f1f4f5; }
+  .ul a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .dsum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .dsum div { background: #f6f8f9; border-radius: 10px; padding: 12px; }
+  .dsum b { display: block; font-size: 18px; font-weight: 700; } .dsum span { font-size: 12px; color: var(--muted); }
+  .num { font-family: "Inter", sans-serif; direction: ltr; unicode-bidi: isolate; }
+  @media (max-width: 1100px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) {
+    .stats { gap: 10px; } .st { padding: 12px; gap: 10px; } .st i { width: 38px; height: 38px; } .st b { font-size: 18px; }
+    .srch { width: 100%; } .grid { grid-template-columns: minmax(0, 1fr); }
+    .row2 { grid-template-columns: 1fr; } .dsum { grid-template-columns: 1fr 1fr 1fr; } .ph-act, .ph-act .btn { width: 100%; }
+    .ov { padding: 0; place-items: end center; } .md { border-radius: 16px 16px 0 0; max-height: 92vh; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v2M14 11v2M14 17v2"/></svg></span>
+      <div><h1 data-i18n="title">Coupons</h1><p data-i18n="subtitle">Discount codes in the names of doctors and staff. The customer enters the code on the payment page.</p></div>
+    </div>
+    <div class="ph-act"><button type="button" class="btn btn-primary" id="newBtn"></button></div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="bar"><div class="tabs" id="tabs" role="group"></div>
+    <div class="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"></div></div>
+  <div class="grid" id="list"></div>
+</main>
+<div class="ov" id="ov" hidden><form class="md" id="md" novalidate></form></div>
+<div class="ov" id="dv" hidden><div class="md" id="dt"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="coupons.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Coupons are saved through MadaCoupons (coupons.js, MadaStore "mada-coupons"); pay.html checks and applies them.
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Coupons", subtitle: "Discount codes in the names of doctors and staff. The customer enters the code on the payment page.",
+      newC: "New Coupon", stActive: "Active coupons", stUses: "Times used", stDisc: "Total discount", stSales: "Sales with coupons",
+      all: "All", t_doctor: "Doctors", t_staff: "Staff", t_other: "Other", o_doctor: "Doctor", o_staff: "Staff", o_other: "Other",
+      search: "Search by code or name", sar: "SAR", upTo: "Up to {n} SAR", off: "off",
+      anyTime: "No end date", from: "From {d}", until: "Until {d}", fromTo: "{a} – {b}", expired: "Expired {d}", ended: "Expired", soon: "Starts {d}",
+      allSvc: "All services", s_doctor: "Doctor visit", s_blood: "Lab tests", s_nursing: "Home nursing", s_iv: "IV therapy",
+      minO: "Orders from {n} SAR", once: "Once per customer", uses: "Used", usesOf: "{n} of {m}", usesN: "{n} times", discGiven: "Discount: {n} SAR",
+      active: "Active", paused: "Paused", copy: "Copy code", copied: "Code {c} copied", edit: "Edit", del: "Delete", delUsed: "Used coupons can't be deleted. Pause it instead.", delQ: "Delete coupon {c}?",
+      emptyT: "No coupons yet", empty: "Create a coupon for a doctor or a staff member, then share the code with their customers.", noMatch: "No coupons match.",
+      newT: "New Coupon", editT: "Edit Coupon", forWho: "Coupon for", doctorL: "Doctor", staffL: "Staff member", pickDoc: "Choose the doctor", pickStaff: "Choose the staff member",
+      noDocs: "No doctors added yet. Add them on the Staff page.", noStaff: "No staff added yet. Add them on the Staff page.",
+      nameAr: "Name (Arabic)", nameEn: "Name (English)", otherPh: "e.g. Al Noor Clinic, a marketer", code: "Code", gen: "Generate", codeHint: "Capital letters, numbers and - only. 3 to 20 characters.",
+      discType: "Discount", pct: "Percentage %", amount: "Amount (SAR)", value: "Value", capL: "Maximum discount (SAR)", svcL: "Applies to",
+      starts: "Starts", ends: "Ends", limitL: "Total uses", limitPh: "No limit", minL: "Minimum order (SAR)", minPh: "None", onceL: "One use per customer (mobile number)",
+      noteL: "Note", activeL: "Active", optional: "(optional)", save: "Save Coupon", cancel: "Cancel", close: "Close",
+      e_owner: "Choose who the coupon is for.", e_name: "Write the name.", e_code: "Use 3 to 20 capital letters, numbers or -.", e_dup: "This code is already used by another coupon.",
+      e_val: "Write a value above 0.", e_pct: "A percentage can't be more than 100.", e_dates: "The end date is before the start date.", fixErr: "Please fix the highlighted fields.",
+      saved: "Coupon {c} saved", nowOn: "{c} is active", nowOff: "{c} is paused", removed: "Coupon {c} deleted", storeErr: "Couldn't save. Please try again.",
+      usageT: "Usage", noUse: "Not used yet.", th_date: "Date", th_order: "Booking", th_patient: "Patient", th_paid: "Paid", th_disc: "Discount", sample: "Sample"
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "الكوبونات", subtitle: "كوبونات خصم بأسماء الأطباء والموظفين. العميل يدخل الكود في صفحة الدفع.",
+      newC: "كوبون جديد", stActive: "كوبونات مفعّلة", stUses: "مرات الاستخدام", stDisc: "إجمالي الخصم", stSales: "مبيعات بالكوبونات",
+      all: "الكل", t_doctor: "الأطباء", t_staff: "الموظفين", t_other: "أخرى", o_doctor: "طبيب", o_staff: "موظف", o_other: "أخرى",
+      search: "ابحث بالكود أو الاسم", sar: "ريال", upTo: "بحد أقصى {n} ريال", off: "خصم",
+      anyTime: "بدون تاريخ انتهاء", from: "يبدأ {d}", until: "ينتهي {d}", fromTo: "{a} – {b}", expired: "انتهى {d}", ended: "منتهي", soon: "يبدأ {d}",
+      allSvc: "كل الخدمات", s_doctor: "زيارة طبيب", s_blood: "التحاليل", s_nursing: "التمريض المنزلي", s_iv: "المحاليل الوريدية",
+      minO: "للطلبات من {n} ريال", once: "مرة وحدة لكل عميل", uses: "الاستخدام", usesOf: "{n} من {m}", usesN: "{n} مرة", discGiven: "الخصم: {n} ريال",
+      active: "مفعّل", paused: "موقوف", copy: "نسخ الكود", copied: "تم نسخ الكود {c}", edit: "تعديل", del: "حذف", delUsed: "الكوبون المستخدم ما ينحذف. أوقفه بدلاً من الحذف.", delQ: "تبي تحذف الكوبون {c}؟",
+      emptyT: "ما فيه كوبونات للحين", empty: "سوّ كوبون لطبيب أو موظف، وخلّه يشارك الكود مع عملائه.", noMatch: "ما فيه كوبونات مطابقة.",
+      newT: "كوبون جديد", editT: "تعديل الكوبون", forWho: "الكوبون باسم", doctorL: "طبيب", staffL: "موظف", pickDoc: "اختر الطبيب", pickStaff: "اختر الموظف",
+      noDocs: "ما فيه أطباء مضافين. أضفهم من صفحة الموظفين.", noStaff: "ما فيه موظفين مضافين. أضفهم من صفحة الموظفين.",
+      nameAr: "الاسم (عربي)", nameEn: "الاسم (إنجليزي)", otherPh: "مثال: عيادة النور، مسوّق", code: "الكود", gen: "توليد", codeHint: "حروف إنجليزية كبيرة وأرقام و - فقط. من 3 إلى 20 خانة.",
+      discType: "الخصم", pct: "نسبة %", amount: "مبلغ (ريال)", value: "القيمة", capL: "أقصى خصم (ريال)", svcL: "ينطبق على",
+      starts: "يبدأ", ends: "ينتهي", limitL: "عدد الاستخدامات", limitPh: "بدون حد", minL: "أقل مبلغ للطلب (ريال)", minPh: "بدون", onceL: "مرة وحدة لكل عميل (رقم الجوال)",
+      noteL: "ملاحظة", activeL: "مفعّل", optional: "(اختياري)", save: "حفظ الكوبون", cancel: "إلغاء", close: "إغلاق",
+      e_owner: "اختر صاحب الكوبون.", e_name: "اكتب الاسم.", e_code: "استخدم من 3 إلى 20 حرف إنجليزي كبير أو رقم أو -.", e_dup: "هذا الكود مستخدم لكوبون ثاني.",
+      e_val: "اكتب قيمة أكبر من صفر.", e_pct: "النسبة ما تزيد عن 100.", e_dates: "تاريخ الانتهاء قبل تاريخ البداية.", fixErr: "صحّح الخانات المحددة بالأحمر.",
+      saved: "انحفظ الكوبون {c}", nowOn: "{c} صار مفعّل", nowOff: "{c} صار موقوف", removed: "انحذف الكوبون {c}", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
+      usageT: "سجل الاستخدام", noUse: "ما انستخدم للحين.", th_date: "التاريخ", th_order: "الحجز", th_patient: "المريض", th_paid: "المدفوع", th_disc: "الخصم", sample: "تجريبي"
+    }
+  };
+  let current = "en", tab = "all", q = "", list = [], f = null, tried = false;
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const T = v => v && typeof v === "object" ? v[current] || v.en || v.ar || "" : v || "";
+  const num = n => Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
+  const fmtD = d => d ? new Date(d + (d.length === 10 ? "T00:00:00" : "")).toLocaleDateString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { plus: '<path d="M12 5v14M5 12h14"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>', pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
+    trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', cal: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', grid: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>', ticket: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v2M14 11v2M14 17v2"/>',
+    steth: '<path d="M6 3v6a5 5 0 0 0 10 0V3"/><path d="M11 14v2a5 5 0 0 0 10 0v-2"/><circle cx="21" cy="12" r="2"/>', badge: '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 17c.7-1.8 2.2-2.7 4-2.7s3.3.9 4 2.7"/>', star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+    repeat: '<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>', money: '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>', chart: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>' };
+  const TYPE_IC = { doctor: IC.steth, staff: IC.badge, other: IC.star };
+  const initials = n => String(n || "").replace(/^(د\.|Dr\.?)\s*/i, "").trim().split(/\s+/).slice(0, 2).map(w => w[0] || "").join("").toUpperCase();
+
+  // People coupons can be in the name of: doctors (staff role doctor, plus the demo doctors) and other active staff.
+  const staffAll = () => (MadaStore.getJSON("mada-staff", []) || []).filter(s => s.status === "active");
+  const doctors = () => { const s = staffAll().filter(x => x.role === "doctor").map(x => ({ id: x.id, name: x.name }));
+    MadaOrders.DOCTORS.filter(d => !s.some(x => x.id === d.id)).forEach(d => s.push({ id: d.id, name: d.name })); return s; };
+  const staffers = () => staffAll().filter(x => x.role !== "doctor").map(x => ({ id: x.id, name: x.name }));
+
+  function stats() {
+    const uses = list.map(c => ({ c, u: MadaCoupons.usesOf(c) }));
+    const n = uses.reduce((a, x) => a + x.u.length, 0), disc = uses.reduce((a, x) => a + x.u.reduce((b, o) => b + discOf(x.c, o), 0), 0),
+      sales = uses.reduce((a, x) => a + x.u.reduce((b, o) => b + (+o.paidInfo.amount || 0), 0), 0);
+    const card = (cls, ic, v, l) => `<div class="card st"><i class="${cls}">${svg(ic, 1.9)}</i><div><b class="num">${v}</b><span>${l}</span></div></div>`;
+    $("stats").innerHTML = card("i-g", IC.ticket, list.filter(c => c.active && !(c.ends && c.ends < MadaCoupons.today())).length, t().stActive) + card("i-b", IC.repeat, n, t().stUses)
+      + card("i-o", IC.money, num(disc), `${t().stDisc} (${t().sar})`) + card("i-p", IC.chart, num(sales), `${t().stSales} (${t().sar})`);
+  }
+  const discOf = (c, o) => o.paidInfo.discount != null ? +o.paidInfo.discount : MadaCoupons.discount(c, o.total > 0 ? o.total : o.service === "doctor" ? 350 : 0);
+  const valTxt = c => c.kind === "pct" ? `<span class="num">${num(c.value)}%</span>` : `<span class="num">${num(c.value)}</span><small>${t().sar}</small>`;
+  function dates(c) {
+    const d = MadaCoupons.today();
+    if (c.ends && d > c.ends) return `<span class="bad">${svg(IC.cal)}${esc(tx("expired", { d: fmtD(c.ends) }))}</span>`;
+    if (c.starts && d < c.starts) return `<span class="warn">${svg(IC.cal)}${esc(c.ends ? tx("fromTo", { a: fmtD(c.starts), b: fmtD(c.ends) }) : tx("soon", { d: fmtD(c.starts) }))}</span>`;
+    return `<span>${svg(IC.cal)}${esc(c.starts && c.ends ? tx("fromTo", { a: fmtD(c.starts), b: fmtD(c.ends) }) : c.ends ? tx("until", { d: fmtD(c.ends) }) : c.starts ? tx("from", { d: fmtD(c.starts) }) : t().anyTime)}</span>`;
+  }
+  function cardHtml(c) {
+    const u = MadaCoupons.usesOf(c), disc = u.reduce((a, o) => a + discOf(c, o), 0), pct = c.limit ? Math.min(100, u.length / c.limit * 100) : 0, ty = c.owner.type, nm = T(c.owner.name);
+    const ended = c.ends && c.ends < MadaCoupons.today();
+    return `<article class="card cp ${c.active && !ended ? "" : "off"}" data-type="${ty}" data-id="${c.id}" tabindex="0">
+      <div class="cp-top"><div class="cp-h"><div><div class="cp-val">${valTxt(c)}</div><div class="cp-cap">${c.kind === "pct" && c.cap ? esc(tx("upTo", { n: num(c.cap) })) : t().off}</div></div>
+        <span class="chip">${svg(TYPE_IC[ty], 2)}${t()["o_" + ty]}${c.sample ? " · " + t().sample : ""}</span></div>
+        <div class="cp-code"><b>${esc(c.code)}</b><button type="button" class="cp-copy" data-act="copy" title="${t().copy}" aria-label="${t().copy}">${svg(IC.copy, 2)}</button></div></div>
+      <div class="cp-body">
+        <div class="own"><span class="av">${esc(initials(nm))}</span><div style="min-width:0"><b>${esc(nm)}</b><small>${t()["o_" + ty]}</small></div></div>
+        <div class="meta">${dates(c)}<span>${svg(IC.grid)}${esc(c.services && c.services.length ? c.services.map(s => t()["s_" + s]).join("، ") : t().allSvc)}</span>
+          ${c.minOrder ? `<span>${svg(IC.money)}${esc(tx("minO", { n: num(c.minOrder) }))}</span>` : ""}${c.once ? `<span>${svg(IC.user)}${t().once}</span>` : ""}</div>
+        <div class="use"><div class="use-h"><span>${t().uses}: <b>${c.limit ? tx("usesOf", { n: `<span class="num">${u.length}</span>`, m: `<span class="num">${c.limit}</span>` }) : tx("usesN", { n: `<span class="num">${u.length}</span>` })}</b></span><span>${esc(tx("discGiven", { n: num(disc) }))}</span></div>
+          ${c.limit ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ""}</div></div>
+      <div class="cp-f"><label class="lbl2"><span class="sw"><input type="checkbox" data-act="on" ${c.active ? "checked" : ""} ${c.sample ? "disabled" : ""} aria-label="${esc(c.code)}"><span></span></span>${ended ? t().ended : c.active ? t().active : t().paused}</label>
+        <div class="acts"><button type="button" class="ib" data-act="edit" title="${t().edit}" aria-label="${t().edit}" ${c.sample ? "disabled" : ""}>${svg(IC.pen, 2)}</button>
+          <button type="button" class="ib red" data-act="del" title="${u.length ? t().delUsed : t().del}" aria-label="${t().del}" ${c.sample || u.length ? "disabled" : ""}>${svg(IC.trash, 2)}</button></div></div>
+    </article>`;
+  }
+  function render() {
+    list = MadaCoupons.all();
+    stats();
+    const cnt = k => k === "all" ? list.length : list.filter(c => c.owner.type === k).length;
+    $("tabs").innerHTML = ["all", "doctor", "staff", "other"].map(k => `<button type="button" data-tab="${k}" aria-pressed="${tab === k}">${k === "all" ? t().all : t()["t_" + k]}<em>${cnt(k)}</em></button>`).join("");
+    $("newBtn").innerHTML = svg(IC.plus, 2.2) + t().newC;
+    $("q").placeholder = t().search;
+    const qq = q.trim().toLowerCase();
+    const shown = list.filter(c => (tab === "all" || c.owner.type === tab) && (!qq || [c.code, c.owner.name.en, c.owner.name.ar].some(v => String(v || "").toLowerCase().includes(qq))))
+      .sort((a, b) => (b.active - a.active) || String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+    $("list").innerHTML = shown.length ? shown.map(cardHtml).join("")
+      : list.length ? `<div class="card empty" style="grid-column:1/-1">${t().noMatch}</div>`
+      : `<div class="card empty" style="grid-column:1/-1">${svg(IC.ticket, 1.5)}<b>${t().emptyT}</b>${t().empty}<br><button type="button" class="btn btn-primary" data-act="new">${svg(IC.plus, 2.2)}${t().newC}</button></div>`;
+  }
+  const stored = () => MadaCoupons.all().filter(c => !c.sample);
+  function store(next) { try { MadaCoupons.save(next); return true; } catch (e) { toast(t().storeErr); return false; } }
+
+  // ---------- Form ----------
+  function blank() { return { id: null, code: "", owner: { type: "doctor", id: "", name: { en: "", ar: "" } }, kind: "pct", value: "", cap: "", minOrder: "", services: [], starts: "", ends: "", limit: "", once: false, active: true, note: "" }; }
+  function openForm(c) { f = c ? JSON.parse(JSON.stringify(c)) : blank(); f.codeTouched = !!c; tried = false; drawForm(); $("ov").hidden = false; }
+  function errs() {
+    const e = {}, other = list.filter(x => x.id !== f.id);
+    if (f.owner.type !== "other" && !f.owner.id) e.owner = t().e_owner;
+    if (f.owner.type === "other" && !f.owner.name.ar.trim() && !f.owner.name.en.trim()) e.name = t().e_name;
+    if (!/^[A-Z0-9-]{3,20}$/.test(f.code)) e.code = t().e_code; else if (other.some(x => x.code === f.code)) e.code = t().e_dup;
+    if (!(+f.value > 0)) e.value = t().e_val; else if (f.kind === "pct" && +f.value > 100) e.value = t().e_pct;
+    if (f.starts && f.ends && f.ends < f.starts) e.ends = t().e_dates;
+    return e;
+  }
+  function genCode() {
+    const en = (f.owner.name.en || "").replace(/^(dr\.?)\s*/i, "").trim().split(/\s+/)[0] || "MADA";
+    const base = (f.owner.type === "doctor" ? "DR-" : "") + en.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 10) + (+f.value > 0 ? Math.round(+f.value) : "");
+    let c = base || "MADA", i = 2; while (list.some(x => x.code === c && x.id !== f.id)) c = base + "-" + i++;
+    return c.slice(0, 20);
+  }
+  function drawForm() {
+    const e = tried ? errs() : {}, people = f.owner.type === "doctor" ? doctors() : f.owner.type === "staff" ? staffers() : [];
+    const er = k => e[k] ? `<span class="err">${e[k]}</span>` : "";
+    const segBtn = (k, v, lbl, ic) => `<button type="button" data-${k}="${v}" aria-pressed="${f[k === "otype" ? "owner" : k] === v || (k === "otype" && f.owner.type === v)}">${ic ? svg(ic, 2) : ""}${lbl}</button>`;
+    $("md").innerHTML = `<div class="md-h"><h3>${f.id ? t().editT : t().newT}</h3><button type="button" class="ib" data-x aria-label="${t().close}">${svg(IC.x, 2.2)}</button></div>
+      <div class="md-b">
+        <div class="prev ${f.owner.type}"><div><b>${f.value ? (f.kind === "pct" ? num(f.value) + "%" : num(f.value) + " " + t().sar) : "—"}</b><small>${esc(T(f.owner.name) || "—")}</small></div><span>${esc(f.code || "CODE")}</span></div>
+        <div class="fl"><span class="lb">${t().forWho}</span><div class="seg">${segBtn("otype", "doctor", t().doctorL, IC.steth)}${segBtn("otype", "staff", t().staffL, IC.badge)}${segBtn("otype", "other", t().o_other, IC.star)}</div></div>
+        ${f.owner.type === "other" ? `<div class="row2"><div class="fl"><label for="fNa">${t().nameAr}</label><input class="in ${e.name ? "bad" : ""}" id="fNa" dir="rtl" maxlength="60" value="${esc(f.owner.name.ar)}" placeholder="${esc(t().otherPh)}"></div>
+            <div class="fl"><label for="fNe">${t().nameEn} <i class="o">${t().optional}</i></label><input class="in" id="fNe" dir="ltr" maxlength="60" value="${esc(f.owner.name.en)}"></div></div>${er("name")}`
+          : people.length ? `<div class="fl"><label for="fOwn">${f.owner.type === "doctor" ? t().pickDoc : t().pickStaff}</label><select class="in ${e.owner ? "bad" : ""}" id="fOwn"><option value="">—</option>${people.map(p => `<option value="${esc(p.id)}" ${p.id === f.owner.id ? "selected" : ""}>${esc(T(p.name))}</option>`).join("")}</select>${er("owner")}</div>`
+          : `<p class="hint">${f.owner.type === "doctor" ? t().noDocs : t().noStaff}</p>${er("owner")}`}
+        <div class="fl"><span class="lb">${t().discType}</span><div class="seg">${segBtn("kind", "pct", t().pct)}${segBtn("kind", "amount", t().amount)}</div></div>
+        <div class="row2"><div class="fl"><label for="fVal">${t().value}</label><input class="in num ${e.value ? "bad" : ""}" id="fVal" inputmode="decimal" maxlength="7" value="${esc(f.value)}" placeholder="${f.kind === "pct" ? "15" : "50"}">${er("value")}</div>
+          ${f.kind === "pct" ? `<div class="fl"><label for="fCap">${t().capL} <i class="o">${t().optional}</i></label><input class="in num" id="fCap" inputmode="decimal" maxlength="7" value="${esc(f.cap)}" placeholder="${t().minPh}"></div>` : "<div></div>"}</div>
+        <div class="fl"><label for="fCode">${t().code}</label><div class="code-row"><input class="in code ${e.code ? "bad" : ""}" id="fCode" maxlength="20" autocomplete="off" value="${esc(f.code)}" placeholder="DR-AHMED15"><button type="button" class="btn btn-ghost" data-gen>${t().gen}</button></div>${er("code") || `<span class="hint">${t().codeHint}</span>`}</div>
+        <div class="fl"><span class="lb">${t().svcL}</span><div class="chips"><button type="button" data-svc="" aria-pressed="${!f.services.length}">${t().allSvc}</button>${MadaCoupons.SERVICES.map(s => `<button type="button" data-svc="${s}" aria-pressed="${f.services.includes(s)}">${t()["s_" + s]}</button>`).join("")}</div></div>
+        <div class="row2"><div class="fl"><label for="fS">${t().starts} <i class="o">${t().optional}</i></label><input class="in" type="date" id="fS" value="${esc(f.starts)}"></div>
+          <div class="fl"><label for="fE">${t().ends} <i class="o">${t().optional}</i></label><input class="in ${e.ends ? "bad" : ""}" type="date" id="fE" value="${esc(f.ends)}">${er("ends")}</div></div>
+        <div class="row2"><div class="fl"><label for="fLim">${t().limitL} <i class="o">${t().optional}</i></label><input class="in num" id="fLim" inputmode="numeric" maxlength="6" value="${esc(f.limit)}" placeholder="${t().limitPh}"></div>
+          <div class="fl"><label for="fMin">${t().minL} <i class="o">${t().optional}</i></label><input class="in num" id="fMin" inputmode="decimal" maxlength="7" value="${esc(f.minOrder)}" placeholder="${t().minPh}"></div></div>
+        <label class="chk"><input type="checkbox" id="fOnce" ${f.once ? "checked" : ""}>${t().onceL}</label>
+        <div class="fl"><label for="fNote">${t().noteL} <i class="o">${t().optional}</i></label><textarea class="in" id="fNote" maxlength="200" dir="auto">${esc(f.note)}</textarea></div>
+        <label class="chk"><span class="sw"><input type="checkbox" id="fOn" ${f.active ? "checked" : ""}><span></span></span>${t().activeL}</label>
+      </div>
+      <div class="md-f"><button type="button" class="btn btn-ghost" data-x>${t().cancel}</button><button type="submit" class="btn btn-primary">${t().save}</button></div>`;
+  }
+  // Read the typed fields into f (the buttons change f directly).
+  function read() {
+    const v = id => $(id) ? $(id).value : null, n = s => String(s || "").replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d.]/g, "");
+    if ($("fNa")) { f.owner.name.ar = v("fNa"); f.owner.name.en = v("fNe"); }
+    f.value = n(v("fVal")); if ($("fCap")) f.cap = n(v("fCap")); f.code = MadaCoupons.norm(v("fCode"));
+    f.starts = v("fS"); f.ends = v("fE"); f.limit = n(v("fLim")).replace(/\./g, ""); f.minOrder = n(v("fMin")); f.once = $("fOnce").checked; f.note = v("fNote"); f.active = $("fOn").checked;
+  }
+  function setOwner(id) {
+    const p = (f.owner.type === "doctor" ? doctors() : staffers()).find(x => x.id === id);
+    f.owner.id = id; f.owner.name = p ? { en: p.name.en || "", ar: p.name.ar || "" } : { en: "", ar: "" };
+  }
+  $("md").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.hasAttribute("data-x")) return closeForm();
+    if (b.type === "submit") return;
+    read();
+    if (b.dataset.otype) { if (f.owner.type !== b.dataset.otype) f.owner = { type: b.dataset.otype, id: "", name: { en: "", ar: "" } }; }
+    else if (b.dataset.kind) { f.kind = b.dataset.kind; if (f.kind === "amount") f.cap = ""; }
+    else if (b.dataset.svc !== undefined) { const s = b.dataset.svc; f.services = !s ? [] : f.services.includes(s) ? f.services.filter(x => x !== s) : [...f.services, s]; if (f.services.length === MadaCoupons.SERVICES.length) f.services = []; }
+    else if (b.hasAttribute("data-gen")) { f.code = genCode(); f.codeTouched = true; }
+    if (!f.codeTouched && (b.dataset.otype || b.dataset.kind)) f.code = f.owner.name.en ? genCode() : f.code;
+    drawForm();
+  });
+  $("md").addEventListener("change", e => {
+    if (e.target.id === "fOwn") { read(); setOwner(e.target.value); if (!f.codeTouched) f.code = genCode(); drawForm(); }
+  });
+  $("md").addEventListener("input", e => {
+    if (e.target.id === "fCode") { const p = e.target.selectionStart; e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, ""); e.target.setSelectionRange(p, p); f.codeTouched = true; }
+    // Live preview of the ticket.
+    read(); const pv = document.querySelector(".prev");
+    if (pv) pv.innerHTML = `<div><b>${f.value ? (f.kind === "pct" ? num(f.value) + "%" : num(f.value) + " " + t().sar) : "—"}</b><small>${esc(T(f.owner.name) || "—")}</small></div><span>${esc(f.code || "CODE")}</span>`;
+  });
+  $("md").addEventListener("submit", e => {
+    e.preventDefault(); read(); tried = true;
+    const er = errs(); if (Object.keys(er).length) { drawForm(); toast(t().fixErr); const b = $("md").querySelector(".bad"); if (b) b.focus(); return; }
+    const now = new Date().toISOString(), numOr = v => v === "" || v == null ? null : +v;
+    const c = { id: f.id || "CP-" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 5).toUpperCase(), code: f.code,
+      owner: { type: f.owner.type, id: f.owner.type === "other" ? null : f.owner.id, name: { en: f.owner.name.en.trim(), ar: f.owner.name.ar.trim() } },
+      kind: f.kind, value: +f.value, cap: f.kind === "pct" ? numOr(f.cap) : null, minOrder: numOr(f.minOrder), services: f.services, starts: f.starts || "", ends: f.ends || "",
+      limit: f.limit ? parseInt(f.limit, 10) : null, once: f.once, active: f.active, note: (f.note || "").trim(),
+      createdAt: f.createdAt || now, by: f.by || (me ? me.name : null), updatedAt: now };
+    const cur = stored(), i = cur.findIndex(x => x.id === c.id);
+    if (i >= 0) cur[i] = c; else cur.push(c);
+    if (!store(cur)) return;
+    closeForm(); render(); toast(tx("saved", { c: c.code }));
+  });
+  function closeForm() { $("ov").hidden = true; f = null; }
+  $("ov").addEventListener("click", e => { if (e.target === $("ov")) closeForm(); });
+
+  // ---------- Details ----------
+  function openDetails(c) {
+    const u = MadaCoupons.usesOf(c).sort((a, b) => String(b.paidInfo.at || b.bookedAt || "").localeCompare(String(a.paidInfo.at || a.bookedAt || "")));
+    const disc = u.reduce((a, o) => a + discOf(c, o), 0), sales = u.reduce((a, o) => a + (+o.paidInfo.amount || 0), 0);
+    $("dt").innerHTML = `<div class="md-h"><h3>${esc(c.code)} · ${esc(T(c.owner.name))}</h3><button type="button" class="ib" data-x aria-label="${t().close}">${svg(IC.x, 2.2)}</button></div>
+      <div class="md-b"><div class="dsum"><div><b class="num">${u.length}</b><span>${t().stUses}</span></div><div><b class="num">${num(disc)}</b><span>${t().stDisc} (${t().sar})</span></div><div><b class="num">${num(sales)}</b><span>${t().stSales} (${t().sar})</span></div></div>
+        ${c.note ? `<p class="hint">${esc(c.note)}</p>` : ""}
+        <h4 style="font-size:14px">${t().usageT}</h4>
+        ${u.length ? `<div style="overflow-x:auto"><table class="ul"><thead><tr><th>${t().th_date}</th><th>${t().th_order}</th><th>${t().th_patient}</th><th>${t().th_paid}</th><th>${t().th_disc}</th></tr></thead><tbody>
+          ${u.map(o => `<tr><td>${esc(fmtD((o.paidInfo.at || o.bookedAt || "").slice(0, 10)))}</td><td><a href="request-details.html?id=${encodeURIComponent(o.id)}">${esc(o.bookingId || o.id)}</a></td><td>${esc(T(o.patient) || o.mobile || "—")}</td><td class="num">${num(o.paidInfo.amount)}</td><td class="num">${num(discOf(c, o))}</td></tr>`).join("")}</tbody></table></div>`
+          : `<p class="hint">${t().noUse}</p>`}</div>`;
+    $("dv").hidden = false;
+  }
+  $("dv").addEventListener("click", e => { if (e.target === $("dv") || e.target.closest("[data-x]")) $("dv").hidden = true; });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { if (!$("ov").hidden) closeForm(); else $("dv").hidden = true; } });
+
+  // ---------- List actions ----------
+  $("list").addEventListener("change", e => {
+    const i = e.target.closest('[data-act="on"]'); if (!i) return;
+    const cur = stored(), c = cur.find(x => x.id === i.closest(".cp").dataset.id); if (!c) return;
+    c.active = i.checked; c.updatedAt = new Date().toISOString();
+    if (store(cur)) toast(tx(c.active ? "nowOn" : "nowOff", { c: c.code })); render();
+  });
+  $("list").addEventListener("click", e => {
+    if (e.target.closest(".sw")) return;
+    const b = e.target.closest("button"), card = e.target.closest(".cp");
+    if (b && b.dataset.act === "new") return openForm(null);
+    if (!card) return;
+    const c = list.find(x => x.id === card.dataset.id); if (!c) return;
+    if (!b) return openDetails(c);
+    if (b.dataset.act === "copy") { const done = () => toast(tx("copied", { c: c.code })); try { navigator.clipboard.writeText(c.code).then(done, done); } catch (er) { done(); } }
+    else if (b.dataset.act === "edit") openForm(c);
+    else if (b.dataset.act === "del") { if (!confirm(tx("delQ", { c: c.code }))) return; if (store(stored().filter(x => x.id !== c.id))) { render(); toast(tx("removed", { c: c.code })); } }
+  });
+  $("list").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.classList.contains("cp")) { const c = list.find(x => x.id === e.target.dataset.id); if (c) openDetails(c); } });
+  $("tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) { tab = b.dataset.tab; render(); } });
+  $("q").addEventListener("input", e => { q = e.target.value; render(); });
+  $("newBtn").addEventListener("click", () => openForm(null));
+  window.addEventListener("storage", e => { if (!e.key || e.key === "mada-coupons" || e.key === "mada-orders") render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3000); }
+
+  function setLang(lang) {
+    if (f) read();
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | الكوبونات" : "Mada Care | Coupons";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render(); if (f) drawForm();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>
