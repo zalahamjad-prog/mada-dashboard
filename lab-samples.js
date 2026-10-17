@@ -9,6 +9,9 @@
 //    Approving sends them to the care team: the dashboard bell and Request Details (request-details.html).
 // Each test is due at the sample time + its result time (labs.js "hours"). A test that is due with no results is a reminder for the nurse:
 // the bell, the count on the Samples menu item and, if she allows it, a browser notification.
+// The lab report (PDF or photo) the nurse uploads is kept in MadaStore under its own key; the card keeps { name, type, size, key, at, by }
+// as item.report (doctor's order, the same field lab-test.html and doctor-orders-list.html show) or order.labResults.report.
+// The dashboard's Lab Results page (lab-results.html) lists every card of every nurse with the doctor's follow-up (docSeen, approval, alert).
 // Needs orders.js, labs.js and medical.js (result fields: MadaMedical.ANALYTES, set per test on Services > Laboratory).
 // TODO: the lab system should send the results, and the reminders should be push or SMS so they reach her when the portal is closed.
 const MadaSamples = (() => {
@@ -47,19 +50,24 @@ const MadaSamples = (() => {
     c.nextDue = left[0] || null;
     return c;
   }
-  const nurseOrders = nurseId => (typeof MadaOrders !== "undefined" ? MadaOrders.all() : []).filter(o => o.booking && o.booking.nurseId === nurseId && o.status !== "cancelled");
+  // One nurse's bookings, or every booking when nurseId is null (dashboard).
+  const nurseOrders = nurseId => (typeof MadaOrders !== "undefined" ? MadaOrders.all() : []).filter(o => o.status !== "cancelled" && (nurseId == null ? true : o.booking && o.booking.nurseId === nurseId));
+  const staffName = sid => { if (!sid) return null; try { const s = MadaStore.getJSON("mada-staff", []).find(x => x.id === sid); return s ? s.name : null; } catch (e) { return null; } };
 
   // Every sample card for one nurse: { key, kind: "doctor" | "patient", o, r, it, collectedAt, tests, status, nextDue, sent, sentAt, sentBy }.
   // status: "collect" (doctor's order, sample not marked yet) | "waiting" | "due" (a result time has passed) | "ready" (all entered, not sent) | "sent".
   function list(nurseId) {
     const out = [], orders = nurseOrders(nurseId), byId = Object.fromEntries(orders.map(o => [o.id, o])), M = Md();
-    if (M) M.all().filter(r => r.source === "doctor" && byId[r.orderId]).forEach(r => r.items.forEach(it => {
+    if (M) M.all().filter(r => r.source === "doctor" && (byId[r.orderId] || nurseId == null && r.status !== "cancelled")).forEach(r => r.items.forEach(it => {
       if (it.type !== "lab" || !it.v2) return;
       const S = M.STEPS.lab, col = it.log.find(l => S[l.step] === "collected"), res = it.log.find(l => S[l.step] === "resulted");
       const codes = (it.tests || []).length ? it.tests : [];
       const sent = it.step >= S.indexOf("resulted");
       const entries = sent ? Object.fromEntries(codes.map(c => [c, { values: it.results || {} }])) : it.nurseDraft || {};
-      out.push(finish({ key: "mr:" + r.id + ":" + it.id, kind: "doctor", o: byId[r.orderId], r, it, title: it.title, collectedAt: it.step >= 1 ? (col && col.at) || r.createdAt : null,
+      const o = byId[r.orderId] || { id: r.orderId, patient: r.patient, mrn: r.mrn, bookingId: r.bookingId, mobile: r.mobile };
+      const rv = it.log.find(l => S[l.step] === "reviewed"), al = typeof MadaAlerts !== "undefined" ? (MadaStore.getJSON(MadaAlerts.KEY, {})[r.id + ":" + it.id] || null) : null;
+      out.push(finish({ key: "mr:" + r.id + ":" + it.id, kind: "doctor", o, r, it, report: it.report || null, nurseId: o.booking && o.booking.nurseId, nurse: staffName(o.booking && o.booking.nurseId),
+        docSeen: it.docSeen || null, review: rv ? { at: rv.at, by: rv.by, note: rv.data && rv.data.docNote } : null, docNotes: it.docNotes || [], alert: al, title: it.title, collectedAt: it.step >= 1 ? (col && col.at) || r.createdAt : null,
         tests: mkTests(codes, it.step >= 1 ? (col && col.at) || r.createdAt : null, entries), sent, sentAt: res && res.at, sentBy: res && res.by,
         reviewed: it.step >= S.indexOf("reviewed"), doctor: (MadaOrders.DOCTORS.find(d => d.id === r.doctorId) || {}).name || r.byDoctor || null }));
     }));
@@ -69,7 +77,7 @@ const MadaSamples = (() => {
       const codes = sm.tests && sm.tests.length ? sm.tests.filter(x => x.ok).map(x => x.code) : bookedTests(o);
       if (!codes.length) return;
       const lr = o.labResults || {}, at = sampleAt(sm);
-      out.push(finish({ key: "o:" + o.id, kind: "patient", o, collectedAt: at, tests: mkTests(codes, at, lr.tests), sent: lr.status === "sent", sentAt: lr.sentAt, sentBy: lr.sentBy }));
+      out.push(finish({ key: "o:" + o.id, kind: "patient", o, report: lr.report || null, nurseId: o.booking && o.booking.nurseId, nurse: staffName(o.booking && o.booking.nurseId), seen: lr.seen || null, collectedAt: at, tests: mkTests(codes, at, lr.tests), sent: lr.status === "sent", sentAt: lr.sentAt, sentBy: lr.sentBy }));
     });
     return out;
   }
@@ -85,14 +93,43 @@ const MadaSamples = (() => {
     else MadaOrders.update(c.o.id, { labResults: { ...(c.o.labResults || {}), status: "draft", tests: put((c.o.labResults || {}).tests) } });
     return get(nurseId, key);
   }
-  // Approve and send. Every test must have its results.
+  // The lab report file: photos are shrunk to a JPEG, PDFs are kept as they are (up to 1.5 MB). Throws "big" or "room".
+  const MAXF = 1.5 * 1024 * 1024;
+  const readAs = f => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(f); });
+  function shrink(url) {
+    return new Promise((ok, no) => { const img = new Image(); img.onerror = no; img.onload = () => {
+      const k = Math.min(1, 1800 / Math.max(img.width, img.height)), c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); ok(c.toDataURL("image/jpeg", 0.75)); }; img.src = url; });
+  }
+  async function saveReport(nurseId, key, file, by) {
+    const c = get(nurseId, key); if (!c || c.sent) return null;
+    const img = /^image\//.test(file.type);
+    if (!img && file.size > MAXF) throw new Error("big");
+    let data = await readAs(file); if (img) data = await shrink(data);
+    if (data.length > MAXF * 1.4) throw new Error("big");
+    const fk = c.kind === "doctor" ? `mada-mr-file-${c.r.id}-${c.it.id}-report` : `mada-lab-file-${c.o.id}-report`;
+    try { MadaStore.set(fk, data); } catch (e) { throw new Error("room"); }
+    if (MadaStore.get(fk) !== data) throw new Error("room");
+    const report = { name: file.name, type: img ? "image/jpeg" : file.type || "application/pdf", size: Math.round(data.length * 0.75), key: fk, at: new Date().toISOString(), by };
+    if (c.kind === "doctor") Md().patchItem(c.r.id, c.it.id, { report });
+    else { const o = MadaOrders.get(c.o.id); MadaOrders.update(c.o.id, { labResults: { ...(o.labResults || {}), status: (o.labResults || {}).status || "draft", report } }); }
+    return get(nurseId, key);
+  }
+  // Opens a stored report in a new tab.
+  function openFile(f) {
+    const url = f && MadaStore.get(f.key); if (!url) return false;
+    const bin = atob(url.split(",")[1]), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    window.open(URL.createObjectURL(new Blob([buf], { type: f.type || "application/octet-stream" })), "_blank");
+    return true;
+  }
+  // Approve and send. Every test must have its results, and the lab report must be uploaded.
   function send(nurseId, key, by) {
-    const c = get(nurseId, key); if (!c || c.sent || c.status !== "ready") return null;
+    const c = get(nurseId, key); if (!c || c.sent || c.status !== "ready" || !c.report) return null;
     const at = new Date().toISOString();
     if (c.kind === "doctor") {
       const M = Md(), S = M.STEPS.lab, results = {};
       c.tests.forEach(x => Object.assign(results, (x.entry && x.entry.values) || {}));
-      M.patchItem(c.r.id, c.it.id, { results, tests: c.tests.map(x => x.code), enteredBy: by, enteredAt: at, nurseApproved: { by, at } });
+      M.patchItem(c.r.id, c.it.id, { results, tests: c.tests.map(x => x.code), enteredBy: by, enteredAt: at, nurseApproved: { by, at }, docSeen: null });
       // collected -> at the lab -> results entered (waiting for the doctor's approval)
       while ((M.get(c.r.id).items.find(i => i.id === c.it.id) || {}).step < S.indexOf("resulted")) M.advance(c.r.id, c.it.id, by, null);
     } else MadaOrders.update(c.o.id, { labResults: { ...(c.o.labResults || {}), status: "sent", sentAt: at, sentBy: by, seen: null } });
@@ -118,9 +155,9 @@ const MadaSamples = (() => {
 
   const L = {
     en: { resT: "Lab Results", resSub: "Entered and approved by the nurse.", sentBy: "Sent by {n} · {t}", test: "Test", result: "Result", unit: "Unit", range: "Normal range",
-      s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical", nT: "Notifications", nNone: "No new notifications.", nRes: "Lab results ready", nCrit: "Critical lab result", open: "Open" },
+      s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical", nT: "Notifications", nNone: "No new notifications.", nRes: "Lab results ready", nCrit: "Critical lab result", open: "Open", rep: "Lab report" },
     ar: { resT: "نتائج التحاليل", resSub: "أدخلتها واعتمدتها الممرضة.", sentBy: "أرسلها {n} · {t}", test: "التحليل", result: "النتيجة", unit: "الوحدة", range: "المعدل الطبيعي",
-      s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج", nT: "الإشعارات", nNone: "ما فيه إشعارات جديدة.", nRes: "نتائج التحاليل طلعت", nCrit: "نتيجة تحليل حرجة", open: "فتح" }
+      s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج", nT: "الإشعارات", nNone: "ما فيه إشعارات جديدة.", nRes: "نتائج التحاليل طلعت", nCrit: "نتيجة تحليل حرجة", open: "فتح", rep: "تقرير المختبر" }
   };
   const rangeTxt = a => a.low != null && a.high != null ? `${a.low} – ${a.high}` : a.high != null ? `≤ ${a.high}` : a.low != null ? `≥ ${a.low}` : "";
   const when = (iso, lg) => iso ? new Date(iso).toLocaleString(lg === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }) : "";
@@ -140,10 +177,13 @@ const MadaSamples = (() => {
       return `<tr class="g"><td colspan="4">${esc(nm(ti.name, lg))} <small class="n" style="font-weight:500;color:#6b7a80">${esc(c)}</small></td></tr>` + (an.length ? an.map(a => { const v = e.values ? e.values[a.code] : null, s = labStatus(a, v);
         return `<tr><td>${esc(nm(a.name, lg))}</td><td class="n"><b>${esc(v)}</b> ${esc(a.unit || "")}</td><td class="n hm">${esc(rangeTxt(a))}</td><td>${s ? `<span class="p ${s}">${t["s_" + s]}</span>` : ""}</td></tr>`; }).join("")
         : `<tr><td colspan="4" style="white-space:pre-line">${esc(e.text)}</td></tr>`); }).join("");
-    return `<section class="lsr"><div class="lsr-h"><span class="lsr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/></svg></span>
-      <div><b>${t.resT}</b><small>${esc(t.sentBy.replace("{n}", by).replace("{t}", when(lr.sentAt, lg)))}</small></div></div>
+    return `<section class="lsr"><div class="lsr-h" style="flex-wrap:wrap"><span class="lsr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/></svg></span>
+      <div style="flex:1"><b>${t.resT}</b><small>${esc(t.sentBy.replace("{n}", by).replace("{t}", when(lr.sentAt, lg)))}</small></div>${lr.report ? fileBtn(lr.report, lg) : ""}</div>
       <div style="overflow-x:auto"><table><thead><tr><th>${t.test}</th><th>${t.result}</th><th class="hm">${t.range}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   }
+  // Button that opens an uploaded lab report (any page that loads this file).
+  const fileBtn = (f, lg) => `<button type="button" data-lsf="${esc(f.key)}" data-lsft="${esc(f.type)}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 13px;border-radius:9px;border:1px solid #d6dee1;background:#fff;color:#15304a;font:inherit;font-size:13px;font-weight:600;cursor:pointer"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>${L[lg].rep}</button>`;
+  if (typeof document !== "undefined") document.addEventListener("click", e => { const b = e.target.closest("[data-lsf]"); if (b) { e.preventDefault(); openFile({ key: b.dataset.lsf, type: b.dataset.lsft }); } });
   // Worst flag of a sent patient booking, for the care team's bell.
   function orderFlag(o) {
     const lr = o.labResults || {}, fl = Object.entries(lr.tests || {}).flatMap(([c, e]) => analytes(c).map(a => labStatus(a, e.values ? e.values[a.code] : null))).filter(Boolean);
@@ -199,5 +239,5 @@ const MadaSamples = (() => {
     tick(); timer = setInterval(tick, 60000);
   }
 
-  return { list, get, todo, saveDraft, send, markCollected, flag, analytes, labStatus, isEntered, staffNew, markSeen, card, staffBell, watch, rangeTxt, HOUR };
+  return { fileBtn, openFile, saveReport, list, get, todo, saveDraft, send, markCollected, flag, analytes, labStatus, isEntered, staffNew, markSeen, card, staffBell, watch, rangeTxt, HOUR };
 })();

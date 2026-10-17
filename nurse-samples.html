@@ -194,6 +194,17 @@
   .pill { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #eef2f4; color: #6b7a80; white-space: nowrap; }
   .pill.normal { background: #e3f4ee; color: #0f6b52; } .pill.low, .pill.high { background: #fff1e0; color: #a4520a; } .pill.critical { background: #b42318; color: #fff; }
   .val { font-weight: 700; color: #15304a; }
+  .rep { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; border: 1px dashed #c9d4d8; background: #fbfcfc; margin-bottom: 12px; }
+  .rep > svg { width: 26px; height: 26px; color: #5d6d78; flex: none; }
+  .rep > div { flex: 1 1 200px; min-width: 0; }
+  .rep b { display: block; font-size: 14.5px; color: #15304a; }
+  .rep small { display: block; font-size: 12.5px; color: #5d6d78; margin-top: 2px; line-height: 1.5; overflow-wrap: anywhere; }
+  .rep.ok { border-style: solid; border-color: #cdebdf; background: #f4fbf8; }
+  .rep.ok > svg { color: #0f8f6f; }
+  .rep.bad { border-color: #dc2626; background: #fdf3f2; }
+  .rep-a { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rep-a .btn { height: 40px; }
+  .sc-m .rp { color: #0f8f6f; font-weight: 600; } .sc-m .rp svg { color: #0f8f6f; }
   .appr { margin-top: 6px; padding: 14px; border-radius: 12px; background: #f4fbf8; border: 1px solid #cdebdf; }
   .appr label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #15304a; cursor: pointer; line-height: 1.5; }
   .appr input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; margin-top: 1px; }
@@ -331,6 +342,8 @@
       save: "Save", saved: "Saved. You can send them when all the results are in.", cancel: "Close", needAll: "Enter every result before you send. Still missing: {s}",
       apprLbl: "I checked these results against the lab report and they are correct.", apprDoc: "{d} gets a notification that the results are out.", apprTeam: "The care team gets a notification that the results are out, to share them with the patient.",
       sendDoc: "Approve and send to the doctor", sendTeam: "Approve and send", needAppr: "Tick the box to approve the results.", sentToastDoc: "Results sent to {d}.", sentToastTeam: "Results sent to the care team.",
+      repT: "Lab report", repS: "Upload the report from the lab (PDF or photo). You need it to send the results.", repUp: "Upload report", repRe: "Replace", repCam: "Take a photo", repSaved: "Lab report uploaded.",
+      repBig: "The file is too big. Use a PDF under 1.5 MB or a photo.", repRoom: "Couldn't save the file. Try a smaller one.", repType: "Choose a PDF or a photo.", needRep: "Upload the lab report before you send.", repHas: "Lab report uploaded",
       byN: "By {n}", critWarn: "There is a critical value. Call the doctor or your supervisor now as well.", sentBy: "Sent by {n} · {t}",
       colT: "Mark Sample Taken", colS: "When did you take the sample?", colTime: "Sample time", colSave: "Save", colDone: "Sample marked as taken.", needTime: "Enter the time.",
       none: "Nothing here", noneTodo: "No samples waiting. Samples you take on your visits show here.", noneSent: "No results sent yet.", noneQ: "No samples match your search.",
@@ -349,6 +362,8 @@
       save: "حفظ", saved: "انحفظت. تقدر ترسلها لما تكتمل كل النتائج.", cancel: "إغلاق", needAll: "أدخل كل النتائج قبل الإرسال. الناقص: {s}",
       apprLbl: "راجعت النتائج مع تقرير المختبر وهي صحيحة.", apprDoc: "يوصل {d} إشعار إن النتائج طلعت.", apprTeam: "يوصل فريق الرعاية إشعار إن النتائج طلعت، عشان يرسلونها للمريض.",
       sendDoc: "اعتماد وإرسال للطبيب", sendTeam: "اعتماد وإرسال", needAppr: "علّم على المربع عشان تعتمد النتائج.", sentToastDoc: "انرسلت النتائج لـ {d}.", sentToastTeam: "انرسلت النتائج لفريق الرعاية.",
+      repT: "تقرير المختبر", repS: "ارفع التقرير اللي جاك من المختبر (PDF أو صورة). لازم يكون مرفوع عشان ترسل النتائج.", repUp: "رفع التقرير", repRe: "استبدال", repCam: "تصوير التقرير", repSaved: "انرفع تقرير المختبر.",
+      repBig: "الملف كبير. استخدم PDF أقل من 1.5 ميجا أو صورة.", repRoom: "ما قدرنا نحفظ الملف. جرّب ملف أصغر.", repType: "اختر ملف PDF أو صورة.", needRep: "ارفع تقرير المختبر قبل الإرسال.", repHas: "التقرير مرفوع",
       byN: "بواسطة {n}", critWarn: "فيه قيمة حرجة. كلّم الطبيب أو المشرف الحين بعد.", sentBy: "أرسلها {n} · {t}",
       colT: "تحديد وقت السحب", colS: "متى سحبت العينة؟", colTime: "وقت السحب", colSave: "حفظ", colDone: "انحفظ وقت السحب.", needTime: "اكتب الوقت.",
       none: "ما فيه شي هنا", noneTodo: "ما فيه عينات تنتظر. العينات اللي تسحبها في زياراتك تطلع هنا.", noneSent: "ما انرسلت نتائج للحين.", noneQ: "ما فيه عينات تطابق البحث.",
@@ -422,7 +437,7 @@
     return `<article class="sc s-${c.status} ${openKey === c.key ? "hl" : ""}" id="c-${esc(c.key.replace(/[^\w-]/g, "_"))}">
       <div class="sc-h"><div class="sc-who"><b>${esc(T(o.patient))}</b><small><span dir="ltr">${esc(o.mrn || "")}</span>${o.bookingId ? ` · ${t().booking} <span dir="ltr">${esc(o.bookingId)}</span>` : ""}</small></div>
         <div class="chips">${src}<span class="chip ${c.status === "sent" ? "sent" : c.status}">${t()["st_" + stK]}</span>${fl === "critical" ? `<span class="chip critical">${S(I.warn, 2.2)}${t().critical}</span>` : fl === "high" || fl === "low" ? `<span class="chip out">${t().out}</span>` : ""}</div></div>
-      <div class="sc-m">${c.collectedAt ? `<span>${S(I.drop)}${esc(tx("taken", { t: when(c.collectedAt) }))}</span>` : ""}<span>${S(I.flask)}${n === 1 ? t().nTests1 : esc(tx("nTests", { n }))}</span></div>
+      <div class="sc-m">${c.collectedAt ? `<span>${S(I.drop)}${esc(tx("taken", { t: when(c.collectedAt) }))}</span>` : ""}<span>${S(I.flask)}${n === 1 ? t().nTests1 : esc(tx("nTests", { n }))}</span>${c.report ? `<span class="rp">${S(I.ok, 2.2)}${t().repHas}</span>` : ""}</div>
       <ul class="tl">${c.tests.map(x => testRow(c, x)).join("")}</ul>
       <div class="sc-f"><span class="to">${S(c.kind === "doctor" ? I.doc : I.team)}${esc(to)}</span>${act}</div>
     </article>`;
@@ -466,12 +481,31 @@
       <div class="dh"><span class="ic">${S(I.flask)}</span><div><h3 id="resT">${ro ? t().viewT : t().resT}</h3><p>${ro ? esc(T(c.o.patient)) + ` · <span dir="ltr">${esc(c.o.mrn || "")}</span>` : esc(tx("resS", { p: T(c.o.patient) }))}</p></div></div>
       ${ro ? `<div class="sent-box">${S(I.ok, 2.2)}<span>${esc(doc ? tx("sentDoc", { d: docName(c), t: when(c.sentAt) }) : tx("sentTeam", { t: when(c.sentAt) }))}${c.sentBy ? `<br><small>${esc(tx("byN", { n: T(c.sentBy) }))}</small>` : ""}</span></div>${fl === "critical" ? `<div class="alert" style="margin:0 0 12px">${S(I.warn, 2)}<div><b>${t().critical}</b><span>${t().critWarn}</span></div></div>` : ""}` : ""}
       <div id="rtWrap">${c.tests.map(x => resRows(c, x, ro)).join("")}</div>
+      ${repHtml(c, ro)}
       ${ro ? "" : `<div class="appr"><label><input type="checkbox" id="apOk"><span>${t().apprLbl}</span></label><p>${esc(doc ? tx("apprDoc", { d: docName(c) }) : t().apprTeam)}</p></div>
       <p class="err" id="resErr" hidden></p>`}
       <div class="df"><button type="button" class="btn btn-light" data-close>${t().cancel}</button>${ro ? "" : `<button type="button" class="btn btn-dark" id="resSave">${t().save}</button><button type="button" class="btn btn-go" id="resSend">${S(I.send)}${doc ? t().sendDoc : t().sendTeam}</button>`}</div>`;
     $("resOv").hidden = false;
     const first = $("resDlg").querySelector("input[data-t], textarea"); (first || $("resDlg").querySelector(".x")).focus();
   }
+  // The lab report: the nurse downloads it from the lab system and uploads it here (or takes a photo). Needed before sending.
+  function repHtml(c, ro) {
+    const f = c.report, I2 = '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>';
+    if (ro) return f ? `<div class="rep ok">${S(I2)}<div><b>${t().repT}</b><small>${esc(f.name)}</small></div>${MadaSamples.fileBtn(f, current)}</div>` : "";
+    return `<div class="rep ${f ? "ok" : ""}" id="repBox">${S(f ? I.ok : I2, 2)}<div><b>${t().repT}</b><small>${f ? esc(f.name) + " · " + esc(when(f.at)) : t().repS}</small></div>
+      <div class="rep-a">${f ? MadaSamples.fileBtn(f, current) : ""}<label class="btn ${f ? "btn-light" : "btn-dark"}">${S('<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>')}${f ? t().repRe : t().repUp}<input type="file" accept="application/pdf,image/*" data-rep hidden></label>
+      <label class="btn btn-light">${S('<rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>')}${t().repCam}<input type="file" accept="image/*" capture="environment" data-rep hidden></label></div></div>`;
+  }
+  $("resDlg").addEventListener("change", async e => {
+    const inp = e.target.closest("[data-rep]"); if (!inp) return;
+    const f = inp.files[0]; inp.value = ""; if (!f) return;
+    if (!/^image\//.test(f.type) && f.type !== "application/pdf") return toast(t().repType);
+    const key = dlgKey, ap = $("apOk") && $("apOk").checked;
+    MadaSamples.saveDraft(myId, key, collect(), me.name);
+    try { await MadaSamples.saveReport(myId, key, f, me.name); toast(t().repSaved); }
+    catch (x) { toast(x.message === "big" ? t().repBig : t().repRoom); }
+    openRes(key); if (ap && $("apOk")) $("apOk").checked = true;
+  });
   // What is typed in the popup, as { CODE: { values } | { text } }.
   function collect() {
     const out = {};
@@ -496,6 +530,7 @@
       if (!send) { closeDlg("resOv"); render(); return toast(t().saved); }
       const miss = c.tests.filter(x => !x.entered);
       if (miss.length) { err.textContent = tx("needAll", { s: miss.map(x => T(x.name)).join(current === "ar" ? "، " : ", ") }); err.hidden = false; render(); return; }
+      if (!c.report) { err.textContent = t().needRep; err.hidden = false; $("repBox").classList.add("bad"); $("repBox").scrollIntoView({ block: "center", behavior: "smooth" }); render(); return; }
       const done = MadaSamples.send(myId, dlgKey, me.name);
       closeDlg("resOv"); tab = "todo"; render();
       toast(c.kind === "doctor" ? tx("sentToastDoc", { d: docName(c) }) : t().sentToastTeam);
