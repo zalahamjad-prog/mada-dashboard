@@ -178,7 +178,7 @@ const MadaSamples = (() => {
         return `<tr><td>${esc(nm(a.name, lg))}</td><td class="n"><b>${esc(v)}</b> ${esc(a.unit || "")}</td><td class="n hm">${esc(rangeTxt(a))}</td><td>${s ? `<span class="p ${s}">${t["s_" + s]}</span>` : ""}</td></tr>`; }).join("")
         : `<tr><td colspan="4" style="white-space:pre-line">${esc(e.text)}</td></tr>`); }).join("");
     return `<section class="lsr"><div class="lsr-h" style="flex-wrap:wrap"><span class="lsr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/></svg></span>
-      <div style="flex:1"><b>${t.resT}</b><small>${esc(t.sentBy.replace("{n}", by).replace("{t}", when(lr.sentAt, lg)))}</small></div>${lr.report ? fileBtn(lr.report, lg) : ""}</div>
+      <div style="flex:1"><b>${t.resT}</b><small>${esc(t.sentBy.replace("{n}", by).replace("{t}", when(lr.sentAt, lg)))}</small></div><div style="display:flex;flex-wrap:wrap;gap:8px">${lr.report ? fileBtn(lr.report, lg) : ""}${typeof MadaLabReport !== "undefined" ? MadaLabReport.buttons("o:" + o.id, lg) : ""}</div></div>
       <div style="overflow-x:auto"><table><thead><tr><th>${t.test}</th><th>${t.result}</th><th class="hm">${t.range}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   }
   // Button that opens an uploaded lab report (any page that loads this file).

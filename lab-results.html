@@ -236,6 +236,7 @@
 <script src="medical.js"></script>
 <script src="alerts.js"></script>
 <script src="lab-samples.js"></script>
+<script src="lab-report.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -249,7 +250,7 @@
       title: "Lab Results", subtitle: "Every lab test: what is still pending, what is out, and what the doctor did with it.", searchPh: "Patient, file number, booking number, test or doctor", search: "Search",
       srcLbl: "Source", srcAll: "All sources", srcDoc: "Doctor's orders", srcPat: "Patient bookings",
       k_all: "All tests", k_pending: "Pending", k_late: "Late", k_out: "Results out", k_doc: "Waiting for the doctor", k_ok: "Doctor approved",
-      cPatient: "Patient", cSource: "Source", cTests: "Tests", cNurse: "Nurse", cTaken: "Sample taken · nurse", cDue: "Result time", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
+      cPatient: "Patient", cSource: "Source", cTests: "Tests", cNurse: "Nurse", cTaken: "Sample taken", cDue: "Result time", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
       patOrder: "Patient booking", docOrder: "Doctor's order", booking: "Booking",
       st_collect: "Sample time not set", st_waiting: "Waiting for results", st_due: "Late", st_ready: "Entered, not sent", st_review: "With the doctor", st_reviewed: "Doctor approved", st_team: "Sent to care team", st_teamSeen: "Care team opened",
       dueIn: "In {d}", late: "{d} late", outAt: "Out {t}", noHours: "Not set",
@@ -264,7 +265,7 @@
       title: "نتائج التحاليل", subtitle: "كل التحاليل: اللي باقي، واللي طلعت، ووش سوى الطبيب فيها.", searchPh: "المريض أو رقم الملف أو رقم الحجز أو التحليل أو الطبيب", search: "بحث",
       srcLbl: "المصدر", srcAll: "كل المصادر", srcDoc: "طلبات الأطباء", srcPat: "حجوزات المرضى",
       k_all: "كل التحاليل", k_pending: "قيد الانتظار", k_late: "متأخرة", k_out: "طلعت النتائج", k_doc: "بانتظار الطبيب", k_ok: "اعتمدها الطبيب",
-      cPatient: "المريض", cSource: "المصدر", cTests: "التحاليل", cNurse: "الممرضة", cTaken: "وقت السحب · الممرضة", cDue: "وقت النتيجة", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
+      cPatient: "المريض", cSource: "المصدر", cTests: "التحاليل", cNurse: "الممرضة", cTaken: "وقت السحب", cDue: "وقت النتيجة", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
       patOrder: "حجز مريض", docOrder: "طلب طبيب", booking: "الحجز",
       st_collect: "وقت السحب غير محدد", st_waiting: "بانتظار النتائج", st_due: "متأخرة", st_ready: "مدخلة وما انرسلت", st_review: "عند الطبيب", st_reviewed: "اعتمدها الطبيب", st_team: "انرسلت لفريق الرعاية", st_teamSeen: "فتحها فريق الرعاية",
       dueIn: "باقي {d}", late: "متأخرة {d}", outAt: "طلعت {t}", noHours: "غير محدد",
@@ -361,7 +362,7 @@
       <div class="kv"><div><span>${t().cSource}</span>${c.kind === "doctor" ? t().docOrder : t().patOrder}</div><div><span>${t().cNurse}</span>${esc(T(c.nurse) || "—")}</div><div><span>${t().cTaken}</span>${esc(when(c.collectedAt) || "—")}</div>
         <div><span>${t().sentAt}</span>${esc(when(c.sentAt) || "—")}</div><div><span>${t().doctor}</span>${esc(T(c.doctor) || "—")}</div><div><span>${t().cDoctor}</span>${drHtml(c)}</div></div>
       ${res}
-      <div class="df">${c.report ? MadaSamples.fileBtn(c.report, current) : ""}<a class="btn btn-ghost" href="${open}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
+      <div class="df">${c.sent ? MadaLabReport.buttons(c.key, current) : ""}${c.report ? MadaSamples.fileBtn(c.report, current) : ""}<a class="btn btn-ghost" href="${open}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
     $("ov").hidden = false; $("dlg").querySelector(".x").focus();
   }
   $("rows").addEventListener("click", e => { const v = e.target.closest("[data-view]"); if (v) openView(v.dataset.view); });
