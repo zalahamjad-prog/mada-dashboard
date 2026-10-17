@@ -152,6 +152,16 @@
   .sw p { font-size: 14px; color: #44545a; line-height: 1.6; margin: 10px 0 20px; }
   .sw .row { display: flex; gap: 10px; }
   .sw .row .btn { flex: 1; }
+  .bfd { max-width: 680px; padding: 22px 24px 20px; }
+  .bfd-h { display: flex; gap: 14px; align-items: center; padding-inline-end: 34px; margin-bottom: 8px; }
+  .bfd-h .ic { width: 52px; height: 52px; border-radius: 50%; background: #e3f4ee; color: var(--teal); display: grid; place-items: center; flex: none; }
+  .bfd-h .ic svg { width: 26px; height: 26px; }
+  .bfd-h h3 { font-size: 21px; font-weight: 700; color: #15304a; }
+  .bfd-h p { font-size: 13.5px; color: #5d6d78; margin-top: 2px; }
+  .bfd-f { display: flex; justify-content: flex-end; margin-top: 14px; }
+  button.svc { border: 0; cursor: pointer; font: inherit; gap: 6px; }
+  button.svc:hover { filter: brightness(.96); }
+  button.svc svg { width: 14px; height: 14px; }
   .tips { max-width: 660px; padding: 22px 28px 24px; }
   .tips-h { display: flex; gap: 16px; align-items: flex-start; padding-inline-end: 34px; }
   .tips-h .ic { width: 62px; height: 62px; border-radius: 50%; background: #e3f4ee; color: var(--teal); display: grid; place-items: center; flex: none; }
@@ -297,6 +307,7 @@
 </div>
 
 <!-- Before you start -->
+<div class="ov" id="bfOv" hidden role="dialog" aria-modal="true" aria-labelledby="bfT"></div>
 <div class="ov" id="tipOv" hidden role="dialog" aria-modal="true" aria-labelledby="tipT">
   <div class="dlg tips">
     <button type="button" class="x" data-close="tipOv" data-i18n-aria="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -314,6 +325,11 @@
 <script src="auth.js"></script>
 <script src="orders.js"></script>
 <script src="doctor-portal.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="rx-docs.js"></script>
+<script src="svc-brief.js"></script>
 <script>
   const me = MadaAuth.requireAuth("nurse");
   const $ = id => document.getElementById(id), esc = DrPortal.esc;
@@ -333,6 +349,7 @@
   ];
   const ICON = {
     person: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>',
     pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
     car: '<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18v3H3z"/><circle cx="7.5" cy="16.5" r="1.5"/><circle cx="16.5" cy="16.5" r="1.5"/>',
     check: '<path d="m5 12 4.5 4.5L19 7"/>',
@@ -365,7 +382,7 @@
       t_privacy: "Respect Privacy", s_privacy: "Keep the patient covered and talk calmly in a private place.",
       t_safety: "Work Safely", s_safety: "Dispose of sharps and waste in the right containers.",
       t_record: "Record Everything", s_record: "Write what you did, the readings and any notes before you leave.",
-      onwayOk: "The patient's team now sees you are on the way.", arrivedOk: "Arrival saved. You can start the visit.", startedOk: "Visit with {n} started.", workNext: "The visit screen is the next step we build.",
+      onwayOk: "The patient's team now sees you are on the way.", arrivedOk: "Arrival saved. You can start the visit.", startedOk: "Visit with {n} started.", workNext: "The visit screen is the next step we build.", bfOpen: "Service details",
       lateArr: "Arrival time"
     },
     ar: {
@@ -393,7 +410,7 @@
       t_privacy: "احترم الخصوصية", s_privacy: "خلّ المريض مستور وتكلّم بهدوء في مكان خاص.",
       t_safety: "اشتغل بأمان", s_safety: "تخلّص من الإبر والنفايات في الحاويات المخصصة.",
       t_record: "سجّل كل شي", s_record: "اكتب اللي سويته والقراءات وأي ملاحظات قبل ما تطلع.",
-      onwayOk: "الحين الفريق يشوف إنك في الطريق.", arrivedOk: "انحفظ وصولك. تقدر تبدأ الزيارة.", startedOk: "بدأت الزيارة مع {n}.", workNext: "شاشة الزيارة هي الخطوة الجاية اللي نبنيها.",
+      onwayOk: "الحين الفريق يشوف إنك في الطريق.", arrivedOk: "انحفظ وصولك. تقدر تبدأ الزيارة.", startedOk: "بدأت الزيارة مع {n}.", workNext: "شاشة الزيارة هي الخطوة الجاية اللي نبنيها.", bfOpen: "تفاصيل الخدمة",
       lateArr: "وقت الوصول"
     }
   };
@@ -461,7 +478,7 @@
         : s ? `<span class="tag-on ${s === "ontheway" ? "tag-way" : s === "paused" ? "tag-pause" : ""}">${t()["st_" + s]}</span>` : "";
       return `<tr class="${s === "ongoing" && !isDone ? "ongoing" : ""}">
         <td class="c-who"><div class="who"><span class="pa pa-${ix}">${ic("person")}</span><span><b>${esc(T(o.patient) || "—")}</b>${tag ? "<br>" + tag : ""}<small class="mrn num">${esc(o.mrn || "")}</small></span></div></td>
-        <td data-l="${esc(t().cSvc)}"><span class="svc svc-${esc(o.service)}">${esc(svcOf(o))}</span></td>
+        <td data-l="${esc(t().cSvc)}"><button type="button" class="svc svc-${esc(o.service)}" data-brief="${esc(o.id)}" title="${esc(t().bfOpen)}">${esc(svcOf(o))}${ic("info")}</button></td>
         <td data-l="${esc(t().cMobile)}"><a class="num tel" href="tel:${esc(o.mobile || "")}">${esc(DrPortal.phone(o.mobile) || "—")}</a></td>
         <td data-l="${esc(t().cBooking)}"><span class="num">${esc(o.bookingId || "—")}</span></td>
         <td data-l="${esc(t()[last])}" class="when">${isDone ? doneTxt(doneAt(o)) : isCan ? doneTxt(cancelAt(o)) + (cancelWhy(o) ? `<span class="why">${esc(cancelWhy(o))}</span>` : "") : whenTxt(o.appointment)}</td>
@@ -517,14 +534,27 @@
   $("swYes").addEventListener("click", () => { close("swOv"); tipsOrStart(); });
   $("tipGo").addEventListener("click", () => { if ($("tipOff").checked) MadaStore.set(TIP_KEY, "1"); close("tipOv"); begin(); });
   function open(id) { $(id).hidden = false; const f = $(id).querySelector(".btn-dark"); if (f) f.focus(); }
+  // Service details: what the nurse will do (svc-brief.js), and the prescription when one is needed (view only here).
+  function openBrief(id) {
+    const o = MadaOrders.get(id); if (!o) return;
+    const ov = $("bfOv");
+    ov.innerHTML = `<div class="dlg bfd"><button type="button" class="x" data-close="bfOv" aria-label="${esc(MadaBrief.L[current].close)}">${ic("x")}</button>
+      <div class="bfd-h"><span class="ic">${ic("info")}</span><div><h3 id="bfT">${esc(MadaBrief.L[current].title)}</h3><p>${esc(T(o.patient))} · <span class="num">${esc(o.bookingId || o.id)}</span> · ${esc(svcOf(o))}</p></div></div>
+      ${MadaRx.card(o, { lang: current, nurse: true, canEdit: false })}${MadaBrief.html(o, current)}
+      <div class="bfd-f"><button type="button" class="btn btn-dark" data-close="bfOv">${esc(MadaBrief.L[current].close)}</button></div></div>`;
+    ov.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => close("bfOv")));
+    MadaRx.bind(ov, o, { lang: current, canEdit: false });
+    ov.hidden = false; ov.querySelector(".x").focus();
+  }
   function close(id) { $(id).hidden = true; }
   document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => { close(b.dataset.close); pending = null; }));
   document.querySelectorAll(".ov").forEach(ov => ov.addEventListener("click", e => { if (e.target === ov) { close(ov.id); pending = null; } }));
   document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".ov:not([hidden])").forEach(ov => { close(ov.id); pending = null; }); });
 
   $("rows").addEventListener("click", e => {
-    const s = e.target.closest("[data-start]"), st = e.target.closest("[data-step]"), nm = e.target.closest('[aria-disabled="true"]');
-    if (s) startFlow(s.dataset.start);
+    const s = e.target.closest("[data-start]"), st = e.target.closest("[data-step]"), nm = e.target.closest('[aria-disabled="true"]'), bf = e.target.closest("[data-brief]");
+    if (bf) openBrief(bf.dataset.brief);
+    else if (s) startFlow(s.dataset.start);
     else if (st) step(st.dataset.id, st.dataset.step);
     else if (nm) toast(t().noMap);
   });

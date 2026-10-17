@@ -24,7 +24,7 @@ const NrProc = (() => {
       g_blood: "Blood sample", g_urine: "Urine sample", g_stool: "Stool sample", nTests: "{n} tests", nTests1: "1 test", allOk: "All collected", ynY: "Collected", ynN: "Not collected", inPkg: "In {p}",
       tagFast: "Fasting {h} h", tagFast0: "Fasting", tagMorning: "Morning sample", fastQ: "Did the patient fast as required?", fastFor: "Needed for: {s}",
       fastYes: "Fasted", fastNo: "Not fasting", needFast: "Choose whether the patient fasted.", needRows: "Mark every test as collected or not.",
-      okN: "{a} of {n} collected", smPart: "Partly collected", smNone: "Nothing collected", testsT: "Tests",
+      okN: "{a} of {n} collected", smPart: "Partly collected", smNone: "Nothing collected", testsT: "Tests", tubesT: "Tubes to prepare", noTube: "Tube not set",
       care: "Nursing Procedure", careS: "Mark each booked service as done, or write why it was not done.", done: "Done", notDone: "Not done",
       needCare: "Mark every service as done or not done.", careFree: "Procedure performed", careFreePh: "Describe what was done", needFree: "Describe the procedure.",
       iv: "IV Therapy", ivS: "Record the cannula site, the infusion time and any reaction.", site: "Cannula site", sitePick: "Choose the site",
@@ -41,7 +41,7 @@ const NrProc = (() => {
       g_blood: "عينة دم", g_urine: "عينة بول", g_stool: "عينة براز", nTests: "{n} تحاليل", nTests1: "تحليل واحد", allOk: "تم سحب الكل", ynY: "تم السحب", ynN: "ما تم", inPkg: "ضمن {p}",
       tagFast: "صيام {h} ساعات", tagFast0: "صيام", tagMorning: "عينة صباحية", fastQ: "هل المريض صايم حسب المطلوب؟", fastFor: "مطلوب لـ: {s}",
       fastYes: "صايم", fastNo: "مو صايم", needFast: "اختر هل المريض صايم أو لا.", needRows: "حدد كل تحليل: تم سحبه أو لا.",
-      okN: "تم سحب {a} من {n}", smPart: "تم سحب جزء", smNone: "ما تم سحب شي", testsT: "التحاليل",
+      okN: "تم سحب {a} من {n}", smPart: "تم سحب جزء", smNone: "ما تم سحب شي", testsT: "التحاليل", tubesT: "الأنابيب المطلوبة", noTube: "الأنبوب غير محدد",
       care: "الإجراء التمريضي", careS: "حدد كل خدمة محجوزة إنها تمت، أو اكتب ليش ما تمت.", done: "تمت", notDone: "ما تمت",
       needCare: "حدد كل خدمة: تمت أو ما تمت.", careFree: "الإجراء اللي تم", careFreePh: "اكتب وش اللي سويته", needFree: "اكتب الإجراء.",
       iv: "العلاج الوريدي", ivS: "سجّل مكان الكانيولا ووقت المحلول وأي تفاعل.", site: "مكان الكانيولا", sitePick: "اختر المكان",
@@ -69,13 +69,21 @@ const NrProc = (() => {
     if (typeof MadaLabs === "undefined") return [];
     const map = new Map(), add = (code, from) => {
       const x = MadaLabs.byCode[code], r = map.get(code) || { code, name: x ? nameOf(x.name) : code, sample: (x && x.sample) || "blood",
-        fasting: x && x.fasting, fastHours: x && x.fastHours, note: x && x.note ? nameOf(x.note) : "", from: [] };
+        fasting: x && x.fasting, fastHours: x && x.fastHours, tube: x && MadaLabs.tubeOf && MadaLabs.tubeOf(x.tube), note: x && x.note ? nameOf(x.note) : "", from: [] };
       if (from && !r.from.includes(from)) r.from.push(from); map.set(code, r);
     };
     (o.items || []).forEach(it => { if (it.kind === "test") add(it.code, ""); if (it.kind === "pkg") { const p = MadaLabs.pkgById[it.code]; if (p) p.tests.forEach(c => add(c, nameOf(p.name))); } });
     return [...map.values()];
   }
   const GROUPS = ["blood", "urine", "stool"];
+  // The tube each test goes in (labs.js TUBES), and the tubes a sample group needs.
+  const tubeChip = x => x.tube ? `<span class="np-tube"><i style="background:${x.tube.color}"></i>${E(nameOf(x.tube.name))}</span>` : "";
+  function tubeSum(tests) {
+    const u = []; tests.forEach(x => { if (x.tube && !u.some(y => y.id === x.tube.id)) u.push(x.tube); });
+    const miss = tests.filter(x => !x.tube).length;
+    if (!u.length && !miss) return "";
+    return `<div class="np-tsum"><span>${t().tubesT}:</span>${u.map(y => `<span class="np-tube"><i style="background:${y.color}"></i>${E(nameOf(y.name))} <b class="num">×${tests.filter(x => x.tube && x.tube.id === y.id).length}</b></span>`).join("")}${miss ? `<span class="np-tube none">${E(t().noTube)} <b class="num">×${miss}</b></span>` : ""}</div>`;
+  }
   const groupsOf = tests => GROUPS.concat([...new Set(tests.map(x => x.sample))].filter(g => !GROUPS.includes(g))).map(g => ({ g, tests: tests.filter(x => x.sample === g) })).filter(x => x.tests.length);
   const fastTests = tests => tests.filter(x => x.fasting === "fast");
   const savedOf = (o, k) => ((o.doctorVisit || {}).steps || {})[k];
@@ -110,10 +118,10 @@ const NrProc = (() => {
       const tag = x => [...x.from.map(p => `<span class="np-tg pk">${E(tx("inPkg", { p }))}</span>`), x.fasting === "fast" ? `<span class="np-tg fs">${E(x.fastHours ? tx("tagFast", { h: x.fastHours }) : t().tagFast0)}</span>` : "",
         x.fasting === "morning" ? `<span class="np-tg fs">${t().tagMorning}</span>` : ""].join("");
       return `<div class="np-lt-h"><b>${t().testsT}</b><span class="num">${E(tx("okN", { a: okN, n: st.rows.length }))}</span><button type="button" class="hx-btn out sm" id="npAllOk">${S(I.check, 2.4)}${t().allOk}</button></div>
-        ${groupsOf(lt).map(({ g, tests }) => `<div class="np-grp"><div class="np-gh">${S(I.tube, 2)}<b>${E(t()["g_" + g] || g)}</b><small>${E(tests.length === 1 ? t().nTests1 : tx("nTests", { n: tests.length }))}</small></div>
+        ${groupsOf(lt).map(({ g, tests }) => `<div class="np-grp"><div class="np-gh">${S(I.tube, 2)}<b>${E(t()["g_" + g] || g)}</b><small>${E(tests.length === 1 ? t().nTests1 : tx("nTests", { n: tests.length }))}</small></div>${tubeSum(tests)}
           <ul class="np-lt">${tests.map(x => { const i = st.rows.findIndex(r => r.code === x.code), r = st.rows[i];
             return `<li class="${r.ok === true ? "ok" : r.ok === false ? "no" : ""} ${bad(r.ok === null) ? "bad" : ""}">
-              <div class="np-lt-t"><b>${E(x.name)}</b><code>${E(x.code)}</code>${tag(x)}${x.note ? `<small>${E(x.note)}</small>` : ""}</div>
+              <div class="np-lt-t"><b>${E(x.name)}</b><code>${E(x.code)}</code>${tubeChip(x)}${tag(x)}${x.note ? `<small>${E(x.note)}</small>` : ""}</div>
               <div class="np-yn">${[["y", "ynY", I.check], ["n", "ynN", I.x]].map(([v, l, ic]) => `<button type="button" class="np-ynb ${v} ${(v === "y" ? r.ok === true : r.ok === false) ? "on" : ""}" data-lt="${i}" data-v="${v}" aria-pressed="${v === "y" ? r.ok === true : r.ok === false}" title="${E(t()[l])}">${S(ic, 2.6)}<span>${t()[l]}</span></button>`).join("")}</div>
               ${r.ok === false ? inp("npLr" + i, r.reason, bad(!r.reason.trim()), `data-lr="${i}" maxlength="200" dir="auto" placeholder="${E(t().reasonPh)}"`) : ""}</li>`; }).join("")}</ul></div>`).join("")}
         ${ft.length ? `<div class="pl-f np-fast ${bad(!st.fasting) ? "bad" : ""}"><label>${t().fastQ} <span class="req">*</span></label><small>${E(tx("fastFor", { s: ft.map(x => x.name).join(lang === "ar" ? "، " : ", ") }))}</small>${pills("fasting", st.fasting, [["yes", "fastYes"], ["no", "fastNo", 1]])}</div>` : ""}
@@ -141,8 +149,8 @@ const NrProc = (() => {
       const lt = labTests(o), by = c => lt.find(x => x.code === c) || { code: c, name: c, sample: "blood" }, okN = sv.tests.filter(r => r.ok).length;
       const st0 = sv.status === "collected" ? t().smYes : sv.status === "partial" ? t().smPart : t().smNone;
       return `<div class="np-sum">${row(t().sample, `${st0} · ${tx("okN", { a: okN, n: sv.tests.length })}`)}${row(t().smTime, sv.time)}${row(t().tubes, sv.tubes)}${row(t().fastQ, sv.fasting === "yes" ? t().fastYes : sv.fasting === "no" ? t().fastNo : "")}${row(t().note, sv.note)}</div>
-        ${groupsOf(sv.tests.map(r => ({ ...by(r.code), r }))).map(({ g, tests }) => `<div class="np-grp"><div class="np-gh">${S(I.tube, 2)}<b>${E(t()["g_" + g] || g)}</b><small>${E(tests.length === 1 ? t().nTests1 : tx("nTests", { n: tests.length }))}</small></div>
-          <ul class="np-lt ro">${tests.map(x => `<li class="${x.r.ok ? "ok" : "no"}"><div class="np-lt-t"><b>${E(x.name)}</b><code>${E(x.code)}</code>${x.r.ok ? "" : `<small>${E(x.r.reason)}</small>`}</div>
+        ${groupsOf(sv.tests.map(r => ({ ...by(r.code), r }))).map(({ g, tests }) => `<div class="np-grp"><div class="np-gh">${S(I.tube, 2)}<b>${E(t()["g_" + g] || g)}</b><small>${E(tests.length === 1 ? t().nTests1 : tx("nTests", { n: tests.length }))}</small></div>${tubeSum(tests)}
+          <ul class="np-lt ro">${tests.map(x => `<li class="${x.r.ok ? "ok" : "no"}"><div class="np-lt-t"><b>${E(x.name)}</b><code>${E(x.code)}</code>${tubeChip(x)}${x.r.ok ? "" : `<small>${E(x.r.reason)}</small>`}</div>
             <span class="np-st ${x.r.ok ? "y" : "n"}">${S(x.r.ok ? I.check : I.x, 2.6)}${x.r.ok ? t().smYes : t().smNo}</span></li>`).join("")}</ul></div>`).join("")}`;
     }
     if (k === "sample") return `<div class="np-sum">${row(t().sample, sv.status === "collected" ? t().smYes : t().smNo)}${row(t().smTime, sv.time)}${row(t().tubes, sv.tubes)}${row(t().reason, sv.reason)}${row(t().note, sv.note)}</div>`;
