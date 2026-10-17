@@ -247,6 +247,8 @@
   .pay-top small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); }
   .pay-top .amt { margin-inline-start: auto; text-align: end; font-size: 15px; font-weight: 600; white-space: nowrap; }
   .pay-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pay-need { margin: -2px 0 10px; }
+  .pay-acts .btn[aria-disabled="true"] { opacity: .5; }
   .pay-acts .btn { flex: 1 1 160px; }
   .facts3 { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; }
   .share { padding-top: 14px; border-top: 1px dashed var(--border); display: grid; gap: 10px; }
@@ -651,7 +653,7 @@
     rs_customer: "Customer asked by phone", rs_whatsapp: "Customer asked on WhatsApp", rs_nurse: "Nurse not available", rs_doctor: "Doctor not available", rs_other: "Other",
     rsNeedReason: "Choose the reason for the change.", rsSame: "Nothing changed: pick a different date, time or nurse.", rsSaved: "Visit moved to {t}. The customer and the team will be notified.",
     rsLog: "Change History", rsFrom: "Moved from", rsTo: "to", rsBy: "{n} · {t}", rsTag: "Rescheduled", rsOrig: "Original booking: {t}", bookingSaved: "Team assigned. The nurse{d} will be notified.", andDoctor: " and the doctor", drAfterPay: "Team assigned. The doctor gets the notification once the customer pays.",
-    bookingErr: "Choose the date, time and nurse first.", lastSaved: "Last saved by {n} · {t}",
+    bookingErr: "Choose the date, time and nurse first.", docErr: "Choose the doctor first. A doctor visit needs an assigned doctor.", payNeedDoc: "Assign the doctor in Booking Details and save before sending the payment link.", lastSaved: "Last saved by {n} · {t}",
     locAsk: "No location yet? The payment link lets the customer pin their exact location. You can also send a location request, or paste what they send below.", locAskBtn: "Request Location", locAskAgain: "Send Again",
     locAsked: "Location request sent to {m} at {t}. Waiting for the customer.", locAskToast: "Location request sent to {m}.",
     addrLbl: "Detailed Address", addrPh: "City, district, street, building number",
@@ -723,7 +725,7 @@
     rs_customer: "العميل طلب عبر الاتصال", rs_whatsapp: "العميل طلب عبر واتساب", rs_nurse: "الممرضة غير متاحة", rs_doctor: "الطبيب غير متاح", rs_other: "أخرى",
     rsNeedReason: "اختر سبب التعديل.", rsSame: "ما تغيّر شي: اختر تاريخ أو وقت أو ممرضة مختلفة.", rsSaved: "تم نقل الزيارة إلى {t}. بيوصل إشعار للعميل والفريق.",
     rsLog: "سجل التعديلات", rsFrom: "من", rsTo: "إلى", rsBy: "{n} · {t}", rsTag: "تم تعديل الموعد", rsOrig: "الحجز الأصلي: {t}", bookingSaved: "تم إسناد الفريق. بيوصل إشعار للممرضة{d}.", andDoctor: " والطبيب", drAfterPay: "تم إسناد الفريق. بيوصل الإشعار للطبيب بعد ما يدفع العميل.",
-    bookingErr: "اختاري التاريخ والوقت والممرضة أولاً.", lastSaved: "آخر حفظ بواسطة {n} · {t}",
+    bookingErr: "اختاري التاريخ والوقت والممرضة أولاً.", docErr: "اختاري الطبيب أولاً. زيارة الطبيب لازم يكون لها طبيب مسند.", payNeedDoc: "أسندي الطبيب في تفاصيل الحجز واحفظي قبل إرسال رابط الدفع.", lastSaved: "آخر حفظ بواسطة {n} · {t}",
     locAsk: "ما عندك الموقع؟ رابط الدفع يخلي العميل يحدد موقعه الفعلي بنفسه. وتقدرين ترسلين طلب موقع، أو تلصقين اللي يرسله تحت.", locAskBtn: "طلب الموقع", locAskAgain: "إرسال مرة ثانية",
     locAsked: "تم إرسال طلب الموقع إلى {m} الساعة {t}. بانتظار العميل.", locAskToast: "تم إرسال طلب الموقع إلى {m}.",
     addrLbl: "العنوان التفصيلي", addrPh: "المدينة، الحي، الشارع، رقم المبنى",
@@ -1435,9 +1437,10 @@
       <div class="pay-grid">
         <div class="pay-card">
           <div class="pay-top"><span class="pay-ic">${svg(I.link)}</span><div><b>${t().payLinkTitle}</b><small>${sub}</small></div>${o.total ? `<span class="amt">${o.total} ${t().sar}</span>` : ""}</div>
-          ${canPay && ps !== "paid" ? `<div class="pay-acts"><button type="button" class="btn btn-primary" id="paySend">${svg(I.send)}${ps === "none" ? t().sendLink : t().resendLink}</button>
+          ${canPay && ps !== "paid" && needDoc(o) ? `<div class="pay-need">${hint("bad", I.x, t().payNeedDoc)}</div>` : ""}
+          ${canPay && ps !== "paid" ? `<div class="pay-acts"><button type="button" class="btn btn-primary" id="paySend" ${needDoc(o) ? 'aria-disabled="true"' : ""}>${svg(I.send)}${ps === "none" ? t().sendLink : t().resendLink}</button>
             ${ps === "wait" ? `<a class="btn btn-ghost" id="payOpen" href="pay.html?id=${encodeURIComponent(o.id)}">${svg('<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>')}${t().openCustomer}</a>` : ""}
-            ${ps === "wait" ? `<button type="button" class="btn btn-ghost" id="payMark" title="${esc(t().markPaidHint)}">${svg(I.check)}${t().markPaid}</button>` : ""}</div>
+            ${ps === "wait" ? `<button type="button" class="btn btn-ghost" id="payMark" title="${esc(t().markPaidHint)}" ${needDoc(o) ? 'aria-disabled="true"' : ""}>${svg(I.check)}${t().markPaid}</button>` : ""}</div>
           ${ps === "wait" ? `<div class="share"><span class="share-lbl">${t().shareLbl}</span>
             <div class="link-box"><span class="ltr" id="payUrl">${esc(payUrl(o))}</span></div>
             <div class="share-btns">
@@ -1480,6 +1483,9 @@
   // Short form for messages: p?1003 (p.html redirects to pay.html). GitHub Pages serves p.html at /p; elsewhere keep the extension.
   const payUrl = o => new URL((/github\.io$/.test(location.hostname) ? "p?" : "p.html?") + encodeURIComponent(String(o.id).replace(/^ORD-(?=\d+$)/, "")), location.href).href;
   const waNum = m => String(m || "").replace(/\D/g, "").replace(/^0/, "966");
+  // A doctor visit can't go to payment (and so become a booking) until a doctor is saved on it.
+  const needDoc = o => o.service === "doctor" && !(o.booking && o.booking.doctorId);
+  const goDoc = () => { toast(t().payNeedDoc); const s = $("bkDoctor"); if (s && !s.disabled) { s.scrollIntoView({ block: "center", behavior: "smooth" }); s.focus({ preventScroll: true }); } };
   function shareMsg(o) {
     const name = (MadaOrders.text(o.patient, "ar") || "").split(" ")[0];
     return `💚 رعايتك أقرب مع مدى كير\n\nمرحبًا${name ? " " + name : ""}، زيارتك المنزلية جاهزة للتأكيد! 🏡\n\nأكمل الدفع من الرابط التالي لتأكيد حجزك:\n\n🔗 ${payUrl(o)}\n\nمدى كير | نرعاكم كأهلنا 💚`;
@@ -1680,6 +1686,7 @@
       $("rsReason").addEventListener("change", () => { $("hRs").innerHTML = ""; $("rsReason").classList.remove("bad"); });
       $("rsSave").addEventListener("click", () => {
         if (!bk.date || bk.minute == null || !bk.nurseId) { bookingHints(o); toast(t().bookingErr); return; }
+        if (o.service === "doctor" && !docVal()) { bookingHints(o); $("bkDoctor").focus(); toast(t().docErr); return; }
         const from = { date: sv.date, minute: sv.minute, nurseId: sv.nurseId, doctorId: (o.booking && o.booking.doctorId) || "" };
         const to = { date: bk.date, minute: bk.minute, nurseId: bk.nurseId, doctorId: docVal() };
         if (JSON.stringify(from) === JSON.stringify(to)) { toast(t().rsSame); return; }
@@ -1698,6 +1705,7 @@
     }
     $("bkSave").addEventListener("click", () => {
       if (!bk.date || bk.minute == null || !bk.nurseId) { bookingHints(o); toast(t().bookingErr); return; }
+      if (o.service === "doctor" && !docVal()) { bookingHints(o); $("bkDoctor").focus(); toast(t().docErr); return; }
       const n = MadaNurses.NURSES.find(x => x.id === bk.nurseId);
       // TODO: book the nurse in the scheduling API and notify the assigned team.
       // The doctor is notified in the Doctor Portal (bell and My Visits) only once the customer has paid (the order has a booking number).
@@ -1789,6 +1797,7 @@
   // ----- Payment, notes, cancel -----
   function bindRest(o) {
     if ($("paySend")) $("paySend").addEventListener("click", () => {
+      if (needDoc(MadaOrders.get(id))) return goDoc();
       const now = new Date(), cur = MadaOrders.get(id);
       // TODO: create the link with the payment gateway and send it by SMS.
       MadaOrders.update(id, { payLink: { sentAt: now.toISOString(), expiresAt: new Date(+now + MadaOrders.PAY_MINUTES * 60000).toISOString() },
@@ -1807,6 +1816,7 @@
     });
     ["shWa", "shSms"].forEach(k => { if ($(k)) $(k).addEventListener("click", () => { logShare($(k).dataset.ch); setTimeout(render, 300); }); });
     if ($("payMark")) $("payMark").addEventListener("click", () => {
+      if (needDoc(MadaOrders.get(id))) return goDoc();
       const cur = MadaOrders.get(id);
       MadaOrders.update(id, { payment: "paid", payLink: { ...cur.payLink, paidAt: new Date().toISOString() } });
       render(); toast(t().paidToast);
