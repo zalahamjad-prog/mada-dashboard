@@ -1017,6 +1017,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="auth.js"></script>
+<script src="patients.js"></script>
 <script src="nurses.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
@@ -1054,7 +1055,7 @@
       cardNo: "رقم البطاقة", cardExp: "MM/YY", cardCvv: "CVV", cardName: "الاسم على البطاقة", cardErr: "تأكد من بيانات البطاقة.",
       promo: "كود الخصم", promoSub: "عندك كود خصم؟ أدخل الكود هنا للاستفادة من الخصم على زيارتك.", promoPh: "أدخل الكود", apply: "تطبيق الخصم", remove: "إزالة",
       promoOk: "تم تطبيق الخصم.", promoBad: "الكود غير صحيح أو منتهي.", promoEmpty: "اكتب الكود أولاً.",
-      summary: "ملخص الدفع", visitValue: "قيمة الزيارة", discount: "الخصم", vat: "ضريبة القيمة المضافة", totalDue: "الإجمالي المستحق", sar: "ريال",
+      summary: "ملخص الدفع", visitValue: "قيمة الزيارة", discount: "الخصم", vat: "ضريبة القيمة المضافة 15%", vatEx: "ضريبة القيمة المضافة (معفى · هوية وطنية)", totalDue: "الإجمالي المستحق", sar: "ريال",
       policyLink: "سياسة الإلغاء والاسترجاع", foot: "مدى كير | رعايتك أقرب", secure: "دفعك آمن، وبياناتك محمية.",
       payBtn: "ادفع {t} ريال وأكّد زيارتك", payNeedLoc: "حدد موقع الزيارة أولاً", processing: "جاري تنفيذ الدفع…",
       polTitle: "سياسة الإلغاء والاسترجاع", current: "خدمتك الحالية", gotIt: "فهمت",
@@ -1085,7 +1086,7 @@
       cardNo: "Card number", cardExp: "MM/YY", cardCvv: "CVV", cardName: "Name on card", cardErr: "Check the card details.",
       promo: "Discount code", promoSub: "Have a discount code? Enter it here to get a discount on your visit.", promoPh: "Enter code", apply: "Apply", remove: "Remove",
       promoOk: "Discount applied.", promoBad: "This code is not valid or has expired.", promoEmpty: "Enter the code first.",
-      summary: "Payment summary", visitValue: "Visit price", discount: "Discount", vat: "VAT", totalDue: "Total due", sar: "SAR",
+      summary: "Payment summary", visitValue: "Visit price", discount: "Discount", vat: "VAT 15%", vatEx: "VAT (exempt · Saudi national ID)", totalDue: "Total due", sar: "SAR",
       policyLink: "Cancellation and refund policy", foot: "Mada Care | Care, closer to you", secure: "Your payment is secure and your data is protected.",
       payBtn: "Pay {t} SAR and confirm your visit", payNeedLoc: "Set the visit location first", processing: "Processing your payment…",
       polTitle: "Cancellation and refund policy", current: "Your service", gotIt: "Got it",
@@ -1125,13 +1126,13 @@
   // ---------- State ----------
   let order = null, method = "apple", promo = null, pin = null, labelSel = "home", draftPhoto = undefined;
 
+  // Listed prices are before VAT; VAT (15%) is added unless the patient holds a Saudi national ID (MadaOrders.vatRate).
   function priceOf(o) {
-    const total = o.total > 0 ? o.total : o.service === "doctor" ? 350 : 0;
-    const base = total / (1 + VAT);
+    const base = o.total > 0 ? o.total : o.service === "doctor" ? 350 : 0, rate = MadaOrders.vatRate(o);
     let disc = 0;
-    if (promo) disc = promo.pct ? base * promo.pct / 100 : Math.min(base, promo.amount / (1 + VAT));
-    const net = base - disc, vat = net * VAT;
-    return { base, disc, vat, total: Math.round((net + vat) * 100) / 100 };
+    if (promo) disc = promo.pct ? base * promo.pct / 100 : Math.min(base, promo.amount);
+    const net = base - disc, vat = Math.round(net * rate * 100) / 100;
+    return { base, disc, vat, rate, total: Math.round((net + vat) * 100) / 100 };
   }
   const left = () => order && order.payLink ? new Date(order.payLink.expiresAt) - Date.now() : 0;
   const mmss = ms => { const s = Math.max(0, Math.floor(ms / 1000)); return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`; };
@@ -1230,7 +1231,7 @@
       <div class="rows">
         <div class="row"><span>${t().visitValue}</span><b class="num">${money(pr.base)} ${t().sar}</b></div>
         <div class="row disc"><span>${t().discount}</span><b class="num">${pr.disc ? "-" : ""}${money(pr.disc)} ${t().sar}</b></div>
-        <div class="row"><span>${t().vat}</span><b class="num">${money(pr.vat)} ${t().sar}</b></div>
+        <div class="row"><span>${pr.rate ? t().vat : t().vatEx}</span><b class="num">${money(pr.vat)} ${t().sar}</b></div>
         <div class="row total"><span>${t().totalDue}</span><b class="num">${money(pr.total)} ${t().sar}</b></div>
       </div>
     </section>
@@ -1259,7 +1260,7 @@
     const amt = n => `${L2R(Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }))} ${t().sar}`;
     const kv = (k, v) => `<tr><td style="padding:4px 0;color:#6b7a80;width:42%">${esc(k)}</td><td style="padding:4px 0;font-weight:600">${v || "—"}</td></tr>`;
     const cell = `padding:9px 10px;border-bottom:1px solid #e6ecee;text-align:${al}`, num = `padding:9px 10px;border-bottom:1px solid #e6ecee;text-align:${ar2};white-space:nowrap`;
-    const total = p.amount != null ? Number(p.amount) : priceOf(o).total, net = Math.round(total / (1 + VAT) * 100) / 100;
+    const rate = MadaOrders.vatRate(o), total = p.amount != null ? Number(p.amount) : priceOf(o).total, net = Math.round(total / (1 + rate) * 100) / 100;
     const rows = svcRows(o), list = rows.length ? rows : [{ name: t()["sv_" + o.service] || "", price: total }];
     const day = d => new Date(d).toLocaleDateString(rtl ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
     const wrap = document.createElement("div");
@@ -1281,7 +1282,7 @@
         <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#eef5f3"><th style="${cell};width:30px">#</th><th style="${cell}">${esc(t().invSvc)}</th><th style="${num}">${esc(t().invPrice)}</th></tr></thead>
           <tbody>${list.map((x, i) => `<tr><td style="${cell}">${L2R(i + 1)}</td><td style="${cell}">${esc(x.name)}</td><td style="${num}">${amt(x.price)}</td></tr>`).join("")}</tbody></table>
         <div style="margin-top:18px;border:1px solid #e3e8ea;border-radius:12px;padding:12px 14px"><table style="width:100%;border-collapse:collapse">
-          ${kv(t().invNet, amt(net))}${kv(t().vat, amt(total - net))}${p.promo ? kv(t().discount, L2R(p.promo)) : ""}${p.method ? kv(t().paidVia, esc(t()["m_" + p.method])) : ""}</table>
+          ${kv(t().invNet, amt(net))}${kv(rate ? t().vat : t().vatEx, amt(total - net))}${p.promo ? kv(t().discount, L2R(p.promo)) : ""}${p.method ? kv(t().paidVia, esc(t()["m_" + p.method])) : ""}</table>
           <div style="margin-top:10px;background:#0b6b5c;color:#fff;border-radius:10px;padding:11px 14px;display:flex;justify-content:space-between;font-size:14.5px"><span>${esc(t().invTotal)}</span><b>${amt(total)}</b></div></div>
         <div style="margin-top:22px;text-align:center;color:#0b6b5c;font-weight:600">${esc(t().invThanks)}</div>
         <div style="margin-top:6px;text-align:center;font-size:11px;color:#8a979c">${esc(t().foot)}</div>

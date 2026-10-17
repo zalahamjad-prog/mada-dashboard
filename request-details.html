@@ -534,6 +534,7 @@
 <script src="nursing.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
+<script src="patients.js"></script>
 <script src="orders.js"></script>
 <script src="nurses.js"></script>
 <script>
@@ -627,7 +628,7 @@
     bk6: "6. Staff Notes", bookingIdLbl: "Booking ID", pdfBtn: "Download PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
     pdfTitle: "Booking Confirmation", pdfIssued: "Issued {t}", pdfStConfirmed: "Confirmed", pdfStPaid: "Paid", pdfStMoved: "Rescheduled", pdfVisitTime: "Visit time", pdfDur: "About {m} minutes", pdfHome: "Home visit",
     pdfMoved: "Moved from {t}", pdfScan: "Scan to view your booking", pdfTbd: "To be confirmed", pdfNoDoc: "Not needed for this service", pdfPay: "Payment", pdfStatus: "Status", pdfPaidAt: "Paid on", pdfPromo: "Promo code", pdfStaffPaid: "Confirmed by our team",
-    pdfSub: "Services total", pdfDisc: "Discount", pdfVat: "VAT 15% (included)", pdfPrep: "Before the visit", pdfPolicy: "Cancellation policy", pdfFootL: "Mada Care · Home healthcare · Jeddah",
+    pdfSub: "Services total", pdfDisc: "Discount", pdfVat: "VAT 15% (included)", pdfVatEx: "VAT (exempt · Saudi national ID)", pdfPrep: "Before the visit", pdfPolicy: "Cancellation policy", pdfFootL: "Mada Care · Home healthcare · Jeddah",
     pr_fast: "Fast for {h} hours before the visit. Water is fine.", pr_morning: "A morning sample is preferred.", pr_rx: "Keep the doctor's prescription ready for the nurse.", pr_iv: "Eat a light meal and drink water before the session.",
     pr_id: "Keep the patient's ID and any recent reports ready.", pr_call: "The team will call you before arriving. Please keep your phone close.",
     p_home: "Home visit", p_h1: "2 hours or more before the visit", p_h1d: "You can cancel and get a full refund.", p_h2: "In the last 2 hours before the visit", p_h2d: "The amount can't be refunded.", p_r: "Rescheduling", p_rd: "Call us to move the visit, subject to availability.",
@@ -699,7 +700,7 @@
     bk6: "6. ملاحظات الموظفين", bookingIdLbl: "رقم الحجز", pdfBtn: "تحميل PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدم حفظ كـ PDF من نافذة الطباعة.",
     pdfTitle: "تأكيد الحجز", pdfIssued: "صدر {t}", pdfStConfirmed: "مؤكد", pdfStPaid: "مدفوع", pdfStMoved: "تم تعديل الموعد", pdfVisitTime: "وقت الزيارة", pdfDur: "حوالي {m} دقيقة", pdfHome: "زيارة منزلية",
     pdfMoved: "تم نقله من {t}", pdfScan: "امسح الرمز لعرض حجزك", pdfTbd: "يتم تأكيده لاحقاً", pdfNoDoc: "غير مطلوب لهذه الخدمة", pdfPay: "الدفع", pdfStatus: "الحالة", pdfPaidAt: "تاريخ الدفع", pdfPromo: "كود الخصم", pdfStaffPaid: "أكده فريقنا",
-    pdfSub: "إجمالي الخدمات", pdfDisc: "الخصم", pdfVat: "ضريبة القيمة المضافة 15% (مشمولة)", pdfPrep: "قبل الزيارة", pdfPolicy: "سياسة الإلغاء", pdfFootL: "مدى كير · رعاية صحية منزلية · جدة",
+    pdfSub: "إجمالي الخدمات", pdfDisc: "الخصم", pdfVat: "ضريبة القيمة المضافة 15% (مشمولة)", pdfVatEx: "ضريبة القيمة المضافة (معفى · هوية وطنية)", pdfPrep: "قبل الزيارة", pdfPolicy: "سياسة الإلغاء", pdfFootL: "مدى كير · رعاية صحية منزلية · جدة",
     pr_fast: "الصيام {h} ساعات قبل الزيارة، ويسمح بشرب الماء.", pr_morning: "يفضّل أخذ العينة صباحاً.", pr_rx: "جهّز وصفة الطبيب للممرضة.", pr_iv: "تناول وجبة خفيفة واشرب ماء قبل الجلسة.",
     pr_id: "جهّز هوية المريض وأي تقارير حديثة.", pr_call: "بيتواصل معك الفريق قبل الوصول، خلك قريب من جوالك.",
     p_home: "الزيارة المنزلية", p_h1: "قبل الموعد بساعتين أو أكثر", p_h1d: "تقدر تلغي ونرجع لك المبلغ كامل.", p_h2: "خلال آخر ساعتين قبل الموعد", p_h2d: "ما يمكن استرداد المبلغ.", p_r: "إعادة الجدولة", p_rd: "تواصل معنا لتغيير الموعد حسب المواعيد المتاحة.",
@@ -1143,9 +1144,10 @@
     const addr = L.address || composeAddr(A) || "—";
     const map = L.lat != null ? `https://www.google.com/maps/search/?api=1&query=${L.lat},${L.lng}` : (L.mapLink || A.mapLink || "");
     const items = (o.items || []).map(it => ({ it, d: itemDetail(it) })).filter(x => x.d);
-    const p = o.paidInfo || {}, paid = p.amount != null ? +p.amount : o.total != null ? +o.total : null;
-    const list = o.total != null ? +o.total : paid, disc = list != null && paid != null && list - paid > 0.004 ? list - paid : 0;
-    const vat = paid != null ? paid - paid / 1.15 : null, money = v => `${(+v).toFixed(2)} ${t().sar}`;
+    // Listed prices are before VAT; 15% is added unless the patient holds a Saudi national ID.
+    const rate = MadaOrders.vatRate(o), p = o.paidInfo || {}, paid = p.amount != null ? +p.amount : o.total != null ? Math.round(o.total * (1 + rate) * 100) / 100 : null;
+    const list = o.total != null ? Math.round(o.total * (1 + rate) * 100) / 100 : paid, disc = list != null && paid != null && list - paid > 0.004 ? list - paid : 0;
+    const vat = paid != null ? paid - paid / (1 + rate) : null, money = v => `${(+v).toFixed(2)} ${t().sar}`;
     const now = new Date(), issued = `${clean(fmtDate(now))} · ${clean(fmtTime(now))}`, paidAt = o.bookedAt ? `${clean(fmtDate(new Date(o.bookedAt)))} · ${clean(fmtTime(new Date(o.bookedAt)))}` : "—";
     const rs = (o.reschedules || []).slice(-1)[0];
     const ltr = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`;
@@ -1220,7 +1222,7 @@
           <div style="display:grid;gap:4px;align-content:start">
           ${list != null ? `<div style="display:flex;justify-content:space-between"><span style="color:${MU}">${t().pdfSub}</span><span>${money(list)}</span></div>` : ""}
           ${disc ? `<div style="display:flex;justify-content:space-between;color:#15803d"><span>${t().pdfDisc}${p.promo ? ` (${ltr(p.promo)})` : ""}</span><span>- ${money(disc)}</span></div>` : ""}
-          ${vat != null ? `<div style="display:flex;justify-content:space-between"><span style="color:${MU}">${t().pdfVat}</span><span>${money(vat)}</span></div>` : ""}
+          ${vat != null ? `<div style="display:flex;justify-content:space-between"><span style="color:${MU}">${rate ? t().pdfVat : t().pdfVatEx}</span><span>${money(vat)}</span></div>` : ""}
           </div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(135deg, ${G} 0%, ${GD} 100%);color:#fff">
@@ -1493,7 +1495,7 @@
   function itemsTable(o) {
     const rows = (o.items || []).map(it => ({ it, d: itemDetail(it) })).filter(x => x.d);
     if (!rows.length) return "";
-    const sum = rows.reduce((a, x) => a + x.d.price, 0), total = o.total != null ? o.total : sum;
+    const sum = rows.reduce((a, x) => a + x.d.price, 0), base = o.total != null ? o.total : sum, total = Math.round(base * (1 + MadaOrders.vatRate(o)) * 100) / 100;
     return `<div class="block"><span class="lbl">${t().reqServices} (${rows.length})</span>
       <div class="svc-table" role="table">
         <div class="st-head" role="row"><span role="columnheader">${t().colCode}</span><span role="columnheader">${t().colService}</span><span role="columnheader">${t().colPrice}</span></div>
