@@ -750,7 +750,7 @@
     const vit = v ? [v.temp && `${v.temp} °C`, v.bp && `BP ${v.bp}`, v.hr && `HR ${v.hr}`, v.spo2 && `SpO₂ ${v.spo2}%`].filter(Boolean).join(" · ") : "";
     const done = STEPS.filter(x => s[x.k]).length;
     return `<div class="pf-dr" role="dialog" aria-modal="true" aria-labelledby="pfH">
-      <div class="pf-hd"><span class="pf-ava">${esc(initials(p.name))}</span><div><h2 id="pfH">${esc(p.name)}</h2><p>${t().pfTitle} · <span class="num">${esc(o.mrn || "—")}</span></p></div>
+      <div class="pf-hd"><span class="pf-ava">${esc(initials(p.name))}</span><div><h2 id="pfH">${esc(p.name)}</h2><p>${t().pfTitle} · <span class="num">${esc(o.mrn || "—")}</span></p>${o.mrn ? `<a class="pf-full" href="nurse-patient.html?mrn=${encodeURIComponent(o.mrn)}&from=${encodeURIComponent(o.id)}">${svg(IC.folder, 2)}${t().pfFull}</a>` : ""}</div>
         <button type="button" class="pf-x" id="pfX" aria-label="${t().pfClose}">${svg('<path d="M6 6l12 12M18 6 6 18"/>', 2.2)}</button></div>
       <div class="pf-bd">MISSWARN
         <section class="pf-sec"><h3>${svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>')}${t().pfId}</h3><dl class="pf-kv">
@@ -770,7 +770,7 @@
     ov.innerHTML = `<div class="dlg vd"><span class="vd-ic">${svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 2.4)}</span>
       <h3 id="doneT">${t().vdT}</h3><p>${t().vdS}</p>
       <div class="vd-next"><span class="vd-ni">${svg(IC.folder)}</span><div><small>${t().vdNext}</small><b>${t().vdNextT}</b><p>${t().vdNextS}</p><p>${t().vdNextS2}</p></div></div>
-      <div class="vd-f"><a class="btn btn-out" href="nurse-visits.html">${t().vdDone}</a><button type="button" class="btn btn-dark" id="vdReview">${svg(IC.folder)}${t().vdReview}</button></div></div>`;
+      <div class="vd-f"><a class="btn btn-out" href="nurse-visits.html">${t().vdDone}</a>${(o => o && o.mrn ? `<a class="btn btn-dark" id="vdReview" href="nurse-patient.html?mrn=${encodeURIComponent(o.mrn)}&from=${encodeURIComponent(id)}">${svg(IC.folder)}${t().vdReview}</a>` : `<button type="button" class="btn btn-dark" id="vdReview">${svg(IC.folder)}${t().vdReview}</button>`)(MadaOrders.get(id))}</div></div>`;
     ov.hidden = false; $("vdReview").focus();
   }
   function closeDone() { const ov = $("doneOv"); ov.hidden = true; ov.innerHTML = ""; }
@@ -888,7 +888,7 @@
     if (!active) active = STEPS[Math.min(doneCount(o), STEPS.length - 1)].k;
     if (!VIEW) markOpen(o, active);
     const hx = active === "history", body = active === "arrival" ? arrivalCard(o) : hx ? DrHistory.view(o, hxCtx) : active === "vitals" ? vitalsCard(o) : active === "exam" ? DrExam.view(o, exCtx) : active === "allergy" ? DrAllergy.view(o, alCtx) : active === "assess" ? DrDiagnosis.view(o, dxCtx) : active === "plan" ? DrPlan.view(o, planCtx) : active === "orders" ? DrOrders.view(o, orCtx) : active === "nurse" ? DrNurse.view(o, nuCtx) : active === "edu" ? DrEdu.view(o, edCtx) : active === "idform" ? DrIdForm.view(o, idCtx) : active === "consent" ? DrConsent.view(o, csCtx) : SERVICE_STEPS.includes(active) ? NrProc.view(o, prCtx(active), active) : soonCard(active);
-    const backA = `<a class="back" href="nurse-visits.html">${svg(IC.back, 2)}${t().back}</a>`;
+    const backA = VIEW && o.mrn ? `<a class="back" href="nurse-patient.html?mrn=${encodeURIComponent(o.mrn)}">${svg(IC.back, 2)}${t().backFile}</a>` : `<a class="back" href="nurse-visits.html">${svg(IC.back, 2)}${t().back}</a>`;
     $("vw").innerHTML = `${backA}${VIEW ? `<div class="ro-bar">${svg(IC.info, 2)}<span><b>${t().roT}</b> ${t().roS}</span></div>` : ""}${strip(o)}${VIEW ? "" : payBar(o)}
       <div class="vw-body">${stepList(o)}<section class="card ${hx && DrHistory.isOpen() ? "hx-card" : ""}" id="stepCard">${body}</section></div>`;
     bind(o);
