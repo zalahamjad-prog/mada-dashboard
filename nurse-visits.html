@@ -510,10 +510,10 @@
     const now = new Date().toISOString(), cur = ongoing(), o = MadaOrders.get(pending);
     if (cur && cur.id !== pending) MadaOrders.update(cur.id, { nurseVisit: { ...nv(cur), status: "paused", pausedAt: now } });
     MadaOrders.update(pending, { nurseVisit: { ...nv(o), status: "ongoing", startedAt: nv(o).startedAt || now, resumedAt: nv(o).startedAt ? now : undefined } });
-    const id = pending; pending = null; render(); toast(tx("startedOk", { n: T(o.patient) })); openVisit(id);
+    const id = pending; pending = null; try { sessionStorage.setItem("mada-dr-toast", tx("startedOk", { n: T(o.patient) })); } catch (e) {} openVisit(id);
   }
   // TODO: the nurse visit screen (identity, vitals, procedure, samples, note, consent) is the next step.
-  function openVisit(id) { setTimeout(() => toast(t().workNext), 1600); }
+  function openVisit(id) { location.href = "nurse-visit.html?id=" + encodeURIComponent(id); }
   $("swYes").addEventListener("click", () => { close("swOv"); tipsOrStart(); });
   $("tipGo").addEventListener("click", () => { if ($("tipOff").checked) MadaStore.set(TIP_KEY, "1"); close("tipOv"); begin(); });
   function open(id) { $(id).hidden = false; const f = $(id).querySelector(".btn-dark"); if (f) f.focus(); }
