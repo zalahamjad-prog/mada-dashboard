@@ -237,7 +237,17 @@
   .sp-head { display: flex; align-items: center; gap: 18px; padding: 20px 22px; }
   .sp-ava { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); font-size: 24px; font-weight: 600; }
   .sp-ava.f { background: #fdeef5; color: #c2185b; }
-  .sp-who { min-width: 0; }
+  .sp-who { min-width: 0; flex: 1; }
+  .sp-pw { flex: none; align-self: flex-start; }
+  .sp-pw svg { width: 17px; height: 17px; }
+  .pw-box { display: grid; gap: 10px; padding: 16px; border-radius: 12px; background: #f3f8f6; border: 1px dashed #b9d9cc; }
+  .pw-box div { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: #44545a; }
+  .pw-box b { font-family: "Inter", monospace; font-size: 16px; color: #15304a; letter-spacing: .5px; direction: ltr; unicode-bidi: isolate; }
+  .pw-note { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .pw-acts { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pw-acts .btn { flex: 1; }
+  .btn-wa { background: #1fa855; color: #fff; } .btn-wa:hover { background: #178f47; }
+  @media (max-width: 640px) { .sp-head { flex-wrap: wrap; } .sp-pw { width: 100%; } }
   .sp-who h1 { font-size: 22px; font-weight: 600; }
   .sp-who p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
   .sp-meta { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; font-size: 13px; color: #44545a; }
@@ -374,6 +384,7 @@
   <section id="view"></section>
 </main>
 <div class="md-back" id="mdBack" hidden></div>
+<div class="md-back" id="pwBack" hidden></div>
 <div class="toast" id="toast" role="status" hidden></div>
 <script src="auth.js"></script>
 <script src="orders.js"></script>
@@ -414,6 +425,9 @@
       off: "Off", hrsN: "{n} h", weekTotal: "Total per week", workDays: "{n} working days", workDays1: "1 working day", nextDay: "next day",
       pickDays: "Working days", hoursT: "Hours for each day", from: "From", to: "To", copyAll: "Use these hours for all days", pickOne: "Choose at least one day.", sameTime: "Start and end can't be the same.",
       lastUpd: "Last updated {d} by {n}",
+      pwReset: "Temporary Password", pwT: "Give a temporary password?", pwP: "{n} will log in with a new temporary password and must change it the first time. The old password stops working.", pwGo: "Create Password",
+      pwDoneT: "Temporary password ready", pwDoneP: "Send these details to {n}. After logging in, they must choose a new password.", pwId: "Employee ID", pwPw: "Temporary password", pwPortal: "Login page",
+      pwCopy: "Copy details", pwWa: "Send on WhatsApp", pwCopied: "Copied.", pwLogin: "Mada Care login\nEmployee ID: {u}\nTemporary password: {p}\nLogin: {l}\nYou will be asked to choose a new password.",
       save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", storeErr: "Couldn't save. The browser storage may be full.", req: "Required."
     },
     ar: {
@@ -440,6 +454,9 @@
       off: "إجازة", hrsN: "{n} ساعة", weekTotal: "المجموع في الأسبوع", workDays: "{n} أيام دوام", workDays1: "يوم دوام واحد", nextDay: "اليوم التالي",
       pickDays: "أيام الدوام", hoursT: "ساعات كل يوم", from: "من", to: "إلى", copyAll: "طبّق هذي الساعات على كل الأيام", pickOne: "اختر يوم واحد على الأقل.", sameTime: "وقت البداية والنهاية ما يصير نفس الوقت.",
       lastUpd: "آخر تحديث {d} بواسطة {n}",
+      pwReset: "كلمة مرور مؤقتة", pwT: "تعطي كلمة مرور مؤقتة؟", pwP: "{n} بيدخل بكلمة مرور مؤقتة جديدة، ولازم يغيّرها أول ما يدخل. كلمة المرور القديمة توقف.", pwGo: "إنشاء كلمة المرور",
+      pwDoneT: "كلمة المرور المؤقتة جاهزة", pwDoneP: "أرسل هذي البيانات لـ {n}. بعد ما يدخل، لازم يختار كلمة مرور جديدة.", pwId: "الرقم الوظيفي", pwPw: "كلمة المرور المؤقتة", pwPortal: "صفحة الدخول",
+      pwCopy: "نسخ البيانات", pwWa: "إرسال واتساب", pwCopied: "تم النسخ.", pwLogin: "دخول مدى كير\nالرقم الوظيفي: {u}\nكلمة المرور المؤقتة: {p}\nرابط الدخول: {l}\nبيطلب منك تختار كلمة مرور جديدة.",
       save: "حفظ", cancel: "إلغاء", close: "إغلاق", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. يمكن مساحة المتصفح ممتلئة.", req: "مطلوب."
     }
   };
@@ -451,6 +468,7 @@
   const IC = { plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>', check: '<path d="m5 12 5 5 9-10"/>', doc: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', cal: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
     clip: '<path d="m21 12-8.5 8.5a5 5 0 0 1-7-7L14 5a3.3 3.3 0 0 1 4.7 4.7L10.2 18a1.7 1.7 0 0 1-2.4-2.4L15.5 8"/>', user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
     phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>', alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>' };
   const initials = n => (n || "?").trim().split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const LOC = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
@@ -469,7 +487,8 @@
     const name = T(s.name), dl = docs(), alerts = dl.filter(d => expState(d) === "expired").length;
     $("head").innerHTML = `${s.photo ? `<img class="sp-ava" src="${esc(s.photo)}" alt="">` : `<span class="sp-ava ${s.gender === "f" ? "f" : ""}">${esc(initials(name))}</span>`}
       <div class="sp-who"><h1>${esc(name)}</h1><p><span class="code">${esc(s.id)}</span> · ${esc(t()["role_" + s.role] || s.role)}${s.specialty ? ` · ${esc(s.specialty)}` : ""}</p>
-        <div class="sp-meta"><span>${svg(IC.phone, 1.8)}<bdi dir="ltr">${esc(s.mobile || "—")}</bdi></span><span class="st ${s.status === "disabled" ? "off" : "on"}">${s.status === "disabled" ? t().st_disabled : t().st_active}</span></div></div>`;
+        <div class="sp-meta"><span>${svg(IC.phone, 1.8)}<bdi dir="ltr">${esc(s.mobile || "—")}</bdi></span><span class="st ${s.status === "disabled" ? "off" : "on"}">${s.status === "disabled" ? t().st_disabled : t().st_active}</span></div></div>
+      ${canReset && s.status !== "disabled" ? `<button type="button" class="btn btn-ghost sp-pw" id="pwReset">${svg(IC.key, 1.9)}${t().pwReset}</button>` : ""}`;
     const n = { info: "", docs: dl.length, sched: "" };
     $("tabs").innerHTML = [["info", "tabInfo", IC.user], ["docs", "tabDocs", IC.doc], ["sched", "tabSched", IC.cal]].map(([k, l, ic]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${svg(ic, 1.8)}${t()[l]}${n[k] !== "" ? `<small class="${k === "docs" && alerts ? "alert" : ""}">${n[k]}</small>` : ""}</button>`).join("");
     $("view").innerHTML = tab === "docs" ? docsView() : tab === "sched" ? schedView() : infoView();
@@ -626,6 +645,39 @@
   $("mdBack").addEventListener("mousedown", e => { if (e.target === $("mdBack")) closeModal(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && modal) closeModal(); });
   window.addEventListener("storage", e => { if (!modal && (!e.key || e.key === MadaStaff.KEY)) { s = MadaStaff.get(id); render(); } });
+  // Temporary password (admin and supervisors): a new password with mustChangePassword, so the login page asks for a new one.
+  // TODO: the backend resets the password and sends it; the browser must never keep passwords.
+  const canReset = !!me && (me.supervisor || me.username === "admin");
+  const loginUrl = r => new URL(r === "doctor" ? "doctor-login.html" : r === "nurse" ? "nurse-login.html" : "index.html", location.href).href;
+  function pwModal(step) {
+    const n = T(s.name), T2 = t(), b = $("pwBack");
+    b.innerHTML = step
+      ? `<div class="md" role="dialog" aria-modal="true" aria-labelledby="pwH"><div class="md-h"><h2 id="pwH">${T2.pwDoneT}</h2><button type="button" class="ib" data-pwx aria-label="${T2.close}">${svg(IC.x, 2)}</button></div>
+        <div class="md-b" style="display:grid;gap:14px"><p class="pw-note">${esc(tx("pwDoneP", { n }))}</p>
+          <div class="pw-box"><div><span>${T2.pwId}</span><b>${esc(s.id)}</b></div><div><span>${T2.pwPw}</span><b id="pwVal">${esc(step.pw)}</b></div></div>
+          <div class="pw-acts"><button type="button" class="btn btn-ghost" id="pwCopy">${svg(IC.copy, 1.9)}${T2.pwCopy}</button>${s.mobile ? `<a class="btn btn-wa" id="pwWa" target="_blank" rel="noopener" href="https://wa.me/${esc(waNo(s.mobile))}?text=${encodeURIComponent(step.msg)}">${T2.pwWa}</a>` : ""}</div></div>
+        <div class="md-f"><button type="button" class="btn btn-primary" data-pwx>${T2.close}</button></div></div>`
+      : `<div class="md" role="dialog" aria-modal="true" aria-labelledby="pwH"><div class="md-h"><h2 id="pwH">${T2.pwT}</h2><button type="button" class="ib" data-pwx aria-label="${T2.close}">${svg(IC.x, 2)}</button></div>
+        <div class="md-b"><p class="pw-note">${esc(tx("pwP", { n }))}</p></div>
+        <div class="md-f"><button type="button" class="btn btn-ghost" data-pwx>${T2.cancel}</button><button type="button" class="btn btn-primary" id="pwGo">${svg(IC.key, 1.9)}${T2.pwGo}</button></div></div>`;
+    b.hidden = false; document.body.style.overflow = "hidden";
+    const f = b.querySelector("#pwGo, #pwCopy"); if (f) f.focus();
+  }
+  const waNo = m => { const d = String(m || "").replace(/\D/g, ""); return d.startsWith("966") ? d : d.startsWith("05") ? "966" + d.slice(1) : d; };
+  function pwClose() { $("pwBack").hidden = true; $("pwBack").innerHTML = ""; document.body.style.overflow = ""; }
+  $("pwBack").addEventListener("click", e => {
+    if (e.target === $("pwBack") || e.target.closest("[data-pwx]")) return pwClose();
+    if (e.target.closest("#pwGo")) {
+      const pw = MadaStaff.tempPassword();
+      if (!persist({ password: pw, mustChangePassword: true, passwordResetAt: new Date().toISOString(), passwordResetBy: me.name })) return;
+      pwModal({ pw, msg: tx("pwLogin", { u: s.id, p: pw, l: loginUrl(s.role) }) });
+    } else if (e.target.closest("#pwCopy")) {
+      const txt = tx("pwLogin", { u: s.id, p: $("pwVal").textContent, l: loginUrl(s.role) }), done = () => toast(t().pwCopied);
+      try { navigator.clipboard.writeText(txt).then(done, done); } catch (x) { done(); }
+    }
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("pwBack").hidden) pwClose(); });
+  $("head").addEventListener("click", e => { if (e.target.closest("#pwReset")) pwModal(); });
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
 
   function setLang(lang) {

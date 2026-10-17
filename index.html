@@ -318,7 +318,7 @@
           <div class="err-msg" data-i18n="passwordErr">Please enter your password</div>
         </div>
 
-        <div class="forgot"><a href="#" data-i18n="forgot">Forgot password?</a></div>
+        <div class="forgot"><a href="#" id="forgot" data-i18n="forgot">Forgot password?</a></div>
 
         <div class="form-error" id="formError" role="alert" data-i18n="badCreds">Incorrect username or password</div>
 
@@ -387,7 +387,7 @@
       subtitle: "Please enter your credentials to continue",
       username: "Employee ID", usernamePh: "e.g. EMP-001", usernameErr: "Please enter your employee ID",
       password: "Password", passwordPh: "Enter your password", passwordErr: "Please enter your password", badCreds: "Incorrect employee ID or password",
-      forgot: "Forgot password?", login: "Login", or: "or",
+      forgot: "Forgot password?", forgotMsg: "Ask the administration for a temporary password. You will choose a new one when you log in.", login: "Login", or: "or",
       trust: "Secure • Trusted • Reliable",
       show: "Show password", hide: "Hide password", label: "English",
       doctorHere: "Doctors sign in from the Doctor Portal.", nurseHere: "Nurses sign in from the Nursing Portal.", nurseLink: "Go to Nursing Portal", doctorLink: "Go to Doctor Portal", doctorQ: "Are you a doctor?", nurseQ: "Are you a nurse?",
@@ -408,7 +408,7 @@
       subtitle: "يرجى إدخال بيانات الدخول للمتابعة",
       username: "الرقم الوظيفي", usernamePh: "مثال: EMP-001", usernameErr: "يرجى إدخال الرقم الوظيفي",
       password: "كلمة المرور", passwordPh: "أدخل كلمة المرور", passwordErr: "يرجى إدخال كلمة المرور", badCreds: "الرقم الوظيفي أو كلمة المرور غير صحيحة",
-      forgot: "نسيت كلمة المرور؟", login: "تسجيل الدخول", or: "أو",
+      forgot: "نسيت كلمة المرور؟", forgotMsg: "تواصل مع الإدارة يعطونك كلمة مرور مؤقتة، وتختار كلمة جديدة أول ما تدخل.", login: "تسجيل الدخول", or: "أو",
       trust: "آمن • موثوق • يعتمد عليه",
       show: "إظهار كلمة المرور", hide: "إخفاء كلمة المرور", label: "العربية",
       doctorHere: "الأطباء يدخلون من بوابة الطبيب.", nurseHere: "التمريض يدخلون من بوابة التمريض.", nurseLink: "الذهاب لبوابة التمريض", doctorLink: "الذهاب لبوابة الطبيب", doctorQ: "أنت طبيب؟", nurseQ: "أنت من التمريض؟",
@@ -543,6 +543,7 @@
   document.getElementById("cpGo").addEventListener("click", () => { window.location.href = MadaAuth.home(); });
   document.getElementById("cpOut").addEventListener("click", () => MadaAuth.logout());
 
+  document.getElementById("forgot").addEventListener("click", e => { e.preventDefault(); const fe = document.getElementById("formError"); fe.textContent = i18n[current].forgotMsg; fe.classList.add("show"); });
   let saved = "en";
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
   setLang(saved);
