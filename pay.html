@@ -920,13 +920,12 @@
   .spin { width: 46px; height: 46px; margin: 0 auto 12px; border-radius: 50%; border: 4px solid var(--primary-soft); border-top-color: var(--primary); animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .toast { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); z-index: 90; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; max-width: calc(100% - 32px); text-align: center; }
-  .demo-bar { background: #fff8e6; color: #7a4a06; font-size: 12px; text-align: center; padding: 6px 12px; border-bottom: 1px solid #f2dfb8; }
-  .demo-bar a { color: inherit; font-weight: 700; }
+  .inv-btn { width: 100%; height: 50px; margin-top: 18px; border: 1.5px solid var(--primary, #0b6b5c); border-radius: 14px; background: #fff; color: var(--primary, #0b6b5c); font: inherit; font-size: 15.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .inv-btn svg { width: 19px; height: 19px; }
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <div class="demo-bar"><span data-i18n="demoBar">Demo: this is the page the customer opens from the SMS link.</span> <a href="#" id="backStaff" data-i18n="backStaff">Back to the request</a></div>
   <header class="hero">
     <div class="hero-top">
       <div class="brand"><img src="assets/mada-logo.png" alt="" width="301" height="320"><span data-i18n="brand">Mada Care</span></div>
@@ -1068,7 +1067,7 @@
       photoHelp: "صورة المدخل تساعد الفريق يعرف المكان بسرعة.", photoAdd: "إضافة صورة", photoChange: "تغيير", photoErr: "تعذّر حفظ الصورة. جرّب صورة أصغر.",
       pkLink: "أو الصق رابط الموقع", pkLinkPh: "رابط قوقل ماب أو الإحداثيات", pkLinkErr: "هذا ليس رابط خرائط ولا إحداثيات.", pkSave: "تأكيد الموقع",
       offlineNote: "الخريطة ما تحمّلت الحين. اضغط \"موقعي الحالي\" أو الصق رابط الموقع تحت.", locating: "جاري تحديد موقعك…", locFail: "ما قدرنا نحدد موقعك. حرّك الخريطة للمكان الصحيح.", locSaved: "تم حفظ موقع الزيارة.", needPin: "حدد المكان على الخريطة أو الصق رابط الموقع.", services: "الخدمات المطلوبة", fileNo: "رقم الملف", nTests: "{n} تحاليل", outArea: "هذي المنطقة خارج نطاق خدماتنا حالياً. نخدم الآن في: {c}.", weServe: "مناطق الخدمة: {c}", payOutArea: "الموقع خارج نطاق التغطية، غيّره",
-      paidTitle: "تم تأكيد زيارتك", paidSub: "استلمنا دفعتك وأرسلنا التفاصيل برسالة نصية. الفريق بيتواصل معك قبل الوصول.", paidVia: "طريقة الدفع", movedFrom: "الموعد السابق", paidAmount: "المبلغ المدفوع", orderNo: "رقم الطلب",
+      paidTitle: "تم تأكيد زيارتك", invBtn: "تحميل الفاتورة", invT: "فاتورة", invNo: "رقم الفاتورة", invDate: "تاريخ الفاتورة", invName: "الاسم", invMobile: "الجوال", invSvc: "الخدمة", invPrice: "السعر", invNet: "المبلغ قبل الضريبة", invTotal: "الإجمالي شامل الضريبة", invThanks: "شكراً لاختيارك مدى كير.", invMaking: "جاري تجهيز الفاتورة…", invFail: "تعذر إنشاء الملف هنا. استخدم حفظ كـ PDF من نافذة الطباعة.", invVisit: "الزيارة", paidSub: "استلمنا دفعتك وأرسلنا التفاصيل برسالة نصية. الفريق بيتواصل معك قبل الوصول.", paidVia: "طريقة الدفع", movedFrom: "الموعد السابق", paidAmount: "المبلغ المدفوع", orderNo: "رقم الطلب",
       expTitle: "انتهت مهلة الحجز", expSub: "انتهت مدة الرابط قبل إكمال الدفع. تواصل معنا ونرسل لك رابط جديد.", goneTitle: "الرابط غير صالح", goneSub: "ما لقينا هذا الطلب. تأكد من الرابط أو تواصل معنا.",
       cancelledTitle: "تم إلغاء هذا الطلب", cancelledSub: "إذا تبي تحجز من جديد تواصل معنا.", notReady: "الطلب لسا ما جهز للدفع", notReadySub: "بنرسل لك رابط الدفع بعد ما يجهز الطلب."
     },
@@ -1099,7 +1098,7 @@
       photoHelp: "A photo of the entrance helps the team find you quickly.", photoAdd: "Add photo", photoChange: "Change", photoErr: "Couldn't save the photo. Try a smaller one.",
       pkLink: "Or paste a location link", pkLinkPh: "Google Maps link or coordinates", pkLinkErr: "This is not a maps link or coordinates.", pkSave: "Confirm location",
       offlineNote: "The map can't load right now. Tap \"My location\", or paste the location link below.", locating: "Finding your location…", locFail: "We couldn't find your location. Move the map to the right place.", locSaved: "Visit location saved.", needPin: "Set the place on the map or paste a location link.", services: "Requested services", fileNo: "File number", nTests: "{n} tests", outArea: "This area is outside our service area for now. We currently serve: {c}.", weServe: "We serve: {c}", payOutArea: "Location is outside our area, change it",
-      paidTitle: "Your visit is confirmed", paidSub: "We received your payment and sent the details by SMS. The team will contact you before arriving.", paidVia: "Paid with", movedFrom: "Previous time", paidAmount: "Amount paid", orderNo: "Order number",
+      paidTitle: "Your visit is confirmed", invBtn: "Download Invoice", invT: "Invoice", invNo: "Invoice No.", invDate: "Invoice Date", invName: "Name", invMobile: "Mobile", invSvc: "Service", invPrice: "Price", invNet: "Amount before VAT", invTotal: "Total incl. VAT", invThanks: "Thank you for choosing Mada Care.", invMaking: "Preparing the invoice…", invFail: "Could not create the file here. Use Save as PDF in the print window.", invVisit: "Visit", paidSub: "We received your payment and sent the details by SMS. The team will contact you before arriving.", paidVia: "Paid with", movedFrom: "Previous time", paidAmount: "Amount paid", orderNo: "Order number",
       expTitle: "The booking hold has ended", expSub: "The link expired before the payment was completed. Contact us and we will send you a new link.", goneTitle: "This link is not valid", goneSub: "We couldn't find this request. Check the link or contact us.",
       cancelledTitle: "This request was cancelled", cancelledSub: "Contact us if you want to book again.", notReady: "This request isn't ready for payment yet", notReadySub: "We will send you the payment link once it is ready."
     }
@@ -1151,7 +1150,7 @@
   // ---------- Render ----------
   function stateCard(kind, title, sub, extra) {
     $("paybar").hidden = true; $("timer").hidden = true;
-    return `<section class="card state"><div class="big ${kind === "ok" ? "ok-big" : "bad-big"}">${svg(kind === "ok" ? ICO.check : ICO.clock, 2)}</div><h2>${title}</h2><p>${sub}</p>${extra || ""}
+    return `<section class="card state"><div class="big ${kind === "ok" ? "ok-big" : "bad-big"}">${svg(kind === "ok" ? ICO.check : ICO.clock, 2)}</div><h2>${title}</h2>${sub ? `<p>${sub}</p>` : ""}${extra || ""}
       ${kind !== "ok" ? `<a class="btn btn-ghost" href="tel:920000000">${t().callUs}</a>` : ""}</section>`;
   }
 
@@ -1163,12 +1162,14 @@
     if (o.payment === "paid") {
       const p = o.paidInfo || {};
       $("heroTitle").textContent = t().paidTitle; $("heroSub").textContent = "";
-      $("main").innerHTML = stateCard("ok", t().paidTitle, t().paidSub, `<div class="rows receipt">
+      $("main").innerHTML = stateCard("ok", t().paidTitle, "", `<div class="rows receipt">
         <div class="row"><span>${t().orderNo}</span><b class="ltr">${esc(o.id)}</b></div>
         <div class="row"><span>${t().dateTime}</span><b>${esc(visitWhen(o))}</b></div>
         ${(o.reschedules || []).length ? `<div class="row"><span>${t().movedFrom}</span><b><s style="color:#8a979c;font-weight:500">${esc(visitWhen({ appointment: o.reschedules[o.reschedules.length - 1].from }))}</s></b></div>` : ""}
         ${p.method ? `<div class="row"><span>${t().paidVia}</span><b>${esc(t()["m_" + p.method])}</b></div>` : ""}
-        ${p.amount != null ? `<div class="row"><span>${t().paidAmount}</span><b>${money(p.amount)} ${t().sar}</b></div>` : ""}</div>`);
+        ${p.amount != null ? `<div class="row"><span>${t().paidAmount}</span><b>${money(p.amount)} ${t().sar}</b></div>` : ""}</div>
+        <button type="button" class="inv-btn" id="invBtn">${svg('<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>')}${t().invBtn}</button>`);
+      $("invBtn").addEventListener("click", () => invoicePdf(o));
       return;
     }
     if (o.status === "cancelled" || o.status === "declined") { $("main").innerHTML = stateCard("bad", t().cancelledTitle, t().cancelledSub); return; }
@@ -1244,9 +1245,66 @@
   }
 
   // What the customer is paying for: each service with its price.
-  function svcList(o) {
+  function svcRows(o) {
     const src = { pkg: MadaLabs.pkgById, test: MadaLabs.byCode, nursing: MadaNursing.byCode, iv: MadaIV.byCode };
-    const rows = (o.items || []).map(it => { const p = src[it.kind] && src[it.kind][it.code]; return p && { code: it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code, name: T(p.name), price: p.price, n: it.kind === "pkg" ? p.tests.length : 0 }; }).filter(Boolean);
+    return (o.items || []).map(it => { const p = src[it.kind] && src[it.kind][it.code]; return p && { code: it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code, name: T(p.name), price: p.price, n: it.kind === "pkg" ? p.tests.length : 0 }; }).filter(Boolean);
+  }
+  // Simple invoice for the paid booking (A4 PDF). Not a tax invoice yet.
+  // TODO: tax invoice fields (VAT registration number, e-invoice QR) once Mada Care's approved invoice format is provided.
+  async function invoicePdf(o) {
+    const rtl = lang === "ar", al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right", p = o.paidInfo || {};
+    const no = `INV-${String(o.id).replace(/\D/g, "")}`, file = `Mada-Care-Invoice-${no}.pdf`;
+    // Numbers in their own left-to-right box without direction marks (Safari draws mixed-direction text over itself otherwise).
+    const L2R = v => `<span dir="ltr" style="display:inline-block">${esc(String(v).replace(/[\u2066-\u2069\u200e\u200f]/g, "")).replace(/ /g, "&nbsp;")}</span>`;
+    const amt = n => `${L2R(Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }))} ${t().sar}`;
+    const kv = (k, v) => `<tr><td style="padding:4px 0;color:#6b7a80;width:42%">${esc(k)}</td><td style="padding:4px 0;font-weight:600">${v || "—"}</td></tr>`;
+    const cell = `padding:9px 10px;border-bottom:1px solid #e6ecee;text-align:${al}`, num = `padding:9px 10px;border-bottom:1px solid #e6ecee;text-align:${ar2};white-space:nowrap`;
+    const total = p.amount != null ? Number(p.amount) : priceOf(o).total, net = Math.round(total / (1 + VAT) * 100) / 100;
+    const rows = svcRows(o), list = rows.length ? rows : [{ name: t()["sv_" + o.service] || "", price: total }];
+    const day = d => new Date(d).toLocaleDateString(rtl ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:748px";
+    wrap.innerHTML = `<div dir="ltr" style="width:748px;padding:0 0 24px;box-sizing:border-box;font-family:${rtl ? "Tajawal,Inter" : "Inter,Tajawal"},Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px"><div dir="${rtl ? "rtl" : "ltr"}" style="text-align:${al}">
+      <div style="background:linear-gradient(120deg,#07463d,#0b6b5c);color:#fff;padding:18px 26px;display:flex;align-items:center;gap:14px;border-radius:0 0 20px 20px">
+        <span style="width:56px;height:56px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none"><img src="assets/mada-logo.png" style="height:38px;width:auto" alt=""></span>
+        <div style="flex:1"><div style="font-size:20px;font-weight:700">${L2R("Mada Care")} <span style="font-weight:500">| مدى كير</span></div><div style="font-size:11.5px;opacity:.85">${rtl ? "رعاية كالعائلة" : "Caring Like Family"}</div></div>
+        <div style="text-align:${ar2}"><div style="font-size:22px;font-weight:700">${esc(t().invT)}</div><div style="font-size:11px;opacity:.9;margin-top:3px">${esc(t().invNo)}: ${L2R(no)}</div><div style="font-size:11px;opacity:.9">${esc(t().invDate)}: ${esc(day(p.at || new Date()))}</div></div>
+      </div>
+      <div style="height:3px;background:#c8a45a;margin:0 44px;border-radius:2px"></div>
+      <div style="padding:0 26px">
+        <div style="display:flex;gap:16px;margin:18px 0">
+          <div style="flex:1;background:#f5f9f8;border-radius:12px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().patient)}</div><table style="width:100%;border-collapse:collapse">
+            ${kv(t().invName, esc(T(o.patient)))}${o.mrn ? kv(t().fileNo, L2R(o.mrn)) : ""}${kv(t().invMobile, o.mobile ? L2R(o.mobile) : "")}</table></div>
+          <div style="flex:1;background:#f5f9f8;border-radius:12px;padding:12px 14px"><div style="font-weight:700;color:#0b6b5c;margin-bottom:6px">${esc(t().invVisit)}</div><table style="width:100%;border-collapse:collapse">
+            ${kv(t().orderNo, L2R(o.id))}${kv(t().dateTime, esc(visitWhen(o)))}</table></div>
+        </div>
+        <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#eef5f3"><th style="${cell};width:30px">#</th><th style="${cell}">${esc(t().invSvc)}</th><th style="${num}">${esc(t().invPrice)}</th></tr></thead>
+          <tbody>${list.map((x, i) => `<tr><td style="${cell}">${L2R(i + 1)}</td><td style="${cell}">${esc(x.name)}</td><td style="${num}">${amt(x.price)}</td></tr>`).join("")}</tbody></table>
+        <div style="margin-top:18px;border:1px solid #e3e8ea;border-radius:12px;padding:12px 14px"><table style="width:100%;border-collapse:collapse">
+          ${kv(t().invNet, amt(net))}${kv(t().vat, amt(total - net))}${p.promo ? kv(t().discount, L2R(p.promo)) : ""}${p.method ? kv(t().paidVia, esc(t()["m_" + p.method])) : ""}</table>
+          <div style="margin-top:10px;background:#0b6b5c;color:#fff;border-radius:10px;padding:11px 14px;display:flex;justify-content:space-between;font-size:14.5px"><span>${esc(t().invTotal)}</span><b>${amt(total)}</b></div></div>
+        <div style="margin-top:22px;text-align:center;color:#0b6b5c;font-weight:600">${esc(t().invThanks)}</div>
+        <div style="margin-top:6px;text-align:center;font-size:11px;color:#8a979c">${esc(t().foot)}</div>
+      </div></div></div>`;
+    document.body.appendChild(wrap);
+    // The PDF renderer drops the spaces between Arabic words: each Arabic word gets its own box.
+    const walk = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walk.nextNode()) if (/[\u0600-\u06ff]/.test(walk.currentNode.nodeValue)) nodes.push(walk.currentNode);
+    nodes.forEach(nd => { const f = document.createDocumentFragment(); nd.nodeValue.split(/(\s+|[()،,.:·\-–]+)/).forEach(part => { if (!part) return;
+      if (/^\s+$/.test(part)) f.appendChild(document.createTextNode(part)); else { const sp = document.createElement("span"); sp.textContent = rtl ? part.replace(/[()]/g, c => c === "(" ? ")" : "(") : part; f.appendChild(sp); } }); nd.replaceWith(f); });
+    toast(t().invMaking); const sy = scrollY; scrollTo(0, 0);
+    try {
+      if (!window.html2pdf) await new Promise((ok, bad) => { const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); setTimeout(bad, 15000); });
+      await window.html2pdf().set({ margin: [6, 6], filename: file, image: { type: "jpeg", quality: 0.96 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" } }).from(wrap.firstElementChild).save();
+      toast("");
+    } catch (x) {
+      const w = window.open("", "_blank");
+      if (w) { w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${file}</title></head><body style="margin:0">${wrap.innerHTML}<script>onload=()=>print()<\/script></body></html>`); w.document.close(); }
+      toast(t().invFail);
+    } finally { wrap.remove(); scrollTo(0, sy); }
+  }
+  function svcList(o) {
+    const rows = svcRows(o);
     if (!rows.length) return "";
     return `<div class="addr-lbl">${t().services}</div><ul class="svc-list">${rows.map(r =>
       `<li><span><b>${esc(r.name)}</b><small class="ltr">${esc(r.code)}${r.n ? ` · ${esc(tx("nTests", { n: int(r.n) }))}` : ""}</small></span><em class="num">${lang === "ar" ? nf0.format(r.price) : r.price} ${t().sar}</em></li>`).join("")}</ul>`;
@@ -1461,7 +1519,6 @@
     if (!$("picker").hidden) { photoBox(); checkCov(); $("covCities").textContent = tx("weServe", { c: cityNames() }); }
   }
   $("langToggle").addEventListener("click", () => setLang(lang === "ar" ? "en" : "ar"));
-  $("backStaff").addEventListener("click", e => { e.preventDefault(); location.href = "request-details.html?id=" + encodeURIComponent(id || ""); });
   // Link tracking: record when the customer opens a valid link, so the staff page can show it.
   // TODO: the backend records this when the signed link is opened.
   (function trackOpen() {
