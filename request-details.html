@@ -1477,12 +1477,12 @@
   }
 
   // Customer link (pay.html) and the message sent with it. Demo: the link points at this prototype.
-  const payUrl = o => new URL("pay.html?id=" + encodeURIComponent(o.id), location.href).href;
+  // Short form for messages: p?1003 (p.html redirects to pay.html). GitHub Pages serves p.html at /p; elsewhere keep the extension.
+  const payUrl = o => new URL((/github\.io$/.test(location.hostname) ? "p?" : "p.html?") + encodeURIComponent(String(o.id).replace(/^ORD-(?=\d+$)/, "")), location.href).href;
   const waNum = m => String(m || "").replace(/\D/g, "").replace(/^0/, "966");
   function shareMsg(o) {
     const name = (MadaOrders.text(o.patient, "ar") || "").split(" ")[0];
-    const exp = new Date(o.payLink.expiresAt), hh = exp.getHours(), time = `${((hh + 11) % 12) + 1}:${String(exp.getMinutes()).padStart(2, "0")} ${hh >= 12 ? "مساءً" : "صباحاً"}`;
-    return `مرحباً${name ? " " + name : ""}، زيارتك مع مدى كير جاهزة.\nحدد موقع الزيارة وادفع${o.total ? " " + o.total + " ريال" : ""} من الرابط:\n${payUrl(o)}\nالرابط صالح حتى الساعة ${time}.`;
+    return `💚 رعايتك أقرب مع مدى كير\n\nمرحبًا${name ? " " + name : ""}، زيارتك المنزلية جاهزة للتأكيد! 🏡\n\nأكمل الدفع من الرابط التالي لتأكيد حجزك:\n\n🔗 ${payUrl(o)}\n\nمدى كير | نرعاكم كأهلنا 💚`;
   }
   // Requested services with code, details and price (lab tests and packages, nursing, IV).
   function itemDetail(it) {
