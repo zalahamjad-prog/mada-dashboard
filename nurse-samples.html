@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Samples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c; --primary-soft: #e6f3ef; --teal: #12a37f; --navy: #0b3a55;
+    --ink: #10232b; --muted: #6b7a80; --border: #e3e8ea; --page: #f6f8f9;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button { font: inherit; color: inherit; }
+  [hidden] { display: none !important; }
+  .app { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+
+  /* Sidebar */
+  .side { position: sticky; top: 0; height: 100vh; background: #fff; border-inline-end: 1px solid var(--border); padding: 18px 14px; display: flex; flex-direction: column; gap: 22px; overflow: hidden; }
+  .logo { display: flex; align-items: center; gap: 8px; padding: 0 6px; text-decoration: none; color: var(--ink); }
+  .logo img { height: 40px; width: auto; }
+  .logo b { display: block; font-size: 18px; font-weight: 600; line-height: 1.1; }
+  .logo small { font-size: 10.5px; color: var(--primary); }
+  .menu { display: grid; gap: 4px; }
+  .menu a { display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 14px; border-radius: 10px; text-decoration: none; color: #2c3d43; font-size: 14px; font-weight: 500; }
+  .menu a svg { width: 21px; height: 21px; flex: none; }
+  .menu a:hover { background: #f3f6f7; }
+  .menu a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  .menu a.soon { color: #8a979c; cursor: default; }
+  .menu a.soon:hover { background: none; }
+  .soon-tag { margin-inline-start: auto; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  .support { order: 3; display: flex; align-items: center; gap: 12px; padding: 14px 8px 0; border-top: 1px solid var(--border); font-size: 13px; }
+  .support svg { width: 26px; height: 26px; color: #2c3d43; flex: none; }
+  .support b { display: block; font-weight: 600; }
+  .support a { color: var(--muted); text-decoration: none; }
+  .side-art { order: 2; margin-top: auto; margin-inline-start: -14px; width: 170px; color: #e3f2ee; }
+  [dir="rtl"] .side-art { transform: scaleX(-1); }
+
+  /* Top bar */
+  .top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: flex-end; gap: 14px; height: 76px; padding: 0 28px; background: rgba(246,248,249,.92); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover, .bell:hover { background: #eef2f3; }
+  .lang-btn svg { width: 16px; height: 16px; }
+  .bell { position: relative; width: 42px; height: 42px; border: 0; background: none; border-radius: 50%; cursor: pointer; display: grid; place-items: center; color: #2c3d43; }
+  .bell svg { width: 23px; height: 23px; }
+  .sep { width: 1px; height: 34px; background: var(--border); }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 12px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 12px; text-align: start; }
+  .user-btn:hover { background: #eef2f3; }
+  .ava { width: 50px; height: 50px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 700; font-size: 16px; overflow: hidden; flex: none; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--border); }
+  .ava img { width: 100%; height: 100%; object-fit: cover; }
+  .u-name { display: block; font-size: 14px; font-weight: 600; }
+  .u-spec { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .user-btn > svg { width: 16px; height: 16px; color: #44545a; }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 180px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  /* Content */
+  main { padding: 22px 28px 32px; }
+  .stage { position: relative; overflow: hidden; min-height: calc(100vh - 76px - 54px); border-radius: 18px; border: 1px solid var(--border); background: radial-gradient(circle at 0 0, #e9f5f1 0, rgba(233,245,241,0) 220px), linear-gradient(160deg, #ffffff 55%, #fff3e8 100%); display: grid; place-items: center; padding: 40px 20px; }
+  .stage::after { content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%; inset-inline-end: -120px; bottom: -150px; background: rgba(253,214,180,.35); }
+  .empty { position: relative; z-index: 1; display: grid; justify-items: center; text-align: center; max-width: 560px; }
+  .empty-art { width: 330px; max-width: 100%; height: auto; margin-bottom: 18px; }
+  .empty h1 { font-size: 30px; font-weight: 700; color: #15304a; letter-spacing: -.3px; }
+  .empty p { margin-top: 10px; font-size: 16px; color: var(--muted); line-height: 1.6; }
+  .rule { width: 60px; height: 4px; border-radius: 2px; background: var(--teal); margin: 26px 0; }
+  .quote { display: flex; align-items: flex-start; gap: 12px; padding: 16px 22px; border-radius: 12px; background: rgba(230,243,239,.75); font-size: 17px; font-weight: 500; color: #15304a; line-height: 1.5; text-align: start; }
+  .quote span.q { font-size: 34px; line-height: .9; color: var(--teal); font-weight: 700; font-family: Georgia, serif; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; max-width: calc(100% - 32px); }
+  .panel { background: #fff; border: 1px solid var(--border); border-radius: 18px; }
+  .p-head { display: flex; align-items: center; gap: 18px; padding: 22px 26px; border-bottom: 1px solid #eef2f3; }
+  .p-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--primary-soft); color: var(--teal); display: grid; place-items: center; flex: none; }
+  .p-icon svg { width: 30px; height: 30px; }
+  .p-head h1 { font-size: 28px; font-weight: 700; color: #15304a; }
+  .p-head p { font-size: 15px; color: var(--muted); margin-top: 4px; }
+  .tools { display: flex; gap: 14px; padding: 18px 22px 6px; }
+  .search { flex: 1; display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 16px; border: 1px solid var(--border); border-radius: 10px; background: #fff; min-width: 0; }
+  .search:focus-within, .dates:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(18,163,127,.12); outline: 0; }
+  .search svg { width: 20px; height: 20px; color: #3d4f57; flex: none; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 14px; background: none; }
+  .vtabs { display: flex; gap: 4px; margin: 0 0 18px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .vtabs::-webkit-scrollbar { display: none; }
+  .vtabs button { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 18px; border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; background: none; cursor: pointer; font: inherit; font-size: 15px; font-weight: 600; color: var(--muted); }
+  .vtabs button:hover { color: #15304a; }
+  .vtabs button[aria-selected="true"] { color: var(--teal); border-color: var(--teal); }
+  .vtabs .cnt { min-width: 24px; height: 22px; padding: 0 7px; border-radius: 11px; background: #eef2f3; color: #44545a; font-size: 12px; font-weight: 700; display: inline-grid; place-items: center; }
+  .vtabs button[aria-selected="true"] .cnt { background: #e3f4ee; color: #0f6b52; }
+  @media (max-width: 760px) { .vtabs { gap: 0; } .vtabs button { flex: 1 1 0; min-width: 0; flex-direction: column; justify-content: center; gap: 3px; height: 62px; padding: 0 4px; font-size: 12.5px; line-height: 1.2; white-space: normal; text-align: center; } .vtabs .cnt { height: 18px; min-width: 20px; font-size: 11px; } }
+  /* Samples */
+  .vtabs { margin: 0; padding: 0 22px; }
+  .alert { display: flex; align-items: center; gap: 14px; margin: 18px 22px 0; padding: 14px 16px; border-radius: 12px; background: #fdecec; color: #8f1d14; border: 1px solid #f7c9c4; }
+  .alert > svg { width: 26px; height: 26px; flex: none; }
+  .alert b { display: block; font-size: 15px; }
+  .alert span { font-size: 13px; line-height: 1.5; }
+  .alert.info { background: #eef6fb; color: #164a6b; border-color: #cfe3f1; }
+  .alert .btn { margin-inline-start: auto; flex: none; }
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; padding: 18px 22px 0; }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: #fff; cursor: pointer; text-align: start; font: inherit; }
+  .stat:hover { border-color: #c9d4d8; }
+  .stat[aria-pressed="true"] { border-color: currentColor; box-shadow: 0 0 0 1px currentColor inset; }
+  .stat i { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .stat i svg { width: 21px; height: 21px; }
+  .stat b { display: block; font-size: 24px; line-height: 1; color: #15304a; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 4px; font-weight: 600; }
+  .stat.k-due { color: #c2261b; } .stat.k-due i { background: #fdecec; }
+  .stat.k-waiting { color: #b26a00; } .stat.k-waiting i { background: #fff4dc; }
+  .stat.k-ready { color: #0f8f6f; } .stat.k-ready i { background: #dff5ec; }
+  .stat.k-collect { color: #2563eb; } .stat.k-collect i { background: #e8f0fe; }
+  .stat.k-sent { color: #5d6d78; } .stat.k-sent i { background: #eef2f4; }
+  .list { display: grid; gap: 14px; padding: 16px 22px 24px; }
+  .sc { border: 1px solid var(--border); border-radius: 16px; background: #fff; overflow: hidden; border-inline-start: 5px solid #cfd9dc; scroll-margin-top: 90px; }
+  .sc.s-due { border-inline-start-color: #dc2626; }
+  .sc.s-waiting { border-inline-start-color: #f59e0b; }
+  .sc.s-ready { border-inline-start-color: #12a37f; }
+  .sc.s-collect { border-inline-start-color: #3b82f6; }
+  .sc.hl { box-shadow: 0 0 0 3px rgba(18,163,127,.25); }
+  .sc-h { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px 10px; flex-wrap: wrap; }
+  .sc-who { min-width: 0; flex: 1 1 220px; }
+  .sc-who b { display: block; font-size: 16px; color: #15304a; }
+  .sc-who small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12px; font-weight: 700; background: #eef2f4; color: #44545a; white-space: nowrap; }
+  .chip svg { width: 14px; height: 14px; }
+  .chip.doc { background: #f1eafe; color: #6d28d9; } .chip.pat { background: #e8f0fe; color: #1d4ed8; }
+  .chip.due { background: #fdecec; color: #b42318; } .chip.waiting { background: #fff4dc; color: #a15c00; } .chip.ready { background: #dff5ec; color: #0f7a5f; }
+  .chip.collect { background: #e8f0fe; color: #1d4ed8; } .chip.sent { background: #eef2f4; color: #44545a; }
+  .chip.critical { background: #b42318; color: #fff; } .chip.out { background: #fff1e0; color: #a4520a; }
+  .sc-m { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 18px 12px; font-size: 13px; color: #44545a; }
+  .sc-m span { display: inline-flex; align-items: center; gap: 6px; }
+  .sc-m svg { width: 15px; height: 15px; color: #6b7a80; }
+  .tl { list-style: none; border-top: 1px solid #eef2f3; }
+  .tl li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 14px; align-items: center; padding: 11px 18px; border-bottom: 1px solid #f2f5f6; }
+  .tl .nm { display: flex; align-items: center; gap: 8px; min-width: 0; flex-wrap: wrap; }
+  .tl .nm b { font-size: 14px; color: #15304a; }
+  .tl .code { font-size: 11px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 2px 7px; border-radius: 6px; direction: ltr; }
+  .tube { width: 12px; height: 12px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+  .cd { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; white-space: nowrap; color: #a15c00; }
+  .cd svg { width: 15px; height: 15px; }
+  .cd small { font-weight: 500; color: var(--muted); font-size: 12px; }
+  .cd.due { color: #c2261b; } .cd.ok { color: #0f8f6f; } .cd.na { color: var(--muted); font-weight: 600; }
+  .bar { grid-column: 1 / -1; height: 5px; border-radius: 3px; background: #eef2f4; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 3px; background: #f59e0b; }
+  .bar i.due { background: #dc2626; } .bar i.ok { background: #12a37f; }
+  .sc-f { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 18px 14px; background: #fbfcfc; }
+  .sc-f .to { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: #44545a; margin-inline-end: auto; }
+  .sc-f .to svg { width: 16px; height: 16px; color: #6b7a80; }
+  .none { padding: 50px 20px; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 17px; color: #15304a; margin-bottom: 6px; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+  .btn svg { width: 18px; height: 18px; }
+  .btn-light { background: #f6f8fa; border-color: #dfe5e8; color: #15304a; }
+  .btn-light:hover { background: #eef2f4; }
+  .btn-dark { background: var(--navy); color: #fff; }
+  .btn-dark:hover { background: #082d42; }
+  .btn-go { background: var(--teal); color: #fff; }
+  .btn-go:hover { background: #0f8f6f; }
+  .btn-red { background: #dc2626; color: #fff; }
+  .btn-red:hover { background: #b91c1c; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* Popups */
+  .ov { position: fixed; inset: 0; z-index: 50; background: rgba(16,35,43,.42); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .dlg { position: relative; width: 100%; max-width: 760px; background: #fff; border-radius: 18px; box-shadow: 0 24px 60px rgba(0,0,0,.18); margin: auto; padding: 22px 24px 20px; }
+  .dlg.sm { max-width: 420px; }
+  .x { position: absolute; top: 16px; inset-inline-end: 16px; width: 34px; height: 34px; border: 0; background: none; border-radius: 8px; cursor: pointer; color: #44545a; display: grid; place-items: center; }
+  .x:hover { background: #f1f4f5; }
+  .x svg { width: 20px; height: 20px; }
+  .dh { display: flex; gap: 14px; align-items: center; padding-inline-end: 34px; margin-bottom: 14px; }
+  .dh .ic { width: 50px; height: 50px; border-radius: 50%; background: #e3f4ee; color: var(--teal); display: grid; place-items: center; flex: none; }
+  .dh .ic svg { width: 25px; height: 25px; }
+  .dh h3 { font-size: 21px; font-weight: 700; color: #15304a; }
+  .dh p { font-size: 13.5px; color: #5d6d78; margin-top: 2px; }
+  .rt { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .rt-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 14px; background: #f5f8f9; font-size: 14px; }
+  .rt-h b { color: #15304a; }
+  .rt-h .cd { margin-inline-start: auto; font-size: 12.5px; }
+  .rt table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .rt th { text-align: start; font-size: 12px; font-weight: 600; color: var(--muted); padding: 8px 14px 4px; }
+  .rt td { padding: 8px 14px; border-top: 1px solid #f0f3f4; vertical-align: middle; }
+  .rt td.n { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; color: #5d6d78; white-space: nowrap; }
+  .rt input, .rt textarea { width: 120px; height: 40px; padding: 0 10px; border: 1px solid #cfd9dc; border-radius: 8px; font: inherit; font-size: 14px; direction: ltr; text-align: center; }
+  .rt textarea { width: 100%; height: 76px; padding: 8px 10px; direction: auto; text-align: start; resize: vertical; }
+  .rt input:focus, .rt textarea:focus { outline: 0; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(18,163,127,.12); }
+  .rt .hint { padding: 10px 14px 0; font-size: 12.5px; color: var(--muted); }
+  .rt .tx { padding: 8px 14px 12px; }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #eef2f4; color: #6b7a80; white-space: nowrap; }
+  .pill.normal { background: #e3f4ee; color: #0f6b52; } .pill.low, .pill.high { background: #fff1e0; color: #a4520a; } .pill.critical { background: #b42318; color: #fff; }
+  .val { font-weight: 700; color: #15304a; }
+  .appr { margin-top: 6px; padding: 14px; border-radius: 12px; background: #f4fbf8; border: 1px solid #cdebdf; }
+  .appr label { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: #15304a; cursor: pointer; line-height: 1.5; }
+  .appr input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; margin-top: 1px; }
+  .appr p { font-size: 12.5px; color: #44545a; margin: 6px 0 0 30px; line-height: 1.5; }
+  [dir="rtl"] .appr p { margin: 6px 30px 0 0; }
+  .df { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .err { color: #b42318; font-size: 13px; margin-top: 10px; }
+  .sent-box { display: flex; gap: 10px; align-items: center; padding: 12px 14px; border-radius: 12px; background: #f4fbf8; color: #0b6b5c; font-size: 13.5px; margin-bottom: 12px; line-height: 1.5; }
+  .sent-box svg { width: 20px; height: 20px; flex: none; }
+  .fld { display: grid; gap: 6px; font-size: 13px; color: #44545a; font-weight: 600; }
+  .fld input { height: 46px; padding: 0 12px; border: 1px solid #cfd9dc; border-radius: 10px; font: inherit; font-size: 15px; direction: ltr; }
+  @media (max-width: 900px) {
+    .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; align-content: start; }
+    .side { position: static; height: auto; flex-direction: row; align-items: center; gap: 12px; padding: 10px 12px; border-inline-end: 0; border-bottom: 1px solid var(--border); }
+    .logo { flex: none; }
+    .logo img { height: 34px; }
+    .logo span { display: none; }
+    .menu { display: flex; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+    .menu::-webkit-scrollbar { display: none; }
+    .menu a { flex: none; height: 38px; padding: 0 12px; font-size: 13px; gap: 8px; }
+    .menu a svg { width: 18px; height: 18px; }
+    .side-art, .support { display: none; }
+    .top { height: 66px; padding: 0 12px; gap: 8px; }
+    .user-meta { display: none; }
+    .ava { width: 42px; height: 42px; }
+    main { padding: 14px 12px 24px; }
+    .p-head { padding: 16px; gap: 12px; }
+    .p-icon { width: 48px; height: 48px; }
+    .p-icon svg { width: 24px; height: 24px; }
+    .p-head h1 { font-size: 22px; }
+    .p-head p { font-size: 13px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 14px 14px 0; gap: 10px; }
+    .alert { margin: 14px 14px 0; flex-wrap: wrap; }
+    .alert .btn { width: 100%; }
+    .tools { padding: 14px 14px 4px; }
+    .vtabs { padding: 0 14px; }
+    .list { padding: 14px 14px 20px; }
+    .sc-h { padding: 14px 14px 8px; }
+    .sc-m { padding: 0 14px 10px; }
+    .tl li { padding: 10px 14px; grid-template-columns: minmax(0, 1fr); }
+    .sc-f { padding: 12px 14px; }
+    .sc-f .btn { flex: 1 1 100%; }
+    .dlg { padding: 18px 14px 16px; }
+    .rt th.hm, .rt td.hm { display: none; }
+    .rt td { padding: 8px 10px; }
+    .rt input { width: 90px; }
+    .df .btn { flex: 1 1 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <a class="logo" href="nurse-visits.html" aria-label="Mada care">
+      <img src="assets/mada-logo.png" alt="" width="301" height="320">
+      <span><b>Mada care</b><small data-i18n="tagline">Caring Like Family</small></span>
+    </a>
+    <nav class="menu" id="menu" aria-label="Nursing portal"></nav>
+    <div class="support" id="support"></div>
+    <svg class="side-art" viewBox="0 0 170 220" fill="none" stroke="currentColor" stroke-width="22" aria-hidden="true"><circle cx="40" cy="40" r="22" fill="currentColor" stroke="none"/><path d="M40 210c-50-40-60-90-30-110s60 0 60 30-40 40-60 20"/><path d="M60 120c30-40 90-30 95 10s-40 70-115 80"/></svg>
+  </aside>
+
+  <div>
+    <header class="top">
+      <button class="lang-btn" id="langToggle" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+        <span data-i18n="otherLang">العربية</span>
+      </button>
+      <button class="bell" type="button" id="bell" data-i18n-aria="notifications" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="user" id="user">
+        <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+          <span class="ava" id="avatar"></span>
+          <span class="user-meta"><span class="u-name" id="userName"></span><span class="u-spec" id="userSpec"></span></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="user-menu" role="menu">
+          <a href="#" role="menuitem" data-soon data-i18n="profile">My Account</a>
+          <a href="nurse-login.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <div class="p-head">
+          <span class="p-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 14h9"/></svg></span>
+          <div><h1 data-i18n="title">Samples</h1><p data-i18n="sub">The samples you took, when each result is due, and sending the results</p></div>
+        </div>
+        <div id="alerts"></div>
+        <div class="stats" id="stats"></div>
+        <div class="tools">
+          <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="q" data-i18n-ph="searchPh" data-i18n-aria="search" placeholder="Search" autocomplete="off"></label>
+        </div>
+        <div class="vtabs" role="tablist" id="vtabs"></div>
+        <div class="list" id="list"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="ov" id="resOv" hidden role="dialog" aria-modal="true" aria-labelledby="resT"><div class="dlg" id="resDlg"></div></div>
+<div class="ov" id="colOv" hidden role="dialog" aria-modal="true" aria-labelledby="colT"><div class="dlg sm" id="colDlg"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="labs.js"></script>
+<script src="medical.js"></script>
+<script src="alerts.js"></script>
+<script src="lab-samples.js"></script>
+<script src="doctor-portal.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("nurse");
+  const $ = id => document.getElementById(id), esc = DrPortal.esc;
+  // Samples: every lab sample this nurse took and its results (lab-samples.js has where they come from and where they go).
+  // Each test counts down to its result time; when it passes, the card turns red and the nurse gets a reminder.
+  // She types the results from the lab report, approves them and sends them: to the ordering doctor, or to the care team for a patient booking.
+  const myId = me && me.nurseId;
+  const L = {
+    en: { title: "Samples", sub: "The samples you took, when each result is due, and sending the results", searchPh: "Search by patient name, file number, booking number or test...", search: "Search",
+      tabTodo: "To Do", tabSent: "Sent", k_due: "Results due now", k_waiting: "Waiting for results", k_ready: "Ready to send", k_collect: "Mark sample taken", k_sent: "Sent",
+      dueT: "{n} results are due now", dueT1: "1 result is due now", dueS: "Get them from the lab, enter them and send them so they are not late.", readyT: "{n} samples have results that are not sent yet", readyT1: "1 sample has results that are not sent yet", readyS: "Review them and send them.",
+      ntfT: "Turn on reminders on this device", ntfS: "You get an alert on this device when a result is due, even on another page.", ntfOn: "Turn on reminders", ntfDone: "Reminders are on for this device.", ntfNo: "Reminders are blocked in the browser settings.",
+      docOrder: "Doctor's order", docOrderBy: "Doctor's order · {d}", patOrder: "Patient booking", taken: "Sample taken {t}", nTests: "{n} tests", nTests1: "1 test", booking: "Booking",
+      st_due: "Results due", st_waiting: "Waiting for results", st_ready: "Ready to send", st_collect: "Sample not marked", st_sent: "Sent", st_reviewed: "Doctor approved", st_review: "With the doctor",
+      dueIn: "Due in {d}", dueAt: "at {t}", late: "Due {d} ago", entered: "Entered", noHours: "Result time not set", noTime: "Mark the sample time first",
+      toDoc: "Goes to {d} when you send it", toTeam: "Goes to the care team when you send it", sentDoc: "Sent to {d} · {t}", sentTeam: "Sent to the care team · {t}",
+      enter: "Enter results", edit: "Edit results", review: "Review and send", view: "View results", markCol: "Mark sample taken", critical: "Critical value", out: "Out of range",
+      resT: "Enter Results", resS: "{p} · type each result as it is in the lab report.", viewT: "Results", test: "Test", result: "Result", unit: "Unit", range: "Normal range", flag: "Status",
+      s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical", textLbl: "Result as written in the lab report", textHint: "This test has no result fields yet, so type the result as it is in the report.",
+      save: "Save", saved: "Saved. You can send them when all the results are in.", cancel: "Close", needAll: "Enter every result before you send. Still missing: {s}",
+      apprLbl: "I checked these results against the lab report and they are correct.", apprDoc: "{d} gets a notification that the results are out.", apprTeam: "The care team gets a notification that the results are out, to share them with the patient.",
+      sendDoc: "Approve and send to the doctor", sendTeam: "Approve and send", needAppr: "Tick the box to approve the results.", sentToastDoc: "Results sent to {d}.", sentToastTeam: "Results sent to the care team.",
+      byN: "By {n}", critWarn: "There is a critical value. Call the doctor or your supervisor now as well.", sentBy: "Sent by {n} · {t}",
+      colT: "Mark Sample Taken", colS: "When did you take the sample?", colTime: "Sample time", colSave: "Save", colDone: "Sample marked as taken.", needTime: "Enter the time.",
+      none: "Nothing here", noneTodo: "No samples waiting. Samples you take on your visits show here.", noneSent: "No results sent yet.", noneQ: "No samples match your search.",
+      d: "{n}d", h: "{n}h", m: "{n}m", today: "today", ytd: "yesterday", tmr: "tomorrow", close: "Close", soonMsg: "This section is coming soon.", notifications: "Notifications", otherLang: "العربية", tagline: "Caring Like Family", profile: "My Account", logout: "Log out" },
+    ar: { title: "العينات", sub: "العينات اللي سحبتها، ومتى تطلع كل نتيجة، وإرسال النتائج", searchPh: "ابحث باسم المريض أو رقم الملف أو رقم الحجز أو التحليل...", search: "بحث",
+      tabTodo: "المطلوب", tabSent: "المرسلة", k_due: "نتائج حان وقتها", k_waiting: "بانتظار النتائج", k_ready: "جاهزة للإرسال", k_collect: "حدد وقت السحب", k_sent: "المرسلة",
+      dueT: "{n} نتائج حان وقتها الحين", dueT1: "نتيجة وحدة حان وقتها الحين", dueS: "خذها من المختبر وأدخلها وأرسلها عشان ما تتأخر.", readyT: "{n} عينات نتائجها ما انرسلت", readyT1: "عينة وحدة نتائجها ما انرسلت", readyS: "راجعها وأرسلها.",
+      ntfT: "شغّل التذكير على هذا الجهاز", ntfS: "يجيك تنبيه على هذا الجهاز لما يحين وقت النتيجة، حتى لو كنت في صفحة ثانية.", ntfOn: "تشغيل التذكير", ntfDone: "التذكير شغّال على هذا الجهاز.", ntfNo: "التذكير مقفل من إعدادات المتصفح.",
+      docOrder: "طلب طبيب", docOrderBy: "طلب طبيب · {d}", patOrder: "حجز مريض", taken: "انسحبت العينة {t}", nTests: "{n} تحاليل", nTests1: "تحليل واحد", booking: "الحجز",
+      st_due: "حان وقت النتائج", st_waiting: "بانتظار النتائج", st_ready: "جاهزة للإرسال", st_collect: "وقت السحب غير محدد", st_sent: "انرسلت", st_reviewed: "اعتمدها الطبيب", st_review: "عند الطبيب",
+      dueIn: "باقي {d}", dueAt: "الساعة {t}", late: "متأخرة {d}", entered: "مدخلة", noHours: "وقت النتيجة غير محدد", noTime: "حدد وقت السحب أول",
+      toDoc: "تروح لـ {d} لما ترسلها", toTeam: "تروح لفريق الرعاية لما ترسلها", sentDoc: "انرسلت لـ {d} · {t}", sentTeam: "انرسلت لفريق الرعاية · {t}",
+      enter: "إدخال النتائج", edit: "تعديل النتائج", review: "مراجعة وإرسال", view: "عرض النتائج", markCol: "حدد وقت السحب", critical: "قيمة حرجة", out: "خارج المعدل",
+      resT: "إدخال النتائج", resS: "{p} · اكتب كل نتيجة مثل ما هي في تقرير المختبر.", viewT: "النتائج", test: "التحليل", result: "النتيجة", unit: "الوحدة", range: "المعدل الطبيعي", flag: "الحالة",
+      s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج", textLbl: "النتيجة مثل ما هي في تقرير المختبر", textHint: "هذا التحليل ما له خانات نتائج للحين، اكتب النتيجة مثل ما هي في التقرير.",
+      save: "حفظ", saved: "انحفظت. تقدر ترسلها لما تكتمل كل النتائج.", cancel: "إغلاق", needAll: "أدخل كل النتائج قبل الإرسال. الناقص: {s}",
+      apprLbl: "راجعت النتائج مع تقرير المختبر وهي صحيحة.", apprDoc: "يوصل {d} إشعار إن النتائج طلعت.", apprTeam: "يوصل فريق الرعاية إشعار إن النتائج طلعت، عشان يرسلونها للمريض.",
+      sendDoc: "اعتماد وإرسال للطبيب", sendTeam: "اعتماد وإرسال", needAppr: "علّم على المربع عشان تعتمد النتائج.", sentToastDoc: "انرسلت النتائج لـ {d}.", sentToastTeam: "انرسلت النتائج لفريق الرعاية.",
+      byN: "بواسطة {n}", critWarn: "فيه قيمة حرجة. كلّم الطبيب أو المشرف الحين بعد.", sentBy: "أرسلها {n} · {t}",
+      colT: "تحديد وقت السحب", colS: "متى سحبت العينة؟", colTime: "وقت السحب", colSave: "حفظ", colDone: "انحفظ وقت السحب.", needTime: "اكتب الوقت.",
+      none: "ما فيه شي هنا", noneTodo: "ما فيه عينات تنتظر. العينات اللي تسحبها في زياراتك تطلع هنا.", noneSent: "ما انرسلت نتائج للحين.", noneQ: "ما فيه عينات تطابق البحث.",
+      d: "{n} يوم", h: "{n} س", m: "{n} د", today: "اليوم", ytd: "أمس", tmr: "بكرة", close: "إغلاق", soonMsg: "هذا القسم قريباً.", notifications: "الإشعارات", otherLang: "English", tagline: "نهتم كالعائلة", profile: "حسابي", logout: "تسجيل الخروج" }
+  };
+  let current = "en", tab = "todo", kind = "", openKey = null;
+  const t = () => L[current], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n] != null ? v[n] : "");
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const S = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { flask: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', ok: '<path d="m5 12 5 5 9-10"/>',
+    warn: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>', bell: '<path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9z"/><path d="M10 20a2 2 0 0 0 4 0"/>', send: '<path d="M4 12 20 4l-6 16-3-7z"/>',
+    doc: '<circle cx="12" cy="7" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/>', team: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a6.5 6.5 0 0 1 13 0v1"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14a6.5 6.5 0 0 1 3 5.5v.5"/>',
+    pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', drop: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>' };
+  const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const hm = d => d.toLocaleTimeString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { hour: "numeric", minute: "2-digit" });
+  // "today 1:30 PM", "tomorrow 9:00 AM", or the date.
+  function when(iso) {
+    if (!iso) return ""; const d = new Date(iso), a = new Date(d), b = new Date(); a.setHours(0, 0, 0, 0); b.setHours(0, 0, 0, 0);
+    const diff = Math.round((a - b) / 864e5), day = diff === 0 ? t().today : diff === -1 ? t().ytd : diff === 1 ? t().tmr : d.toLocaleDateString(loc(), { day: "numeric", month: "short" });
+    return day + " " + hm(d);
+  }
+  function dur(ms) {
+    const m = Math.max(1, Math.round(Math.abs(ms) / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+    return d ? [tx("d", { n: d }), h ? tx("h", { n: h }) : ""].filter(Boolean).join(" ") : h ? [tx("h", { n: h }), mm ? tx("m", { n: mm }) : ""].filter(Boolean).join(" ") : tx("m", { n: mm });
+  }
+  const docName = c => T(c.doctor) || "—";
+  const cards = () => MadaSamples.list(myId);
+  const ORDER = { due: 0, ready: 1, collect: 2, waiting: 3, sent: 4 };
+  function sorted(list) {
+    return list.sort((a, b) => a.status === "sent" && b.status === "sent" ? String(b.sentAt).localeCompare(String(a.sentAt))
+      : ORDER[a.status] - ORDER[b.status] || String(a.nextDue || a.collectedAt || "").localeCompare(String(b.nextDue || b.collectedAt || "")));
+  }
+  function match(c, q) {
+    if (!q) return true;
+    const s = [T(c.o.patient), c.o.patient && c.o.patient.en, c.o.patient && c.o.patient.ar, c.o.mrn, c.o.bookingId, c.o.id, c.o.mobile, ...c.tests.flatMap(x => [x.code, T(x.name)])].join(" ").toLowerCase();
+    return s.includes(q.toLowerCase());
+  }
+
+  // One test line: tube, name, code and its countdown to the result time.
+  function cdOf(c, x) {
+    let cd;
+    if (x.entered) cd = `<span class="cd ok">${S(I.ok, 2.4)}${t().entered}</span>`;
+    else if (!c.collectedAt) cd = `<span class="cd na">${t().noTime}</span>`;
+    else if (!x.dueAt) cd = `<span class="cd na">${t().noHours}</span>`;
+    else {
+      const left = new Date(x.dueAt) - Date.now();
+      cd = left <= 0 ? `<span class="cd due">${S(I.warn, 2.1)}${esc(tx("late", { d: dur(left) }))}</span>`
+        : `<span class="cd">${S(I.clock)}${esc(tx("dueIn", { d: dur(left) }))} <small>${esc(tx("dueAt", { t: when(x.dueAt) }))}</small></span>`;
+    }
+    return cd;
+  }
+  function testRow(c, x) {
+    const cd = cdOf(c, x); let bar = "";
+    if (c.collectedAt && x.dueAt && c.status !== "sent") {
+      const span = new Date(x.dueAt) - new Date(c.collectedAt), pc = x.entered ? 100 : Math.max(3, Math.min(100, (Date.now() - new Date(c.collectedAt)) / span * 100));
+      bar = `<div class="bar" aria-hidden="true"><i class="${x.entered ? "ok" : x.due ? "due" : ""}" style="width:${pc.toFixed(1)}%"></i></div>`;
+    }
+    return `<li><span class="nm">${x.tube ? `<i class="tube" style="background:${x.tube.color}" title="${esc(T(x.tube.name))}"></i>` : ""}<b>${esc(T(x.name))}</b><span class="code">${esc(x.code)}</span></span>${cd}${bar}</li>`;
+  }
+  function cardHtml(c) {
+    const o = c.o, fl = c.status === "ready" || c.status === "sent" ? MadaSamples.flag(c) : null, n = c.tests.length;
+    const src = c.kind === "doctor" ? `<span class="chip doc">${S(I.doc)}${esc(c.doctor ? tx("docOrderBy", { d: docName(c) }) : t().docOrder)}</span>` : `<span class="chip pat">${S(I.team)}${t().patOrder}</span>`;
+    const stK = c.status === "sent" && c.kind === "doctor" ? (c.reviewed ? "reviewed" : "review") : c.status;
+    const to = c.status === "sent" ? (c.kind === "doctor" ? tx("sentDoc", { d: docName(c), t: when(c.sentAt) }) : tx("sentTeam", { t: when(c.sentAt) }))
+      : c.kind === "doctor" ? tx("toDoc", { d: docName(c) }) : t().toTeam;
+    const left = c.tests.filter(x => !x.entered).length, anyIn = c.tests.some(x => x.entered);
+    const act = c.status === "collect" ? `<button type="button" class="btn btn-dark" data-col="${esc(c.key)}">${S(I.clock)}${t().markCol}</button>`
+      : c.status === "sent" ? `<button type="button" class="btn btn-light" data-view="${esc(c.key)}">${S(I.eye)}${t().view}</button>`
+      : c.status === "ready" ? `<button type="button" class="btn btn-go" data-res="${esc(c.key)}">${S(I.send)}${t().review}</button>`
+      : `<button type="button" class="btn ${c.status === "due" ? "btn-red" : "btn-dark"}" data-res="${esc(c.key)}">${S(I.pen)}${anyIn ? t().edit : t().enter}</button>`;
+    return `<article class="sc s-${c.status} ${openKey === c.key ? "hl" : ""}" id="c-${esc(c.key.replace(/[^\w-]/g, "_"))}">
+      <div class="sc-h"><div class="sc-who"><b>${esc(T(o.patient))}</b><small><span dir="ltr">${esc(o.mrn || "")}</span>${o.bookingId ? ` · ${t().booking} <span dir="ltr">${esc(o.bookingId)}</span>` : ""}</small></div>
+        <div class="chips">${src}<span class="chip ${c.status === "sent" ? "sent" : c.status}">${t()["st_" + stK]}</span>${fl === "critical" ? `<span class="chip critical">${S(I.warn, 2.2)}${t().critical}</span>` : fl === "high" || fl === "low" ? `<span class="chip out">${t().out}</span>` : ""}</div></div>
+      <div class="sc-m">${c.collectedAt ? `<span>${S(I.drop)}${esc(tx("taken", { t: when(c.collectedAt) }))}</span>` : ""}<span>${S(I.flask)}${n === 1 ? t().nTests1 : esc(tx("nTests", { n }))}</span></div>
+      <ul class="tl">${c.tests.map(x => testRow(c, x)).join("")}</ul>
+      <div class="sc-f"><span class="to">${S(c.kind === "doctor" ? I.doc : I.team)}${esc(to)}</span>${act}</div>
+    </article>`;
+  }
+
+  function render() {
+    const all = cards(), q = $("q").value.trim(), cnt = k => all.filter(c => c.status === k).length;
+    const dueTests = all.filter(c => c.status === "due").reduce((s, c) => s + c.tests.filter(x => x.due).length, 0), ready = cnt("ready");
+    // Reminders at the top: results that are due, results not sent, and turning on device reminders.
+    let al = "";
+    if (dueTests) al += `<div class="alert">${S(I.bell, 2)}<div><b>${dueTests === 1 ? t().dueT1 : esc(tx("dueT", { n: dueTests }))}</b><span>${t().dueS}</span></div></div>`;
+    if (ready) al += `<div class="alert info">${S(I.send, 2)}<div><b>${ready === 1 ? t().readyT1 : esc(tx("readyT", { n: ready }))}</b><span>${t().readyS}</span></div></div>`;
+    if (typeof Notification !== "undefined" && Notification.permission === "default" && all.some(c => c.status !== "sent"))
+      al += `<div class="alert info">${S(I.bell, 2)}<div><b>${t().ntfT}</b><span>${t().ntfS}</span></div><button type="button" class="btn btn-dark" id="ntfOn">${t().ntfOn}</button></div>`;
+    $("alerts").innerHTML = al;
+    const KS = ["due", "waiting", "ready", ...(cnt("collect") ? ["collect"] : [])];
+    const ICK = { due: I.warn, waiting: I.clock, ready: I.send, collect: I.drop };
+    $("stats").style.gridTemplateColumns = innerWidth > 900 ? `repeat(${KS.length}, minmax(0, 1fr))` : "";
+    $("stats").innerHTML = KS.map(k => `<button type="button" class="stat k-${k}" data-k="${k}" aria-pressed="${kind === k}"><i>${S(ICK[k], 2)}</i><span><b>${cnt(k)}</b><small>${t()["k_" + k]}</small></span></button>`).join("");
+    const todoN = all.filter(c => c.status !== "sent").length, sentN = cnt("sent");
+    $("vtabs").innerHTML = [["todo", t().tabTodo, todoN], ["sent", t().tabSent, sentN]].map(([k, l, n]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${tab === k}">${l}<span class="cnt">${n}</span></button>`).join("");
+    const list = sorted(all.filter(c => (tab === "sent" ? c.status === "sent" : c.status !== "sent") && (!kind || tab === "sent" || c.status === kind) && match(c, q)));
+    $("list").innerHTML = list.length ? list.map(cardHtml).join("")
+      : `<div class="none"><b>${t().none}</b>${q ? t().noneQ : tab === "sent" ? t().noneSent : t().noneTodo}</div>`;
+  }
+
+  // Enter results: each test with its result fields (unit, normal range and the flag as you type), or a text box when the test has none.
+  let dlgKey = null;
+  function resRows(c, x, ro) {
+    const v = (x.entry && x.entry.values) || {}, head = `<div class="rt-h">${x.tube ? `<i class="tube" style="background:${x.tube.color}"></i>` : ""}<b>${esc(T(x.name))}</b><span class="code" style="font-size:11px;font-weight:700;color:#0b6b5c;background:#e3f4ee;padding:2px 7px;border-radius:6px;direction:ltr">${esc(x.code)}</span>${ro ? "" : cdOf(c, x)}</div>`;
+    if (!x.an.length) return `<div class="rt">${head}${ro ? `<div class="tx" style="white-space:pre-line">${esc((x.entry || {}).text)}</div>` : `<p class="hint">${t().textHint}</p><div class="tx"><textarea data-tx="${esc(x.code)}" aria-label="${esc(t().textLbl)}" placeholder="${esc(t().textLbl)}">${esc((x.entry || {}).text || "")}</textarea></div>`}</div>`;
+    return `<div class="rt">${head}<table><thead><tr><th>${t().test}</th><th>${t().result}</th><th class="hm">${t().unit}</th><th class="hm">${t().range}</th><th>${t().flag}</th></tr></thead><tbody>
+      ${x.an.map(a => { const val = v[a.code], st = MadaSamples.labStatus(a, val);
+        return `<tr><td>${esc(T(a.name))}</td><td>${ro ? `<span class="val num" dir="ltr">${esc(val)}</span>` : `<input inputmode="decimal" data-t="${esc(x.code)}" data-a="${esc(a.code)}" value="${val != null ? esc(val) : ""}" aria-label="${esc(T(a.name))}">`}</td>
+          <td class="n hm">${esc(a.unit || "")}</td><td class="n hm">${esc(MadaSamples.rangeTxt(a))}</td><td><span class="pill ${st || ""}" data-st="${esc(x.code + ":" + a.code)}">${st ? t()["s_" + st] : "—"}</span></td></tr>`; }).join("")}</tbody></table></div>`;
+  }
+  function openRes(key, ro) {
+    const c = MadaSamples.get(myId, key); if (!c) return;
+    dlgKey = key; const doc = c.kind === "doctor", fl = ro ? MadaSamples.flag(c) : null;
+    $("resDlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
+      <div class="dh"><span class="ic">${S(I.flask)}</span><div><h3 id="resT">${ro ? t().viewT : t().resT}</h3><p>${ro ? esc(T(c.o.patient)) + ` · <span dir="ltr">${esc(c.o.mrn || "")}</span>` : esc(tx("resS", { p: T(c.o.patient) }))}</p></div></div>
+      ${ro ? `<div class="sent-box">${S(I.ok, 2.2)}<span>${esc(doc ? tx("sentDoc", { d: docName(c), t: when(c.sentAt) }) : tx("sentTeam", { t: when(c.sentAt) }))}${c.sentBy ? `<br><small>${esc(tx("byN", { n: T(c.sentBy) }))}</small>` : ""}</span></div>${fl === "critical" ? `<div class="alert" style="margin:0 0 12px">${S(I.warn, 2)}<div><b>${t().critical}</b><span>${t().critWarn}</span></div></div>` : ""}` : ""}
+      <div id="rtWrap">${c.tests.map(x => resRows(c, x, ro)).join("")}</div>
+      ${ro ? "" : `<div class="appr"><label><input type="checkbox" id="apOk"><span>${t().apprLbl}</span></label><p>${esc(doc ? tx("apprDoc", { d: docName(c) }) : t().apprTeam)}</p></div>
+      <p class="err" id="resErr" hidden></p>`}
+      <div class="df"><button type="button" class="btn btn-light" data-close>${t().cancel}</button>${ro ? "" : `<button type="button" class="btn btn-dark" id="resSave">${t().save}</button><button type="button" class="btn btn-go" id="resSend">${S(I.send)}${doc ? t().sendDoc : t().sendTeam}</button>`}</div>`;
+    $("resOv").hidden = false;
+    const first = $("resDlg").querySelector("input[data-t], textarea"); (first || $("resDlg").querySelector(".x")).focus();
+  }
+  // What is typed in the popup, as { CODE: { values } | { text } }.
+  function collect() {
+    const out = {};
+    $("resDlg").querySelectorAll("input[data-t]").forEach(i => { const v = i.value.trim().replace(",", "."), e = out[i.dataset.t] = out[i.dataset.t] || { values: {} }; if (v !== "" && !isNaN(v)) e.values[i.dataset.a] = +v; });
+    $("resDlg").querySelectorAll("textarea[data-tx]").forEach(i => out[i.dataset.tx] = { text: i.value.trim() });
+    return out;
+  }
+  $("resDlg").addEventListener("input", e => {
+    const i = e.target.closest("input[data-t]"); if (!i) return;
+    const a = MadaSamples.analytes(i.dataset.t).find(y => y.code === i.dataset.a), v = i.value.trim().replace(",", "."), st = v !== "" && !isNaN(v) ? MadaSamples.labStatus(a, +v) : null;
+    const p = $("resDlg").querySelector(`[data-st="${CSS.escape(i.dataset.t + ":" + i.dataset.a)}"]`); if (p) { p.className = "pill " + (st || ""); p.textContent = st ? t()["s_" + st] : "—"; }
+    i.style.borderColor = v !== "" && isNaN(v) ? "#dc2626" : "";
+  });
+  $("resDlg").addEventListener("click", e => {
+    if (e.target.closest("[data-close]")) return closeDlg("resOv");
+    const err = $("resErr");
+    if (e.target.closest("#resSave") || e.target.closest("#resSend")) {
+      const send = !!e.target.closest("#resSend");
+      if (send && !$("apOk").checked) { err.textContent = t().needAppr; err.hidden = false; return; }
+      MadaSamples.saveDraft(myId, dlgKey, collect(), me.name);
+      const c = MadaSamples.get(myId, dlgKey);
+      if (!send) { closeDlg("resOv"); render(); return toast(t().saved); }
+      const miss = c.tests.filter(x => !x.entered);
+      if (miss.length) { err.textContent = tx("needAll", { s: miss.map(x => T(x.name)).join(current === "ar" ? "، " : ", ") }); err.hidden = false; render(); return; }
+      const done = MadaSamples.send(myId, dlgKey, me.name);
+      closeDlg("resOv"); tab = "todo"; render();
+      toast(c.kind === "doctor" ? tx("sentToastDoc", { d: docName(c) }) : t().sentToastTeam);
+      if (done && MadaSamples.flag(done) === "critical") setTimeout(() => openRes(done.key, true), 300);
+    }
+  });
+  // Doctor's order whose sample was not marked on the visit: the nurse sets the time she took it.
+  function openCol(key) {
+    dlgKey = key; const n = new Date(), v = String(n.getHours()).padStart(2, "0") + ":" + String(n.getMinutes()).padStart(2, "0");
+    $("colDlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
+      <div class="dh"><span class="ic">${S(I.drop)}</span><div><h3 id="colT">${t().colT}</h3><p>${t().colS}</p></div></div>
+      <label class="fld">${t().colTime}<input type="time" id="colTime" value="${v}"></label><p class="err" id="colErr" hidden></p>
+      <div class="df"><button type="button" class="btn btn-light" data-close>${t().cancel}</button><button type="button" class="btn btn-go" id="colSave">${t().colSave}</button></div>`;
+    $("colOv").hidden = false; $("colTime").focus();
+  }
+  $("colDlg").addEventListener("click", e => {
+    if (e.target.closest("[data-close]")) return closeDlg("colOv");
+    if (!e.target.closest("#colSave")) return;
+    const v = $("colTime").value; if (!v) { $("colErr").textContent = t().needTime; $("colErr").hidden = false; return; }
+    const d = new Date(), [h, m] = v.split(":"); d.setHours(+h, +m, 0, 0); if (d > new Date()) d.setDate(d.getDate() - 1);
+    MadaSamples.markCollected(myId, dlgKey, d.toISOString(), me.name); closeDlg("colOv"); render(); toast(t().colDone);
+  });
+  function closeDlg(id) { $(id).hidden = true; dlgKey = null; }
+  document.querySelectorAll(".ov").forEach(ov => ov.addEventListener("click", e => { if (e.target === ov) closeDlg(ov.id); }));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".ov:not([hidden])").forEach(ov => closeDlg(ov.id)); });
+
+  $("list").addEventListener("click", e => {
+    const r = e.target.closest("[data-res]"), v = e.target.closest("[data-view]"), c = e.target.closest("[data-col]");
+    if (r) openRes(r.dataset.res); else if (v) openRes(v.dataset.view, true); else if (c) openCol(c.dataset.col);
+  });
+  $("stats").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; kind = kind === b.dataset.k ? "" : b.dataset.k; tab = "todo"; render(); });
+  $("vtabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; kind = ""; render(); });
+  $("q").addEventListener("input", render);
+  addEventListener("resize", () => { clearTimeout(render.r); render.r = setTimeout(render, 150); });
+  $("alerts").addEventListener("click", e => {
+    if (!e.target.closest("#ntfOn")) return;
+    Notification.requestPermission().then(p => { toast(p === "granted" ? t().ntfDone : t().ntfNo); render(); });
+  });
+  // The countdowns move on their own; the list refreshes every 30 seconds and when another tab changes the data.
+  setInterval(() => { if ($("resOv").hidden && $("colOv").hidden) render(); }, 30000);
+  window.addEventListener("storage", e => { if ((!e.key || ["mada-orders", "mada-medical"].includes(e.key)) && $("resOv").hidden) render(); });
+  document.addEventListener("click", e => { if (e.target.closest("[data-soon]")) { e.preventDefault(); toast(t().soonMsg); } });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    document.title = lang === "ar" ? "مدى كير | العينات" : "Mada Care | Samples";
+    DrPortal.render(me, lang, "samples"); render();
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  // From the bell or a reminder: ?k= opens that sample.
+  { const k = new URLSearchParams(location.search).get("k"), c = k && MadaSamples.get(myId, k);
+    if (c) { openKey = k; tab = c.status === "sent" ? "sent" : "todo"; render();
+      const el = document.getElementById("c-" + k.replace(/[^\w-]/g, "_")); if (el) el.scrollIntoView({ block: "center" });
+      if (c.status === "due" || c.status === "ready") openRes(k); } }
+</script>
+</body>
+</html>

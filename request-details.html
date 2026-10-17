@@ -540,6 +540,8 @@
 <script src="orders.js"></script>
 <script src="nurses.js"></script>
 <script src="rx-docs.js"></script>
+<script src="medical.js"></script>
+<script src="lab-samples.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const isSupervisor = !!(me && me.supervisor);
@@ -798,6 +800,8 @@
   const rxOpts = { get lang() { return current; }, canEdit: true, get by() { return me.name; }, toast: m => toast(m), done: () => render() };
   function render() {
     const o = id && MadaOrders.get(id);
+    // Lab results the nurse sent for this booking (lab-samples.js): opening the request clears them from the dashboard bell.
+    if (o && o.labResults && o.labResults.status === "sent" && !o.labResults.seen) { MadaSamples.markSeen(o.id, me.name); setTimeout(() => { const el = document.querySelector(".lsr"); if (el && /labres=1/.test(location.search)) el.scrollIntoView({ block: "center" }); }, 50); }
     if (!o) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="requests.html">${t().toList}</a></p></section>`; return; }
     const d = new Date(o.createdAt), isEmg = o.medical === "emergency", em = o.emergency || { checks: [], notes: "" };
     // Emergency referrals and "Not Approved" requests are locked for agents; a supervisor closes them.
@@ -1358,6 +1362,7 @@
         </div>
         ${itemsTable(o)}
         ${MadaRx.card(o, rxOpts)}
+        ${MadaSamples.card(o, current)}
         ${banner}
       </div>
       <div class="after"><b>${t().statusLbl}</b><span class="pill ${stPill}">${esc(t()["st_" + st] || st)}</span>${o.staff ? `<span class="who">${esc(tx("createdByLbl", { n: T(o.staff) }))}</span>` : ""}</div>

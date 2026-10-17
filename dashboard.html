@@ -403,6 +403,9 @@
 <script src="auth.js"></script>
 <script src="requests.js"></script>
 <script src="orders.js"></script>
+<script src="labs.js"></script>
+<script src="medical.js"></script>
+<script src="lab-samples.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const i18n = {
@@ -489,6 +492,8 @@
   let saved = "en";
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
   setLang(saved);
+  // Bell: lab results the nurse sent for patient bookings (lab-samples.js).
+  MadaSamples.staffBell(document.querySelector('.top-actions [data-i18n-aria="notifications"]'), current, me.name);
   { const n = MadaOrders.needsAction(), c = document.getElementById("navCount"); c.hidden = !n; c.textContent = n; }
   // Stats from the Requests page.
   {
