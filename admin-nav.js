@@ -16,10 +16,19 @@
     "services.html": '<rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><path d="M17 13v8M13 17h8"/>',
     "quality.html": '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>',
     "staff.html": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M3 12h18"/>',
+    "coverage.html": '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
     "policies.html": '<path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
     soon: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>'
   };
   const svg = p => `<svg class="mn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+
+  // Coverage map link, added here so every page gets it without its own translation; named by the page language in paint().
+  let cov = nav.querySelector('a[href="coverage.html"]');
+  if (!cov) {
+    cov = document.createElement("a"); cov.href = "coverage.html"; cov.innerHTML = '<span class="mn-tx mn-cov"></span>';
+    const at = nav.querySelector('a[href="staff.html"]'); at ? nav.insertBefore(cov, at) : nav.appendChild(cov);
+  }
+  if (/(^|\/)coverage\.html$/.test(location.pathname)) cov.setAttribute("aria-current", "page");
 
   // Each link: icon + name. A name set straight on the link moves into its own span so translating the page keeps the icon.
   nav.querySelectorAll("a").forEach(a => {
@@ -56,6 +65,7 @@
     back.hidden = !(sm && document.body.classList.contains("mn-drawer"));
     btn.setAttribute("aria-expanded", String(open));
     btn.setAttribute("aria-label", ar() ? (open ? "إخفاء القائمة" : "إظهار القائمة") : (open ? "Hide menu" : "Show menu"));
+    const cl = nav.querySelector(".mn-cov"); if (cl) cl.textContent = ar() ? "التغطية" : "Coverage";
     nav.querySelectorAll("a").forEach(a => { const l = a.querySelector(".mn-tx"); if (l) a.title = l.textContent.trim(); });
   }
   btn.addEventListener("click", () => {

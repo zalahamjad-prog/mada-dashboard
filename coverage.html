@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+
+ 
+ .leaflet-pane,
+ .leaflet-tile,
+ .leaflet-marker-icon,
+ .leaflet-marker-shadow,
+ .leaflet-tile-container,
+ .leaflet-pane > svg,
+ .leaflet-pane > canvas,
+ .leaflet-zoom-box,
+ .leaflet-image-layer,
+ .leaflet-layer {
+ 	position: absolute;
+ 	left: 0;
+ 	top: 0;
+ 	}
+ .leaflet-container {
+ 	overflow: hidden;
+ 	}
+ .leaflet-tile,
+ .leaflet-marker-icon,
+ .leaflet-marker-shadow {
+ 	-webkit-user-select: none;
+ 	 -moz-user-select: none;
+ 	 user-select: none;
+ 	 -webkit-user-drag: none;
+ 	}
+ 
+ .leaflet-tile::selection {
+ 	background: transparent;
+ }
+ 
+ .leaflet-safari .leaflet-tile {
+ 	image-rendering: -webkit-optimize-contrast;
+ 	}
+ 
+ .leaflet-safari .leaflet-tile-container {
+ 	width: 1600px;
+ 	height: 1600px;
+ 	-webkit-transform-origin: 0 0;
+ 	}
+ .leaflet-marker-icon,
+ .leaflet-marker-shadow {
+ 	display: block;
+ 	}
+ 
+ 
+ .leaflet-container .leaflet-overlay-pane svg {
+ 	max-width: none !important;
+ 	max-height: none !important;
+ 	}
+ .leaflet-container .leaflet-marker-pane img,
+ .leaflet-container .leaflet-shadow-pane img,
+ .leaflet-container .leaflet-tile-pane img,
+ .leaflet-container img.leaflet-image-layer,
+ .leaflet-container .leaflet-tile {
+ 	max-width: none !important;
+ 	max-height: none !important;
+ 	width: auto;
+ 	padding: 0;
+ 	}
+ 
+ .leaflet-container img.leaflet-tile {
+ 	
+ 	mix-blend-mode: plus-lighter;
+ }
+ 
+ .leaflet-container.leaflet-touch-zoom {
+ 	-ms-touch-action: pan-x pan-y;
+ 	touch-action: pan-x pan-y;
+ 	}
+ .leaflet-container.leaflet-touch-drag {
+ 	-ms-touch-action: pinch-zoom;
+ 	
+ 	touch-action: none;
+ 	touch-action: pinch-zoom;
+ }
+ .leaflet-container.leaflet-touch-drag.leaflet-touch-zoom {
+ 	-ms-touch-action: none;
+ 	touch-action: none;
+ }
+ .leaflet-container {
+ 	-webkit-tap-highlight-color: transparent;
+ }
+ .leaflet-container a {
+ 	-webkit-tap-highlight-color: rgba(51, 181, 229, 0.4);
+ }
+ .leaflet-tile {
+ 	filter: inherit;
+ 	visibility: hidden;
+ 	}
+ .leaflet-tile-loaded {
+ 	visibility: inherit;
+ 	}
+ .leaflet-zoom-box {
+ 	width: 0;
+ 	height: 0;
+ 	-moz-box-sizing: border-box;
+ 	 box-sizing: border-box;
+ 	z-index: 800;
+ 	}
+ 
+ .leaflet-overlay-pane svg {
+ 	-moz-user-select: none;
+ 	}
+ 
+ .leaflet-pane { z-index: 400; }
+ 
+ .leaflet-tile-pane { z-index: 200; }
+ .leaflet-overlay-pane { z-index: 400; }
+ .leaflet-shadow-pane { z-index: 500; }
+ .leaflet-marker-pane { z-index: 600; }
+ .leaflet-tooltip-pane { z-index: 650; }
+ .leaflet-popup-pane { z-index: 700; }
+ 
+ .leaflet-map-pane canvas { z-index: 100; }
+ .leaflet-map-pane svg { z-index: 200; }
+ 
+ .leaflet-vml-shape {
+ 	width: 1px;
+ 	height: 1px;
+ 	}
+ .lvml {
+ 	behavior: url(#default#VML);
+ 	display: inline-block;
+ 	position: absolute;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-control {
+ 	position: relative;
+ 	z-index: 800;
+ 	pointer-events: visiblePainted; 
+ 	pointer-events: auto;
+ 	}
+ .leaflet-top,
+ .leaflet-bottom {
+ 	position: absolute;
+ 	z-index: 1000;
+ 	pointer-events: none;
+ 	}
+ .leaflet-top {
+ 	top: 0;
+ 	}
+ .leaflet-right {
+ 	right: 0;
+ 	}
+ .leaflet-bottom {
+ 	bottom: 0;
+ 	}
+ .leaflet-left {
+ 	left: 0;
+ 	}
+ .leaflet-control {
+ 	float: left;
+ 	clear: both;
+ 	}
+ .leaflet-right .leaflet-control {
+ 	float: right;
+ 	}
+ .leaflet-top .leaflet-control {
+ 	margin-top: 10px;
+ 	}
+ .leaflet-bottom .leaflet-control {
+ 	margin-bottom: 10px;
+ 	}
+ .leaflet-left .leaflet-control {
+ 	margin-left: 10px;
+ 	}
+ .leaflet-right .leaflet-control {
+ 	margin-right: 10px;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-fade-anim .leaflet-popup {
+ 	opacity: 0;
+ 	-webkit-transition: opacity 0.2s linear;
+ 	 -moz-transition: opacity 0.2s linear;
+ 	 transition: opacity 0.2s linear;
+ 	}
+ .leaflet-fade-anim .leaflet-map-pane .leaflet-popup {
+ 	opacity: 1;
+ 	}
+ .leaflet-zoom-animated {
+ 	-webkit-transform-origin: 0 0;
+ 	 -ms-transform-origin: 0 0;
+ 	 transform-origin: 0 0;
+ 	}
+ svg.leaflet-zoom-animated {
+ 	will-change: transform;
+ }
+ 
+ .leaflet-zoom-anim .leaflet-zoom-animated {
+ 	-webkit-transition: -webkit-transform 0.25s cubic-bezier(0,0,0.25,1);
+ 	 -moz-transition: -moz-transform 0.25s cubic-bezier(0,0,0.25,1);
+ 	 transition: transform 0.25s cubic-bezier(0,0,0.25,1);
+ 	}
+ .leaflet-zoom-anim .leaflet-tile,
+ .leaflet-pan-anim .leaflet-tile {
+ 	-webkit-transition: none;
+ 	 -moz-transition: none;
+ 	 transition: none;
+ 	}
+ 
+ .leaflet-zoom-anim .leaflet-zoom-hide {
+ 	visibility: hidden;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-interactive {
+ 	cursor: pointer;
+ 	}
+ .leaflet-grab {
+ 	cursor: -webkit-grab;
+ 	cursor: -moz-grab;
+ 	cursor: grab;
+ 	}
+ .leaflet-crosshair,
+ .leaflet-crosshair .leaflet-interactive {
+ 	cursor: crosshair;
+ 	}
+ .leaflet-popup-pane,
+ .leaflet-control {
+ 	cursor: auto;
+ 	}
+ .leaflet-dragging .leaflet-grab,
+ .leaflet-dragging .leaflet-grab .leaflet-interactive,
+ .leaflet-dragging .leaflet-marker-draggable {
+ 	cursor: move;
+ 	cursor: -webkit-grabbing;
+ 	cursor: -moz-grabbing;
+ 	cursor: grabbing;
+ 	}
+ 
+ 
+ .leaflet-marker-icon,
+ .leaflet-marker-shadow,
+ .leaflet-image-layer,
+ .leaflet-pane > svg path,
+ .leaflet-tile-container {
+ 	pointer-events: none;
+ 	}
+ 
+ .leaflet-marker-icon.leaflet-interactive,
+ .leaflet-image-layer.leaflet-interactive,
+ .leaflet-pane > svg path.leaflet-interactive,
+ svg.leaflet-image-layer.leaflet-interactive path {
+ 	pointer-events: visiblePainted; 
+ 	pointer-events: auto;
+ 	}
+ 
+ 
+ 
+ .leaflet-container {
+ 	background: #ddd;
+ 	outline-offset: 1px;
+ 	}
+ .leaflet-container a {
+ 	color: #0078A8;
+ 	}
+ .leaflet-zoom-box {
+ 	border: 2px dotted #38f;
+ 	background: rgba(255,255,255,0.5);
+ 	}
+ 
+ 
+ 
+ .leaflet-container {
+ 	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+ 	font-size: 12px;
+ 	font-size: 0.75rem;
+ 	line-height: 1.5;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-bar {
+ 	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
+ 	border-radius: 4px;
+ 	}
+ .leaflet-bar a {
+ 	background-color: #fff;
+ 	border-bottom: 1px solid #ccc;
+ 	width: 26px;
+ 	height: 26px;
+ 	line-height: 26px;
+ 	display: block;
+ 	text-align: center;
+ 	text-decoration: none;
+ 	color: black;
+ 	}
+ .leaflet-bar a,
+ .leaflet-control-layers-toggle {
+ 	background-position: 50% 50%;
+ 	background-repeat: no-repeat;
+ 	display: block;
+ 	}
+ .leaflet-bar a:hover,
+ .leaflet-bar a:focus {
+ 	background-color: #f4f4f4;
+ 	}
+ .leaflet-bar a:first-child {
+ 	border-top-left-radius: 4px;
+ 	border-top-right-radius: 4px;
+ 	}
+ .leaflet-bar a:last-child {
+ 	border-bottom-left-radius: 4px;
+ 	border-bottom-right-radius: 4px;
+ 	border-bottom: none;
+ 	}
+ .leaflet-bar a.leaflet-disabled {
+ 	cursor: default;
+ 	background-color: #f4f4f4;
+ 	color: #bbb;
+ 	}
+ 
+ .leaflet-touch .leaflet-bar a {
+ 	width: 30px;
+ 	height: 30px;
+ 	line-height: 30px;
+ 	}
+ .leaflet-touch .leaflet-bar a:first-child {
+ 	border-top-left-radius: 2px;
+ 	border-top-right-radius: 2px;
+ 	}
+ .leaflet-touch .leaflet-bar a:last-child {
+ 	border-bottom-left-radius: 2px;
+ 	border-bottom-right-radius: 2px;
+ 	}
+ 
+ 
+ 
+ .leaflet-control-zoom-in,
+ .leaflet-control-zoom-out {
+ 	font: bold 18px 'Lucida Console', Monaco, monospace;
+ 	text-indent: 1px;
+ 	}
+ 
+ .leaflet-touch .leaflet-control-zoom-in, .leaflet-touch .leaflet-control-zoom-out {
+ 	font-size: 22px;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-control-layers {
+ 	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+ 	background: #fff;
+ 	border-radius: 5px;
+ 	}
+ .leaflet-control-layers-toggle {
+ 	background-image: none;
+ 	width: 36px;
+ 	height: 36px;
+ 	}
+ .leaflet-retina .leaflet-control-layers-toggle {
+ 	background-image: none;
+ 	background-size: 26px 26px;
+ 	}
+ .leaflet-touch .leaflet-control-layers-toggle {
+ 	width: 44px;
+ 	height: 44px;
+ 	}
+ .leaflet-control-layers .leaflet-control-layers-list,
+ .leaflet-control-layers-expanded .leaflet-control-layers-toggle {
+ 	display: none;
+ 	}
+ .leaflet-control-layers-expanded .leaflet-control-layers-list {
+ 	display: block;
+ 	position: relative;
+ 	}
+ .leaflet-control-layers-expanded {
+ 	padding: 6px 10px 6px 6px;
+ 	color: #333;
+ 	background: #fff;
+ 	}
+ .leaflet-control-layers-scrollbar {
+ 	overflow-y: scroll;
+ 	overflow-x: hidden;
+ 	padding-right: 5px;
+ 	}
+ .leaflet-control-layers-selector {
+ 	margin-top: 2px;
+ 	position: relative;
+ 	top: 1px;
+ 	}
+ .leaflet-control-layers label {
+ 	display: block;
+ 	font-size: 13px;
+ 	font-size: 1.08333em;
+ 	}
+ .leaflet-control-layers-separator {
+ 	height: 0;
+ 	border-top: 1px solid #ddd;
+ 	margin: 5px -10px 5px -6px;
+ 	}
+ 
+ 
+ .leaflet-default-icon-path { 
+ 	background-image: none;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-container .leaflet-control-attribution {
+ 	background: #fff;
+ 	background: rgba(255, 255, 255, 0.8);
+ 	margin: 0;
+ 	}
+ .leaflet-control-attribution,
+ .leaflet-control-scale-line {
+ 	padding: 0 5px;
+ 	color: #333;
+ 	line-height: 1.4;
+ 	}
+ .leaflet-control-attribution a {
+ 	text-decoration: none;
+ 	}
+ .leaflet-control-attribution a:hover,
+ .leaflet-control-attribution a:focus {
+ 	text-decoration: underline;
+ 	}
+ .leaflet-attribution-flag {
+ 	display: inline !important;
+ 	vertical-align: baseline !important;
+ 	width: 1em;
+ 	height: 0.6669em;
+ 	}
+ .leaflet-left .leaflet-control-scale {
+ 	margin-left: 5px;
+ 	}
+ .leaflet-bottom .leaflet-control-scale {
+ 	margin-bottom: 5px;
+ 	}
+ .leaflet-control-scale-line {
+ 	border: 2px solid #777;
+ 	border-top: none;
+ 	line-height: 1.1;
+ 	padding: 2px 5px 1px;
+ 	white-space: nowrap;
+ 	-moz-box-sizing: border-box;
+ 	 box-sizing: border-box;
+ 	background: rgba(255, 255, 255, 0.8);
+ 	text-shadow: 1px 1px #fff;
+ 	}
+ .leaflet-control-scale-line:not(:first-child) {
+ 	border-top: 2px solid #777;
+ 	border-bottom: none;
+ 	margin-top: -2px;
+ 	}
+ .leaflet-control-scale-line:not(:first-child):not(:last-child) {
+ 	border-bottom: 2px solid #777;
+ 	}
+ 
+ .leaflet-touch .leaflet-control-attribution,
+ .leaflet-touch .leaflet-control-layers,
+ .leaflet-touch .leaflet-bar {
+ 	box-shadow: none;
+ 	}
+ .leaflet-touch .leaflet-control-layers,
+ .leaflet-touch .leaflet-bar {
+ 	border: 2px solid rgba(0,0,0,0.2);
+ 	background-clip: padding-box;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-popup {
+ 	position: absolute;
+ 	text-align: center;
+ 	margin-bottom: 20px;
+ 	}
+ .leaflet-popup-content-wrapper {
+ 	padding: 1px;
+ 	text-align: left;
+ 	border-radius: 12px;
+ 	}
+ .leaflet-popup-content {
+ 	margin: 13px 24px 13px 20px;
+ 	line-height: 1.3;
+ 	font-size: 13px;
+ 	font-size: 1.08333em;
+ 	min-height: 1px;
+ 	}
+ .leaflet-popup-content p {
+ 	margin: 17px 0;
+ 	margin: 1.3em 0;
+ 	}
+ .leaflet-popup-tip-container {
+ 	width: 40px;
+ 	height: 20px;
+ 	position: absolute;
+ 	left: 50%;
+ 	margin-top: -1px;
+ 	margin-left: -20px;
+ 	overflow: hidden;
+ 	pointer-events: none;
+ 	}
+ .leaflet-popup-tip {
+ 	width: 17px;
+ 	height: 17px;
+ 	padding: 1px;
+ 
+ 	margin: -10px auto 0;
+ 	pointer-events: auto;
+ 
+ 	-webkit-transform: rotate(45deg);
+ 	 -moz-transform: rotate(45deg);
+ 	 -ms-transform: rotate(45deg);
+ 	 transform: rotate(45deg);
+ 	}
+ .leaflet-popup-content-wrapper,
+ .leaflet-popup-tip {
+ 	background: white;
+ 	color: #333;
+ 	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+ 	}
+ .leaflet-container a.leaflet-popup-close-button {
+ 	position: absolute;
+ 	top: 0;
+ 	right: 0;
+ 	border: none;
+ 	text-align: center;
+ 	width: 24px;
+ 	height: 24px;
+ 	font: 16px/24px Tahoma, Verdana, sans-serif;
+ 	color: #757575;
+ 	text-decoration: none;
+ 	background: transparent;
+ 	}
+ .leaflet-container a.leaflet-popup-close-button:hover,
+ .leaflet-container a.leaflet-popup-close-button:focus {
+ 	color: #585858;
+ 	}
+ .leaflet-popup-scrolled {
+ 	overflow: auto;
+ 	}
+ 
+ .leaflet-oldie .leaflet-popup-content-wrapper {
+ 	-ms-zoom: 1;
+ 	}
+ .leaflet-oldie .leaflet-popup-tip {
+ 	width: 24px;
+ 	margin: 0 auto;
+ 
+ 	-ms-filter: "progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678)";
+ 	filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678);
+ 	}
+ 
+ .leaflet-oldie .leaflet-control-zoom,
+ .leaflet-oldie .leaflet-control-layers,
+ .leaflet-oldie .leaflet-popup-content-wrapper,
+ .leaflet-oldie .leaflet-popup-tip {
+ 	border: 1px solid #999;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-div-icon {
+ 	background: #fff;
+ 	border: 1px solid #666;
+ 	}
+ 
+ 
+ 
+ 
+ .leaflet-tooltip {
+ 	position: absolute;
+ 	padding: 6px;
+ 	background-color: #fff;
+ 	border: 1px solid #fff;
+ 	border-radius: 3px;
+ 	color: #222;
+ 	white-space: nowrap;
+ 	-webkit-user-select: none;
+ 	-moz-user-select: none;
+ 	-ms-user-select: none;
+ 	user-select: none;
+ 	pointer-events: none;
+ 	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+ 	}
+ .leaflet-tooltip.leaflet-interactive {
+ 	cursor: pointer;
+ 	pointer-events: auto;
+ 	}
+ .leaflet-tooltip-top:before,
+ .leaflet-tooltip-bottom:before,
+ .leaflet-tooltip-left:before,
+ .leaflet-tooltip-right:before {
+ 	position: absolute;
+ 	pointer-events: none;
+ 	border: 6px solid transparent;
+ 	background: transparent;
+ 	content: "";
+ 	}
+ 
+ 
+ 
+ .leaflet-tooltip-bottom {
+ 	margin-top: 6px;
+ }
+ .leaflet-tooltip-top {
+ 	margin-top: -6px;
+ }
+ .leaflet-tooltip-bottom:before,
+ .leaflet-tooltip-top:before {
+ 	left: 50%;
+ 	margin-left: -6px;
+ 	}
+ .leaflet-tooltip-top:before {
+ 	bottom: 0;
+ 	margin-bottom: -12px;
+ 	border-top-color: #fff;
+ 	}
+ .leaflet-tooltip-bottom:before {
+ 	top: 0;
+ 	margin-top: -12px;
+ 	margin-left: -6px;
+ 	border-bottom-color: #fff;
+ 	}
+ .leaflet-tooltip-left {
+ 	margin-left: -6px;
+ }
+ .leaflet-tooltip-right {
+ 	margin-left: 6px;
+ }
+ .leaflet-tooltip-left:before,
+ .leaflet-tooltip-right:before {
+ 	top: 50%;
+ 	margin-top: -6px;
+ 	}
+ .leaflet-tooltip-left:before {
+ 	right: 0;
+ 	margin-right: -12px;
+ 	border-left-color: #fff;
+ 	}
+ .leaflet-tooltip-right:before {
+ 	left: 0;
+ 	margin-left: -12px;
+ 	border-right-color: #fff;
+ 	}
+ 
+ 
+ 
+ @media print {
+ 	
+ 	.leaflet-control {
+ 		-webkit-print-color-adjust: exact;
+ 		print-color-adjust: exact;
+ 		}
+ 	}
+ 
+</style>
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Coverage ---------- */
+  .cv { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+  .cv-map { position: relative; overflow: hidden; height: calc(100vh - 210px); min-height: 520px; }
+  #map { position: absolute; inset: 0; direction: ltr; background: #eef2f3; }
+  #map.drawing { cursor: crosshair; }
+  #map.drawing .leaflet-interactive { cursor: crosshair; }
+  .cv-bar { position: absolute; top: 12px; left: 60px; right: 60px; margin-inline: auto; width: fit-content; z-index: 500; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;
+    padding: 8px 8px 8px 14px; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 24px rgba(16,35,43,.12); font-size: 13px; }
+  [dir="rtl"] .cv-bar { padding: 8px 14px 8px 8px; }
+  .cv-bar p { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+  .cv-bar p svg { width: 17px; height: 17px; color: var(--primary); }
+  .cv-bar p b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--primary-soft); color: var(--primary); font-size: 12px; display: inline-grid; place-items: center; }
+  .cv-bar .btn { height: 34px; padding: 0 12px; font-size: 13px; }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .cv-legend { position: absolute; bottom: 12px; inset-inline-start: 12px; z-index: 500; display: flex; gap: 14px; flex-wrap: wrap; padding: 7px 12px; background: rgba(255,255,255,.94); border: 1px solid var(--border); border-radius: 10px; font-size: 12px; color: #44545a; }
+  .cv-legend span { display: flex; align-items: center; gap: 6px; }
+  .cv-legend i { width: 18px; height: 10px; border-radius: 3px; }
+  .lg-on { background: rgba(11,107,92,.28); border: 1.5px solid var(--primary); }
+  .lg-off { background: rgba(107,122,128,.1); border: 1.5px dashed #8a979c; }
+  .lg-city { border: 1.5px dashed #6b7a80; }
+  .zl { background: rgba(255,255,255,.92); border: 0; border-radius: 6px; box-shadow: 0 1px 4px rgba(16,35,43,.18); padding: 2px 8px; font: 600 12px/1.5 "Tajawal", "Inter", system-ui, sans-serif; color: var(--ink); }
+  .zl:before { display: none; }
+  .zl.off { color: #8a979c; }
+  .cv-pop { font: 13px/1.5 var(--font); min-width: 150px; }
+  .cv-pop b { display: flex; align-items: center; gap: 6px; font-size: 13.5px; }
+  .cv-pop b i { width: 9px; height: 9px; border-radius: 50%; }
+  .cv-pop small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+  .cv-side { display: grid; gap: 14px; }
+  .cv-sum { padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; font-size: 13px; line-height: 1.6; }
+  .cv-sum svg { width: 20px; height: 20px; flex: none; margin-top: 1px; }
+  .cv-sum.all { background: #fef8ec; border-color: #f4dfb5; color: #7a4d06; }
+  .cv-sum.on { background: #f6fbf9; border-color: #cfe7de; color: #0f4d43; }
+  .cv-sum b { display: block; font-size: 14px; }
+  .cv-list { overflow: hidden; }
+  .cv-lh { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid #eef2f3; }
+  .cv-lh h2 { font-size: 15px; font-weight: 600; }
+  .cv-lh h2 span { color: var(--muted); font-weight: 500; }
+  .cv-lh .btn { height: 36px; padding: 0 14px; }
+  .zn-wrap { max-height: calc(100vh - 380px); min-height: 200px; overflow-y: auto; }
+  .zn { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #f1f4f5; cursor: pointer; }
+  .zn:last-child { border-bottom: 0; }
+  .zn:hover { background: #fafcfc; }
+  .zn.sel { background: var(--primary-soft); }
+  .zn-sw { width: 14px; height: 14px; border-radius: 4px; flex: none; }
+  .zn.off .zn-sw { background: #fff !important; border: 1.5px dashed #8a979c !important; }
+  .zn-tx { flex: 1; min-width: 0; }
+  .zn-tx b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .zn.off .zn-tx b { color: #6b7a80; }
+  .zn-tx small { display: block; font-size: 12px; color: var(--muted); margin-top: 1px; }
+  .zn-a { display: flex; gap: 4px; flex: none; }
+  .zn-a .ib { width: 30px; height: 30px; border: 0; background: none; border-radius: 7px; display: grid; place-items: center; cursor: pointer; color: #6b7a80; }
+  .zn-a .ib:hover { background: #fff; color: var(--ink); }
+  .zn-a .ib.red:hover { color: var(--red); }
+  .zn-a .ib svg { width: 16px; height: 16px; }
+  .sw { position: relative; width: 38px; height: 22px; flex: none; }
+  .sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+  .sw span { position: absolute; inset: 0; border-radius: 11px; background: #cfd8db; transition: background .15s; }
+  .sw span:after { content: ""; position: absolute; top: 3px; inset-inline-start: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.2); transition: transform .15s; }
+  .sw input:checked + span { background: var(--primary); }
+  .sw input:checked + span:after { transform: translateX(16px); }
+  [dir="rtl"] .sw input:checked + span:after { transform: translateX(-16px); }
+  .sw input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .zn-empty { padding: 32px 22px; text-align: center; color: var(--muted); font-size: 13px; line-height: 1.7; }
+  .zn-empty svg { width: 40px; height: 40px; color: #b9c6ca; margin-bottom: 8px; }
+  .zn-empty b { display: block; color: var(--ink); font-size: 14.5px; margin-bottom: 4px; }
+  .ov { position: fixed; inset: 0; z-index: 1000; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .ov[hidden] { display: none; }
+  .md { width: min(440px, 100%); background: #fff; border-radius: 14px; box-shadow: 0 20px 50px rgba(16,35,43,.25); padding: 22px; display: grid; gap: 14px; }
+  .md h3 { font-size: 17px; font-weight: 600; }
+  .md p.sub { font-size: 13px; color: var(--muted); margin-top: -8px; }
+  .fl { display: grid; gap: 6px; font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fl i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; font-weight: 400; color: var(--ink); }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .err { font-size: 12.5px; color: var(--red); font-weight: 400; }
+  .chk { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--ink); }
+  .md-b { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+  @media (max-width: 1100px) {
+    .cv { grid-template-columns: minmax(0, 1fr); }
+    .cv-map { height: 62vh; min-height: 380px; }
+    .zn-wrap { max-height: none; }
+  }
+  @media (max-width: 760px) {
+    .cv-bar { left: 12px; right: 12px; top: 84px; font-size: 12.5px; }
+    .ph-act, .ph-act .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span>
+      <div><h1 data-i18n="title">Coverage</h1><p data-i18n="subtitle">Draw the Jeddah districts we serve. Bookings with a location outside them show as outside our area.</p></div>
+    </div>
+  </div>
+  <div class="cv">
+    <section class="card cv-map">
+      <div id="map" aria-label="Map"></div>
+      <div class="cv-bar" id="bar" hidden></div>
+      <div class="cv-legend" id="legend"></div>
+    </section>
+    <div class="cv-side">
+      <div class="card cv-sum" id="sum"></div>
+      <section class="card cv-list">
+        <div class="cv-lh"><h2 id="listH"></h2><button type="button" class="btn btn-primary" id="addBtn"></button></div>
+        <div class="zn-wrap" id="list"></div>
+      </section>
+    </div>
+  </div>
+</main>
+<div class="ov" id="ov" hidden>
+  <form class="md" id="md" novalidate>
+    <h3 id="mdT"></h3>
+    <p class="sub" id="mdS"></p>
+    <label class="fl"><span id="lAr"></span><input class="in" id="nAr" dir="rtl" list="sugAr" maxlength="60" autocomplete="off"><span class="err" id="eAr" hidden></span></label>
+    <label class="fl"><span id="lEn"></span><input class="in" id="nEn" dir="ltr" list="sugEn" maxlength="60" autocomplete="off"></label>
+    <label class="chk"><span class="sw"><input type="checkbox" id="nOn" checked><span></span></span><span id="lOn"></span></label>
+    <div class="md-b"><button type="button" class="btn btn-ghost" id="mdX"></button><button type="submit" class="btn btn-primary" id="mdOk"></button></div>
+  </form>
+</div>
+<datalist id="sugAr"></datalist><datalist id="sugEn"></datalist>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Districts are drawn here and saved through MadaOrders.saveZones (MadaStore "mada-coverage"); orders.js decides what is covered.
+  // Shapes are drawn by hand; there is no official district boundary file yet.
+  // TODO: keep the zones in the backend and check coverage there too, so a changed browser value can't open an area.
+  const CITY = MadaOrders.COVERAGE[0];
+  // Name suggestions only; the admin can type any name.
+  const NAMES = [["الروضة", "Al Rawdah"], ["الزهراء", "Al Zahra"], ["السلامة", "Al Salamah"], ["النعيم", "Al Naeem"], ["الشاطئ", "Al Shati"], ["الحمراء", "Al Hamra"], ["الصفا", "Al Safa"], ["المروة", "Al Marwah"],
+    ["أبحر الشمالية", "Obhur Al Shamaliyah"], ["أبحر الجنوبية", "Obhur Al Janubiyah"], ["البساتين", "Al Basateen"], ["النهضة", "Al Nahdah"], ["الفيصلية", "Al Faisaliyah"], ["الأندلس", "Al Andalus"], ["الرحاب", "Al Rehab"],
+    ["المحمدية", "Al Muhammadiyah"], ["الخالدية", "Al Khalidiyah"], ["البوادي", "Al Bawadi"], ["الربوة", "Al Rabwah"], ["العزيزية", "Al Aziziyah"], ["المرجان", "Al Murjan"], ["الشرفية", "Al Sharafiyah"],
+    ["البغدادية", "Al Baghdadiyah"], ["الرويس", "Al Ruwais"], ["مشرفة", "Mushrifah"], ["النزهة", "Al Nuzhah"], ["السامر", "Al Samer"], ["السليمانية", "Al Sulimaniyah"], ["النسيم", "Al Naseem"], ["البلد", "Al Balad"]];
+  const COLORS = ["#0b6b5c", "#3b82f6", "#7c3aed", "#d97706", "#db2777", "#0891b2", "#65a30d", "#dc2626"];
+
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Coverage", subtitle: "Draw the Jeddah districts we serve. Bookings with a location outside them show as outside our area.",
+      city: "Jeddah", districts: "Districts", add: "Add District",
+      sumAllT: "All of Jeddah is covered", sumAll: "No active districts yet. Once you activate a district, only active districts are covered.",
+      sumOnT: "{n} active districts", sumOn1: "1 active district", sumOn: "Only these districts are covered. A location outside them shows as outside our area.",
+      emptyT: "No districts yet", empty: "Tap “Add District” and tap points on the map around the district.",
+      drawHint: "Tap the map around the district", points: "points", undo: "Undo", cancel: "Cancel", done: "Done", redrawHint: "Redraw: tap the map around {n}",
+      lgOn: "Covered", lgOff: "Paused", lgCity: "Jeddah outline",
+      newT: "Name the district", editT: "Edit district", newS: "This name shows in the list and on the map.",
+      nameAr: "Name (Arabic)", nameEn: "Name (English)", optional: "(optional)", activeL: "Active, we serve this district", save: "Save", close: "Cancel",
+      errAr: "Write the district name in Arabic.", errDup: "This name is used by another district.",
+      on: "Active", off: "Paused", km: "{a} km²", edit: "Edit name", redraw: "Redraw shape", del: "Delete", delQ: "Delete {n}?",
+      saved: "{n} saved", updated: "{n} updated", removed: "{n} deleted", nowOn: "{n} is active", nowOff: "{n} is paused", storeErr: "Couldn't save. Please try again.",
+      inZone: "Covered", outZone: "Outside our area", inCity: "Covered · inside Jeddah", byZone: "District: {n}", leaveQ: "Stop drawing? The points will be lost."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "التغطية", subtitle: "ارسم أحياء جدة اللي نخدمها. الحجز اللي موقعه برّاها يظهر خارج التغطية.",
+      city: "جدة", districts: "الأحياء", add: "إضافة حي",
+      sumAllT: "كل جدة مغطاة حالياً", sumAll: "ما فيه أحياء مفعّلة للحين. أول ما تفعّل حي، تصير التغطية للأحياء المفعّلة بس.",
+      sumOnT: "{n} أحياء مفعّلة", sumOn1: "حي واحد مفعّل", sumOn: "التغطية لهذي الأحياء بس. أي موقع برّاها يظهر خارج التغطية.",
+      emptyT: "ما أضفت أحياء للحين", empty: "اضغط «إضافة حي» وحدد نقاط حول الحي على الخريطة.",
+      drawHint: "اضغط على الخريطة حول حدود الحي", points: "نقاط", undo: "تراجع", cancel: "إلغاء", done: "تم", redrawHint: "إعادة رسم: حدد حدود {n}",
+      lgOn: "مغطى", lgOff: "موقوف", lgCity: "حدود جدة",
+      newT: "سمّ الحي", editT: "تعديل الحي", newS: "الاسم يظهر في القائمة وعلى الخريطة.",
+      nameAr: "الاسم (عربي)", nameEn: "الاسم (إنجليزي)", optional: "(اختياري)", activeL: "مفعّل، نخدم هذا الحي", save: "حفظ", close: "إلغاء",
+      errAr: "اكتب اسم الحي بالعربي.", errDup: "هذا الاسم مستخدم لحي ثاني.",
+      on: "مفعّل", off: "موقوف", km: "{a} كم²", edit: "تعديل الاسم", redraw: "إعادة رسم الحدود", del: "حذف", delQ: "تبي تحذف {n}؟",
+      saved: "انحفظ {n}", updated: "تم تحديث {n}", removed: "انحذف {n}", nowOn: "{n} صار مفعّل", nowOff: "{n} صار موقوف", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
+      inZone: "مغطى", outZone: "خارج التغطية", inCity: "مغطى · داخل جدة", byZone: "الحي: {n}", leaveQ: "توقف الرسم؟ النقاط اللي حددتها بتروح."
+    }
+  };
+  let current = "en", list = [], sel = null, draw = null, editing = null, tried = false;
+  const t = () => i18n[current];
+  const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const nm = z => (current === "en" && z.name.en) || z.name.ar || z.name.en;
+  const other = z => current === "en" ? (z.name.en && z.name.ar !== z.name.en ? z.name.ar : "") : z.name.en;
+  const color = z => COLORS[list.indexOf(z) % COLORS.length];
+  const num = n => n.toLocaleString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { maximumFractionDigits: 1 });
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { plus: '<path d="M12 5v14M5 12h14"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>', pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
+    shape: '<path d="M5 6l9-2 6 7-5 9-10-3z"/><circle cx="5" cy="6" r="1.6"/><circle cx="14" cy="4" r="1.6"/><circle cx="20" cy="11" r="1.6"/><circle cx="15" cy="20" r="1.6"/><circle cx="5" cy="17" r="1.6"/>',
+    check: '<path d="m5 12 5 5 9-10"/>', undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', pin: '<path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+    info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>' };
+  // Rough area for the list (flat-earth approximation is fine at district size).
+  function areaKm(poly) {
+    const k = Math.cos(poly[0][0] * Math.PI / 180) * 111.32; let a = 0;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) a += (poly[j][1] * k) * (poly[i][0] * 110.57) - (poly[i][1] * k) * (poly[j][0] * 110.57);
+    return Math.abs(a / 2);
+  }
+
+  // ---------- Map ----------
+  const map = L.map("map", { zoomControl: true, attributionControl: true }).setView(CITY.center, 11);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap" }).addTo(map);
+  L.polygon(CITY.polygon, { color: "#6b7a80", weight: 1.5, dashArray: "6 6", fill: false, interactive: false }).addTo(map);
+  // The side menu and screen size change the map box without a window resize.
+  if (window.ResizeObserver) new ResizeObserver(() => map.invalidateSize()).observe($("map"));
+  const zl = L.layerGroup().addTo(map), dl = L.layerGroup().addTo(map);
+  let shapes = {};
+  function paintMap() {
+    zl.clearLayers(); shapes = {};
+    list.forEach(z => {
+      if (draw && draw.id === z.id) return;
+      const c = color(z), p = L.polygon(z.polygon, z.active ? { color: c, weight: sel === z.id ? 3.5 : 2, fillColor: c, fillOpacity: sel === z.id ? .32 : .2 }
+        : { color: "#8a979c", weight: sel === z.id ? 3 : 1.6, dashArray: "5 5", fillColor: "#8a979c", fillOpacity: .08 });
+      p.bindTooltip(esc(nm(z)), { permanent: true, direction: "center", className: "zl" + (z.active ? "" : " off") });
+      p.on("click", e => { if (draw) return; L.DomEvent.stopPropagation(e); pick(z.id, false); check(e.latlng); });
+      p.addTo(zl); shapes[z.id] = p;
+    });
+  }
+  function paintDraft() {
+    dl.clearLayers(); if (!draw) return;
+    const pts = draw.pts;
+    if (pts.length > 1) L.polygon(pts, { color: "#0b6b5c", weight: 2.5, dashArray: "6 5", fillColor: "#0b6b5c", fillOpacity: pts.length > 2 ? .15 : 0, interactive: false }).addTo(dl);
+    pts.forEach((p, i) => {
+      const m = L.circleMarker(p, { radius: i ? 6 : 8, color: "#fff", weight: 2.5, fillColor: "#0b6b5c", fillOpacity: 1 }).addTo(dl);
+      // Tapping the first point closes the shape.
+      if (!i) m.on("click", e => { L.DomEvent.stopPropagation(e); if (draw.pts.length > 2) finish(); });
+    });
+  }
+  // Outside drawing, a tap on the map says whether that spot is covered.
+  function check(ll) {
+    const hit = MadaOrders.coverageAt(ll.lat, ll.lng), z = hit && hit.zone;
+    const html = `<div class="cv-pop"><b><i style="background:${hit ? "var(--green)" : "var(--red)"}"></i>${hit ? (z ? t().inZone : t().inCity) : t().outZone}</b>${z ? `<small>${esc(tx("byZone", { n: nm(z) }))}</small>` : ""}</div>`;
+    L.popup({ closeButton: false, autoPan: false }).setLatLng(ll).setContent(html).openOn(map);
+  }
+  map.on("click", e => {
+    if (!draw) return check(e.latlng);
+    draw.pts.push([+e.latlng.lat.toFixed(6), +e.latlng.lng.toFixed(6)]); paintDraft(); bar();
+  });
+
+  // ---------- Drawing ----------
+  function start(id) {
+    if (draw) return;
+    map.closePopup(); draw = { id: id || null, pts: [] }; sel = id || null;
+    $("map").classList.add("drawing"); paintMap(); paintDraft(); bar(); renderList();
+    if (id) { const z = list.find(x => x.id === id); map.fitBounds(L.latLngBounds(z.polygon), { padding: [60, 60], maxZoom: 15 }); }
+  }
+  function stop() { draw = null; $("map").classList.remove("drawing"); dl.clearLayers(); bar(); paintMap(); renderList(); }
+  function bar() {
+    const b = $("bar"); b.hidden = !draw; if (!draw) return;
+    const z = draw.id && list.find(x => x.id === draw.id);
+    b.innerHTML = `<p>${svg(IC.pin, 2)}${z ? esc(tx("redrawHint", { n: nm(z) })) : t().drawHint} <b>${draw.pts.length}</b></p>
+      <button type="button" class="btn btn-ghost" id="bUndo" ${draw.pts.length ? "" : "disabled"}>${svg(IC.undo, 2)}${t().undo}</button>
+      <button type="button" class="btn btn-ghost" id="bX">${t().cancel}</button>
+      <button type="button" class="btn btn-primary" id="bOk" ${draw.pts.length > 2 ? "" : "disabled"}>${svg(IC.check, 2.2)}${t().done}</button>`;
+  }
+  $("bar").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b || b.disabled) return;
+    if (b.id === "bUndo") { draw.pts.pop(); paintDraft(); bar(); }
+    else if (b.id === "bX") stop();
+    else if (b.id === "bOk") finish();
+  });
+  L.DomEvent.disableClickPropagation($("bar")); L.DomEvent.disableClickPropagation($("legend"));
+  function finish() {
+    if (!draw || draw.pts.length < 3) return;
+    if (draw.id) {
+      const z = list.find(x => x.id === draw.id); z.polygon = draw.pts; z.updatedAt = new Date().toISOString();
+      if (!store()) return; sel = z.id; stop(); toast(tx("updated", { n: nm(z) })); return;
+    }
+    openForm(null);
+  }
+
+  // ---------- Name form ----------
+  function openForm(z) {
+    editing = z; tried = false;
+    $("mdT").textContent = z ? t().editT : t().newT; $("mdS").textContent = t().newS;
+    $("lAr").textContent = t().nameAr; $("lEn").innerHTML = `${t().nameEn} <i>${t().optional}</i>`; $("lOn").textContent = t().activeL;
+    $("mdX").textContent = t().close; $("mdOk").textContent = t().save;
+    const used = new Set(list.filter(x => x !== z).map(x => x.name.ar));
+    $("sugAr").innerHTML = NAMES.filter(n => !used.has(n[0])).map(n => `<option value="${esc(n[0])}"></option>`).join("");
+    $("sugEn").innerHTML = NAMES.filter(n => !used.has(n[0])).map(n => `<option value="${esc(n[1])}"></option>`).join("");
+    $("nAr").value = z ? z.name.ar : ""; $("nEn").value = z ? z.name.en : ""; $("nOn").checked = z ? z.active : true; $("nAr").dataset.auto = $("nEn").dataset.auto = "";
+    formErr(); $("ov").hidden = false; setTimeout(() => $("nAr").focus(), 30);
+  }
+  function closeForm() { $("ov").hidden = true; if (draw && !draw.id && !editing) stop(); editing = null; }
+  function formErr() {
+    const ar = $("nAr").value.trim(), dup = ar && list.some(x => x !== editing && x.name.ar === ar), msg = !tried ? "" : !ar ? t().errAr : dup ? t().errDup : "";
+    $("eAr").hidden = !msg; $("eAr").textContent = msg; $("nAr").classList.toggle("bad", !!msg);
+    return !(!ar || dup);
+  }
+  // Picking a suggested name fills the other language.
+  // A name filled this way keeps following the other field until the admin types in it.
+  const fill = (to, v) => { const f = $(to); if (!f.value.trim() || f.value === f.dataset.auto) { f.value = v; f.dataset.auto = v; } };
+  $("nAr").addEventListener("input", () => { const n = NAMES.find(x => x[0] === $("nAr").value.trim()); fill("nEn", n ? n[1] : ""); $("nAr").dataset.auto = ""; if (tried) formErr(); });
+  $("nEn").addEventListener("input", () => { const n = NAMES.find(x => x[1].toLowerCase() === $("nEn").value.trim().toLowerCase()); fill("nAr", n ? n[0] : ""); $("nEn").dataset.auto = ""; if (tried) formErr(); });
+  $("mdX").addEventListener("click", closeForm);
+  $("ov").addEventListener("click", e => { if (e.target === $("ov")) closeForm(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("ov").hidden) closeForm(); });
+  $("md").addEventListener("submit", e => {
+    e.preventDefault(); tried = true; if (!formErr()) return $("nAr").focus();
+    const name = { ar: $("nAr").value.trim(), en: $("nEn").value.trim() }, active = $("nOn").checked;
+    let z = editing, msg;
+    if (z) { Object.assign(z, { name, active, updatedAt: new Date().toISOString() }); msg = "updated"; }
+    else { z = { id: "Z-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), city: CITY.id, name, polygon: draw.pts, active, createdAt: new Date().toISOString(), by: me ? me.name : null }; list.push(z); msg = "saved"; }
+    if (!store()) { if (msg === "saved") list.pop(); return; }
+    $("ov").hidden = true; editing = null; sel = z.id;
+    if (draw) stop(); else { paintMap(); renderList(); }
+    toast(tx(msg, { n: nm(z) }));
+  });
+
+  // ---------- List ----------
+  function store() {
+    try { MadaOrders.saveZones(list); if (MadaOrders.zones().length !== list.length) throw 0; return true; }
+    catch (e) { list = MadaOrders.zones(); toast(t().storeErr); return false; }
+  }
+  function renderList() {
+    const act = list.filter(z => z.active).length;
+    $("sum").className = "card cv-sum " + (act ? "on" : "all");
+    $("sum").innerHTML = `${svg(act ? IC.check : IC.info, 2.2)}<div><b>${act ? (act === 1 ? t().sumOn1 : tx("sumOnT", { n: act })) : t().sumAllT}</b>${act ? t().sumOn : t().sumAll}</div>`;
+    $("listH").innerHTML = `${t().districts} <span>(${list.length})</span>`;
+    $("addBtn").innerHTML = `${svg(IC.plus, 2.2)}${t().add}`; $("addBtn").disabled = !!draw;
+    $("legend").innerHTML = `<span><i class="lg-on"></i>${t().lgOn}</span><span><i class="lg-off"></i>${t().lgOff}</span><span><i class="lg-city"></i>${t().lgCity}</span>`;
+    $("list").innerHTML = !list.length ? `<div class="zn-empty">${svg(IC.map, 1.6)}<b>${t().emptyT}</b>${t().empty}</div>`
+      : list.map(z => `<div class="zn ${z.active ? "" : "off"} ${sel === z.id ? "sel" : ""}" data-id="${z.id}">
+        <span class="zn-sw" style="background:${color(z)}33;border:1.5px solid ${color(z)}"></span>
+        <div class="zn-tx"><b>${esc(nm(z))}</b><small>${[other(z), tx("km", { a: num(areaKm(z.polygon)) }), z.active ? t().on : t().off].filter(Boolean).map(x => `<bdi>${esc(x)}</bdi>`).join(" · ")}</small></div>
+        <div class="zn-a">
+          <button type="button" class="ib" data-act="edit" title="${t().edit}" aria-label="${t().edit}" ${draw ? "disabled" : ""}>${svg(IC.pen, 2)}</button>
+          <button type="button" class="ib" data-act="redraw" title="${t().redraw}" aria-label="${t().redraw}" ${draw ? "disabled" : ""}>${svg(IC.shape, 1.8)}</button>
+          <button type="button" class="ib red" data-act="del" title="${t().del}" aria-label="${t().del}" ${draw ? "disabled" : ""}>${svg(IC.trash, 2)}</button>
+        </div>
+        <label class="sw" title="${z.active ? t().on : t().off}"><input type="checkbox" data-act="on" ${z.active ? "checked" : ""} ${draw ? "disabled" : ""} aria-label="${esc(nm(z))}: ${t().on}"><span></span></label></div>`).join("");
+  }
+  function pick(id, zoom) {
+    sel = id; paintMap(); renderList();
+    if (zoom && shapes[id]) map.fitBounds(shapes[id].getBounds(), { padding: [60, 60], maxZoom: 15 });
+    const el = document.querySelector(`.zn[data-id="${id}"]`); if (el && !zoom) el.scrollIntoView({ block: "nearest" });
+  }
+  $("list").addEventListener("change", e => {
+    const i = e.target.closest('[data-act="on"]'); if (!i) return;
+    const z = list.find(x => x.id === i.closest(".zn").dataset.id); z.active = i.checked; z.updatedAt = new Date().toISOString();
+    if (!store()) return renderList();
+    paintMap(); renderList(); toast(tx(z.active ? "nowOn" : "nowOff", { n: nm(z) }));
+  });
+  $("list").addEventListener("click", e => {
+    const row = e.target.closest(".zn"); if (!row || e.target.closest(".sw")) return;
+    const z = list.find(x => x.id === row.dataset.id), b = e.target.closest("button");
+    if (!b) return draw || pick(z.id, true);
+    if (b.dataset.act === "edit") openForm(z);
+    else if (b.dataset.act === "redraw") start(z.id);
+    else if (b.dataset.act === "del") {
+      if (!confirm(tx("delQ", { n: nm(z) }))) return;
+      list = list.filter(x => x !== z); if (sel === z.id) sel = null;
+      if (!store()) return; map.closePopup(); paintMap(); renderList(); toast(tx("removed", { n: nm(z) }));
+    }
+  });
+  $("addBtn").addEventListener("click", () => start(null));
+  // Another admin saved zones (cloud sync): reload unless this page is mid-edit.
+  window.addEventListener("storage", e => { if ((!e.key || e.key === "mada-coverage") && !draw && $("ov").hidden) { list = MadaOrders.zones(); paintMap(); renderList(); } });
+  window.addEventListener("beforeunload", e => { if (draw && draw.pts.length) { e.preventDefault(); e.returnValue = ""; } });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | التغطية" : "Mada Care | Coverage";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    map.closePopup(); paintMap(); bar(); renderList();
+    if (!$("ov").hidden) openForm(editing);
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  list = MadaOrders.zones();
+  if (list.length) setTimeout(() => map.fitBounds(L.latLngBounds(list.flatMap(z => z.polygon)), { padding: [40, 40], maxZoom: 14 }), 0);
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>

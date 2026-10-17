@@ -3181,7 +3181,9 @@
     const city = $("pCity").value, t = i18n[current];
     $("pDistrict").disabled = !city;
     $("pDistrict").placeholder = city ? t.districtPh : t.districtPhNoCity;
-    $("districtList").innerHTML = city ? DISTRICTS[city][current].map(d => `<option value="${esc(d)}"></option>`).join("") : "";
+    // Districts opened on the Coverage page come first; the fixed list is the fallback.
+    const zs = city ? MadaOrders.activeZones(city).map(z => (current === "en" && z.name.en) || z.name.ar) : [];
+    $("districtList").innerHTML = city ? (zs.length ? zs : DISTRICTS[city][current]).map(d => `<option value="${esc(d)}"></option>`).join("") : "";
   }
   $("pCity").addEventListener("change", () => { $("pDistrict").value = ""; fillDistricts(); $("fCity").classList.remove("bad"); if ($("pCity").value) $("pDistrict").focus(); });
   ["pName", "pDistrict", "pId", "pPostal", "pMap", "relName"].forEach(id => $(id).addEventListener("input", e => e.target.closest(".bad")?.classList.remove("bad")));
