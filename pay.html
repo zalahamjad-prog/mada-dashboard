@@ -1389,14 +1389,15 @@
   // ---------- Maps ----------
   const hasLeaflet = () => typeof L !== "undefined" && L.map;
   // CARTO's light map (clear street names), with OpenStreetMap's own tiles as the fallback.
-  const TILES = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", TILES_OSM = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
-  const ATTR = "© OpenStreetMap · © CARTO";
+  // CARTO's basemaps now need an API key (they serve "API KEY REQUIRED" tiles), so OpenStreetMap only.
+  const TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png", TILES_OSM = TILES;
+  const ATTR = "© OpenStreetMap";
   function miniMap(loc) {
     if (!hasLeaflet() || loc.lat == null) return;
     try {
       const m = L.map("miniMap", { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false })
         .setView([loc.lat, loc.lng], 15);
-      const tl = L.tileLayer(TILES, { maxZoom: 19, subdomains: "abcd" }).addTo(m); let f = 0;
+      const tl = L.tileLayer(TILES, { maxZoom: 19 }).addTo(m); let f = 0;
       tl.on("tileerror", () => { if (++f === 3) tl.setUrl(TILES_OSM); });
     } catch (e) {}
   }
@@ -1441,7 +1442,7 @@
     if (!big) {
       big = L.map("bigMap", { zoomControl: false, attributionControl: true }).setView(start, Lc.lat != null ? 17 : 12);
       big.attributionControl.setPrefix("");
-      const layer = L.tileLayer(TILES, { maxZoom: 19, subdomains: "abcd", attribution: ATTR }).addTo(big);
+      const layer = L.tileLayer(TILES, { maxZoom: 19, attribution: ATTR }).addTo(big);
       let fails = 0, osm = false;
       layer.on("tileload", () => { tilesOk = true; $("offline").hidden = true; $("offlineNote").hidden = true; });
       layer.on("tileerror", () => { if (tilesOk) return; ++fails; if (fails >= 3 && !osm) { osm = true; fails = 0; layer.setUrl(TILES_OSM); } else if (osm && fails >= 3) offline(); });
