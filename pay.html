@@ -800,7 +800,7 @@
   .b-tabby { background: #3effa8; color: #121212; }
   .card-form { display: none; margin-top: -4px; padding: 12px 14px 14px; border-radius: 0 0 14px 14px; border: 1.5px solid var(--primary); border-top: 0; background: #f3faf8; gap: 10px; }
   .card-form.on { display: grid; }
-  .field { width: 100%; height: 44px; padding: 0 12px; border: 1px solid #d3dcdf; border-radius: 10px; background: #fff; font-size: 14px; }
+  .field { width: 100%; height: 44px; padding: 0 12px; border: 1px solid #d3dcdf; border-radius: 10px; background: #fff; font-size: 16px; }
   .field:focus { outline: 0; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); }
   .field.bad { border-color: var(--red); }
   .ltr { direction: ltr; text-align: left; }
@@ -876,7 +876,7 @@
   [dir="ltr"] .pk-search { direction: ltr; }
   .pk-sbox { display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 14px; background: #fff; border-radius: 14px; box-shadow: 0 6px 20px rgba(16,35,43,.16); }
   .pk-sbox svg { width: 21px; height: 21px; color: var(--g, #0b6b5c); flex: none; }
-  .pk-sbox input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: none; font: 600 15px/1 var(--font); color: var(--ink, #10232b); }
+  .pk-sbox input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: none; font: 600 16px/1 var(--font); color: var(--ink, #10232b); }
   .pk-sbox input::placeholder { color: #8a979c; font-weight: 500; }
   .pk-sbox input::-webkit-search-cancel-button { display: none; }
   .pk-sx { width: 30px; height: 30px; border: 0; border-radius: 50%; background: #eef2f3; color: #44545a; display: grid; place-items: center; cursor: pointer; flex: none; }
@@ -1048,6 +1048,7 @@
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="maps-config.js"></script>
 <script src="auth.js"></script>
 <script src="patients.js"></script>
 <script src="nurses.js"></script>
@@ -1393,7 +1394,9 @@
   const TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png", TILES_OSM = TILES;
   const ATTR = "© OpenStreetMap";
   function miniMap(loc) {
-    if (!hasLeaflet() || loc.lat == null) return;
+    if (loc.lat == null) return;
+    if (gOk) { try { new google.maps.Map($("miniMap"), { center: { lat: loc.lat, lng: loc.lng }, zoom: 15, disableDefaultUI: true, gestureHandling: "none", clickableIcons: false, keyboardShortcuts: false }); return; } catch (e) {} }
+    if (!hasLeaflet()) return;
     try {
       const m = L.map("miniMap", { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false })
         .setView([loc.lat, loc.lng], 15);
@@ -1423,6 +1426,36 @@
     return !out;
   }
 
+  // ---------- Google Maps (when a key is set in maps-config.js) ----------
+  // Google gives the map and the place search; without a key, or if Google fails, the page uses OpenStreetMap.
+  const GKEY = (window.MADA_MAPS && window.MADA_MAPS.googleKey) || "";
+  let gLoad = null, gOk = false;
+  function loadGoogle() {
+    if (!GKEY) return Promise.reject(new Error("no key"));
+    return gLoad || (gLoad = new Promise((res, rej) => {
+      window.__madaGm = () => { gOk = true; res(google.maps); };
+      // Wrong key, billing off or site not allowed: Google calls this; fall back to OpenStreetMap.
+      window.gm_authFailure = () => { gOk = false; rej(new Error("auth")); if (big && big.kind === "g") { big = null; $("bigMap").innerHTML = ""; if (!$("picker").hidden) openPicker(); } };
+      const sc = document.createElement("script");
+      sc.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GKEY)}&v=weekly&libraries=places&language=${lang}&region=SA&loading=async&callback=__madaGm`;
+      sc.async = true; sc.onerror = () => rej(new Error("load")); document.head.appendChild(sc);
+      setTimeout(() => { if (!gOk) rej(new Error("timeout")); }, 8000);
+    }).catch(e => { gLoad = Promise.reject(e); gLoad.catch(() => {}); throw e; }));
+  }
+  // Same calls as the Leaflet map (setView, getCenter, getZoom, invalidateSize) so the rest of the page doesn't care which one runs.
+  function googleMap(start, zoom) {
+    const g = google.maps, m = new g.Map($("bigMap"), { center: { lat: start[0], lng: start[1] }, zoom, disableDefaultUI: true, gestureHandling: "greedy", clickableIcons: false, keyboardShortcuts: false });
+    const v = { kind: "g", _userMoved: false,
+      setView: (c, z) => { m.setCenter({ lat: c[0], lng: c[1] }); if (z != null) m.setZoom(z); return v; },
+      getCenter: () => { const c = m.getCenter(); return { lat: c.lat(), lng: c.lng() }; },
+      getZoom: () => m.getZoom(), invalidateSize: () => {} };
+    m.addListener("dragstart", () => { v._userMoved = true; $("centerPin").classList.add("lift"); });
+    m.addListener("zoom_changed", () => { v._userMoved = true; });
+    m.addListener("idle", () => { $("centerPin").classList.remove("lift"); const c = v.getCenter(); if (v._userMoved || pin) setPin(c.lat, c.lng); });
+    tilesOk = true; $("offline").hidden = true; $("offlineNote").hidden = true;
+    return v;
+  }
+
   function openPicker() {
     const o = order, Lc = o.location || {}, A = o.address || {};
     $("picker").hidden = false; document.body.style.overflow = "hidden";
@@ -1438,6 +1471,9 @@
     const start = Lc.lat != null ? [Lc.lat, Lc.lng] : CITY_CENTER;
     pin = Lc.lat != null ? { lat: Lc.lat, lng: Lc.lng } : null;
     showCoords(); checkCov(); $("covCities").textContent = tx("weServe", { c: cityNames() });
+    if (!big && GKEY && !gLoad) { loadGoogle().then(() => { if (!big && !$("picker").hidden) openPicker(); }).catch(() => { if (!big && !$("picker").hidden) openPicker(); }); return; }
+    if (!big && gOk) { big = googleMap(start, Lc.lat != null ? 17 : 12); return; }
+    if (big && big.kind === "g") { big.setView(start, Lc.lat != null ? 17 : 12); big._userMoved = false; return; }
     if (!hasLeaflet()) { offline(); return; }
     if (!big) {
       big = L.map("bigMap", { zoomControl: false, attributionControl: true }).setView(start, Lc.lat != null ? 17 : 12);
@@ -1472,7 +1508,23 @@
   const resBox = html => { $("pkRes").innerHTML = html; $("pkRes").hidden = !html; };
   const resBtn = (i, name, sub, icon) => `<button type="button" role="option" data-i="${i}">${icon || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>'}<span><b><bdi>${esc(name)}</bdi></b>${sub ? `<small>${esc(sub)}</small>` : ""}</span></button>`;
   let sHits = [];
+  // Google Places (New): suggestions while typing, details only for the one picked. One session token per search keeps it billed as one session.
+  let gToken = null;
+  async function gSuggest(q) {
+    const P = google.maps.places, [lat, lng] = pin ? [pin.lat, pin.lng] : CITY_CENTER;
+    if (!gToken) gToken = new P.AutocompleteSessionToken();
+    const { suggestions } = await P.AutocompleteSuggestion.fetchAutocompleteSuggestions({ input: q, sessionToken: gToken, language: lang, region: "sa",
+      includedRegionCodes: ["sa"], locationBias: { center: { lat, lng }, radius: 30000 } });
+    return (suggestions || []).filter(x => x.placePrediction).slice(0, 7).map(x => { const pp = x.placePrediction;
+      return { g: pp, name: pp.mainText ? pp.mainText.text : pp.text.text, sub: pp.secondaryText ? pp.secondaryText.text : "" }; });
+  }
+  async function gResolve(h) {
+    const place = h.g.toPlace(); await place.fetchFields({ fields: ["location", "displayName", "addressComponents"], sessionToken: gToken }); gToken = null;
+    const comp = t => ((place.addressComponents || []).find(c => c.types.includes(t)) || {}).longText || "";
+    return { lat: place.location.lat(), lng: place.location.lng(), district: comp("sublocality_level_1") || comp("sublocality") || comp("neighborhood"), street: comp("route") };
+  }
   async function geocode(q) {
+    if (gOk) return gSuggest(q);
     const [lat, lng] = pin ? [pin.lat, pin.lng] : CITY_CENTER, uniq = a => [...new Set(a.filter(Boolean))];
     try {
       const r = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=7&lat=${lat}&lon=${lng}&bbox=${SA_BOX}`);
@@ -1503,8 +1555,9 @@
   $("pkQ").addEventListener("input", runSearch);
   $("pkQ").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); const b = $("pkRes").querySelector("button"); if (b) b.click(); } });
   $("pkQx").addEventListener("click", () => { $("pkQ").value = ""; runSearch(); $("pkQ").focus(); });
-  $("pkRes").addEventListener("click", e => {
-    const b = e.target.closest("button[data-i]"); if (!b) return; const h = sHits[+b.dataset.i]; if (!h) return;
+  $("pkRes").addEventListener("click", async e => {
+    const b = e.target.closest("button[data-i]"); if (!b) return; let h = sHits[+b.dataset.i]; if (!h) return;
+    if (h.g) { try { h = { ...h, ...(await gResolve(h)) }; } catch (er) { toast(t().searchFail); return; } }
     if (big) big._userMoved = true; setPin(h.lat, h.lng, true);
     if (big) big.setView([h.lat, h.lng], 17);
     // Fill the district field when it is still empty; the customer can edit it.
@@ -1619,6 +1672,9 @@
   })();
   let saved = "ar"; try { saved = localStorage.getItem("mada-pay-lang") || "ar"; } catch (e) {}
   setLang(saved);
+  // Load Google early when a key is set, then swap the small location map for Google's.
+  if (GKEY) loadGoogle().then(() => { const el = $("miniMap"), Lo = id && (MadaOrders.get(id) || {}).location;
+    if (el && Lo && Lo.lat != null) { const n = document.createElement("div"); n.id = "miniMap"; n.style.cssText = el.style.cssText; el.replaceWith(n); miniMap(Lo); } }).catch(() => {});
 </script>
 </body>
 </html>
