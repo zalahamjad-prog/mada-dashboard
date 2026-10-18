@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | X-ray Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Lab Results ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 14px; text-align: start; cursor: pointer; font: inherit; color: inherit; }
+  .stat:hover { border-color: #c9d4d8; }
+  .stat[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary) inset; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .stat-icon svg { width: 21px; height: 21px; }
+  .stat b { display: block; font-size: 22px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; line-height: 1.3; }
+  .s-green { background: var(--primary-soft); color: var(--primary); } .s-orange { background: var(--orange-soft); color: var(--orange); } .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); } .s-purple { background: var(--purple-soft); color: var(--purple); } .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; }
+  .search { flex: 1 1 280px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px; border: 1px solid var(--border); border-radius: 9px; background: #fff; }
+  .search svg { width: 18px; height: 18px; color: #5b6b70; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; }
+  .search:focus-within, .sel:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); outline: 0; }
+  .sel { height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13.5px; min-width: 180px; }
+  .table-wrap { overflow-x: auto; border-top: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { background: #f5f8f9; text-align: start; font-weight: 600; font-size: 12.5px; color: #44545a; padding: 12px 12px; white-space: nowrap; }
+  tbody td { padding: 12px; border-top: 1px solid #eef2f3; vertical-align: top; }
+  tbody tr:hover td { background: #fbfdfc; }
+  td b.pn, td a.pl { display: block; color: #15304a; font-weight: 600; text-decoration: none; }
+  td a.pl:hover { color: #0f766e; text-decoration: underline; }
+  a.fl { color: #0f766e; font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.fl:hover { border-bottom-style: solid; }
+  td.c-who small { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 3px; }
+  td.c-who a.fl { display: inline-block; background: #e6f4f1; border: 1px solid #b7e0d6; border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+  td.c-who a.fl:hover { background: #0f766e; color: #fff; border-color: #0f766e; }
+  td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+  td .num { white-space: nowrap; }
+  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; }
+  .dr small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .tests { display: flex; flex-wrap: wrap; gap: 4px; max-width: 260px; }
+  .exam { font-weight: 600; color: #15304a; min-width: 110px; max-width: 180px; display: block; }
+  td small { max-width: 180px; }
+  .dr .q { max-width: 190px !important; }
+  .tc { font-size: 11px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 2px 7px; border-radius: 6px; direction: ltr; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-orange { background: var(--orange-soft); color: #b45309; } .p-red { background: var(--red-soft); color: #b91c1c; } .p-blue { background: var(--blue-soft); color: #1d4ed8; }
+  .p-green { background: var(--green-soft); color: var(--green); } .p-purple { background: var(--purple-soft); color: var(--purple); } .p-gray { background: #f0f3f4; color: #5b6b70; }
+  .p-crit { background: #b42318; color: #fff; }
+  .due { font-weight: 600; color: #b45309; white-space: nowrap; } .due.late { color: #b91c1c; } .due.ok { color: var(--green); }
+  .dr { min-width: 150px; }
+  .dr b { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+  .dr b svg { width: 15px; height: 15px; }
+  .dr .tl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .dr .tl li { display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .dr .tl b { font-size: 11.5px; font-weight: 600; color: #15304a; display: inline; }
+  .dr .tl em { font-style: normal; color: #6b7a80; }
+  .dr .took { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .dr .took svg { width: 13px; height: 13px; }
+  .dr .took.ok { background: #e7f6ec; color: #15803d; } .dr .took.wait { background: #fff4e5; color: #b45309; }
+  .stat small.avg { color: #15803d; font-weight: 700; margin-top: 3px; }
+  .dr .q { margin-top: 4px; font-size: 12px; color: #44545a; font-style: italic; max-width: 240px; }
+  .d-no { color: #b91c1c; } .d-seen { color: #b45309; } .d-ok { color: var(--green); } .d-na { color: var(--muted); }
+  .acts { display: flex; gap: 6px; justify-content: flex-end; }
+  .ib { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #d9e1e3; background: #fff; display: grid; place-items: center; cursor: pointer; color: #15304a; text-decoration: none; }
+  .ib:hover { background: #f5f8f8; }
+  .ib svg { width: 17px; height: 17px; }
+  .ib[disabled] { opacity: .35; cursor: default; }
+  .none { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+  .ov { position: fixed; inset: 0; z-index: 60; background: rgba(16,35,43,.42); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .dlg { position: relative; width: 100%; max-width: 760px; background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.18); margin: auto; padding: 22px 22px 18px; }
+  .x { position: absolute; top: 14px; inset-inline-end: 14px; width: 34px; height: 34px; border: 0; background: none; border-radius: 8px; cursor: pointer; display: grid; place-items: center; color: #44545a; }
+  .x:hover { background: #f1f4f5; } .x svg { width: 20px; height: 20px; }
+  .dlg h3 { font-size: 19px; color: #15304a; padding-inline-end: 36px; }
+  .dlg .sub { font-size: 13px; color: var(--muted); margin: 4px 0 14px; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-size: 13px; }
+  .kv span { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 3px; }
+  .rt { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .rt h4 { display: flex; gap: 8px; align-items: center; padding: 9px 12px; background: #f5f8f9; font-size: 13.5px; color: #15304a; }
+  .rt td, .rt th { padding: 8px 12px; }
+  .rt th { font-size: 11.5px; color: var(--muted); font-weight: 600; text-align: start; }
+  .fl { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #e3f4ee; color: #0f6b52; }
+  .fl.low, .fl.high { background: #fff1e0; color: #a4520a; } .fl.critical { background: #b42318; color: #fff; }
+  .df { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .df a { text-decoration: none; }
+  @media (max-width: 1180px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .user-meta { display: none; } }
+  @media (max-width: 980px) {
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-who, .table-wrap td.c-tests, .table-wrap td.c-dr { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { grid-column: 1 / -1; }
+    .acts { justify-content: stretch; } .acts .ib { flex: 1; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .ph-icon { width: 40px; height: 40px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .sel { flex: 1 1 100%; }
+    .kv { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .dlg { padding: 18px 14px 14px; }
+    .rt .hm { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/></svg></span>
+      <div><h1 data-i18n="title">X-ray Results</h1><p data-i18n="subtitle">Every imaging order: what is still pending, which reports are in, and what the doctor did with them.</p></div>
+    </div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <section class="card">
+    <div class="filters">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="q" data-i18n-ph="searchPh" data-i18n-aria="search" placeholder="Search" autocomplete="off"></label>
+      <select class="sel" id="src" data-i18n-aria="srcLbl"></select>
+    </div>
+    <div class="table-wrap"><table><thead><tr id="thead"></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="none" id="none" hidden></div>
+  </section>
+</main>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="dT"><div class="dlg" id="dlg"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="medical.js"></script>
+<script src="patients.js"></script>
+<script src="lab-report.js"></script>
+<script src="rad-report.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // X-ray Results: every imaging item of every medical request (medical.js, type "radiology"), the same view as Lab Results.
+  // Steps: ordered → scheduled { center, date } → resulted { file: the imaging center's report, result: summary } → reviewed { docNote }.
+  // The doctor's follow-up: opened (item.docSeen, set on doctor-orders-list.html), a note only (item.docNotes) or approved with the comment.
+  const i18n = {
+    en: { tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "X-ray Results", subtitle: "Every imaging order: what is still pending, which reports are in, and what the doctor did with them.", searchPh: "Patient, file number, booking number, exam, center or doctor", search: "Search",
+      srcLbl: "Source", srcAll: "All sources", srcDoc: "Doctor's orders", srcStaff: "Added by staff",
+      k_all: "All exams", k_pending: "Pending", k_late: "Late", k_out: "Reports in", k_doc: "Waiting for the doctor", k_ok: "Doctor approved", avgOk: "Avg. {d} to approve", tl_out: "Report in", tl_seen: "Opened", tl_ok: "Approved", tl_took: "Doctor took {d}", tl_wait: "Waiting {d}", tl_after: "after {d}",
+      cPatient: "Patient", openFile: "Open patient file", cSource: "Source", cExam: "Exam", cCenter: "Imaging center", cDate: "Exam date", cRep: "Report", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
+      docOrder: "Doctor's order", staffOrder: "Added by staff",
+      st_book: "Not booked", st_waiting: "Waiting report", st_late: "Late, no report", st_review: "With the doctor", st_reviewed: "Doctor approved", st_rejected: "Not approved",
+      inAt: "In {t}", noRepYet: "Not in yet",
+      d_none: "Not opened yet", d_seen: "Opened, no action yet", d_ok: "Approved", d_note: "Note only", d_wait: "Report not in yet",
+      d: "{n}d", h: "{n}h", m: "{n}m", today: "today", ytd: "yesterday", tmr: "tomorrow",
+      view: "View result", report: "Imaging center report", noRep: "No report attached", open: "Open request", close: "Close",
+      dT: "X-ray Result", attBy: "Attached by", sum: "Report summary", docNote: "Doctor's comment", noRes: "The imaging center's report is not in yet.", doctor: "Doctor", reason: "Clinical details",
+      none: "No imaging orders here", noneSub: "Imaging the doctors order shows here.", noneQ: "No exams match your search." },
+    ar: { tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "نتائج الأشعة", subtitle: "كل طلبات الأشعة: اللي باقي، واللي وصل تقريرها، ووش سوى الطبيب فيها.", searchPh: "المريض أو رقم الملف أو رقم الحجز أو الفحص أو المركز أو الطبيب", search: "بحث",
+      srcLbl: "المصدر", srcAll: "كل المصادر", srcDoc: "طلبات الأطباء", srcStaff: "أضافها الموظفين",
+      k_all: "كل الأشعة", k_pending: "قيد الانتظار", k_late: "متأخرة", k_out: "وصل التقرير", k_doc: "بانتظار الطبيب", k_ok: "اعتمدها الطبيب", avgOk: "المتوسط {d} للاعتماد", tl_out: "وصل التقرير", tl_seen: "فتحها", tl_ok: "اعتمدها", tl_took: "أخذ الطبيب {d}", tl_wait: "صار له {d} ينتظر", tl_after: "بعد {d}",
+      cPatient: "المريض", openFile: "فتح ملف المريض", cSource: "المصدر", cExam: "الفحص", cCenter: "مركز الأشعة", cDate: "تاريخ الفحص", cRep: "التقرير", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
+      docOrder: "طلب طبيب", staffOrder: "أضافها الموظفين",
+      st_book: "ما انحجز", st_waiting: "بانتظار التقرير", st_late: "متأخر، ما وصل التقرير", st_review: "عند الطبيب", st_reviewed: "اعتمدها الطبيب", st_rejected: "ما انعتمدت",
+      inAt: "وصل {t}", noRepYet: "ما وصل للحين",
+      d_none: "ما فتحها للحين", d_seen: "فتحها وما سوى إجراء", d_ok: "اعتمدها", d_note: "كتب ملاحظة فقط", d_wait: "التقرير ما وصل",
+      d: "{n} يوم", h: "{n} س", m: "{n} د", today: "اليوم", ytd: "أمس", tmr: "بكرة",
+      view: "عرض النتيجة", report: "تقرير مركز الأشعة", noRep: "ما انرفق التقرير", open: "فتح الطلب", close: "إغلاق",
+      dT: "نتيجة الأشعة", attBy: "أرفقه", sum: "ملخص التقرير", docNote: "تعليق الطبيب", noRes: "تقرير مركز الأشعة ما وصل للحين.", doctor: "الطبيب", reason: "المعلومات السريرية",
+      none: "ما فيه طلبات أشعة هنا", noneSub: "الأشعة اللي يطلبها الأطباء تطلع هنا.", noneQ: "ما فيه أشعة تطابق البحث." }
+  };
+  let current = "en", kind = "all";
+  const t = () => i18n[current], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n] != null ? v[n] : "");
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const S = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { all: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/>', pending: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', late: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>',
+    out: '<path d="m5 12 5 5 9-10"/>', doc: '<circle cx="12" cy="7" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/>', ok: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>',
+    eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', file: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', go: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>' };
+  const KS = [["all", "s-green"], ["pending", "s-orange"], ["late", "s-red"], ["out", "s-blue"], ["doc", "s-purple"], ["ok", "s-green"]];
+  const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  function when(iso) {
+    if (!iso) return ""; const d = new Date(iso), a = new Date(d), b = new Date(); a.setHours(0, 0, 0, 0); b.setHours(0, 0, 0, 0);
+    const diff = Math.round((a - b) / 864e5), day = diff === 0 ? t().today : diff === -1 ? t().ytd : diff === 1 ? t().tmr : d.toLocaleDateString(loc(), { day: "numeric", month: "short" });
+    return day + " " + d.toLocaleTimeString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { hour: "numeric", minute: "2-digit" });
+  }
+  const dayTxt = ymd => { if (!ymd) return ""; const [y, m, d] = ymd.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString(loc(), { day: "numeric", month: "short", year: "numeric" }); };
+  function dur(ms) {
+    const m = Math.max(1, Math.round(Math.abs(ms) / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+    return d ? [tx("d", { n: d }), h ? tx("h", { n: h }) : ""].filter(Boolean).join(" ") : h ? [tx("h", { n: h }), mm ? tx("m", { n: mm }) : ""].filter(Boolean).join(" ") : tx("m", { n: mm });
+  }
+
+  // One card per imaging item.
+  const RS = MadaMedical.STEPS.radiology, logOf = (it, k) => [...(it.log || [])].reverse().find(l => RS[l.step] === k) || null;
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  function cards() {
+    const out = [];
+    MadaMedical.all().filter(r => r.status !== "cancelled").forEach(r => r.items.filter(it => it.type === "radiology").forEach(it => {
+      const sc = logOf(it, "scheduled"), rs = logOf(it, "resulted"), rv = logOf(it, "reviewed"), scd = (sc && sc.data) || {}, rsd = (rs && rs.data) || {};
+      const d = MadaOrders.DOCTORS.find(x => x.id === r.doctorId), o = MadaOrders.get(r.orderId) || {};
+      const c = { key: r.id + "|" + it.id, r, it, mrn: r.mrn || o.mrn, patient: r.patient || o.patient, bookingId: r.bookingId || o.bookingId, mobile: r.mobile || o.mobile,
+        kind: r.source === "doctor" && !it.addedBy ? "doctor" : "staff", doctor: d ? d.name : r.byDoctor, exam: it.title, why: it.details,
+        center: scd.center || "", examDate: scd.date || "", repAt: rs ? rs.at : null, repBy: rs ? rs.by : null, file: it.report || rsd.file || null, summary: rsd.result || "",
+        docSeen: it.docSeen || null, review: rv ? { at: rv.at, by: rv.by, note: rv.data && rv.data.docNote } : null, docNotes: it.docNotes || [], rejected: !!it.rejected };
+      c.sent = !!rs;
+      c.status = c.rejected ? "rejected" : c.review ? "reviewed" : c.sent ? "review" : !sc ? "book" : c.examDate && c.examDate < today() ? "late" : "waiting";
+      out.push(c);
+    }));
+    return out.sort((a, b) => String(b.repAt || b.r.createdAt || "").localeCompare(String(a.repAt || a.r.createdAt || "")));
+  }
+  const IN = { all: () => true, pending: c => ["book", "waiting"].includes(c.status), late: c => c.status === "late", out: c => c.sent, doc: c => c.status === "review", ok: c => c.status === "reviewed" };
+  const PILL = { book: "p-orange", waiting: "p-orange", late: "p-red", review: "p-purple", reviewed: "p-green", rejected: "p-red" };
+  function repHtml(c) {
+    if (c.sent) return `<span class="due ok">${esc(tx("inAt", { t: when(c.repAt) }))}</span>${c.repBy ? `<small>${esc(T(c.repBy))}</small>` : ""}`;
+    return `<span class="due ${c.status === "late" ? "late" : ""}" style="${c.status === "late" ? "" : "color:var(--muted)"}">${t().noRepYet}</span>`;
+  }
+  // How long the doctor took: report in, opened, approved, and the time from the report to approval (or the wait so far).
+  const took = c => c.review && c.repAt ? new Date(c.review.at) - new Date(c.repAt) : null;
+  function tlHtml(c) {
+    const out = c.repAt, row = (k, at, extra) => `<li><span>${t()[k]}</span><b class="num">${esc(when(at))}</b>${extra ? `<em>${esc(extra)}</em>` : ""}</li>`;
+    const after = at => out ? tx("tl_after", { d: dur(new Date(at) - new Date(out)) }) : "";
+    const lines = [row("tl_out", out), c.docSeen ? row("tl_seen", c.docSeen.at, after(c.docSeen.at)) : "", c.review ? row("tl_ok", c.review.at, after(c.review.at)) : ""].join("");
+    const chip = c.review ? `<span class="took ok">${S(I.pending, 2.2)}${esc(tx("tl_took", { d: dur(took(c)) }))}</span>`
+      : `<span class="took wait">${S(I.pending, 2.2)}${esc(tx("tl_wait", { d: dur(Date.now() - new Date(out)) }))}</span>`;
+    return `<ul class="tl">${lines}</ul>${chip}`;
+  }
+  function drHtml(c) {
+    const name = c.doctor ? `<small>${esc(T(c.doctor))}</small>` : "";
+    if (!c.sent) return `<div class="dr"><b class="d-na">${t().d_wait}</b>${name}</div>`;
+    let h;
+    if (c.review) h = `<b class="d-ok">${S(I.out, 2.4)}${t().d_ok}</b><small>${esc(T(c.review.by))}</small>${c.review.note ? `<div class="q">“${esc(c.review.note)}”</div>` : ""}`;
+    else if (c.docNotes.length) { const n = c.docNotes[c.docNotes.length - 1]; h = `<b class="d-seen">${S(I.doc)}${t().d_note}</b><small>${esc(when(n.at))}</small><div class="q">“${esc(n.text)}”</div>`; }
+    else if (c.docSeen) h = `<b class="d-seen">${S(I.eye)}${t().d_seen}</b>`;
+    else h = `<b class="d-no">${S(I.late, 2)}${t().d_none}</b>`;
+    return `<div class="dr">${h}${tlHtml(c)}</div>`;
+  }
+  function match(c, q) {
+    if (!q) return true;
+    return [T(c.patient), c.patient && c.patient.en, c.patient && c.patient.ar, c.mrn, c.bookingId, c.r.id, c.mobile, T(c.doctor), c.exam && c.exam.en, c.exam && c.exam.ar, c.center].join(" ").toLowerCase().includes(q.toLowerCase());
+  }
+  const fileLink = (c, cls, txt) => c.mrn ? `<a class="${cls}" href="patient.html?file=${encodeURIComponent(c.mrn)}" title="${t().openFile}">${esc(txt)}</a>` : `<b class="pn">${esc(txt)}</b>`;
+  const openUrl = c => `medical-request.html?id=${encodeURIComponent(c.r.id)}#item-${encodeURIComponent(c.it.id)}`;
+  function render() {
+    const list = cards(), q = $("q").value.trim(), src = $("src").value;
+    const tk = list.map(took).filter(x => x != null), avg = tk.length ? tk.reduce((a, b) => a + b, 0) / tk.length : null;
+    $("stats").innerHTML = KS.map(([k, cls]) => `<button type="button" class="card stat" data-k="${k}" aria-pressed="${kind === k}"><span class="stat-icon ${cls}">${S(I[k], 2)}</span><span><b>${list.filter(IN[k]).length}</b><small>${t()["k_" + k]}</small>${k === "ok" && avg != null ? `<small class="avg">${esc(tx("avgOk", { d: dur(avg) }))}</small>` : ""}</span></button>`).join("");
+    $("thead").innerHTML = ["cPatient", "cExam", "cCenter", "cRep", "cStatus", "cDoctor", "cActs"].map(k => `<th>${t()[k]}</th>`).join("");
+    const rows = list.filter(c => IN[kind](c) && (!src || c.kind === src) && match(c, q));
+    $("rows").innerHTML = rows.map(c => `<tr>
+        <td class="c-who" data-l="${t().cPatient}">${c.mrn ? fileLink(c, "pn pl", T(c.patient)) : `<b class="pn">${esc(T(c.patient))}</b>`}<small>${c.mrn ? fileLink(c, "num fl", c.mrn) : ""}${c.bookingId ? `<span class="num">${esc(c.bookingId)}</span>` : ""}</small></td>
+        <td data-l="${t().cExam}"><span class="exam">${esc(T(c.exam))}</span><small>${c.kind === "doctor" ? t().docOrder : t().staffOrder}${c.doctor ? " · " + esc(T(c.doctor)) : ""}</small></td>
+        <td class="c-taken" data-l="${t().cCenter}">${esc(c.center || "—")}${c.examDate ? `<small>${esc(t().cDate)}: ${esc(dayTxt(c.examDate))}</small>` : ""}</td>
+        <td data-l="${t().cRep}">${repHtml(c)}</td>
+        <td data-l="${t().cStatus}"><span class="pill ${PILL[c.status]}">${t()["st_" + c.status]}</span></td>
+        <td class="c-dr" data-l="${t().cDoctor}">${drHtml(c)}</td>
+        <td class="c-acts"><div class="acts"><button type="button" class="ib" data-view="${esc(c.key)}" title="${t().view}" aria-label="${t().view}">${S(I.eye)}</button>
+          <button type="button" class="ib" ${c.file ? `data-rf="${esc(c.key)}" title="${t().report}" aria-label="${t().report}"` : `disabled title="${t().noRep}" aria-label="${t().noRep}"`}>${S(I.file)}</button>
+          <a class="ib" href="${openUrl(c)}" title="${t().open}" aria-label="${t().open}">${S(I.go)}</a></div></td></tr>`).join("");
+    $("none").hidden = !!rows.length;
+    $("none").innerHTML = `<b>${t().none}</b>${q ? t().noneQ : t().noneSub}`;
+  }
+  // The imaging center's report, opened in a new tab (a data: link cannot be opened directly).
+  function openRep(c) {
+    const url = c && c.file && MadaStore.get(c.file.key); if (!url) return;
+    const bin = atob(url.split(",")[1]), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    window.open(URL.createObjectURL(new Blob([buf], { type: c.file.type || "application/octet-stream" })), "_blank");
+  }
+  function openView(key) {
+    const c = cards().find(x => x.key === key); if (!c) return;
+    const box = (k, v) => v ? `<div class="rt"><h4>${esc(t()[k])}</h4><p style="padding:10px 12px;white-space:pre-line" dir="auto">${esc(v)}</p></div>` : "";
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
+      <h3 id="dT">${t().dT}</h3><p class="sub">${esc(T(c.patient))} · ${c.mrn ? `<a class="num fl" href="patient.html?file=${encodeURIComponent(c.mrn)}">${esc(c.mrn)}</a>` : ""}</p>
+      <div class="kv"><div><span>${t().cExam}</span>${esc(T(c.exam))}</div><div><span>${t().cCenter}</span>${esc(c.center || "—")}</div><div><span>${t().cDate}</span>${esc(dayTxt(c.examDate) || "—")}</div>
+        <div><span>${t().cRep}</span>${esc(when(c.repAt) || "—")}</div><div><span>${t().attBy}</span>${esc(T(c.repBy) || "—")}</div><div><span>${t().doctor}</span>${esc(T(c.doctor) || "—")}</div>
+        <div style="grid-column:1/-1"><span>${t().cDoctor}</span>${drHtml(c)}</div></div>
+      ${T(c.why) ? box("reason", T(c.why)) : ""}${c.sent ? box("sum", c.summary) + box("docNote", c.review && c.review.note) : `<p class="sub">${t().noRes}</p>`}
+      <div class="df">${MadaRadReport.ready(c.it) ? MadaRadReport.buttons(c.r, c.it, current) : ""}${c.file ? `<button type="button" class="btn btn-ghost" data-rf="${esc(c.key)}">${S(I.file)} ${t().report}</button>` : ""}<a class="btn btn-ghost" href="${openUrl(c)}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
+    $("ov").hidden = false; $("dlg").querySelector(".x").focus();
+  }
+  document.addEventListener("click", e => { const f = e.target.closest("[data-rf]"); if (f) openRep(cards().find(x => x.key === f.dataset.rf)); });
+  $("rows").addEventListener("click", e => { const v = e.target.closest("[data-view]"); if (v) openView(v.dataset.view); });
+  $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) $("ov").hidden = true; });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") $("ov").hidden = true; });
+  $("stats").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (b) { kind = b.dataset.k; render(); } });
+  $("q").addEventListener("input", render);
+  $("src").addEventListener("change", render);
+  window.addEventListener("storage", e => { if (!e.key || ["mada-medical", "mada-orders"].includes(e.key)) render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+  window.toast = toast; // the patient imaging report button (rad-report.js) shows its progress here
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    const sv = $("src").value; $("src").innerHTML = [["", "srcAll"], ["doctor", "srcDoc"], ["staff", "srcStaff"]].map(([v, k]) => `<option value="${v}">${t()[k]}</option>`).join(""); $("src").value = sv || "";
+    document.title = lang === "ar" ? "مدى كير | نتائج الأشعة" : "Mada Care | X-ray Results";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+  setInterval(render, 60000);
+</script>
+</body>
+</html>
