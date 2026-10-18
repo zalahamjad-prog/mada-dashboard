@@ -99,7 +99,13 @@
   thead th { background: #f5f8f9; text-align: start; font-weight: 600; font-size: 12.5px; color: #44545a; padding: 12px 12px; white-space: nowrap; }
   tbody td { padding: 12px; border-top: 1px solid #eef2f3; vertical-align: top; }
   tbody tr:hover td { background: #fbfdfc; }
-  td b.pn { display: block; color: #15304a; font-weight: 600; }
+  td b.pn, td a.pl { display: block; color: #15304a; font-weight: 600; text-decoration: none; }
+  td a.pl:hover { color: #0f766e; text-decoration: underline; }
+  a.fl { color: #0f766e; font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.fl:hover { border-bottom-style: solid; }
+  td.c-who small { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 3px; }
+  td.c-who a.fl { display: inline-block; background: #e6f4f1; border: 1px solid #b7e0d6; border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+  td.c-who a.fl:hover { background: #0f766e; color: #fff; border-color: #0f766e; }
   td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
   .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
   td .num { white-space: nowrap; }
@@ -250,7 +256,7 @@
       title: "Lab Results", subtitle: "Every lab test: what is still pending, what is out, and what the doctor did with it.", searchPh: "Patient, file number, booking number, test or doctor", search: "Search",
       srcLbl: "Source", srcAll: "All sources", srcDoc: "Doctor's orders", srcPat: "Patient bookings",
       k_all: "All tests", k_pending: "Pending", k_late: "Late", k_out: "Results out", k_doc: "Waiting for the doctor", k_ok: "Doctor approved",
-      cPatient: "Patient", cSource: "Source", cTests: "Tests", cNurse: "Nurse", cTaken: "Sample taken", cDue: "Result time", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
+      cPatient: "Patient", openFile: "Open patient file", cSource: "Source", cTests: "Tests", cNurse: "Nurse", cTaken: "Sample taken", cDue: "Result time", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
       patOrder: "Patient booking", docOrder: "Doctor's order", booking: "Booking",
       st_collect: "Sample time not set", st_waiting: "Waiting for results", st_due: "Late", st_ready: "Entered, not sent", st_review: "With the doctor", st_reviewed: "Doctor approved", st_team: "Sent to care team", st_teamSeen: "Care team opened",
       dueIn: "In {d}", late: "{d} late", outAt: "Out {t}", noHours: "Not set",
@@ -265,7 +271,7 @@
       title: "نتائج التحاليل", subtitle: "كل التحاليل: اللي باقي، واللي طلعت، ووش سوى الطبيب فيها.", searchPh: "المريض أو رقم الملف أو رقم الحجز أو التحليل أو الطبيب", search: "بحث",
       srcLbl: "المصدر", srcAll: "كل المصادر", srcDoc: "طلبات الأطباء", srcPat: "حجوزات المرضى",
       k_all: "كل التحاليل", k_pending: "قيد الانتظار", k_late: "متأخرة", k_out: "طلعت النتائج", k_doc: "بانتظار الطبيب", k_ok: "اعتمدها الطبيب",
-      cPatient: "المريض", cSource: "المصدر", cTests: "التحاليل", cNurse: "الممرضة", cTaken: "وقت السحب", cDue: "وقت النتيجة", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
+      cPatient: "المريض", openFile: "فتح ملف المريض", cSource: "المصدر", cTests: "التحاليل", cNurse: "الممرضة", cTaken: "وقت السحب", cDue: "وقت النتيجة", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
       patOrder: "حجز مريض", docOrder: "طلب طبيب", booking: "الحجز",
       st_collect: "وقت السحب غير محدد", st_waiting: "بانتظار النتائج", st_due: "متأخرة", st_ready: "مدخلة وما انرسلت", st_review: "عند الطبيب", st_reviewed: "اعتمدها الطبيب", st_team: "انرسلت لفريق الرعاية", st_teamSeen: "فتحها فريق الرعاية",
       dueIn: "باقي {d}", late: "متأخرة {d}", outAt: "طلعت {t}", noHours: "غير محدد",
@@ -336,7 +342,7 @@
     $("rows").innerHTML = rows.map(c => { const st = stOf(c), fl = c.sent ? MadaSamples.flag(c) : null;
       const open = c.kind === "doctor" ? `lab-test.html?id=${encodeURIComponent(c.r.id)}&item=${encodeURIComponent(c.it.id)}` : `request-details.html?id=${encodeURIComponent(c.o.id)}`;
       return `<tr>
-        <td class="c-who" data-l="${t().cPatient}"><b class="pn">${esc(T(c.o.patient))}</b><small><span class="num">${esc(c.o.mrn || "")}</span>${c.o.bookingId ? ` · <span class="num">${esc(c.o.bookingId)}</span>` : ""}</small></td>
+        <td class="c-who" data-l="${t().cPatient}">${c.o.mrn ? `<a class="pn pl" href="patient.html?file=${encodeURIComponent(c.o.mrn)}" title="${t().openFile}">${esc(T(c.o.patient))}</a>` : `<b class="pn">${esc(T(c.o.patient))}</b>`}<small>${c.o.mrn ? `<a class="num fl" href="patient.html?file=${encodeURIComponent(c.o.mrn)}" title="${t().openFile}">${esc(c.o.mrn)}</a>` : ""}${c.o.bookingId ? `<span class="num">${esc(c.o.bookingId)}</span>` : ""}</small></td>
         <td data-l="${t().cSource}">${c.kind === "doctor" ? `${t().docOrder}<small>${esc(T(c.doctor) || "")}</small>` : t().patOrder}</td>
         <td class="c-tests" data-l="${t().cTests}"><div class="tests">${c.tests.map(x => `<span class="tc" title="${esc(T(x.name))}">${esc(x.code)}</span>`).join("")}</div></td>
         <td class="c-taken" data-l="${t().cTaken}">${c.collectedAt ? esc(when(c.collectedAt)) : "—"}${c.nurse ? `<small>${esc(T(c.nurse))}</small>` : ""}</td>
@@ -358,7 +364,7 @@
         : `<p style="padding:10px 12px;white-space:pre-line">${esc((x.entry || {}).text)}</p>`}</div>`).join("") : `<p class="sub">${t().noRes}</p>`;
     const open = c.kind === "doctor" ? `lab-test.html?id=${encodeURIComponent(c.r.id)}&item=${encodeURIComponent(c.it.id)}` : `request-details.html?id=${encodeURIComponent(c.o.id)}`;
     $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
-      <h3 id="dT">${t().dT}</h3><p class="sub">${esc(T(c.o.patient))} · <span class="num">${esc(c.o.mrn || "")}</span></p>
+      <h3 id="dT">${t().dT}</h3><p class="sub">${esc(T(c.o.patient))} · ${c.o.mrn ? `<a class="num fl" href="patient.html?file=${encodeURIComponent(c.o.mrn)}">${esc(c.o.mrn)}</a>` : ""}</p>
       <div class="kv"><div><span>${t().cSource}</span>${c.kind === "doctor" ? t().docOrder : t().patOrder}</div><div><span>${t().cNurse}</span>${esc(T(c.nurse) || "—")}</div><div><span>${t().cTaken}</span>${esc(when(c.collectedAt) || "—")}</div>
         <div><span>${t().sentAt}</span>${esc(when(c.sentAt) || "—")}</div><div><span>${t().doctor}</span>${esc(T(c.doctor) || "—")}</div><div><span>${t().cDoctor}</span>${drHtml(c)}</div></div>
       ${res}
