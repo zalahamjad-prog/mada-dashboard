@@ -429,6 +429,7 @@
 <script src="lab-report.js"></script>
 <script src="providers.js"></script>
 <script src="rad-report.js"></script>
+<script src="visit-book.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -583,7 +584,7 @@
   // A service the doctor ordered (nursing, IV, physiotherapy, doctor visit): the operations team calls the patient, books a time and
   // assigns a nurse or doctor. That creates the visit (MadaOrders.book), paid after the service; it shows in the assignee's visits.
   const VISIT_FORM = { booked: [{ k: "date", ty: "date", req: 1 }, { k: "time", ty: "time", req: 1 }, { k: "assign", ty: "assign", req: 1 }, { k: "note", ty: "text" }], done: [{ k: "note", ty: "text" }] };
-  const VISIT_TYPES = ["doctor", "nursing", "physio", "iv"];
+  const VISIT_TYPES = MadaVisitBook.TYPES;
   const FORM = {
     referral: { consent: [{ k: "decision", ty: "select", opts: ["approved", "rejected"], lp: "dc_", lk: "f_decision", req: 1 }, { k: "note", ty: "text", req: "rejected", lk: "f_refNote" }],
       procedures: [{ k: "date", ty: "date", lk: "f_svcDate" }, { k: "time", ty: "time" }, { k: "provider", ty: "text" }, { k: "facility", ty: "text" },
@@ -807,32 +808,12 @@
       <div class="fgrid">${VISIT_FORM.booked.map(fd => fieldHtml(it, fd, "b")).join("")}</div><div class="err" id="berr-${esc(it.id)}" hidden></div>
       <div class="acts"><button type="button" class="btn btn-primary btn-sm" data-labbook="${esc(it.id)}">${svg(I.check, 2.2)}${t().a_booked}</button></div></div>`;
   }
-  const whoAssigned = vo => who((vo.booking || {}).nurseId ? (MadaNurses.NURSES.find(n => n.id === vo.booking.nurseId) || {}).name : (MadaOrders.DOCTORS.find(d => d.id === (vo.booking || {}).doctorId) || {}).name);
+  const whoAssigned = vo => who(MadaVisitBook.assignee(vo));
   const visitCard = vo => `<a class="vd-card" href="request-details.html?id=${encodeURIComponent(vo.id)}">${svg(I.clock)}<span><b>${esc(tx("visitBooked", { b: vo.bookingId, n: whoAssigned(vo) }))}</b>
         <small class="muted" style="display:block">${ymdD(vo.appointment.date)} · ${fmtMin(vo.appointment.minute)} · ${vo.payment === "paid" ? t().payPaid : t().payAfter}</small></span></a>`;
-  // The visit for a doctor-ordered service. Paid after the service, unless the patient already paid for it in the doctor's visit.
-  function bookVisit(r, it, d) {
-    const src = MadaOrders.get(r.orderId) || {}, [h, m] = d.time.split(":").map(Number), x = it.order || {};
-    const kind = it.type === "iv" ? "iv" : "nursing", lab = it.type === "lab";
-    const price = lab ? Number(x.price || (it.orderCodes || []).reduce((a, c) => a + Number((DrOrders.item(c) || {}).price || 0), 0)) : Number(x.price || 0);
-    const paid = !it.addedBy && src.doctorVisit && typeof DrOrders !== "undefined" && DrOrders.payState(src, current).status === "paid";
-    const o = MadaOrders.book({ service: lab ? "blood" : it.type === "doctor" ? "doctor" : it.type === "iv" ? "iv" : "nursing", mrn: r.mrn, patient: r.patient, mobile: r.mobile,
-      location: src.location, address: src.address, items: lab ? (it.tests || []).map(c => ({ kind: "test", code: c })) : x.code && it.type !== "doctor" ? [{ kind, code: x.code }] : [], total: price || null,
-      appointment: { date: d.date, minute: h * 60 + (m || 0), nurse: d.nurseId ? d.providerName : null }, payment: paid ? "paid" : "unpaid", payWhen: paid ? null : "after",
-      booking: { nurseId: d.nurseId || null, doctorId: d.doctorId || null, by: me.name, at: new Date().toISOString() }, staff: me.name, title: it.title, fromMr: { id: r.id, itemId: it.id } });
-    delete d.providerName;
-    return { visitId: o.id, bookingId: o.bookingId, payWhen: o.payWhen || null };
-  }
-  const visitOf = it => { const l = [...(it.log || [])].reverse().find(x => x.data && x.data.visitId); return l ? MadaOrders.get(l.data.visitId) : null; };
-  const visitDone = o => o && (o.status === "completed" || (o.nurseVisit && o.nurseVisit.status === "done") || (o.doctorVisit && o.doctorVisit.status === "done"));
+  const visitOf = it => MadaVisitBook.visitOf(it);
   // A booked service is delivered when its visit is finished in the nurse's or doctor's app.
-  function syncVisits(r) {
-    let ch = false;
-    r.items.forEach(it => { if (!VISIT_TYPES.includes(it.type) || MadaMedical.isDone(it) || nextKey(it) !== "done") return;
-      const o = visitOf(it); if (!visitDone(o)) return;
-      MadaMedical.advance(r.id, it.id, (o.booking && o.booking.nurseId ? (MadaNurses.NURSES.find(n => n.id === o.booking.nurseId) || {}).name : (MadaOrders.DOCTORS.find(d => d.id === (o.booking || {}).doctorId) || {}).name) || null, { note: t().visitDoneAuto }); ch = true; });
-    return ch ? MadaMedical.get(r.id) : r;
-  }
+  const syncVisits = r => MadaVisitBook.sync(r, t().visitDoneAuto) ? MadaMedical.get(r.id) : r;
   function render() {
     let r = id && MadaMedical.get(id);
     if (r) r = syncVisits(r);
@@ -904,7 +885,7 @@
       if (fd.ty === "file") { const f = fileOf(el); if (!f && fd.req === 1) { bad = true; msg = t().needFile; (el.closest(".drop") || el).classList.add("bad"); continue; } if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
       let v = el.value.trim();
       if (fd.ty === "assign" && v) { const [kd, aid] = v.split(":"), p = kd === "N" ? (MadaNurses.NURSES || []).find(n => n.id === aid) : (MadaOrders.DOCTORS || []).find(d => d.id === aid);
-        data[kd === "N" ? "nurseId" : "doctorId"] = aid; data.provider = p ? (p.name.en || p.name.ar) : aid; data.providerName = p ? p.name : null; continue; }
+        data[kd === "N" ? "nurseId" : "doctorId"] = aid; data.provider = p ? (p.name.en || p.name.ar) : aid; continue; }
       if (fd.ty === "prov" && el.dataset.prov !== undefined && v) { const p = MadaProviders.get(v); data.providerId = v; v = p ? p.name.en || p.name.ar : v; }
       if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
       if (fd.ty === "num" && v) { v = v.replace(/[٠-٩]/g, c => "٠١٢٣٤٥٦٧٨٩".indexOf(c)); if (!/^\d+(\.\d{1,2})?$/.test(v)) { bad = true; msg = t().badCost; el.classList.add("bad"); continue; } }
@@ -948,8 +929,7 @@
     if (lb) {
       const r = MadaMedical.get(id), it = r.items.find(x => x.id === lb.dataset.labbook), err = $("berr-" + it.id);
       const data = await collect(it, VISIT_FORM.booked, "b", err, r); if (!data) return;
-      const v = bookVisit(r, it, data);
-      MadaMedical.patchItem(r.id, it.id, { visit: { ...v, date: data.date, time: data.time, nurseId: data.nurseId || null, doctorId: data.doctorId || null, provider: data.provider, note: data.note || null, by: me.name, at: new Date().toISOString() } });
+      const v = MadaVisitBook.book(r, it, data, me.name, current);
       render(); toast(tx("visitBooked", { b: v.bookingId, n: data.provider })); return;
     }
     const adv = e.target.closest("[data-adv]");
@@ -959,8 +939,8 @@
       // TODO: a "doctor" step arrives from the doctors system; this button only stands in for it in the demo.
       const by = fm.doctor ? (r.byDoctor || (MadaOrders.DOCTORS.find(d => d.id === r.doctorId) || {}).name) : me.name;
       const nk = nextKey(it);
-      if (nk === "booked" && VISIT_TYPES.includes(it.type) && (data.nurseId || data.doctorId)) Object.assign(data, bookVisit(r, it, data));
-      MadaMedical.advance(r.id, it.id, by, Object.keys(data).length ? data : null);
+      if (nk === "booked" && VISIT_TYPES.includes(it.type) && (data.nurseId || data.doctorId)) MadaVisitBook.book(r, it, data, me.name, current);
+      else MadaMedical.advance(r.id, it.id, by, Object.keys(data).length ? data : null);
       render(); toast(it.type === "referral" && nk === "procedures" ? t().procSaved : tx("stepSaved", { s: t()["s_" + nk] }));
       const card = $("item-" + it.id); if (card) card.scrollIntoView({ block: "nearest" });
       return;
