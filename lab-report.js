@@ -104,6 +104,8 @@ const MadaLabReport = (() => {
       nd.nodeValue.split(/(\([^()]*\)|\s+|[()،,.:·\-–]+)/).forEach(part => {
         if (!part) return;
         if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+        // Arabic inside brackets, such as "(تجريبية)": brackets and words each get their own box like the rest of the line (the renderer does not mirror a lone bracket, so it is swapped here).
+        else if (/^\(.*\)$/.test(part) && /[\u0600-\u06FF]/.test(part)) part.split(/(\s+|[()])/).forEach(q => { if (!q) return; if (/^\s+$/.test(q)) frag.appendChild(document.createTextNode(q)); else { const sp = document.createElement("span"); sp.textContent = q === "(" ? ")" : q === ")" ? "(" : q; frag.appendChild(sp); } });
         else { const sp = document.createElement("span"); sp.textContent = part; if (/^\(.*\)$/.test(part)) { sp.dir = "ltr"; sp.style.unicodeBidi = "isolate"; } frag.appendChild(sp); }
       });
       nd.replaceWith(frag);
