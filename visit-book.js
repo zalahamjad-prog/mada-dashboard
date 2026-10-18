@@ -1,5 +1,5 @@
 // Booking a visit for a service the doctor ordered (medical.js request items): the operations team calls the patient, books a time and
-// assigns a nurse or doctor. Used by Medical Requests (medical-request.html) and Doctor Orders (doctor-requests.html).
+// assigns a nurse or doctor. Used by Medical Requests (medical-request.html) and Doctor Orders (followup-orders.html).
 // Nursing, IV, physiotherapy and doctor visits move to step "booked" with { date, time, nurseId | doctorId, provider, note, visitId, bookingId, payWhen }.
 // Lab tests the doctor added after a visit stay at "ordered" until the sample is collected; the booking is kept on item.visit.
 // The visit is a MadaOrders booking (MadaOrders.book), paid after the service unless the patient already paid for it in the doctor's visit.

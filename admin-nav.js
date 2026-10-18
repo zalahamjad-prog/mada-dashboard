@@ -18,7 +18,7 @@
     "staff.html": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M3 12h18"/>',
     "coupons.html": '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 5v2M14 11v2M14 17v2"/>',
     "lab-results.html": '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 14h9"/>',
-    "doctor-requests.html": '<path d="M9 4h6v3H9z"/><path d="M8 5H6v16h12V5h-2M9 12h6M9 16h4"/>',
+    "followup-orders.html": '<path d="M9 4h6v3H9z"/><path d="M8 5H6v16h12V5h-2M9 12h6M9 16h4"/>',
     "xray-results.html": '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/>',
     "providers.html": '<path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 8h3M8 12h3M8 16h3"/>',
     "coverage.html": '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
@@ -28,7 +28,7 @@
   const svg = p => `<svg class="mn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 
   // Links added here so every page gets them without its own translation; named by the page language in paint().
-  const EXTRA = [{ href: "doctor-requests.html", en: "Doctor Orders", ar: "طلبات الطبيب", after: "patients.html" }, { href: "lab-results.html", en: "Lab Results", ar: "نتائج التحاليل", after: "medical-requests.html" }, { href: "xray-results.html", en: "X-ray Results", ar: "نتائج الأشعة", after: "lab-results.html" }, { href: "providers.html", en: "Service Providers", ar: "مقدمو الخدمة", after: "services.html" }, { href: "coupons.html", en: "Coupons", ar: "الكوبونات" }, { href: "coverage.html", en: "Coverage", ar: "التغطية" }];
+  const EXTRA = [{ href: "followup-orders.html", en: "Doctor Orders", ar: "طلبات الطبيب", after: "patients.html" }, { href: "lab-results.html", en: "Lab Results", ar: "نتائج التحاليل", after: "medical-requests.html" }, { href: "xray-results.html", en: "X-ray Results", ar: "نتائج الأشعة", after: "lab-results.html" }, { href: "providers.html", en: "Service Providers", ar: "مقدمو الخدمة", after: "services.html" }, { href: "coupons.html", en: "Coupons", ar: "الكوبونات" }, { href: "coverage.html", en: "Coverage", ar: "التغطية" }];
   EXTRA.forEach(x => {
     let a = nav.querySelector(`a[href="${x.href}"]`);
     if (!a) {
