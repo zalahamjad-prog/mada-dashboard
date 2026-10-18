@@ -490,19 +490,19 @@
       optional: "(optional)", title: "Lab Test Details", back: "Back to the medical request", crMedical: "Medical Requests", crLab: "Lab Tests", missing: "This lab test was not found.", toList: "Back to medical requests",
       viewAs: "View as", demoRole: "Demo: in the live system the role comes from the login.", r_cs: "Customer Service", r_nurse: "Nurse", r_doctor: "Doctor",
       perm_cs: "Can follow up, share approved results and escalate. Cannot enter results.", perm_nurse: "Takes the sample and enters the results from the lab system.", perm_doctor: "Reviews the results, approves them or writes a note.",
-      h_ordered: "Waiting for the nurse to take the sample", h_collected: "Sample taken, on its way to the lab", h_received: "Sample at the lab, results not out yet", h_late: "No results {h} hours after the sample reached the lab",
+      h_ordered: "Waiting for the nurse to take the sample", h_collected: "Sample taken, waiting for the results", h_received: "Sample at the lab, results not out yet", h_late: "No results {h} hours after the sample was taken",
       h_resulted: "Results entered, waiting for the doctor's approval", h_reviewed: "Approved by the doctor, ready to share with the patient",
-      sinceLab: "At the lab for", hm: "{h}h {m}m",
-      say: "What to tell the patient", say_ordered: "The nurse will take your sample during the visit.", say_collected: "Your sample was taken at {t} and is on its way to the lab.",
+      sinceLab: "Sample taken", hm: "{h}h {m}m",
+      say: "What to tell the patient", say_ordered: "The nurse will take your sample during the visit.", say_collected: "Your sample was taken at {t}. Results usually take up to {h} hours, and we will contact you as soon as they are ready.",
       say_received: "Your sample reached the lab at {t}. Results usually take up to {h} hours, and we will contact you as soon as they are ready.",
-      say_late: "Your sample reached the lab at {t}. The results are taking longer than usual, and we have escalated it to get them to you quickly.",
+      say_late: "Your sample was taken at {t}. The results are taking longer than usual, and we have escalated it to get them to you quickly.",
       say_resulted: "Your results are out and the doctor is reviewing them now. We will share them as soon as they are approved.",
       say_reviewed: "Your results are ready and approved by {d}. We can send them to you now.",
       s1: "1. Sample Tracking", st_ordered: "Ordered by the doctor", st_collected: "Sample collected", st_received: "Sample at the lab", st_resulted: "Results entered", st_reviewed: "Doctor approved",
       notYet: "Not yet", by: "by {n}", markCollected: "Sample collected", markReceived: "Sample received at the lab", fromLabSys: "In the live system the lab system sends this.", trackSaved: "{s} saved.",
       s2: "2. Basic Information", reqNo: "Request Number", bkNo: "Booking Number", patient: "Patient Name", mobile: "Mobile Number", visitDate: "Visit Date", location: "Location", viewMap: "View on Map", noLoc: "No location yet", noVisit: "Not scheduled",
       s3: "3. Test Results", noRes: "Results are not out yet", noRes_cs: "The nurse enters the results from the lab system. You will see them here as soon as they are entered.", noRes_doc: "You can review the results once the nurse enters them.",
-      needLab: "Mark the sample as received at the lab before entering results.", enterTitle: "Enter the results from the lab system", pickTests: "Tests in this order", pickHint: "Choose the tests the doctor ordered.",
+      needLab: "Mark the sample as collected before entering results.", enterTitle: "Enter the results from the lab system", pickTests: "Tests in this order", pickHint: "Choose the tests the doctor ordered.",
       cNo: "#", cName: "Test Name", cCode: "Test Code", cRes: "Result", cUnit: "Unit", cRange: "Reference Range", cStatus: "Status", cPos: "Position",
       s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical",
       fillAll: "Enter a number for every test.", saveRes: "Save Results", resSaved: "Results saved and sent to the doctor.", editRes: "Edit results", cancel: "Cancel",
@@ -510,7 +510,7 @@
       toHigh: "Remaining to High Level", toHighNote: "{v} {u} to reach the high level", aboveHigh: "{v} {u} above the high level", belowLow: "{v} {u} below the normal level", refNote: "Reference ranges may vary by laboratory and patient.",
       reportLbl: "Laboratory Report", reportHint: "PDF, JPG or PNG, up to 1.5 MB", choose: "Choose a file", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
       s4: "4. Doctor Review", revWait: "Opens after the nurse enters the results.", revPending: "Waiting for the doctor to review the results.", approvedBy: "Approved by {n} · {t}",
-      docNoteLbl: "Doctor's note", docNotePh: "Example: HbA1c is high, continue Metformin and repeat in 3 months.", approve: "Approve Results", noteOnly: "Add note only", approvedToast: "Results approved. Customer service can share them now.", noteToast: "Note added.", needNote: "Write the note first.", docNotes: "Doctor's notes",
+      docNoteLbl: "Doctor's note", docNotePdf: "The note written with the approval goes on the lab report (PDF) sent to the patient.", docNotePh: "Example: HbA1c is high, continue Metformin and repeat in 3 months.", approve: "Approve Results", noteOnly: "Add note only", approvedToast: "Results approved. Customer service can share them now.", noteToast: "Note added.", needNote: "Write the note first.", docNotes: "Doctor's notes",
       s5: "5. Share With the Patient", fileLbl: "Uploaded File", noFile: "No report file uploaded.", uploadedAt: "Uploaded {t} · by {n}", viewFile: "View File", dlFile: "Download Report", dlRes: "Download Results PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
       lp_title: "Lab Results Report", lp_issued: "Issued", lp_approved: "Approved by the doctor", lp_critChip: "Needs attention", lp_hello: "Results for", lp_sumAll: "All your results are within the normal range.", lp_sumOut: "{n} of {t} results are within the normal range. Your doctor reviewed the rest.",
       lp_out: "Out of range", lp_scan: "Scan to open your booking", lp_patient: "Patient", lp_file: "File No.", lp_sample: "Sample", lp_resAt: "Results ready", lp_doctor: "Doctor", lp_ordered: "Ordered by", lp_apBy: "Approved by", lp_apAt: "Approved on",
@@ -518,9 +518,9 @@
       lp_rN: "within the healthy range", lp_rH: "outside the range, follow your doctor's advice", lp_rC: "contact your doctor today",
       lp_care: "Questions about your results? Our care team is here for you.", lp_foot: "Mada Care · Home healthcare · This report does not replace a visit to your doctor.",
       lockShare: "Sharing opens after the doctor approves the results.", shareHint: "Download the report or the results sheet and send it to the patient.",
-      s6: "6. Escalation", escText: "If the results are not out {h} hours after the sample reached the lab, escalate to the supervisor to speed up the data entry.", escIn: "Escalation opens in {t} if the results are still not out.", escNotNeeded: "No escalation needed.",
+      s6: "6. Escalation", escText: "If the results are not out {h} hours after the sample was taken, escalate to the supervisor to speed up the data entry.", escIn: "Escalation opens in {t} if the results are still not out.", escNotNeeded: "No escalation needed.",
       escLbl: "What is the problem", escPh: "Example: patient called twice, results still not entered after 26 hours.", escBtn: "Escalate to Supervisor", escSaved: "Escalated to the supervisor.", escOpen: "Open · {n} · {t}", escDone: "Resolved by {n} · {t}", resolve: "Mark resolved", resolvedToast: "Escalation resolved.", resolveNote: "What was done", needEsc: "Write what the problem is.",
-      demoAge: "Demo: make the sample 25 hours at the lab", demoNext: "Demo: {s}", demoSys: "Comes from the nurse, lab and doctor systems.", demoDocNote: "Results reviewed. Continue the current treatment and follow up in 3 months.", supOnly: "The supervisor resolves escalations."
+      demoAge: "Demo: make the sample 25 hours old", demoNext: "Demo: {s}", demoSys: "Comes from the nurse, lab and doctor systems.", demoDocNote: "Results reviewed. Continue the current treatment and follow up in 3 months.", supOnly: "The supervisor resolves escalations."
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -528,19 +528,19 @@
       optional: "(اختياري)", title: "تفاصيل التحاليل", back: "الرجوع للطلب الطبي", crMedical: "الطلبات الطبية", crLab: "التحاليل", missing: "ما لقينا هذا التحليل.", toList: "الرجوع للطلبات الطبية",
       viewAs: "العرض كـ", demoRole: "تجربة: في النظام الفعلي الصلاحية تجي من تسجيل الدخول.", r_cs: "خدمة العملاء", r_nurse: "الممرض", r_doctor: "الطبيب",
       perm_cs: "تتابع وتشارك النتائج المعتمدة وتصعّد. ما تقدر تدخل النتائج.", perm_nurse: "يسحب العينة ويدخل النتائج من نظام المختبر.", perm_doctor: "يراجع النتائج ويعتمدها أو يكتب ملاحظة.",
-      h_ordered: "بانتظار الممرض يسحب العينة", h_collected: "تم سحب العينة، وهي في الطريق للمختبر", h_received: "العينة في المختبر، والنتائج ما طلعت بعد", h_late: "ما طلعت النتائج بعد {h} ساعة من وصول العينة للمختبر",
+      h_ordered: "بانتظار الممرض يسحب العينة", h_collected: "تم سحب العينة، بانتظار النتائج", h_received: "العينة في المختبر، والنتائج ما طلعت بعد", h_late: "ما طلعت النتائج بعد {h} ساعة من سحب العينة",
       h_resulted: "تم إدخال النتائج، بانتظار اعتماد الطبيب", h_reviewed: "اعتمدها الطبيب، وجاهزة للمشاركة مع المريض",
-      sinceLab: "في المختبر من", hm: "{h}س {m}د",
-      say: "وش تقولين للمريض", say_ordered: "الممرض بيسحب العينة وقت الزيارة.", say_collected: "انسحبت عينتك الساعة {t} وهي في الطريق للمختبر.",
+      sinceLab: "من سحب العينة", hm: "{h}س {m}د",
+      say: "وش تقولين للمريض", say_ordered: "الممرض بيسحب العينة وقت الزيارة.", say_collected: "انسحبت عينتك الساعة {t}. النتائج عادة تطلع خلال {h} ساعة، وبنتواصل معك أول ما تجهز.",
       say_received: "وصلت عينتك للمختبر الساعة {t}. النتائج عادة تطلع خلال {h} ساعة، وبنتواصل معك أول ما تجهز.",
-      say_late: "وصلت عينتك للمختبر الساعة {t}. النتائج تأخرت عن العادة، ورفعنا الموضوع عشان توصلك بسرعة.",
+      say_late: "انسحبت عينتك الساعة {t}. النتائج تأخرت عن العادة، ورفعنا الموضوع عشان توصلك بسرعة.",
       say_resulted: "نتائجك طلعت والطبيب يراجعها الحين. بنرسلها لك أول ما يعتمدها.",
       say_reviewed: "نتائجك جاهزة واعتمدها {d}. نقدر نرسلها لك الحين.",
       s1: "1. تتبع العينة", st_ordered: "طلبها الطبيب", st_collected: "تم سحب العينة", st_received: "العينة في المختبر", st_resulted: "تم إدخال النتائج", st_reviewed: "اعتمدها الطبيب",
       notYet: "لم يتم", by: "بواسطة {n}", markCollected: "تم سحب العينة", markReceived: "وصلت العينة للمختبر", fromLabSys: "في النظام الفعلي نظام المختبر يرسل هذي الخطوة.", trackSaved: "تم حفظ: {s}.",
       s2: "2. المعلومات الأساسية", reqNo: "رقم الطلب", bkNo: "رقم الحجز", patient: "اسم المريض", mobile: "رقم الجوال", visitDate: "تاريخ الزيارة", location: "الموقع", viewMap: "عرض على الخريطة", noLoc: "ما فيه موقع بعد", noVisit: "بدون موعد",
       s3: "3. نتائج التحاليل", noRes: "النتائج ما طلعت بعد", noRes_cs: "الممرض يدخل النتائج من نظام المختبر، وتظهر لك هنا أول ما تندخل.", noRes_doc: "تقدر تراجع النتائج بعد ما يدخلها الممرض.",
-      needLab: "سجّل وصول العينة للمختبر قبل إدخال النتائج.", enterTitle: "إدخال النتائج من نظام المختبر", pickTests: "التحاليل في هذا الطلب", pickHint: "اختر التحاليل اللي طلبها الطبيب.",
+      needLab: "سجّل سحب العينة قبل إدخال النتائج.", enterTitle: "إدخال النتائج من نظام المختبر", pickTests: "التحاليل في هذا الطلب", pickHint: "اختر التحاليل اللي طلبها الطبيب.",
       cNo: "#", cName: "اسم التحليل", cCode: "الرمز", cRes: "النتيجة", cUnit: "الوحدة", cRange: "المعدل الطبيعي", cStatus: "الحالة", cPos: "الموقع",
       s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج",
       fillAll: "اكتب رقم لكل تحليل.", saveRes: "حفظ النتائج", resSaved: "تم حفظ النتائج وإرسالها للطبيب.", editRes: "تعديل النتائج", cancel: "إلغاء",
@@ -548,7 +548,7 @@
       toHigh: "المتبقي للمستوى المرتفع", toHighNote: "باقي {v} {u} للمستوى المرتفع", aboveHigh: "أعلى من المرتفع بـ {v} {u}", belowLow: "أقل من الطبيعي بـ {v} {u}", refNote: "المعدلات الطبيعية ممكن تختلف حسب المختبر والمريض.",
       reportLbl: "تقرير المختبر", reportHint: "PDF أو JPG أو PNG، حتى 1.5 ميجا", choose: "اختر ملف", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جرب ملف أصغر.",
       s4: "4. مراجعة الطبيب", revWait: "تفتح بعد ما يدخل الممرض النتائج.", revPending: "بانتظار الطبيب يراجع النتائج.", approvedBy: "اعتمدها {n} · {t}",
-      docNoteLbl: "ملاحظة الطبيب", docNotePh: "مثال: السكر التراكمي مرتفع، يستمر على الميتفورمين ويعيد التحليل بعد 3 شهور.", approve: "اعتماد النتائج", noteOnly: "إضافة ملاحظة فقط", approvedToast: "تم اعتماد النتائج. خدمة العملاء تقدر تشاركها الحين.", noteToast: "تمت إضافة الملاحظة.", needNote: "اكتب الملاحظة أول.", docNotes: "ملاحظات الطبيب",
+      docNoteLbl: "ملاحظة الطبيب", docNotePdf: "الملاحظة اللي تنكتب مع الاعتماد تطلع في تقرير التحاليل (PDF) اللي يوصل للمريض.", docNotePh: "مثال: السكر التراكمي مرتفع، يستمر على الميتفورمين ويعيد التحليل بعد 3 شهور.", approve: "اعتماد النتائج", noteOnly: "إضافة ملاحظة فقط", approvedToast: "تم اعتماد النتائج. خدمة العملاء تقدر تشاركها الحين.", noteToast: "تمت إضافة الملاحظة.", needNote: "اكتب الملاحظة أول.", docNotes: "ملاحظات الطبيب",
       s5: "5. المشاركة مع المريض", fileLbl: "الملف المرفوع", noFile: "ما فيه ملف تقرير مرفوع.", uploadedAt: "رُفع {t} · بواسطة {n}", viewFile: "عرض الملف", dlFile: "تحميل التقرير", dlRes: "تحميل النتائج PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدمي حفظ كـ PDF من نافذة الطباعة.",
       lp_title: "تقرير نتائج التحاليل", lp_issued: "صدر", lp_approved: "معتمد من الطبيب", lp_critChip: "يحتاج انتباه", lp_hello: "نتائج", lp_sumAll: "كل نتائجك ضمن المعدل الطبيعي.", lp_sumOut: "{n} من {t} نتائج ضمن المعدل الطبيعي، والطبيب راجع الباقي.",
       lp_out: "خارج المعدل", lp_scan: "امسح لفتح حجزك", lp_patient: "المريض", lp_file: "رقم الملف", lp_sample: "العينة", lp_resAt: "جاهزية النتائج", lp_doctor: "الطبيب", lp_ordered: "الطبيب الطالب", lp_apBy: "اعتمدها", lp_apAt: "تاريخ الاعتماد",
@@ -556,9 +556,9 @@
       lp_rN: "ضمن المعدل الصحي", lp_rH: "خارج المعدل، اتبع توجيهات طبيبك", lp_rC: "تواصل مع طبيبك اليوم",
       lp_care: "عندك سؤال عن نتائجك؟ فريق الرعاية معك.", lp_foot: "مدى كير · رعاية صحية منزلية · هذا التقرير لا يغني عن مراجعة الطبيب.",
       lockShare: "المشاركة تفتح بعد ما يعتمد الطبيب النتائج.", shareHint: "حمّلي التقرير أو ورقة النتائج وأرسليها للمريض.",
-      s6: "6. التصعيد", escText: "إذا ما طلعت النتائج بعد {h} ساعة من وصول العينة للمختبر، صعّدي للمشرفة عشان تسرّع إدخال البيانات.", escIn: "التصعيد يفتح بعد {t} إذا ما طلعت النتائج.", escNotNeeded: "ما يحتاج تصعيد.",
+      s6: "6. التصعيد", escText: "إذا ما طلعت النتائج بعد {h} ساعة من سحب العينة، صعّدي للمشرفة عشان تسرّع إدخال البيانات.", escIn: "التصعيد يفتح بعد {t} إذا ما طلعت النتائج.", escNotNeeded: "ما يحتاج تصعيد.",
       escLbl: "وش المشكلة", escPh: "مثال: المريض اتصل مرتين، والنتائج ما اندخلت بعد 26 ساعة.", escBtn: "تصعيد للمشرفة", escSaved: "تم التصعيد للمشرفة.", escOpen: "مفتوح · {n} · {t}", escDone: "أنهته {n} · {t}", resolve: "تم الحل", resolvedToast: "تم إنهاء التصعيد.", resolveNote: "وش اللي انعمل", needEsc: "اكتبي وش المشكلة.",
-      demoAge: "تجربة: خلّ العينة 25 ساعة في المختبر", demoNext: "تجربة: {s}", demoSys: "تجي من نظام التمريض والمختبر والأطباء.", demoDocNote: "تمت مراجعة النتائج. يستمر على العلاج الحالي ومتابعة بعد 3 شهور.", supOnly: "المشرفة هي اللي تنهي التصعيد."
+      demoAge: "تجربة: خلّ العينة مسحوبة من 25 ساعة", demoNext: "تجربة: {s}", demoSys: "تجي من نظام التمريض والمختبر والأطباء.", demoDocNote: "تمت مراجعة النتائج. يستمر على العلاج الحالي ومتابعة بعد 3 شهور.", supOnly: "المشرفة هي اللي تنهي التصعيد."
     }
   };
   let current = "en";
@@ -598,18 +598,18 @@
   const getR = () => id && MadaMedical.get(id);
   const getIt = r => r && r.items.find(x => x.id === itemId && x.type === "lab");
   const S = MadaMedical.STEPS.lab;
-  const stepOf = it => S[it.step];
+  const stepOf = it => MadaMedical.keyOf(it); // "sample at the lab" reads as collected
   const logAt = (it, k) => it.log.find(l => S[l.step] === k);
   const docName = r => { const d = MadaOrders.DOCTORS.find(x => x.id === r.doctorId); return d ? T(d.name) : who(r.byDoctor); };
 
   function heroHtml(r, it) {
-    const st = stepOf(it), late = MadaMedical.labLate(it), rcv = logAt(it, "received"), col = logAt(it, "collected");
+    const st = stepOf(it), late = MadaMedical.labLate(it), col = logAt(it, "collected"), rcv = col;
     const cls = late ? "h-red" : st === "reviewed" ? "h-green" : st === "resulted" ? "h-blue" : "h-orange";
     const ico = late ? I.warn : st === "reviewed" ? I.shield : st === "resulted" ? I.doctor : st === "received" ? I.flask : st === "collected" ? I.truck : I.clock;
     const head = late ? tx("h_late", { h: MadaMedical.LAB_LATE_HOURS }) : t()["h_" + st];
     const ap = logAt(it, "reviewed");
     const say = late ? tx("say_late", { t: fmtT(new Date(rcv.at)) }) : st === "received" ? tx("say_received", { t: fmtT(new Date(rcv.at)), h: MadaMedical.LAB_LATE_HOURS })
-      : st === "collected" ? tx("say_collected", { t: fmtT(new Date(col.at)) }) : st === "reviewed" ? tx("say_reviewed", { d: who(ap.by) }) : t()["say_" + st];
+      : st === "collected" ? tx("say_collected", { t: fmtT(new Date(col.at)), h: MadaMedical.LAB_LATE_HOURS }) : st === "reviewed" ? tx("say_reviewed", { d: who(ap.by) }) : t()["say_" + st];
     let clock = "";
     if (rcv && !logAt(it, "resulted")) { const m = Math.floor((Date.now() - new Date(rcv.at)) / 60000); clock = `<div class="clock">${t().sinceLab}<b>${iso(tx("hm", { h: Math.floor(m / 60), m: m % 60 }))}</b></div>`; }
     return `<section class="card hero ${cls}"><span class="ic">${svg(ico, 2)}</span><div class="txt"><small>${esc(T(it.title))}</small><strong>${esc(head)}</strong>
@@ -618,16 +618,17 @@
 
   function trackHtml(r, it) {
     const late = MadaMedical.labLate(it);
-    const li = S.map((k, i) => {
-      const l = logAt(it, k), ok = i <= it.step, now = i === it.step + 1;
+    const nx = MadaMedical.nextIdx(it);
+    const li = MadaMedical.shownSteps("lab").map(({ k, i }, n) => {
+      const l = logAt(it, k), ok = i <= it.step, now = i === nx;
       const cls = ok ? "ok" : now && late && k === "resulted" ? "late" : now ? "now" : "";
-      return `<li class="${cls}"><span class="c">${ok ? svg(I.check, 3) : i + 1}</span><b>${t()["st_" + k]}</b>${l ? `<time>${stamp(l.at)}</time>${l.by ? `<span class="by">${esc(tx("by", { n: who(l.by) }))}</span>` : ""}` : `<time>${t().notYet}</time>`}</li>`;
+      return `<li class="${cls}"><span class="c">${ok ? svg(I.check, 3) : n + 1}</span><b>${t()["st_" + k]}</b>${l ? `<time>${stamp(l.at)}</time>${l.by ? `<span class="by">${esc(tx("by", { n: who(l.by) }))}</span>` : ""}` : `<time>${t().notYet}</time>`}</li>`;
     }).join("");
     let acts = "";
-    if (role === "nurse" && r.status === "open" && (stepOf(it) === "ordered" || stepOf(it) === "collected"))
-      acts = `<div class="track-acts"><button type="button" class="btn btn-primary btn-sm" data-track="${stepOf(it) === "ordered" ? "collected" : "received"}">${svg(stepOf(it) === "ordered" ? I.flask : I.truck)}${stepOf(it) === "ordered" ? t().markCollected : t().markReceived}</button>${stepOf(it) === "collected" ? `<small class="muted">${t().fromLabSys}</small>` : ""}</div>`;
+    if (role === "nurse" && r.status === "open" && stepOf(it) === "ordered")
+      acts = `<div class="track-acts"><button type="button" class="btn btn-primary btn-sm" data-track="collected">${svg(I.flask)}${t().markCollected}</button></div>`;
     // Demo only: stand in for the nurse, lab and doctor systems so the call center view can be tried.
-    if (MadaStore.SAMPLES && r.status === "open" && stepOf(it) !== "reviewed") acts += `<div class="track-acts"><button type="button" class="demo-link" id="demoNext">${esc(tx("demoNext", { s: t()["st_" + S[it.step + 1]] }))}</button>${stepOf(it) === "received" && !late ? `<button type="button" class="demo-link" id="demoAge">${t().demoAge}</button>` : ""}<small class="muted">${t().demoSys}</small></div>`;
+    if (MadaStore.SAMPLES && r.status === "open" && stepOf(it) !== "reviewed") acts += `<div class="track-acts"><button type="button" class="demo-link" id="demoNext">${esc(tx("demoNext", { s: t()["st_" + S[MadaMedical.nextIdx(it)]] }))}</button>${stepOf(it) === "collected" && !late ? `<button type="button" class="demo-link" id="demoAge">${t().demoAge}</button>` : ""}<small class="muted">${t().demoSys}</small></div>`;
     return `<section class="card sec"><h2>${t().s1}</h2><ol class="track">${li}</ol>${acts}</section>`;
   }
 
@@ -679,7 +680,7 @@
 
   function resultsHtml(r, it) {
     const res = it.results || null, ans = MadaMedical.analytesOf(it), st = stepOf(it);
-    const canEnter = role === "nurse" && r.status === "open" && (st === "received" || (st === "resulted" && editing));
+    const canEnter = role === "nurse" && r.status === "open" && (st === "collected" || (st === "resulted" && editing));
     let body = "";
     if (canEnter) {
       const tests = picked || it.tests || [];
@@ -694,7 +695,7 @@
         <div class="err" id="resErr" hidden></div>
         <div class="foot-acts">${editing ? `<button type="button" class="btn btn-ghost" id="resCancel">${t().cancel}</button>` : ""}<button type="button" class="btn btn-primary" id="resSave" ${list.length ? "" : "disabled"}>${svg(I.check, 2.2)}${t().saveRes}</button></div>`;
     } else if (!res) {
-      const m = role === "nurse" ? (st === "ordered" || st === "collected" ? t().needLab : "") : role === "doctor" ? t().noRes_doc : t().noRes_cs;
+      const m = role === "nurse" ? (st === "ordered" ? t().needLab : "") : role === "doctor" ? t().noRes_doc : t().noRes_cs;
       body = `<div class="empty-res"><span class="ic">${svg(I.flask)}</span><b>${t().noRes}</b>${m ? `<p>${esc(m)}</p>` : ""}</div>`;
     } else {
       const withV = ans.filter(a => res[a.code] != null);
@@ -715,7 +716,7 @@
     if (!it.results) body = `<p class="muted">${t().revWait}</p>`;
     else {
       body = ap ? `<div class="approved">${svg(I.shield, 2)}<div><b>${esc(tx("approvedBy", { n: who(ap.by), t: stamp(ap.at) }))}</b>${ap.data && ap.data.docNote ? `<p dir="auto">${esc(ap.data.docNote)}</p>` : ""}</div></div>`
-        : role === "doctor" && r.status === "open" ? `<div><label class="lbl" for="docNote">${t().docNoteLbl} <em>${t().optional || ""}</em></label><textarea class="inp" id="docNote" maxlength="600" dir="auto" placeholder="${esc(t().docNotePh)}"></textarea></div>
+        : role === "doctor" && r.status === "open" ? `<div><label class="lbl" for="docNote">${t().docNoteLbl} <em>${t().optional || ""}</em></label><textarea class="inp" id="docNote" maxlength="600" dir="auto" placeholder="${esc(t().docNotePh)}"></textarea><p class="muted" style="margin-top:6px;font-size:12.5px;color:#7a4b00;background:#fff7e6;border:1px solid #f5d48a;border-radius:8px;padding:8px 10px">${esc(t().docNotePdf)}</p></div>
             <div class="err" id="docErr" hidden></div>
             <div class="foot-acts"><button type="button" class="btn btn-ghost" id="docNoteOnly">${svg(I.note)}${t().noteOnly}</button><button type="button" class="btn btn-primary" id="docApprove">${svg(I.shield)}${t().approve}</button></div>`
         : `<div class="alert blue">${svg(I.clock)}<div><b>${t().revPending}</b></div></div>`;
@@ -734,7 +735,7 @@
   }
 
   function escHtml(r, it) {
-    const late = MadaMedical.labLate(it), rcv = logAt(it, "received"), list = it.escalations || [];
+    const late = MadaMedical.labLate(it), rcv = logAt(it, "collected"), list = it.escalations || [];
     let body = `<p class="muted" style="margin-bottom:12px">${esc(tx("escText", { h: MadaMedical.LAB_LATE_HOURS }))}</p>`;
     if (role === "cs" && r.status === "open") {
       if (late) body += `<div><label class="lbl" for="escNote">${t().escLbl}</label><textarea class="inp" id="escNote" maxlength="500" dir="auto" placeholder="${esc(t().escPh)}"></textarea></div><div class="err" id="escErr" hidden></div>
@@ -807,7 +808,7 @@
     const res = it.results || {}, ans = MadaMedical.analytesOf(it).filter(a => res[a.code] != null);
     const st = a => MadaMedical.labStatus(a, res[a.code]);
     const nNorm = ans.filter(a => st(a) === "normal").length, nOut = ans.length - nNorm, nCrit = ans.filter(a => st(a) === "critical").length;
-    const ap = logAt(it, "reviewed"), col = logAt(it, "collected"), rcv = logAt(it, "received"), rsl = logAt(it, "resulted");
+    const ap = logAt(it, "reviewed"), col = logAt(it, "collected"), rsl = logAt(it, "resulted");
     const when = l => l ? clean(stamp(l.at)) : "—";
     const o = MadaOrders.get(r.orderId) || {}, now = new Date(), issued = clean(stamp(now.toISOString()));
     const ltr = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`;
@@ -853,7 +854,7 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px">
         ${card(I2.user, t().lp_patient, kv(t().patient, esc(T(r.patient) || "—")) + kv(t().lp_file, ltr(r.mrn || "—")) + kv(t().mobile, ltr(r.mobile || "—")))}
-        ${card(I2.flask, t().lp_sample, kv(t().st_collected, ltr(when(col))) + kv(t().st_received, ltr(when(rcv))) + kv(t().lp_resAt, ltr(when(rsl))))}
+        ${card(I2.flask, t().lp_sample, kv(t().st_collected, ltr(when(col))) + kv(t().lp_resAt, ltr(when(rsl))))}
         ${card(I2.doc, t().lp_doctor, kv(t().lp_ordered, esc(doc ? T(doc.name) : who(r.byDoctor) || "—")) + kv(t().lp_apBy, esc(ap ? who(ap.by) : "—")) + kv(t().lp_apAt, ltr(when(ap))))}
       </div>
 
@@ -927,7 +928,7 @@
     const tb = e.target.closest("[data-track]");
     if (tb) { MadaMedical.advance(id, itemId, me.name, null); render(); toast(tx("trackSaved", { s: t()["st_" + tb.dataset.track] })); return; }
     if (e.target.closest("#demoNext")) {
-      const nk = S[it.step + 1];
+      const nk = S[MadaMedical.nextIdx(it)];
       if (nk === "resulted") { // sample values a lab system might send
         const SAMPLE_V = { HGB: 13.8, WBC: 11.2, PLT: 450, LYM: 18, GLU: 96, A1C: 7.4, CHOL: 185, LDL: 142, HDL: 45, TG: 160, CREA: 0.9, UREA: 30, VITD: 18, ALT: 32, AST: 28, ALP: 90, TBIL: 0.8 };
         const tests = (it.tests && it.tests.length) ? it.tests : ["CBC"], results = {};
@@ -939,7 +940,7 @@
       render(); toast(tx("trackSaved", { s: t()["st_" + nk] })); return;
     }
     if (e.target.closest("#demoAge")) { // demo only: pretend the sample reached the lab 25 hours ago
-      MadaMedical.patchItem(id, itemId, x => ({ log: x.log.map(l => S[l.step] === "received" ? { ...l, at: new Date(Date.now() - 25 * 3600000).toISOString() } : S[l.step] === "collected" ? { ...l, at: new Date(Date.now() - 26 * 3600000).toISOString() } : l) }));
+      MadaMedical.patchItem(id, itemId, x => ({ log: x.log.map(l => S[l.step] === "collected" ? { ...l, at: new Date(Date.now() - 25 * 3600000).toISOString() } : l) }));
       render(); return;
     }
     const row = e.target.closest("[data-an]");
@@ -961,7 +962,7 @@
       // TODO: in the live system the nurse's entry comes from the lab system (or is typed here and sent to it).
       const tests = picked || it.tests;
       MadaMedical.patchItem(id, itemId, { results, report, tests, enteredBy: me.name, enteredAt: new Date().toISOString() });
-      if (stepOf(it) === "received") MadaMedical.advance(id, itemId, me.name, null);
+      if (it.step < S.indexOf("resulted")) MadaMedical.advance(id, itemId, me.name, null);
       editing = false; picked = null; render(); toast(t().resSaved); return;
     }
     if (e.target.closest("#docApprove") || e.target.closest("#docNoteOnly")) {

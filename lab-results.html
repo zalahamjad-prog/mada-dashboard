@@ -122,6 +122,14 @@
   .dr { min-width: 170px; }
   .dr b { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
   .dr b svg { width: 15px; height: 15px; }
+  .dr .tl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .dr .tl li { display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .dr .tl b { font-size: 11.5px; font-weight: 600; color: #15304a; display: inline; }
+  .dr .tl em { font-style: normal; color: #6b7a80; }
+  .dr .took { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .dr .took svg { width: 13px; height: 13px; }
+  .dr .took.ok { background: #e7f6ec; color: #15803d; } .dr .took.wait { background: #fff4e5; color: #b45309; }
+  .stat small.avg { color: #15803d; font-weight: 700; margin-top: 3px; }
   .dr .q { margin-top: 4px; font-size: 12px; color: #44545a; font-style: italic; max-width: 240px; }
   .d-no { color: #b91c1c; } .d-seen { color: #b45309; } .d-ok { color: var(--green); } .d-na { color: var(--muted); }
   .acts { display: flex; gap: 6px; justify-content: flex-end; }
@@ -255,7 +263,7 @@
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       title: "Lab Results", subtitle: "Every lab test: what is still pending, what is out, and what the doctor did with it.", searchPh: "Patient, file number, booking number, test or doctor", search: "Search",
       srcLbl: "Source", srcAll: "All sources", srcDoc: "Doctor's orders", srcPat: "Patient bookings",
-      k_all: "All tests", k_pending: "Pending", k_late: "Late", k_out: "Results out", k_doc: "Waiting for the doctor", k_ok: "Doctor approved",
+      k_all: "All tests", k_pending: "Pending", k_late: "Late", k_out: "Results out", k_doc: "Waiting for the doctor", k_ok: "Doctor approved", avgOk: "Avg. {d} to approve", tl_out: "Results out", tl_seen: "Opened", tl_ok: "Approved", tl_took: "Doctor took {d}", tl_wait: "Waiting {d}", tl_after: "after {d}",
       cPatient: "Patient", openFile: "Open patient file", cSource: "Source", cTests: "Tests", cNurse: "Nurse", cTaken: "Sample taken", cDue: "Result time", cStatus: "Status", cDoctor: "Doctor follow-up", cActs: "",
       patOrder: "Patient booking", docOrder: "Doctor's order", booking: "Booking",
       st_collect: "Sample time not set", st_waiting: "Waiting for results", st_due: "Late", st_ready: "Entered, not sent", st_review: "With the doctor", st_reviewed: "Doctor approved", st_team: "Sent to care team", st_teamSeen: "Care team opened",
@@ -270,7 +278,7 @@
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
       title: "نتائج التحاليل", subtitle: "كل التحاليل: اللي باقي، واللي طلعت، ووش سوى الطبيب فيها.", searchPh: "المريض أو رقم الملف أو رقم الحجز أو التحليل أو الطبيب", search: "بحث",
       srcLbl: "المصدر", srcAll: "كل المصادر", srcDoc: "طلبات الأطباء", srcPat: "حجوزات المرضى",
-      k_all: "كل التحاليل", k_pending: "قيد الانتظار", k_late: "متأخرة", k_out: "طلعت النتائج", k_doc: "بانتظار الطبيب", k_ok: "اعتمدها الطبيب",
+      k_all: "كل التحاليل", k_pending: "قيد الانتظار", k_late: "متأخرة", k_out: "طلعت النتائج", k_doc: "بانتظار الطبيب", k_ok: "اعتمدها الطبيب", avgOk: "المتوسط {d} للاعتماد", tl_out: "وصلت النتائج", tl_seen: "فتحها", tl_ok: "اعتمدها", tl_took: "أخذ الطبيب {d}", tl_wait: "صار له {d} ينتظر", tl_after: "بعد {d}",
       cPatient: "المريض", openFile: "فتح ملف المريض", cSource: "المصدر", cTests: "التحاليل", cNurse: "الممرضة", cTaken: "وقت السحب", cDue: "وقت النتيجة", cStatus: "الحالة", cDoctor: "متابعة الطبيب", cActs: "",
       patOrder: "حجز مريض", docOrder: "طلب طبيب", booking: "الحجز",
       st_collect: "وقت السحب غير محدد", st_waiting: "بانتظار النتائج", st_due: "متأخرة", st_ready: "مدخلة وما انرسلت", st_review: "عند الطبيب", st_reviewed: "اعتمدها الطبيب", st_team: "انرسلت لفريق الرعاية", st_teamSeen: "فتحها فريق الرعاية",
@@ -315,16 +323,27 @@
     const left = new Date(c.nextDue) - Date.now();
     return `<span class="due ${left <= 0 ? "late" : ""}">${esc(left <= 0 ? tx("late", { d: dur(left) }) : tx("dueIn", { d: dur(left) }))}</span><small>${esc(when(c.nextDue))}</small>`;
   }
+  // How long the doctor took: results out, opened, approved, and the time from results out to approval (or the wait so far).
+  const took = c => c.review && c.sentAt ? new Date(c.review.at) - new Date(c.sentAt) : null;
+  function tlHtml(c) {
+    const out = c.sentAt, row = (k, at, extra) => `<li><span>${t()[k]}</span><b class="num">${esc(when(at))}</b>${extra ? `<em>${esc(extra)}</em>` : ""}</li>`;
+    const after = at => out ? tx("tl_after", { d: dur(new Date(at) - new Date(out)) }) : "";
+    const lines = [row("tl_out", out), c.docSeen ? row("tl_seen", c.docSeen.at, after(c.docSeen.at)) : "", c.review ? row("tl_ok", c.review.at, after(c.review.at)) : ""].join("");
+    const chip = c.review ? `<span class="took ok">${S(I.pending, 2.2)}${esc(tx("tl_took", { d: dur(took(c)) }))}</span>`
+      : `<span class="took wait">${S(I.pending, 2.2)}${esc(tx("tl_wait", { d: dur(Date.now() - new Date(out)) }))}</span>`;
+    return `<ul class="tl">${lines}</ul>${chip}`;
+  }
   // What the doctor did: opened it, approved it (with the note), and the critical-alert handling.
   function drHtml(c) {
     if (c.kind !== "doctor") return `<div class="dr"><b class="d-na">${t().d_na}</b>${c.seen ? `<small>${esc(T(c.seen.by))} · ${esc(when(c.seen.at))}</small>` : ""}</div>`;
     const name = c.doctor ? `<small>${esc(T(c.doctor))}</small>` : "";
     if (!c.sent) return `<div class="dr"><b class="d-na">${t().d_wait}</b>${name}</div>`;
     let h;
-    if (c.review) h = `<b class="d-ok">${S(I.out, 2.4)}${t().d_ok}</b><small>${esc(T(c.review.by))} · ${esc(when(c.review.at))}</small>${c.review.note ? `<div class="q">“${esc(c.review.note)}”</div>` : ""}`;
+    if (c.review) h = `<b class="d-ok">${S(I.out, 2.4)}${t().d_ok}</b><small>${esc(T(c.review.by))}</small>${c.review.note ? `<div class="q">“${esc(c.review.note)}”</div>` : ""}`;
     else if (c.docNotes.length) { const n = c.docNotes[c.docNotes.length - 1]; h = `<b class="d-seen">${S(I.doc)}${t().d_note}</b><small>${esc(when(n.at))}</small><div class="q">“${esc(n.text)}”</div>`; }
-    else if (c.docSeen) h = `<b class="d-seen">${S(I.eye)}${t().d_seen}</b><small>${esc(when(c.docSeen.at))}</small>`;
-    else h = `<b class="d-no">${S(I.late, 2)}${t().d_none}</b><small>${esc(tx("since", { d: dur(new Date(c.sentAt) - Date.now()) }))}</small>`;
+    else if (c.docSeen) h = `<b class="d-seen">${S(I.eye)}${t().d_seen}</b>`;
+    else h = `<b class="d-no">${S(I.late, 2)}${t().d_none}</b>`;
+    h += tlHtml(c);
     const fl = MadaSamples.flag(c);
     if (fl === "critical" || fl === "high") { const st = (c.alert && c.alert.status) || "new"; h += `<small class="${st === "closed" ? "d-ok" : "d-no"}" style="font-weight:600">${t()["al_" + st]}</small>`; }
     return `<div class="dr">${h}</div>`;
@@ -336,7 +355,8 @@
   }
   function render() {
     const list = all(), q = $("q").value.trim(), src = $("src").value;
-    $("stats").innerHTML = KS.map(([k, cls]) => `<button type="button" class="card stat" data-k="${k}" aria-pressed="${kind === k}"><span class="stat-icon ${cls}">${S(I[k], 2)}</span><span><b>${list.filter(IN[k]).length}</b><small>${t()["k_" + k]}</small></span></button>`).join("");
+    const tk = list.map(took).filter(x => x != null), avg = tk.length ? tk.reduce((a, b) => a + b, 0) / tk.length : null;
+    $("stats").innerHTML = KS.map(([k, cls]) => `<button type="button" class="card stat" data-k="${k}" aria-pressed="${kind === k}"><span class="stat-icon ${cls}">${S(I[k], 2)}</span><span><b>${list.filter(IN[k]).length}</b><small>${t()["k_" + k]}</small>${k === "ok" && avg != null ? `<small class="avg">${esc(tx("avgOk", { d: dur(avg) }))}</small>` : ""}</span></button>`).join("");
     $("thead").innerHTML = ["cPatient", "cSource", "cTests", "cTaken", "cDue", "cStatus", "cDoctor", "cActs"].map(k => `<th>${t()[k]}</th>`).join("");
     const rows = list.filter(c => IN[kind](c) && (!src || c.kind === src) && match(c, q));
     $("rows").innerHTML = rows.map(c => { const st = stOf(c), fl = c.sent ? MadaSamples.flag(c) : null;

@@ -239,6 +239,7 @@
   .tag-way { background: #fff4dc; color: #b26a00; }
   .who small.mrn { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
   .svc { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 13px; font-size: 12.5px; font-weight: 600; background: #eef2f4; color: #44545a; }
+  .dr-only { display: block; margin-top: 4px; font-size: 11.5px; color: #6b7a80; }
   .svc-blood { background: #fdecec; color: #b42318; } .svc-nursing { background: #e3f6ee; color: #0f8f6f; } .svc-iv { background: #e8f0fe; color: #2563eb; } .svc-doctor { background: #f1eafe; color: #7c3aed; }
   a.tel { color: inherit; text-decoration: none; }
   td.place { white-space: normal; min-width: 140px; max-width: 220px; font-size: 13px; line-height: 1.5; }
@@ -396,7 +397,7 @@
       t_privacy: "Respect Privacy", s_privacy: "Keep the patient covered and talk calmly in a private place.",
       t_safety: "Work Safely", s_safety: "Dispose of sharps and waste in the right containers.",
       t_record: "Record Everything", s_record: "Write what you did, the readings and any notes before you leave.",
-      onwayOk: "The patient's team now sees you are on the way.", arrivedOk: "Arrival saved. You can start the visit.", startedOk: "Visit with {n} started.", workNext: "The visit screen is the next step we build.", bfOpen: "Service details", pFile: "Patient File",
+      onwayOk: "The patient's team now sees you are on the way.", arrivedOk: "Arrival saved. You can start the visit.", startedOk: "Visit with {n} started.", workNext: "The visit screen is the next step we build.", bfOpen: "Service details", pFile: "Patient File", drOnly: "The doctor records this visit",
       lateArr: "Arrival time"
     },
     ar: {
@@ -424,7 +425,7 @@
       t_privacy: "احترم الخصوصية", s_privacy: "خلّ المريض مستور وتكلّم بهدوء في مكان خاص.",
       t_safety: "اشتغل بأمان", s_safety: "تخلّص من الإبر والنفايات في الحاويات المخصصة.",
       t_record: "سجّل كل شي", s_record: "اكتب اللي سويته والقراءات وأي ملاحظات قبل ما تطلع.",
-      onwayOk: "الحين الفريق يشوف إنك في الطريق.", arrivedOk: "انحفظ وصولك. تقدر تبدأ الزيارة.", startedOk: "بدأت الزيارة مع {n}.", workNext: "شاشة الزيارة هي الخطوة الجاية اللي نبنيها.", bfOpen: "تفاصيل الخدمة", pFile: "ملف المريض",
+      onwayOk: "الحين الفريق يشوف إنك في الطريق.", arrivedOk: "انحفظ وصولك. تقدر تبدأ الزيارة.", startedOk: "بدأت الزيارة مع {n}.", workNext: "شاشة الزيارة هي الخطوة الجاية اللي نبنيها.", bfOpen: "تفاصيل الخدمة", pFile: "ملف المريض", drOnly: "الطبيب يسجّل هذه الزيارة",
       lateArr: "وقت الوصول"
     }
   };
@@ -447,7 +448,7 @@
   const cancelWhy = o => { const k = o.cancelRequest && o.cancelRequest.reason, r = k && MadaOrders.CANCEL_REASONS[k]; return r ? r[current] : ""; };
   const TABS = { up: ["all", "today", "tomorrow", "week"], done: ["all", "today", "past7", "past30"], cancel: ["all", "today", "past7", "past30"] };
   let tab = "up";
-  const ongoing = () => visits().find(o => nv(o).status === "ongoing") || null;
+  const ongoing = () => visits().find(o => o.service !== "doctor" && nv(o).status === "ongoing") || null;
   const mapUrl = o => { const L = o.location || {}; return L.lat != null ? `https://www.google.com/maps/search/?api=1&query=${L.lat},${L.lng}` : L.mapLink || ""; };
   const place = o => { const L = o.location || {}; return [o.district && T(o.district), L.address].filter(Boolean).join(" · "); };
   const svcOf = o => t()["s_" + o.service] || o.service || "—";
@@ -487,20 +488,21 @@
     const last = isDone ? "cDone" : isCan ? "cCancel" : "cTime";
     $("thead").innerHTML = ["cName", "cSvc", "cMobile", "cBooking", last, "cPlace"].map(k => `<th>${t()[k]}</th>`).join("") + `<th style="text-align:end">${t().cActs}</th>`;
     $("rows").innerHTML = shown.map(o => {
-      const s = nv(o).status, ix = all.indexOf(o) % 4, url = mapUrl(o);
+      // Doctor visits: the doctor records the visit from the doctors system, so the nurse only gets the patient file.
+      const dr = o.service === "doctor", s = dr ? "" : nv(o).status, ix = all.indexOf(o) % 4, url = mapUrl(o);
       const tag = isDone ? `<span class="tag-on">${t().doneTag}</span>` : isCan ? `<span class="tag-on tag-cancel">${t().cancelTag}</span>`
         : s ? `<span class="tag-on ${s === "ontheway" ? "tag-way" : s === "paused" ? "tag-pause" : ""}">${t()["st_" + s]}</span>` : "";
       return `<tr class="${s === "ongoing" && !isDone ? "ongoing" : ""}">
         <td class="c-who"><div class="who"><span class="pa pa-${ix}">${ic("person")}</span><span><b>${esc(T(o.patient) || "—")}</b>${tag ? "<br>" + tag : ""}<small class="mrn num">${esc(o.mrn || "")}</small></span></div></td>
-        <td data-l="${esc(t().cSvc)}"><button type="button" class="svc svc-${esc(o.service)}" data-brief="${esc(o.id)}" title="${esc(t().bfOpen)}">${esc(svcOf(o))}${ic("info")}</button></td>
+        <td data-l="${esc(t().cSvc)}">${dr ? `<span class="svc svc-doctor">${esc(svcOf(o))}</span><small class="dr-only">${esc(t().drOnly)}</small>` : `<button type="button" class="svc svc-${esc(o.service)}" data-brief="${esc(o.id)}" title="${esc(t().bfOpen)}">${esc(svcOf(o))}${ic("info")}</button>`}</td>
         <td data-l="${esc(t().cMobile)}"><a class="num tel" href="tel:${esc(o.mobile || "")}">${esc(DrPortal.phone(o.mobile) || "—")}</a></td>
         <td data-l="${esc(t().cBooking)}"><span class="num">${esc(o.bookingId || "—")}</span></td>
         <td data-l="${esc(t()[last])}" class="when">${isDone ? doneTxt(doneAt(o)) : isCan ? doneTxt(cancelAt(o)) + (cancelWhy(o) ? `<span class="why">${esc(cancelWhy(o))}</span>` : "") : whenTxt(o.appointment)}</td>
         <td data-l="${esc(t().cPlace)}" class="place">${esc(place(o) || "—")}</td>
         <td class="c-acts"><div class="acts">
           ${o.mrn ? `<a class="btn btn-light ib lbl" href="nurse-patient.html?mrn=${encodeURIComponent(o.mrn)}" title="${esc(t().pFile)}" aria-label="${esc(t().pFile)}">${ic("folder")}<span class="bl">${t().pFile}</span></a>` : ""}
-          ${url ? `<a class="btn btn-light ib" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(t().map)}" aria-label="${esc(t().map)}">${ic("pin")}<span class="bl">${t().map}</span></a>` : !isDone && !isCan ? `<span class="btn btn-light ib" aria-disabled="true" title="${esc(t().noMap)}">${ic("pin")}<span class="bl">${t().map}</span></span>` : ""}
-          ${!isDone && !isCan ? stepBtn(o) : ""}
+          ${dr ? "" : url ? `<a class="btn btn-light ib" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(t().map)}" aria-label="${esc(t().map)}">${ic("pin")}<span class="bl">${t().map}</span></a>` : !isDone && !isCan ? `<span class="btn btn-light ib" aria-disabled="true" title="${esc(t().noMap)}">${ic("pin")}<span class="bl">${t().map}</span></span>` : ""}
+          ${!isDone && !isCan && !dr ? stepBtn(o) : ""}
         </div></td></tr>`;
     }).join("");
     $("tblWrap").hidden = !list.length;
