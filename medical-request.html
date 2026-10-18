@@ -427,6 +427,7 @@
 <script src="stamps.js"></script>
 <script src="medical-report.js"></script>
 <script src="lab-report.js"></script>
+<script src="providers.js"></script>
 <script src="rad-report.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
@@ -463,7 +464,7 @@
       a_issued: "Save Sehha leave", a_referred: "Save referral", a_attended: "Service delivered", a_sent: "Mark sent", a_explained: "Mark explained", a_booked: "Save visit date", a_done: "Mark visit done",
       f_note: "Note", f_result: "Result summary", f_radFile: "Report from the imaging center", f_radSum: "Report summary", needFile: "Attach the imaging center's report.",
       radShareT: "Send to the patient", radShareS: "One PDF: a Mada Care cover with the patient's details, the imaging center and the doctor's comment, then the center's own report.", f_file: "Attach the report", f_fileHint: "PDF or image, up to 1.5 MB", f_fileChoose: "Choose a file", f_docNote: "Doctor's comment",
-      f_center: "Radiology center", f_specialty: "Specialty", f_facility: "Hospital or clinic", f_date: "Date", f_pharmacy: "Pharmacy", f_leaveNo: "Sehha leave number", f_from: "From", f_to: "To", f_channel: "Sent by",
+      f_center: "Radiology center", f_pickProv: "Choose the imaging center", f_noProv: "No imaging centers added yet.", f_addProv: "Add one in Service Providers", f_specialty: "Specialty", f_facility: "Hospital or clinic", f_date: "Date", f_pharmacy: "Pharmacy", f_leaveNo: "Sehha leave number", f_from: "From", f_to: "To", f_channel: "Sent by",
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
       required: "Fill in the required fields.", badDate: "Enter the date as DD/MM/YYYY.", badRange: "The end date is before the start date.", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
       itemDone: "Done", itemRejected: "The patient declined the referral. The doctor can see the reason.", f_decision: "Does the patient agree to the referral?", dc_approved: "Patient agrees", dc_rejected: "Patient declined", f_refFile: "Attach a document", f_refNote: "Note or reason",
@@ -511,7 +512,7 @@
       a_issued: "حفظ إجازة صحة", a_referred: "حفظ التحويل", a_attended: "تم تقديم الخدمة", a_sent: "تم الإرسال", a_explained: "تم الشرح", a_booked: "حفظ موعد الزيارة", a_done: "تمت الزيارة",
       f_note: "ملاحظة", f_result: "ملخص النتيجة", f_radFile: "تقرير مركز الأشعة", f_radSum: "ملخص التقرير", needFile: "أرفقي تقرير مركز الأشعة.",
       radShareT: "إرسال للمريض", radShareS: "ملف PDF واحد: غلاف مدى كير فيه بيانات المريض ومركز الأشعة وتعليق الطبيب، وبعده تقرير المركز نفسه.", f_file: "إرفاق التقرير", f_fileHint: "PDF أو صورة، حتى 1.5 ميجا", f_fileChoose: "اختاري ملف", f_docNote: "تعليق الطبيب",
-      f_center: "مركز الأشعة", f_specialty: "التخصص", f_facility: "المستشفى أو العيادة", f_date: "التاريخ", f_pharmacy: "الصيدلية", f_leaveNo: "رقم إجازة صحة", f_from: "من", f_to: "إلى", f_channel: "أُرسلت عن طريق",
+      f_center: "مركز الأشعة", f_pickProv: "اختر مركز الأشعة", f_noProv: "ما فيه مراكز أشعة مضافة.", f_addProv: "أضفها من مقدمو الخدمة", f_specialty: "التخصص", f_facility: "المستشفى أو العيادة", f_date: "التاريخ", f_pharmacy: "الصيدلية", f_leaveNo: "رقم إجازة صحة", f_from: "من", f_to: "إلى", f_channel: "أُرسلت عن طريق",
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
       required: "عبّي الخانات المطلوبة.", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.", badRange: "تاريخ النهاية قبل تاريخ البداية.", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جربي ملف أصغر.",
       itemDone: "مكتمل", itemRejected: "المريض رفض التحويل، والطبيب يشوف السبب.", f_decision: "هل المريض موافق على التحويل؟", dc_approved: "المريض موافق", dc_rejected: "المريض رافض", f_refFile: "إرفاق مستند", f_refNote: "ملاحظة أو السبب",
@@ -587,7 +588,7 @@
       attended: [{ k: "note", ty: "text" }] },
     doctor: VISIT_FORM, nursing: VISIT_FORM, physio: VISIT_FORM, iv: VISIT_FORM,
     lab: { collected: [{ k: "note", ty: "text" }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
-    radiology: { scheduled: [{ k: "center", ty: "text", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "file", ty: "file", req: 1, lk: "f_radFile" }, { k: "result", ty: "area", lk: "f_radSum" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
+    radiology: { scheduled: [{ k: "center", ty: "prov", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "file", ty: "file", req: 1, lk: "f_radFile" }, { k: "result", ty: "area", lk: "f_radSum" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
     medication: { dispensed: [{ k: "pharmacy", ty: "text", req: 1 }], delivered: [{ k: "note", ty: "text" }] },
     leave: { issued: [{ k: "leaveNo", ty: "text", req: 1, ltr: 1 }, { k: "from", ty: "date", req: 1 }, { k: "to", ty: "date", req: 1 }, { k: "file", ty: "file" }], sent: [{ k: "channel", ty: "select", opts: ["sms", "whatsapp", "email"], req: 1 }] },
     plan: { explained: [{ k: "note", ty: "area" }] },
@@ -608,6 +609,11 @@
     const wide = fd.ty === "area" || fd.ty === "file" ? " wide" : "";
     if (fd.ty === "area") return `<div class="${wide}">${lab}<textarea class="inp" id="${fid}" maxlength="600" dir="auto"></textarea></div>`;
     if (fd.ty === "date") return `<div>${lab}${dateField(fid)}</div>`;
+    if (fd.ty === "prov") { // An imaging center from Service Providers (its logo goes on the patient's report); typed by hand when none is added yet.
+      const ps = typeof MadaProviders === "undefined" ? [] : MadaProviders.active("imaging");
+      if (!ps.length) return `<div>${lab}<input class="inp" id="${fid}" maxlength="80" dir="auto"><span class="muted" style="display:block;font-size:11.5px;margin-top:4px">${t().f_noProv} <a href="providers.html">${t().f_addProv}</a></span></div>`;
+      return `<div>${lab}<select class="inp" id="${fid}" data-prov><option value="">${t().f_pickProv}</option>${ps.map(p => `<option value="${esc(p.id)}">${esc(p.name[current] || p.name.en || p.name.ar)}</option>`).join("")}</select></div>`;
+    }
     if (fd.ty === "time") return `<div>${lab}<input type="time" class="inp ltr" id="${fid}" dir="ltr"></div>`;
     if (fd.ty === "num") return `<div>${lab}<input class="inp ltr" id="${fid}" inputmode="decimal" maxlength="10" dir="ltr" placeholder="0"></div>`;
     if (fd.ty === "select") return `<div>${lab}<select class="inp" id="${fid}">${fd.opts.map(o => `<option value="${o}">${t()[(fd.lp || "ch_") + o]}</option>`).join("")}</select></div>`;
@@ -627,7 +633,7 @@
     if (d.facility) parts.push(esc(tx("d_facility", { v: d.facility })));
     if (d.cost) parts.push(tx("d_cost", { v: `<span class="ltr">${esc(d.cost)}</span>` }));
     if (d.payWhen) parts.push(esc(tx("d_payWhen", { v: t()["pw_" + d.payWhen] })));
-    if (d.center) parts.push(esc(tx("d_center", { v: d.center })));
+    if (d.center) { const pv = d.providerId && typeof MadaProviders !== "undefined" ? MadaProviders.get(d.providerId) : null; parts.push(esc(tx("d_center", { v: pv ? pv.name[current] || pv.name.en : d.center }))); }
     if (d.pharmacy) parts.push(esc(tx("d_pharmacy", { v: d.pharmacy })));
     if (d.leaveNo) parts.push(tx("d_leaveNo", { v: `<span class="ltr">${esc(d.leaveNo)}</span>` }));
     if (d.from && d.to) parts.push(tx("d_range", { a: ymdD(d.from), b: ymdD(d.to) }));
@@ -851,6 +857,7 @@
       const el = $(`f-${it.id}-${pre}${fd.k}`);
       if (fd.ty === "file") { const f = fileOf(el); if (!f && fd.req === 1) { bad = true; msg = t().needFile; (el.closest(".drop") || el).classList.add("bad"); continue; } if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
       let v = el.value.trim();
+      if (fd.ty === "prov" && el.dataset.prov !== undefined && v) { const p = MadaProviders.get(v); data.providerId = v; v = p ? p.name.en || p.name.ar : v; }
       if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
       if (fd.ty === "num" && v) { v = v.replace(/[٠-٩]/g, c => "٠١٢٣٤٥٦٧٨٩".indexOf(c)); if (!/^\d+(\.\d{1,2})?$/.test(v)) { bad = true; msg = t().badCost; el.classList.add("bad"); continue; } }
       if ((fd.req === 1 || (fd.req && fd.req === dec)) && !v) { bad = true; (el.closest(".field") || el).classList.add("bad"); continue; }

@@ -109,7 +109,7 @@
   td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
   .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
   td .num { white-space: nowrap; }
-  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; }
+  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; } .pv-logo { display: block; height: 24px; max-width: 90px; object-fit: contain; margin-bottom: 4px; }
   .dr small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
   .tests { display: flex; flex-wrap: wrap; gap: 4px; max-width: 260px; }
   .exam { font-weight: 600; color: #15304a; min-width: 110px; max-width: 180px; display: block; }
@@ -252,6 +252,7 @@
 <script src="medical.js"></script>
 <script src="patients.js"></script>
 <script src="lab-report.js"></script>
+<script src="providers.js"></script>
 <script src="rad-report.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
@@ -320,7 +321,7 @@
       const d = MadaOrders.DOCTORS.find(x => x.id === r.doctorId), o = MadaOrders.get(r.orderId) || {};
       const c = { key: r.id + "|" + it.id, r, it, mrn: r.mrn || o.mrn, patient: r.patient || o.patient, bookingId: r.bookingId || o.bookingId, mobile: r.mobile || o.mobile,
         kind: r.source === "doctor" && !it.addedBy ? "doctor" : "staff", doctor: d ? d.name : r.byDoctor, exam: it.title, why: it.details,
-        center: scd.center || "", examDate: scd.date || "", repAt: rs ? rs.at : null, repBy: rs ? rs.by : null, file: it.report || rsd.file || null, summary: rsd.result || "",
+        center: scd.center || "", prov: scd.providerId && MadaProviders.get(scd.providerId), examDate: scd.date || "", repAt: rs ? rs.at : null, repBy: rs ? rs.by : null, file: it.report || rsd.file || null, summary: rsd.result || "",
         docSeen: it.docSeen || null, review: rv ? { at: rv.at, by: rv.by, note: rv.data && rv.data.docNote } : null, docNotes: it.docNotes || [], rejected: !!it.rejected };
       c.sent = !!rs;
       c.status = c.rejected ? "rejected" : c.review ? "reviewed" : c.sent ? "review" : !sc ? "book" : c.examDate && c.examDate < today() ? "late" : "waiting";
@@ -369,7 +370,7 @@
     $("rows").innerHTML = rows.map(c => `<tr>
         <td class="c-who" data-l="${t().cPatient}">${c.mrn ? fileLink(c, "pn pl", T(c.patient)) : `<b class="pn">${esc(T(c.patient))}</b>`}<small>${c.mrn ? fileLink(c, "num fl", c.mrn) : ""}${c.bookingId ? `<span class="num">${esc(c.bookingId)}</span>` : ""}</small></td>
         <td data-l="${t().cExam}"><span class="exam">${esc(T(c.exam))}</span><small>${c.kind === "doctor" ? t().docOrder : t().staffOrder}${c.doctor ? " · " + esc(T(c.doctor)) : ""}</small></td>
-        <td class="c-taken" data-l="${t().cCenter}">${esc(c.center || "—")}${c.examDate ? `<small>${esc(t().cDate)}: ${esc(dayTxt(c.examDate))}</small>` : ""}</td>
+        <td class="c-taken" data-l="${t().cCenter}">${c.prov && c.prov.logo ? `<img class="pv-logo" src="${c.prov.logo}" alt="">` : ""}${esc(c.prov ? T(c.prov.name) : c.center || "—")}${c.examDate ? `<small>${esc(t().cDate)}: ${esc(dayTxt(c.examDate))}</small>` : ""}</td>
         <td data-l="${t().cRep}">${repHtml(c)}</td>
         <td data-l="${t().cStatus}"><span class="pill ${PILL[c.status]}">${t()["st_" + c.status]}</span></td>
         <td class="c-dr" data-l="${t().cDoctor}">${drHtml(c)}</td>
@@ -390,7 +391,7 @@
     const box = (k, v) => v ? `<div class="rt"><h4>${esc(t()[k])}</h4><p style="padding:10px 12px;white-space:pre-line" dir="auto">${esc(v)}</p></div>` : "";
     $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
       <h3 id="dT">${t().dT}</h3><p class="sub">${esc(T(c.patient))} · ${c.mrn ? `<a class="num fl" href="patient.html?file=${encodeURIComponent(c.mrn)}">${esc(c.mrn)}</a>` : ""}</p>
-      <div class="kv"><div><span>${t().cExam}</span>${esc(T(c.exam))}</div><div><span>${t().cCenter}</span>${esc(c.center || "—")}</div><div><span>${t().cDate}</span>${esc(dayTxt(c.examDate) || "—")}</div>
+      <div class="kv"><div><span>${t().cExam}</span>${esc(T(c.exam))}</div><div><span>${t().cCenter}</span>${esc(c.prov ? T(c.prov.name) : c.center || "—")}</div><div><span>${t().cDate}</span>${esc(dayTxt(c.examDate) || "—")}</div>
         <div><span>${t().cRep}</span>${esc(when(c.repAt) || "—")}</div><div><span>${t().attBy}</span>${esc(T(c.repBy) || "—")}</div><div><span>${t().doctor}</span>${esc(T(c.doctor) || "—")}</div>
         <div style="grid-column:1/-1"><span>${t().cDoctor}</span>${drHtml(c)}</div></div>
       ${T(c.why) ? box("reason", T(c.why)) : ""}${c.sent ? box("sum", c.summary) + box("docNote", c.review && c.review.note) : `<p class="sub">${t().noRes}</p>`}

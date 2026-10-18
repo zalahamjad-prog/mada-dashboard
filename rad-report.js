@@ -35,7 +35,7 @@ const MadaRadReport = (() => {
     const t = L[lg], rtl = lg === "ar", al = rtl ? "right" : "left", ar2 = rtl ? "left" : "right", tx = (k, v) => t[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
     const { esc, when, fileOf, ageOf } = LR(), ltr = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(v)}</span>`;
     const p = fileOf(r.mrn), o = (typeof MadaOrders !== "undefined" && MadaOrders.get(r.orderId)) || {};
-    const sc = (logOf(it, "scheduled") || {}).data || {}, rs = logOf(it, "resulted"), rv = logOf(it, "reviewed"), file = fileOfItem(it);
+    const sc = (logOf(it, "scheduled") || {}).data || {}, pv = sc.providerId && typeof MadaProviders !== "undefined" ? MadaProviders.get(sc.providerId) : null, rs = logOf(it, "resulted"), rv = logOf(it, "reviewed"), file = fileOfItem(it);
     const day = d => { if (!d) return "—"; const [y, m, dd] = String(d).slice(0, 10).split("-"); return ltr(`${dd}/${m}/${y}`); };
     const kv = (k, v) => `<div style="padding:4px 0"><div style="color:${MU};font-size:10px">${esc(k)}</div><div style="font-weight:600;color:${INK};font-size:12px">${v}</div></div>`;
     const box = (title, body) => `<div class="pdf-avoid" style="border:1px solid ${LINE};border-radius:12px;padding:10px 14px;background:#fff"><div style="font-size:11px;font-weight:700;color:${G};margin-bottom:4px">${esc(title)}</div>${body}</div>`;
@@ -66,7 +66,7 @@ const MadaRadReport = (() => {
       </div>
 
       <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:8px;margin-top:8px">
-        ${box(t.center, `<div style="font-size:15px;font-weight:700;color:${INK};padding-top:2px">${esc(sc.center || "—")}</div>
+        ${box(t.center, `<div style="display:flex;align-items:center;gap:12px;padding-top:2px">${pv && pv.logo ? `<span style="width:120px;height:64px;border:1px solid ${LINE};border-radius:10px;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none;padding:4px"><img src="${pv.logo}" style="max-width:100%;max-height:100%;object-fit:contain" alt=""></span>` : ""}<div style="font-size:15px;font-weight:700;color:${INK}">${esc((pv && (pv.name[lg] || pv.name.en)) || sc.center || "—")}</div></div>
           <div style="display:inline-block;margin-top:5px;padding:3px 10px;border-radius:11px;background:#fbf4e4;color:#8a6a1f;font-size:10.5px;font-weight:700">${esc(t.contracted)}</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 12px;margin-top:4px">${kv(t.examDate, day(sc.date))}${kv(t.repAt, rs ? when(rs.at, lg) : "—")}</div>`)}
         ${box(rv ? t.doctor : t.reqBy, kv(rv ? t.doctor : t.reqBy, esc(nm(doctorOf(r), lg) || "—")) + (rv ? kv(t.revAt, when(rv.at, lg)) : ""))}
