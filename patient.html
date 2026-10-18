@@ -255,6 +255,40 @@
   .soon-box h3 { font-size: 18px; }
   .soon-box p { font-size: 13.5px; color: #44545a; max-width: 420px; line-height: 1.6; }
   .missing { padding: 40px 20px; text-align: center; }
+  /* ---------- Files & sharing (patient-docs.js) ---------- */
+  .sh-card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; background: #fbfdfc; }
+  .sh-top { display: flex; align-items: flex-start; gap: 12px; }
+  .sh-ic { width: 40px; height: 40px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; flex: none; }
+  .sh-ic svg { width: 20px; height: 20px; }
+  .sh-top h3 { font-size: 15px; } .sh-top p { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.55; }
+  .sh-url { display: flex; gap: 8px; margin-top: 14px; }
+  .sh-url input, .sh-in { flex: 1; min-width: 0; height: 40px; border: 1px solid #d9e1e3; border-radius: 8px; padding: 0 12px; font: inherit; font-size: 13px; background: #fff; color: var(--ink); }
+  .sh-url input { direction: ltr; }
+  .sh-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin-top: 12px; align-items: end; }
+  .sh-row label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .sh-seg { display: inline-flex; border: 1px solid #d9e1e3; border-radius: 8px; overflow: hidden; height: 40px; }
+  .sh-seg button { border: 0; background: #fff; padding: 0 14px; font: inherit; font-size: 13px; cursor: pointer; color: #44545a; }
+  .sh-seg button.on { background: var(--primary); color: #fff; }
+  .sh-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .btn-wa { background: #1f9d55; color: #fff; } .btn-wa:hover { background: #17804a; }
+  .btn-stop { background: #fff; color: var(--red); border-color: #f3c9c9; }
+  .sh-log { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+  .sh-log b { color: var(--ink); font-weight: 600; }
+  .sh-grp { margin-top: 12px; } .sh-grp h4 { font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .sh-grp h4 b { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11px; line-height: 20px; text-align: center; }
+  .sh-none { font-size: 13px; color: var(--muted); padding: 10px 14px; border: 1px dashed var(--border); border-radius: 10px; }
+  .sh-it { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; background: #fff; flex-wrap: wrap; }
+  .sh-it.off { background: #f7f9f9; } .sh-it.off .sh-t { opacity: .55; }
+  .sh-t { flex: 1; min-width: 200px; } .sh-t b { font-size: 13.5px; display: block; } .sh-t small { font-size: 12px; color: var(--muted); display: block; margin-top: 3px; }
+  .sh-tag { display: inline-block; margin-inline-start: 6px; padding: 1px 8px; border-radius: 10px; background: #fff4e5; color: #b45309; font-size: 11px; font-weight: 600; vertical-align: 1px; }
+  .sh-sw { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: #44545a; cursor: pointer; white-space: nowrap; }
+  .sh-sw input { appearance: none; width: 36px; height: 20px; border-radius: 10px; background: #cfd8db; position: relative; cursor: pointer; margin: 0; transition: background .15s; }
+  .sh-sw input::after { content: ""; position: absolute; top: 2px; inset-inline-start: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: inset-inline-start .15s; }
+  .sh-sw input:checked { background: var(--primary); } .sh-sw input:checked::after { inset-inline-start: 18px; }
+  .sh-dl { display: flex; gap: 6px; }
+  .sh-dl button { height: 34px; padding: 0 11px; border-radius: 8px; border: 1px solid #d9e1e3; background: #fff; font: inherit; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
+  .sh-dl button svg { width: 15px; height: 15px; } .sh-dl button:disabled { opacity: .5; }
+  @media (max-width: 640px) { .sh-row { grid-template-columns: 1fr; } .sh-acts .btn { flex: 1 1 calc(50% - 8px); } .sh-it { align-items: flex-start; } }
   @media (max-width: 760px) {
     .pf-head, .panel { padding: 16px; }
     .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -319,6 +353,19 @@
 <script src="lab-samples.js"></script>
 <script src="lab-report.js"></script>
 <script src="patients.js"></script>
+<script src="providers.js"></script>
+<script src="rad-report.js"></script>
+<script src="doctor-history.js"></script>
+<script src="doctor-exam.js"></script>
+<script src="doctor-allergy.js"></script>
+<script src="doctor-plan.js"></script>
+<script src="doctor-orders.js"></script>
+<script src="doctor-nurse.js"></script>
+<script src="doctor-edu.js"></script>
+<script src="doctor-idform.js"></script>
+<script src="stamps.js"></script>
+<script src="medical-report.js"></script>
+<script src="patient-docs.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -346,6 +393,14 @@
       tab_labs: "Lab Results", lTitle: "Lab Results", lSub: "Approved results stay on the file as a reference: doctor's orders after the doctor approves them, bookings after the nurse approves them.",
       lWait: "{n} more waiting for results or approval.", lEmpty: "No approved lab results yet", lEmptyText: "Results show here once they are approved.", lApproved: "Approved by {n}", lByDoc: "Ordered by {n}", lPatient: "Patient booking",
       lTest: "Test", lRes: "Result", lRange: "Normal range", l_normal: "Normal", l_low: "Low", l_high: "High", l_critical: "Critical",
+      tab_share: "Files & Patient Link", shT: "Patient link", shS: "One link for the patient to view and download their prescriptions, imaging, lab results and the doctor's reports. Only approved files show.",
+      shNew: "Create patient link", shCopy: "Copy link", shCopied: "Link copied.", shPhone: "Patient mobile", shLang: "Message language", shWa: "Send by WhatsApp", shSms: "Send by SMS", shOpen: "Open link", shStop: "Stop link",
+      shStopAsk: "Stop this link? The patient will not be able to open it. You can create a new one later.", shStopped: "Link stopped.", shMade: "Link created. Send it to the patient.", shBadPh: "Enter a valid Saudi mobile number.",
+      shMadeBy: "Created {d} · by {n}", shSent: "Sent {n} times · last {t}", shNotSent: "Not sent yet", shOpened: "Opened by the patient {n} times · last {t}", shNotOpened: "Not opened yet",
+      shWhat: "What the patient sees", shOn: "Shown to patient", g_rx: "Prescriptions", g_rad: "Imaging Reports", g_lab: "Lab Results", g_rep: "Medical Reports",
+      n_rx: "No prescriptions yet. They show here once the doctor signs a visit with medicines.", n_rad: "No imaging reports yet. They show once the doctor reviews them.", n_lab: "No approved lab results yet.", n_rep: "No approved medical reports yet.",
+      rxItem: "Prescription · {n} medicines", rxItem1: "Prescription · 1 medicine", repItem: "Medical report · visit {id}", amended: "Updated after results", byDr: "{d} · {n}", visitL: "Visit {id}",
+      dlAr: "Arabic", dlEn: "English", ch_wa: "WhatsApp", ch_sms: "SMS", ch_copy: "copy",
       hTitle: "The health file is coming next", hText: "Medical history, visits, results and the care plan for this patient will live here."
     },
     ar: {
@@ -368,6 +423,14 @@
       tab_labs: "نتائج التحاليل", lTitle: "نتائج التحاليل", lSub: "النتائج المعتمدة تبقى في الملف كمرجع: طلبات الطبيب بعد ما يعتمدها، والحجوزات بعد ما تعتمدها الممرضة.",
       lWait: "فيه {n} بانتظار النتائج أو الاعتماد.", lEmpty: "ما فيه نتائج تحاليل معتمدة للحين", lEmptyText: "النتائج تطلع هنا أول ما تنعتمد.", lApproved: "اعتمدها {n}", lByDoc: "طلبها {n}", lPatient: "حجز مريض",
       lTest: "التحليل", lRes: "النتيجة", lRange: "المعدل الطبيعي", l_normal: "طبيعي", l_low: "منخفض", l_high: "مرتفع", l_critical: "حرج",
+      tab_share: "الملفات ورابط المريض", shT: "رابط المريض", shS: "رابط واحد يشوف فيه المريض ويحمّل وصفاته والأشعة والتحاليل وتقارير الطبيب. يظهر فيه المعتمد فقط.",
+      shNew: "إنشاء رابط للمريض", shCopy: "نسخ الرابط", shCopied: "تم نسخ الرابط.", shPhone: "جوال المريض", shLang: "لغة الرسالة", shWa: "إرسال واتساب", shSms: "إرسال SMS", shOpen: "فتح الرابط", shStop: "إيقاف الرابط",
+      shStopAsk: "توقف هذا الرابط؟ المريض ما راح يقدر يفتحه، وتقدر تسوي رابط جديد بعدين.", shStopped: "تم إيقاف الرابط.", shMade: "تم إنشاء الرابط. أرسله للمريض.", shBadPh: "اكتب رقم جوال سعودي صحيح.",
+      shMadeBy: "أُنشئ {d} · بواسطة {n}", shSent: "أُرسل {n} مرات · آخر مرة {t}", shNotSent: "ما أُرسل للحين", shOpened: "فتحه المريض {n} مرات · آخر مرة {t}", shNotOpened: "ما فتحه المريض للحين",
+      shWhat: "اللي يشوفه المريض", shOn: "يظهر للمريض", g_rx: "الوصفات الطبية", g_rad: "تقارير الأشعة", g_lab: "نتائج التحاليل", g_rep: "التقارير الطبية",
+      n_rx: "ما فيه وصفات للحين. تظهر هنا أول ما يوقّع الطبيب زيارة فيها أدوية.", n_rad: "ما فيه تقارير أشعة للحين. تظهر بعد ما يراجعها الطبيب.", n_lab: "ما فيه نتائج تحاليل معتمدة للحين.", n_rep: "ما فيه تقارير طبية معتمدة للحين.",
+      rxItem: "وصفة طبية · {n} أدوية", rxItem1: "وصفة طبية · دواء واحد", repItem: "تقرير طبي · زيارة {id}", amended: "معدّلة بعد النتائج", byDr: "{d} · {n}", visitL: "زيارة {id}",
+      dlAr: "عربي", dlEn: "English", ch_wa: "واتساب", ch_sms: "SMS", ch_copy: "نسخ",
       hTitle: "الملف الصحي قريباً", hText: "هنا بيكون التاريخ المرضي والزيارات والنتائج والخطة العلاجية للمريض."
     }
   };
@@ -448,6 +511,65 @@
           : `<tr><td data-l="${esc(t().lTest)}"><b>${esc(T(x.name))}</b></td><td colspan="3" data-l="${esc(t().lRes)}" style="white-space:pre-line">${esc((x.entry || {}).text)}</td></tr>`).join("")}
         </tbody></table></div></div>`; }).join("");
   }
+  // ---------- Files & patient link (patient-docs.js) ----------
+  // One link per patient (records.html) with what is approved: the doctor's prescriptions, imaging, lab results and medical reports.
+  // Each file can be hidden from the link; every file can be downloaded here too (Arabic or English), e.g. when the patient calls for it.
+  let shLang = null, shPhone = null;
+  const SH_IC = { rx: '<rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="m9.5 9.5 5 5"/>', rad: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="3.5"/>',
+    lab: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/>', rep: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', dl: '<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>' };
+  const fmtWhen = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit", hour12: true }); };
+  const fmtDay = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleDateString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", year: "numeric" }); };
+  const drOf = o => { const d = (MadaOrders.DOCTORS || []).find(x => x.id === (o.booking && o.booking.doctorId)); return d ? T(d.name) : T((o.doctorVisit || {}).by); };
+  function shItem(g, x) {
+    let title = "", sub = "", tag = "";
+    if (g === "rx") { const n = x.o.doctorVisit.steps.plan.meds.length; title = n === 1 ? t().rxItem1 : tx("rxItem", { n }); sub = [fmtDay(x.at), drOf(x.o), tx("visitL", { id: x.o.id })].filter(Boolean).join(" · "); if (x.amended) tag = t().amended; }
+    else if (g === "rad") { title = T(x.it.title); const sc = (x.it.log || []).find(l => MadaMedical.STEPS.radiology[l.step] === "scheduled"); sub = [fmtDay(x.at), sc && sc.data && T(sc.data.center)].filter(Boolean).join(" · "); if (x.it.drAdded) tag = t().amended; }
+    else if (g === "lab") { title = x.c.tests.map(z => T(z.name)).join(current === "ar" ? "، " : ", "); sub = fmtDay(x.at) + (x.c.kind === "doctor" ? " · " + tx("lByDoc", { n: T(x.c.doctor) || "—" }) : " · " + t().lPatient); }
+    else { title = tx("repItem", { id: x.o.id }); sub = [fmtDay(x.at), drOf(x.o)].filter(Boolean).join(" · "); }
+    const hide = ((MadaPatientDocs.linkOf(MadaPatients.get(fileNo)) || {}).hide || []).includes(x.key);
+    return `<div class="sh-it${hide ? " off" : ""}"><div class="sh-t"><b>${esc(title)}${tag ? `<span class="sh-tag">${esc(tag)}</span>` : ""}</b><small>${esc(sub)}</small></div>
+      <label class="sh-sw"><input type="checkbox" data-shhide="${esc(x.key)}" ${hide ? "" : "checked"}>${t().shOn}</label>
+      <span class="sh-dl"><button type="button" data-shdl="${g}|${esc(x.key)}|ar">${svg(SH_IC.dl)}${t().dlAr}</button><button type="button" data-shdl="${g}|${esc(x.key)}|en">${svg(SH_IC.dl)}${t().dlEn}</button></span></div>`;
+  }
+  function shareHtml(p) {
+    const c = MadaPatientDocs.collect(p.fileNo), l = MadaPatientDocs.linkOf(p), on = l && l.token && !l.off;
+    if (shLang == null) shLang = current; if (shPhone == null) shPhone = p.mobile || "";
+    const last = a => a && a.length ? a[a.length - 1].at : null;
+    const link = on ? `<div class="sh-url"><input type="text" readonly value="${esc(MadaPatientDocs.url(l.token, shLang))}" aria-label="${esc(t().shT)}"><button type="button" class="btn btn-ghost" id="shCopy">${t().shCopy}</button></div>
+        <div class="sh-row"><div><label for="shPh">${t().shPhone}</label><input class="sh-in" id="shPh" type="tel" dir="ltr" value="${esc(shPhone)}"></div>
+          <div><label>${t().shLang}</label><span class="sh-seg"><button type="button" data-shl="ar" class="${shLang === "ar" ? "on" : ""}">عربي</button><button type="button" data-shl="en" class="${shLang === "en" ? "on" : ""}">English</button></span></div></div>
+        <div class="sh-acts"><a class="btn btn-wa" id="shWa" target="_blank" rel="noopener">${t().shWa}</a><a class="btn btn-primary" id="shSms">${t().shSms}</a>
+          <a class="btn btn-ghost" href="${esc(MadaPatientDocs.url(l.token, shLang))}" target="_blank" rel="noopener">${t().shOpen}</a><button type="button" class="btn btn-stop" id="shStop">${t().shStop}</button></div>
+        <div class="sh-log"><span>${esc(tx("shMadeBy", { d: fmtWhen(l.createdAt), n: T(l.by) || "—" }))}</span>
+          <span>${(l.sent || []).length ? esc(tx("shSent", { n: l.sent.length, t: fmtWhen(last(l.sent)) })) : t().shNotSent}</span>
+          <span>${l.opens ? `<b>${esc(tx("shOpened", { n: l.opens, t: fmtWhen(l.lastOpenAt) }))}</b>` : t().shNotOpened}</span></div>`
+      : `<div class="sh-acts"><button type="button" class="btn btn-primary" id="shNew">${svg(SH_IC.link)}${t().shNew}</button></div>`;
+    return `<div class="sh-card"><div class="sh-top"><span class="sh-ic">${svg(SH_IC.link)}</span><div><h3>${t().shT}</h3><p>${t().shS}</p></div></div>${link}</div>
+      <section class="sec"><h2>${t().shWhat}</h2></section>
+      ${["rx", "rad", "lab", "rep"].map(g => `<div class="sh-grp"><h4>${t()["g_" + g]} <b>${c[g].length}</b></h4>${c[g].length ? c[g].map(x => shItem(g, x)).join("") : `<div class="sh-none">${t()["n_" + g]}</div>`}</div>`).join("")}`;
+  }
+  function toast(m) { const el = $("toast"); if (!m) { el.hidden = true; return; } el.textContent = m; el.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => { el.hidden = true; }, 3200); }
+  async function shDownload(g, k, lg, b) {
+    const x = MadaPatientDocs.collect(fileNo)[g].find(y => y.key === k); if (!x) return;
+    b.disabled = true;
+    try { if (g === "rx") await MadaReport.downloadRx(x.o, lg, toast); else if (g === "rad") await MadaRadReport.download(x.r, x.it, lg, toast); else if (g === "lab") await MadaLabReport.download(x.c, lg, toast); else await MadaReport.download(x.o, lg, toast); }
+    finally { b.disabled = false; }
+  }
+  function bindShare(p) {
+    const by = me ? me.name : null, l = MadaPatientDocs.linkOf(p);
+    const nb = $("shNew"); if (nb) nb.addEventListener("click", () => { MadaPatientDocs.ensure(p.fileNo, by); toast(t().shMade); render(); });
+    if (!l || !l.token || l.off) return;
+    const hrefs = () => { const P = MadaPatients.get(p.fileNo), msg = encodeURIComponent(MadaPatientDocs.message(P, shLang)), wa = MadaPatientDocs.waNum(shPhone);
+      $("shWa").href = wa ? `https://wa.me/${wa}?text=${msg}` : "#"; $("shSms").href = wa ? `sms:+${wa}?&body=${msg}` : "#"; };
+    hrefs();
+    $("shPh").addEventListener("input", e => { shPhone = e.target.value; hrefs(); });
+    ["shWa", "shSms"].forEach(id => $(id).addEventListener("click", e => { if (!MadaPatientDocs.waNum(shPhone)) { e.preventDefault(); toast(t().shBadPh); return; }
+      MadaPatientDocs.logSent(p.fileNo, id === "shWa" ? "wa" : "sms", by); setTimeout(render, 300); }));
+    $("shCopy").addEventListener("click", async () => { const u = MadaPatientDocs.url(l.token, shLang); try { await navigator.clipboard.writeText(u); } catch (e) { const i = document.querySelector(".sh-url input"); i.select(); document.execCommand("copy"); }
+      MadaPatientDocs.logSent(p.fileNo, "copy", by); toast(t().shCopied); render(); });
+    $("shStop").addEventListener("click", () => { if (!confirm(t().shStopAsk)) return; MadaPatientDocs.stop(p.fileNo, by); toast(t().shStopped); render(); });
+  }
   function render() {
     const p = fileNo && MadaPatients.get(fileNo);
     if (!p) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p></section>`; return; }
@@ -456,7 +578,7 @@
     const active = orders.some(o => OPEN.includes(o.status)) || meds.some(r => r.status === "open");
     const name = T(p.name);
     document.title = `${name} | Mada Care`;
-    if (!["info", "bookings", "labs", "health"].includes(tab)) tab = "info";
+    if (!["info", "bookings", "labs", "share", "health"].includes(tab)) tab = "info";
     const labs = labCards(p.fileNo);
     const tabBtn = (k, icon, extra) => `<button type="button" class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${svg(icon)}${t()["tab_" + k]}${extra || ""}</button>`;
     $("content").innerHTML = `<section class="card">
@@ -467,14 +589,21 @@
         ${tabBtn("info", '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>')}
         ${tabBtn("bookings", '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', `<b>${orders.length}</b>`)}
         ${tabBtn("labs", '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 14h9"/>', `<b>${labs.ok.length}</b>`)}
+        ${tabBtn("share", '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', `<b>${MadaPatientDocs.count(MadaPatientDocs.shown(p.fileNo, MadaPatientDocs.linkOf(p)))}</b>`)}
         ${tabBtn("health", '<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M7 12h2.5l1.5-2.5 2 5 1.5-2.5H17"/>', `<span class="soon-tag">${t().soon}</span>`)}
       </div>
-      <div class="panel" role="tabpanel">${tab === "info" ? infoHtml(p) : tab === "bookings" ? bookingsHtml(orders) : tab === "labs" ? labsHtml(labs)
+      <div class="panel" role="tabpanel">${tab === "info" ? infoHtml(p) : tab === "bookings" ? bookingsHtml(orders) : tab === "labs" ? labsHtml(labs) : tab === "share" ? shareHtml(p)
         : `<div class="soon-box">${svg('<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M7 12h2.5l1.5-2.5 2 5 1.5-2.5H17"/>', 1.5)}<h3>${t().hTitle}</h3><p>${t().hText}</p></div>`}</div>
     </section>`;
+    if (tab === "share") bindShare(p);
   }
+  $("content").addEventListener("change", e => { const c = e.target.closest("[data-shhide]"); if (!c) return; MadaPatientDocs.toggle(fileNo, c.dataset.shhide, !c.checked); render(); });
+  $("content").addEventListener("click", e => {
+    const d = e.target.closest("[data-shdl]"); if (d) { const [g, k, lg] = d.dataset.shdl.split("|"); shDownload(g, k, lg, d); return; }
+    const sl = e.target.closest("[data-shl]"); if (sl) { shLang = sl.dataset.shl; render(); }
+  });
   $("content").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; history.replaceState(null, "", "#" + tab); render(); });
-  window.addEventListener("storage", e => { if (!e.key || ["mada-patients", "mada-orders", "mada-medical"].includes(e.key)) render(); });
+  window.addEventListener("storage", e => { if (!e.key || ["mada-patients", "mada-orders", "mada-medical"].includes(e.key)) { if (document.activeElement && document.activeElement.id === "shPh") return; render(); } });
 
   // ---------- Language & header ----------
   function setLang(lang) {
