@@ -568,7 +568,7 @@
       closeTitle: "Close emergency case", closeText: "Choose what happened with the patient and write the closing note. The call center agent will see it.",
       closeNoteLbl: "Closing note", closeNotePh: "e.g. Called the family, the patient was admitted to the ER.", closeErr: "Write the closing note.",
       cancel: "Cancel", closeGo: "Close Case", closedToast: "{id} closed. The agent can see your note.",
-      service: "Service", items: "Requested items", total: "Total", sar: "SAR", noItems: "No items were chosen.",
+      service: "Service", items: "Requested items", total: "Total", sar: "SAR", payAfterSvc: "Pays after the service", noItems: "No items were chosen.",
       sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_none: "Not chosen",
       visit: "Visit", nurse: "Nurse", noVisit: "No visit booked.", patient: "Patient name", mrn: "Medical record", createdBy: "Created by", unknown: "Not recorded",
       payment: "Payment", paid: "Paid", notPaid: "Not Paid", decision: "Customer decision", status: "Status",
@@ -597,7 +597,7 @@
       closeTitle: "إقفال الحالة الطارئة", closeText: "اختاري ماذا حدث مع المريض واكتبي ملاحظة الإقفال. ستظهر لموظفة خدمة العملاء.",
       closeNoteLbl: "ملاحظة الإقفال", closeNotePh: "مثال: تم التواصل مع الأهل والمريض دخل الطوارئ.", closeErr: "اكتبي ملاحظة الإقفال.",
       cancel: "إلغاء", closeGo: "إقفال الحالة", closedToast: "تم إقفال {id}. الموظفة تقدر تشوف ملاحظتك.",
-      service: "الخدمة", items: "الخدمات المطلوبة", total: "الإجمالي", sar: "ريال", noItems: "لم يتم اختيار خدمات.",
+      service: "الخدمة", items: "الخدمات المطلوبة", total: "الإجمالي", sar: "ريال", payAfterSvc: "الدفع بعد تقديم الخدمة", noItems: "لم يتم اختيار خدمات.",
       sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_none: "لم تُحدد",
       visit: "الزيارة", nurse: "الممرض/ة", noVisit: "لا يوجد موعد.", patient: "اسم المريض", mrn: "الملف الطبي", createdBy: "أنشأ الطلب", unknown: "غير مسجل",
       payment: "الدفع", paid: "مدفوع", notPaid: "غير مدفوع", decision: "قرار العميل", status: "الحالة",
@@ -902,7 +902,7 @@
         <div><dt>${t().createdBy}</dt><dd>${esc(T(o.staff) || "—")}</dd></div></dl></section>
       <section class="card sec"><h2>${t().s5}</h2><dl class="facts">
         <div><dt>${t().decision}</dt><dd>${dec}</dd></div>
-        <div><dt>${t().payment}</dt><dd>${o.payment === "paid" ? `<span class="pill p-green">${t().paid}</span>` : o.payment === "unpaid" ? `<span class="pill p-red">${t().notPaid}</span>` : "—"}</dd></div></dl></section>`;
+        <div><dt>${t().payment}</dt><dd>${o.payment === "paid" ? `<span class="pill p-green">${t().paid}</span>` : o.payment === "unpaid" ? `<span class="pill p-red">${t().notPaid}</span>${o.payWhen === "after" ? ` <span class="pill p-orange">${t().payAfterSvc}</span>` : ""}` : "—"}</dd></div></dl></section>`;
     } else {
       html += `<section class="card sec"><h2>${t().s2p}</h2><dl class="facts">
         <div><dt>${t().patient}</dt><dd>${esc(T(o.patient) || t().unknown)}</dd></div>

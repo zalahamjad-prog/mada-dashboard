@@ -461,8 +461,8 @@
       s_written: "Plan written", s_explained: "Explained to patient", s_booked: "Visit booked", s_done: "Visit done",
       nextStep: "Next step: {s}", byDoctorSys: "Comes from the doctors system",
       a_collected: "Sample collected", a_resulted: "Save result", a_reviewed: "Doctor reviewed (demo)", a_scheduled: "Save appointment", a_dispensed: "Mark dispensed", a_delivered: "Mark delivered",
-      a_issued: "Save Sehha leave", a_referred: "Save referral", a_attended: "Service delivered", a_sent: "Mark sent", a_explained: "Mark explained", a_booked: "Save visit date", a_done: "Mark visit done",
-      f_note: "Note", f_result: "Result summary", f_radFile: "Report from the imaging center", f_radSum: "Report summary", needFile: "Attach the imaging center's report.",
+      a_issued: "Save Sehha leave", a_referred: "Save referral", a_attended: "Service delivered", a_sent: "Mark sent", a_explained: "Mark explained", a_done: "Mark visit done",
+      f_note: "Note", f_assign: "Assign to", f_pickAssign: "Choose a nurse or doctor", f_nurses: "Nurses", f_doctors: "Doctors", a_booked: "Book and assign", visitBooked: "Visit {b} booked with {n}", payAfter: "Patient pays after the service", payPaid: "Already paid in the doctor's visit", visitDoneAuto: "Visit completed in the app.", d_visit: "Visit: {v}", f_result: "Result summary", f_radFile: "Report from the imaging center", f_radSum: "Report summary", needFile: "Attach the imaging center's report.",
       radShareT: "Send to the patient", radShareS: "One PDF: a Mada Care cover with the patient's details, the imaging center and the doctor's comment, then the center's own report.", f_file: "Attach the report", f_fileHint: "PDF or image, up to 1.5 MB", f_fileChoose: "Choose a file", f_docNote: "Doctor's comment",
       f_center: "Radiology center", f_pickProv: "Choose the imaging center", f_noProv: "No imaging centers added yet.", f_addProv: "Add one in Service Providers", f_specialty: "Specialty", f_facility: "Hospital or clinic", f_date: "Date", f_pharmacy: "Pharmacy", f_leaveNo: "Sehha leave number", f_from: "From", f_to: "To", f_channel: "Sent by",
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
@@ -509,8 +509,8 @@
       s_written: "كُتبت الخطة", s_explained: "شُرحت للمريض", s_booked: "تم حجز الزيارة", s_done: "تمت الزيارة",
       nextStep: "الخطوة الجاية: {s}", byDoctorSys: "تجي من نظام الأطباء",
       a_collected: "تم سحب العينة", a_resulted: "حفظ النتيجة", a_reviewed: "راجعها الطبيب (تجربة)", a_scheduled: "حفظ الموعد", a_dispensed: "تم الصرف", a_delivered: "تم التوصيل",
-      a_issued: "حفظ إجازة صحة", a_referred: "حفظ التحويل", a_attended: "تم تقديم الخدمة", a_sent: "تم الإرسال", a_explained: "تم الشرح", a_booked: "حفظ موعد الزيارة", a_done: "تمت الزيارة",
-      f_note: "ملاحظة", f_result: "ملخص النتيجة", f_radFile: "تقرير مركز الأشعة", f_radSum: "ملخص التقرير", needFile: "أرفقي تقرير مركز الأشعة.",
+      a_issued: "حفظ إجازة صحة", a_referred: "حفظ التحويل", a_attended: "تم تقديم الخدمة", a_sent: "تم الإرسال", a_explained: "تم الشرح", a_done: "تمت الزيارة",
+      f_note: "ملاحظة", f_assign: "إسناد إلى", f_pickAssign: "اختر ممرضة أو طبيب", f_nurses: "الممرضات", f_doctors: "الأطباء", a_booked: "احجز وأسند", visitBooked: "زيارة {b} محجوزة مع {n}", payAfter: "المريض يدفع بعد تقديم الخدمة", payPaid: "مدفوعة في زيارة الطبيب", visitDoneAuto: "اكتملت الزيارة في التطبيق.", d_visit: "الزيارة: {v}", f_result: "ملخص النتيجة", f_radFile: "تقرير مركز الأشعة", f_radSum: "ملخص التقرير", needFile: "أرفقي تقرير مركز الأشعة.",
       radShareT: "إرسال للمريض", radShareS: "ملف PDF واحد: غلاف مدى كير فيه بيانات المريض ومركز الأشعة وتعليق الطبيب، وبعده تقرير المركز نفسه.", f_file: "إرفاق التقرير", f_fileHint: "PDF أو صورة، حتى 1.5 ميجا", f_fileChoose: "اختاري ملف", f_docNote: "تعليق الطبيب",
       f_center: "مركز الأشعة", f_pickProv: "اختر مركز الأشعة", f_noProv: "ما فيه مراكز أشعة مضافة.", f_addProv: "أضفها من مقدمو الخدمة", f_specialty: "التخصص", f_facility: "المستشفى أو العيادة", f_date: "التاريخ", f_pharmacy: "الصيدلية", f_leaveNo: "رقم إجازة صحة", f_from: "من", f_to: "إلى", f_channel: "أُرسلت عن طريق",
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
@@ -580,7 +580,10 @@
   const nextKey = it => MadaMedical.STEPS[it.type][MadaMedical.nextIdx(it)];
 
   // What staff enter for each next step. "doctor: true" steps come from the doctors system (demo button here).
-  const VISIT_FORM = { booked: [{ k: "date", ty: "date", req: 1 }, { k: "note", ty: "text" }], done: [{ k: "note", ty: "text" }] };
+  // A service the doctor ordered (nursing, IV, physiotherapy, doctor visit): the operations team calls the patient, books a time and
+  // assigns a nurse or doctor. That creates the visit (MadaOrders.book), paid after the service; it shows in the assignee's visits.
+  const VISIT_FORM = { booked: [{ k: "date", ty: "date", req: 1 }, { k: "time", ty: "time", req: 1 }, { k: "assign", ty: "assign", req: 1 }, { k: "note", ty: "text" }], done: [{ k: "note", ty: "text" }] };
+  const VISIT_TYPES = ["doctor", "nursing", "physio", "iv"];
   const FORM = {
     referral: { consent: [{ k: "decision", ty: "select", opts: ["approved", "rejected"], lp: "dc_", lk: "f_decision", req: 1 }, { k: "note", ty: "text", req: "rejected", lk: "f_refNote" }],
       procedures: [{ k: "date", ty: "date", lk: "f_svcDate" }, { k: "time", ty: "time" }, { k: "provider", ty: "text" }, { k: "facility", ty: "text" },
@@ -609,6 +612,11 @@
     const wide = fd.ty === "area" || fd.ty === "file" ? " wide" : "";
     if (fd.ty === "area") return `<div class="${wide}">${lab}<textarea class="inp" id="${fid}" maxlength="600" dir="auto"></textarea></div>`;
     if (fd.ty === "date") return `<div>${lab}${dateField(fid)}</div>`;
+    if (fd.ty === "assign") { // Nurses and doctors; the doctor list comes first for a doctor visit.
+      const ns = `<optgroup label="${esc(t().f_nurses)}">${(MadaNurses.NURSES || []).map(n => `<option value="N:${esc(n.id)}">${esc(T(n.name))}</option>`).join("")}</optgroup>`;
+      const ds = `<optgroup label="${esc(t().f_doctors)}">${(MadaOrders.DOCTORS || []).map(d => `<option value="D:${esc(d.id)}">${esc(T(d.name))}</option>`).join("")}</optgroup>`;
+      return `<div>${lab}<select class="inp" id="${fid}"><option value="">${t().f_pickAssign}</option>${it.type === "doctor" ? ds + ns : ns + ds}</select></div>`;
+    }
     if (fd.ty === "prov") { // An imaging center from Service Providers (its logo goes on the patient's report); typed by hand when none is added yet.
       const ps = typeof MadaProviders === "undefined" ? [] : MadaProviders.active("imaging");
       if (!ps.length) return `<div>${lab}<input class="inp" id="${fid}" maxlength="80" dir="auto"><span class="muted" style="display:block;font-size:11.5px;margin-top:4px">${t().f_noProv} <a href="providers.html">${t().f_addProv}</a></span></div>`;
@@ -630,6 +638,7 @@
     if (d.docNote) parts.push(esc(d.docNote));
     if (d.specialty) parts.push(esc(tx("d_specialty", { v: d.specialty })));
     if (d.provider) parts.push(esc(tx("d_provider", { v: d.provider })));
+    if (d.bookingId) parts.push(esc(tx("d_visit", { v: d.bookingId })));
     if (d.facility) parts.push(esc(tx("d_facility", { v: d.facility })));
     if (d.cost) parts.push(tx("d_cost", { v: `<span class="ltr">${esc(d.cost)}</span>` }));
     if (d.payWhen) parts.push(esc(tx("d_payWhen", { v: t()["pw_" + d.payWhen] })));
@@ -664,7 +673,9 @@
         <div class="fgrid">${FORM.referral.procedures.map(fd => fieldHtml(it, fd, "p")).join("")}</div>
         <div class="err" id="perr-${esc(it.id)}" hidden></div>
         <div class="acts"><button type="button" class="btn btn-ghost btn-sm" data-proc="${esc(it.id)}">${svg('<path d="M12 5v14M5 12h14"/>', 2.2)}${t().a_procedures}</button></div></div>` : "";
-      foot = proc + `<div class="next" data-item="${esc(it.id)}">
+      const vo = VISIT_TYPES.includes(it.type) ? visitOf(it) : null;
+      foot = proc + (vo ? `<a class="vd-card" href="request-details.html?id=${encodeURIComponent(vo.id)}">${svg(I.clock)}<span><b>${esc(tx("visitBooked", { b: vo.bookingId, n: who((vo.booking || {}).nurseId ? (MadaNurses.NURSES.find(n => n.id === vo.booking.nurseId) || {}).name : (MadaOrders.DOCTORS.find(d => d.id === (vo.booking || {}).doctorId) || {}).name) }))}</b>
+        <small class="muted" style="display:block">${ymdD(vo.appointment.date)} · ${fmtMin(vo.appointment.minute)} · ${vo.payment === "paid" ? t().payPaid : t().payAfter}</small></span></a>` : "") + `<div class="next" data-item="${esc(it.id)}">
         <div class="next-h">${svg(I.clock)}${esc(tx("nextStep", { s: t()["s_" + nk] }))}${fm.doctor ? ` <small>· ${t().byDoctorSys}</small>` : ""}</div>
         ${fm.f.length ? `<div class="fgrid">${fm.f.map(fd => fieldHtml(it, fd)).join("")}</div>` : ""}
         <div class="err" id="err-${esc(it.id)}" hidden></div>
@@ -788,8 +799,31 @@
     // TODO: link to the Quality page (quality.html?open=medical:<id>) once it is opened.
   }
 
+  // The visit for a doctor-ordered service. Paid after the service, unless the patient already paid for it in the doctor's visit.
+  function bookVisit(r, it, d) {
+    const src = MadaOrders.get(r.orderId) || {}, [h, m] = d.time.split(":").map(Number), x = it.order || {};
+    const kind = it.type === "iv" ? "iv" : "nursing", price = Number(x.price || 0);
+    const paid = src.doctorVisit && typeof DrOrders !== "undefined" && DrOrders.payState(src, current).status === "paid";
+    const o = MadaOrders.book({ service: it.type === "doctor" ? "doctor" : it.type === "iv" ? "iv" : "nursing", mrn: r.mrn, patient: r.patient, mobile: r.mobile,
+      location: src.location, address: src.address, items: x.code && it.type !== "doctor" ? [{ kind, code: x.code }] : [], total: price || null,
+      appointment: { date: d.date, minute: h * 60 + (m || 0), nurse: d.nurseId ? d.providerName : null }, payment: paid ? "paid" : "unpaid", payWhen: paid ? null : "after",
+      booking: { nurseId: d.nurseId || null, doctorId: d.doctorId || null, by: me.name, at: new Date().toISOString() }, staff: me.name, title: it.title, fromMr: { id: r.id, itemId: it.id } });
+    delete d.providerName;
+    return { visitId: o.id, bookingId: o.bookingId, payWhen: o.payWhen || null };
+  }
+  const visitOf = it => { const l = [...(it.log || [])].reverse().find(x => x.data && x.data.visitId); return l ? MadaOrders.get(l.data.visitId) : null; };
+  const visitDone = o => o && (o.status === "completed" || (o.nurseVisit && o.nurseVisit.status === "done") || (o.doctorVisit && o.doctorVisit.status === "done"));
+  // A booked service is delivered when its visit is finished in the nurse's or doctor's app.
+  function syncVisits(r) {
+    let ch = false;
+    r.items.forEach(it => { if (!VISIT_TYPES.includes(it.type) || MadaMedical.isDone(it) || nextKey(it) !== "done") return;
+      const o = visitOf(it); if (!visitDone(o)) return;
+      MadaMedical.advance(r.id, it.id, (o.booking && o.booking.nurseId ? (MadaNurses.NURSES.find(n => n.id === o.booking.nurseId) || {}).name : (MadaOrders.DOCTORS.find(d => d.id === (o.booking || {}).doctorId) || {}).name) || null, { note: t().visitDoneAuto }); ch = true; });
+    return ch ? MadaMedical.get(r.id) : r;
+  }
   function render() {
-    const r = id && MadaMedical.get(id);
+    let r = id && MadaMedical.get(id);
+    if (r) r = syncVisits(r);
     if (!r) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="medical-requests.html">${t().toList}</a></p></section>`; return; }
     const o = MadaOrders.get(r.orderId), st = stateOf(r), pr = MadaMedical.progress(r);
     const doc = MadaOrders.DOCTORS.find(d => d.id === r.doctorId);
@@ -857,6 +891,8 @@
       const el = $(`f-${it.id}-${pre}${fd.k}`);
       if (fd.ty === "file") { const f = fileOf(el); if (!f && fd.req === 1) { bad = true; msg = t().needFile; (el.closest(".drop") || el).classList.add("bad"); continue; } if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
       let v = el.value.trim();
+      if (fd.ty === "assign" && v) { const [kd, aid] = v.split(":"), p = kd === "N" ? (MadaNurses.NURSES || []).find(n => n.id === aid) : (MadaOrders.DOCTORS || []).find(d => d.id === aid);
+        data[kd === "N" ? "nurseId" : "doctorId"] = aid; data.provider = p ? (p.name.en || p.name.ar) : aid; data.providerName = p ? p.name : null; continue; }
       if (fd.ty === "prov" && el.dataset.prov !== undefined && v) { const p = MadaProviders.get(v); data.providerId = v; v = p ? p.name.en || p.name.ar : v; }
       if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
       if (fd.ty === "num" && v) { v = v.replace(/[٠-٩]/g, c => "٠١٢٣٤٥٦٧٨٩".indexOf(c)); if (!/^\d+(\.\d{1,2})?$/.test(v)) { bad = true; msg = t().badCost; el.classList.add("bad"); continue; } }
@@ -903,6 +939,7 @@
       // TODO: a "doctor" step arrives from the doctors system; this button only stands in for it in the demo.
       const by = fm.doctor ? (r.byDoctor || (MadaOrders.DOCTORS.find(d => d.id === r.doctorId) || {}).name) : me.name;
       const nk = nextKey(it);
+      if (nk === "booked" && VISIT_TYPES.includes(it.type) && (data.nurseId || data.doctorId)) Object.assign(data, bookVisit(r, it, data));
       MadaMedical.advance(r.id, it.id, by, Object.keys(data).length ? data : null);
       render(); toast(it.type === "referral" && nk === "procedures" ? t().procSaved : tx("stepSaved", { s: t()["s_" + nk] }));
       const card = $("item-" + it.id); if (card) card.scrollIntoView({ block: "nearest" });
