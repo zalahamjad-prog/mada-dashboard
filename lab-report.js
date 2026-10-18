@@ -140,5 +140,6 @@ const MadaLabReport = (() => {
     try { await download(c, b.dataset.lg || ui, typeof toast === "function" ? toast : null); } finally { b.disabled = false; }
   });
   const buttons = (key, ui) => btn(key, "en", btnLabel(ui, "en")) + btn(key, "ar", btnLabel(ui, "ar"));
-  return { html, download, reportNo, buttons, L };
+  // fixArabic, loadH2p, when, fileOf and ageOf are shared with the imaging report (rad-report.js).
+  return { html, download, reportNo, buttons, L, fixArabic, loadH2p, withTimeout, when, fileOf, ageOf, esc };
 })();

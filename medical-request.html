@@ -165,6 +165,7 @@
   textarea.inp { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; }
   .inp:focus, .field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
   .inp.bad, .field.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.1); }
+  .drop.bad { border-color: var(--red); background: #fff7f7; }
   select.inp { appearance: none; -webkit-appearance: none; cursor: pointer; padding-inline-end: 32px;
     background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2344545a' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center; }
   [dir="rtl"] select.inp { background-position: left 12px center; }
@@ -425,6 +426,8 @@
 <script src="doctor-history.js"></script>
 <script src="stamps.js"></script>
 <script src="medical-report.js"></script>
+<script src="lab-report.js"></script>
+<script src="rad-report.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -458,7 +461,8 @@
       nextStep: "Next step: {s}", byDoctorSys: "Comes from the doctors system",
       a_collected: "Sample collected", a_resulted: "Save result", a_reviewed: "Doctor reviewed (demo)", a_scheduled: "Save appointment", a_dispensed: "Mark dispensed", a_delivered: "Mark delivered",
       a_issued: "Save Sehha leave", a_referred: "Save referral", a_attended: "Service delivered", a_sent: "Mark sent", a_explained: "Mark explained", a_booked: "Save visit date", a_done: "Mark visit done",
-      f_note: "Note", f_result: "Result summary", f_file: "Attach the report", f_fileHint: "PDF or image, up to 1.5 MB", f_fileChoose: "Choose a file", f_docNote: "Doctor's comment",
+      f_note: "Note", f_result: "Result summary", f_radFile: "Report from the imaging center", f_radSum: "Report summary", needFile: "Attach the imaging center's report.",
+      radShareT: "Send to the patient", radShareS: "One PDF: a Mada Care cover with the patient's details, the imaging center and the doctor's comment, then the center's own report.", f_file: "Attach the report", f_fileHint: "PDF or image, up to 1.5 MB", f_fileChoose: "Choose a file", f_docNote: "Doctor's comment",
       f_center: "Radiology center", f_specialty: "Specialty", f_facility: "Hospital or clinic", f_date: "Date", f_pharmacy: "Pharmacy", f_leaveNo: "Sehha leave number", f_from: "From", f_to: "To", f_channel: "Sent by",
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
       required: "Fill in the required fields.", badDate: "Enter the date as DD/MM/YYYY.", badRange: "The end date is before the start date.", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
@@ -505,7 +509,8 @@
       nextStep: "الخطوة الجاية: {s}", byDoctorSys: "تجي من نظام الأطباء",
       a_collected: "تم سحب العينة", a_resulted: "حفظ النتيجة", a_reviewed: "راجعها الطبيب (تجربة)", a_scheduled: "حفظ الموعد", a_dispensed: "تم الصرف", a_delivered: "تم التوصيل",
       a_issued: "حفظ إجازة صحة", a_referred: "حفظ التحويل", a_attended: "تم تقديم الخدمة", a_sent: "تم الإرسال", a_explained: "تم الشرح", a_booked: "حفظ موعد الزيارة", a_done: "تمت الزيارة",
-      f_note: "ملاحظة", f_result: "ملخص النتيجة", f_file: "إرفاق التقرير", f_fileHint: "PDF أو صورة، حتى 1.5 ميجا", f_fileChoose: "اختاري ملف", f_docNote: "تعليق الطبيب",
+      f_note: "ملاحظة", f_result: "ملخص النتيجة", f_radFile: "تقرير مركز الأشعة", f_radSum: "ملخص التقرير", needFile: "أرفقي تقرير مركز الأشعة.",
+      radShareT: "إرسال للمريض", radShareS: "ملف PDF واحد: غلاف مدى كير فيه بيانات المريض ومركز الأشعة وتعليق الطبيب، وبعده تقرير المركز نفسه.", f_file: "إرفاق التقرير", f_fileHint: "PDF أو صورة، حتى 1.5 ميجا", f_fileChoose: "اختاري ملف", f_docNote: "تعليق الطبيب",
       f_center: "مركز الأشعة", f_specialty: "التخصص", f_facility: "المستشفى أو العيادة", f_date: "التاريخ", f_pharmacy: "الصيدلية", f_leaveNo: "رقم إجازة صحة", f_from: "من", f_to: "إلى", f_channel: "أُرسلت عن طريق",
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
       required: "عبّي الخانات المطلوبة.", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.", badRange: "تاريخ النهاية قبل تاريخ البداية.", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جربي ملف أصغر.",
@@ -582,7 +587,7 @@
       attended: [{ k: "note", ty: "text" }] },
     doctor: VISIT_FORM, nursing: VISIT_FORM, physio: VISIT_FORM, iv: VISIT_FORM,
     lab: { collected: [{ k: "note", ty: "text" }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
-    radiology: { scheduled: [{ k: "center", ty: "text", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
+    radiology: { scheduled: [{ k: "center", ty: "text", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "file", ty: "file", req: 1, lk: "f_radFile" }, { k: "result", ty: "area", lk: "f_radSum" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
     medication: { dispensed: [{ k: "pharmacy", ty: "text", req: 1 }], delivered: [{ k: "note", ty: "text" }] },
     leave: { issued: [{ k: "leaveNo", ty: "text", req: 1, ltr: 1 }, { k: "from", ty: "date", req: 1 }, { k: "to", ty: "date", req: 1 }, { k: "file", ty: "file" }], sent: [{ k: "channel", ty: "select", opts: ["sms", "whatsapp", "email"], req: 1 }] },
     plan: { explained: [{ k: "note", ty: "area" }] },
@@ -606,7 +611,7 @@
     if (fd.ty === "time") return `<div>${lab}<input type="time" class="inp ltr" id="${fid}" dir="ltr"></div>`;
     if (fd.ty === "num") return `<div>${lab}<input class="inp ltr" id="${fid}" inputmode="decimal" maxlength="10" dir="ltr" placeholder="0"></div>`;
     if (fd.ty === "select") return `<div>${lab}<select class="inp" id="${fid}">${fd.opts.map(o => `<option value="${o}">${t()[(fd.lp || "ch_") + o]}</option>`).join("")}</select></div>`;
-    if (fd.ty === "file") return `<div class="wide"><span class="lbl">${t()[fd.lk || "f_file"]} <em>${t().optional}</em></span><label class="drop">${svg(I.upload)}<span><span class="fname" id="${fid}-name">${t().f_fileChoose}</span> <span class="muted">· ${t().f_fileHint}</span></span><input type="file" id="${fid}" accept="application/pdf,image/*"></label></div>`;
+    if (fd.ty === "file") return `<div class="wide"><span class="lbl">${t()[fd.lk || "f_file"]} ${fd.req === 1 ? "" : `<em>${t().optional}</em>`}</span><label class="drop">${svg(I.upload)}<span><span class="fname" id="${fid}-name">${t().f_fileChoose}</span> <span class="muted">· ${t().f_fileHint}</span></span><input type="file" id="${fid}" accept="application/pdf,image/*"></label></div>`;
     return `<div class="${fd.k === "note" ? "wide" : ""}">${lab}<input class="inp${fd.ltr ? " ltr" : ""}" id="${fid}" maxlength="120" dir="${fd.ltr ? "ltr" : "auto"}"></div>`;
   }
 
@@ -642,6 +647,8 @@
     const log = `<ul class="log">${it.log.map(l => `<li><div><b>${t()["s_" + steps[l.step]]}</b> <span class="who">· ${stamp(l.at)}${l.by ? " · " + esc(tx("by", { n: who(l.by) })) : ""}</span>${dataTxt(l.data, r.id, it, l.step)}</div></li>`).join("")}</ul>`;
     let foot = "";
     if (it.type === "lab") foot = `${MadaMedical.labLate(it) ? `<div class="it-warn">${svg(I.warn, 2)}${t().labLate}</div>` : ""}${MadaMedical.openEsc(it).length ? `<div class="it-warn">${svg(I.warn, 2)}${t().labEsc}</div>` : ""}<a class="vd-card lab-link" href="lab-test.html?id=${encodeURIComponent(r.id)}&item=${encodeURIComponent(it.id)}"><span class="it-ic">${svg(TY_ICON.lab)}</span><span><b>${t().openLab}</b><small>${t().openLabSub}</small></span>${svg('<path d="m9 6 6 6-6 6"/>', 2)}</a>`;
+    else if (it.type === "radiology" && typeof MadaRadReport !== "undefined" && MadaRadReport.ready(it))
+      foot = `<div class="it-done">${svg(I.check, 2.4)}${t().itemDone}</div><div class="next rad-share"><div class="next-h">${svg(I.note)}${t().radShareT}</div><p class="muted" style="margin:0 0 10px">${t().radShareS}</p><div class="acts" style="flex-wrap:wrap;gap:8px">${MadaRadReport.buttons(r, it, current)}</div></div>`;
     else if (done) foot = it.rejected ? `<div class="it-done no">${svg(I.warn, 2.2)}${t().itemRejected}</div>` : `<div class="it-done">${svg(I.check, 2.4)}${t().itemDone}</div>`;
     else if (open) {
       const nk = nextKey(it), fm = formOf(it);
@@ -842,7 +849,7 @@
     const dEl = $(`f-${it.id}-${pre}decision`), dec = dEl ? dEl.value : null;
     for (const fd of fields) {
       const el = $(`f-${it.id}-${pre}${fd.k}`);
-      if (fd.ty === "file") { const f = fileOf(el); if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
+      if (fd.ty === "file") { const f = fileOf(el); if (!f && fd.req === 1) { bad = true; msg = t().needFile; (el.closest(".drop") || el).classList.add("bad"); continue; } if (f) { if (f.size > 1.5 * 1024 * 1024) { bad = true; msg = t().tooBig; } else data.file = { name: f.name, type: f.type, size: f.size, src: f }; } continue; }
       let v = el.value.trim();
       if (fd.ty === "date" && v) { const d = fromDmy(v); if (!d) { bad = true; msg = t().badDate; el.closest(".field").classList.add("bad"); continue; } v = d; }
       if (fd.ty === "num" && v) { v = v.replace(/[٠-٩]/g, c => "٠١٢٣٤٥٦٧٨٩".indexOf(c)); if (!/^\d+(\.\d{1,2})?$/.test(v)) { bad = true; msg = t().badCost; el.classList.add("bad"); continue; } }
@@ -940,6 +947,7 @@
     const a = document.activeElement; if (a && (a.tagName === "TEXTAREA" || a.tagName === "INPUT") && a.value) return;
     render();
   });
+  window.toast = window.toast || (m => toast(m)); // the imaging report button (rad-report.js) shows its progress here
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
 
   // ---------- Language & header ----------
