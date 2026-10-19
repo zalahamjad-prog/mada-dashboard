@@ -302,6 +302,7 @@
 <script src="doctor-orders.js"></script>
 <script src="providers.js"></script>
 <script src="visit-book.js"></script>
+<script src="rad-share.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -482,13 +483,15 @@
       const with_ = g.items.filter(x => x.v && x.v.id === c.v.id && x !== c).map(x => T(x.it.title));
       body = `<a class="vcard" href="request-details.html?id=${encodeURIComponent(c.v.id)}">${S(I.booked)}<span><b>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</b>
         <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${with_.length ? `<small>${esc(tx("sameVisit", { s: with_.join(current === "ar" ? "، " : ", ") }))}</small>` : ""}${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${first ? payBox(c.v) : ""}`; }
-    else if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); body = `<div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) }))}</b></span></div>`; }
+    else if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId);
+      body = `<div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) + (d.time ? " · " + MadaRadShare.fmtTime(d.time, current) : "") }))}</b></span></div>${MadaRadShare.html(r, it, current, !!rsEdit[it.id])}`; }
     else if (r.status !== "open") body = "";
     else if (it.type === "radiology") {
       const ps = MadaProviders.active("imaging");
       body = `<div class="fg"><div><label for="bCenter-${id}">${t().fCenter}</label>${ps.length ? `<select class="inp" id="bCenter-${id}"><option value="">${t().pickC}</option>${ps.map(p => `<option value="${esc(p.id)}">${esc(T(p.name))}</option>`).join("")}</select>`
           : `<input class="inp" id="bCenter-${id}" maxlength="80" dir="auto"><small style="display:block;color:var(--muted);font-size:12px;margin-top:4px">${t().noProv} <a href="providers.html">${t().addProv}</a></small>`}</div>
-        <div><label for="bDate-${id}">${t().fDate}</label><input class="inp" type="date" id="bDate-${id}" min="${today()}"></div></div>
+        <div><label for="bDate-${id}">${t().fDate}</label><input class="inp" type="date" id="bDate-${id}" min="${today()}"></div>
+        <div><label for="bTime-${id}">${t().fTime}</label><input class="inp" type="time" id="bTime-${id}" dir="ltr"></div></div>
         <div class="err" id="rErr-${id}" hidden></div><div class="df"><button type="button" class="btn btn-primary" data-rad="${id}">${t().bSaveRad}</button></div>`;
     }
     else if (OWN.includes(it.type)) body = `<div class="own"><span>${esc(tx("stepNow", { s: t()["s_" + step(it)] || step(it) }))}</span><a class="btn btn-ghost btn-sm" href="medical-request.html?id=${encodeURIComponent(r.id)}#item-${encodeURIComponent(it.id)}">${t()["go_" + it.type]}</a></div>`;
@@ -512,6 +515,10 @@
       <div class="w"><label for="bNote">${t().fNote2} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="bNote" maxlength="200" dir="auto" value="${esc(bk.note || "")}"></div></div>
       <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bBook">${sel.length > 1 ? tx("bSaveN", { n: sel.length }) : t().bSave}</button></div></div>`;
   }
+  // Booked imaging: share it with the patient and send the patient's details to the center (rad-share.js). rsEdit: location form open.
+  const rsEdit = {};
+  MadaRadShare.bind($("dlg"), { get: iid => { const r = M.all().find(x => x.items.some(i => i.id === iid)); return { r, it: r.items.find(i => i.id === iid) }; },
+    redraw: () => { render(); openAct(openKey, true); }, toast: m => toast(m), lang: () => current, by: () => me.name, edit: (iid, on) => { rsEdit[iid] = on; openAct(openKey, true); } });
   function openAct(key, keep) {
     const g = cards().find(x => x.key === key); if (!g) return;
     openKey = key; const r = g.r, shown = new Set();
@@ -553,11 +560,11 @@
     }
     const rb = e.target.closest("[data-rad]");
     if (rb) {
-      const iid = rb.dataset.rad, el = $("bCenter-" + iid), de = $("bDate-" + iid), date = de.value, v = el.value.trim(), box = $("rErr-" + iid);
-      if (!v || !date) return bad(box, t().need, !v && el, !date && de);
+      const iid = rb.dataset.rad, el = $("bCenter-" + iid), de = $("bDate-" + iid), te = $("bTime-" + iid), date = de.value, time = te.value, v = el.value.trim(), box = $("rErr-" + iid);
+      if (!v || !date || !time) return bad(box, t().need, !v ? el : !date ? de : te);
       if (date < today()) return bad(box, t().badPast, de);
       const p = el.tagName === "SELECT" ? MadaProviders.get(v) : null;
-      M.advance(g.r.id, iid, me.name, p ? { providerId: p.id, center: p.name.en || p.name.ar, date } : { center: v, date });
+      M.advance(g.r.id, iid, me.name, p ? { providerId: p.id, center: p.name.en || p.name.ar, date, time } : { center: v, date, time });
       render(); openAct(openKey, true); return toast(t().radSaved);
     }
   });

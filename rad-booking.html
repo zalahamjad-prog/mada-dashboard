@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>مدى كير | موعد الأشعة</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="مدى كير | Mada Care">
+<meta property="og:title" content="مدى كير | موعد الأشعة">
+<meta property="og:description" content="تفاصيل موعد الأشعة: المركز والتاريخ والوقت والموقع. نرعاكم كأهلنا 💚">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --g: #0b6b5c; --gd: #07463d; --gold: #c8a45a; --ink: #10232b; --mu: #6b7a80; --line: #e3e8ea; --soft: #f4f8f7; --bg: #f3f6f6; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: Tajawal, Inter, Arial, sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+  html[lang="en"] body { font-family: Inter, Tajawal, Arial, sans-serif; }
+  .ltr { direction: ltr; unicode-bidi: isolate; }
+  .hero { background: linear-gradient(130deg, var(--gd), var(--g)); color: #fff; padding: 18px 16px 64px; border-radius: 0 0 28px 28px; }
+  .top { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+  .logo { width: 48px; height: 48px; border-radius: 50%; background: #fff; display: grid; place-items: center; box-shadow: 0 0 0 3px rgba(200,164,90,.55); flex: none; }
+  .logo img { height: 32px; }
+  .brand { flex: 1; } .brand b { display: block; font-size: 18px; } .brand small { opacity: .85; font-size: 12.5px; }
+  .lang { border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.1); color: #fff; border-radius: 20px; padding: 7px 14px; font: inherit; font-size: 13.5px; cursor: pointer; }
+  .hero h1 { max-width: 560px; margin: 22px auto 4px; font-size: 24px; }
+  .hero p { max-width: 560px; margin: 0 auto; opacity: .88; font-size: 14.5px; line-height: 1.6; }
+  main { max-width: 560px; margin: -44px auto 0; padding: 0 16px 40px; }
+  .card { background: #fff; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 8px 26px rgba(16,35,43,.06); padding: 18px; margin-bottom: 14px; }
+  .card h2 { margin: 0 0 12px; font-size: 17px; display: flex; align-items: center; gap: 10px; }
+  .ic { width: 34px; height: 34px; border-radius: 10px; background: #e6f3ef; color: var(--g); display: grid; place-items: center; flex: none; }
+  .ic svg { width: 18px; height: 18px; }
+  .rows { display: grid; gap: 10px; }
+  .row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; } .row span { color: var(--mu); } .row b { text-align: end; }
+  .sum { background: linear-gradient(180deg, #fbf7ee, #fff); border-color: #eedfbd; }
+  .sum .ic { background: #f8edd5; color: #9a6b12; }
+  .sum p { margin: 0 0 12px; line-height: 1.8; font-size: 15px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; background: #fff; border: 1px solid #eedfbd; font-size: 13.5px; font-weight: 600; }
+  .chip em { font-style: normal; color: #9a6b12; }
+  .grp { margin-top: 6px; } .grp + .grp { margin-top: 16px; }
+  .grp h3 { margin: 0 0 8px; font-size: 13px; color: var(--g); letter-spacing: .2px; }
+  .svc { list-style: none; margin: 0; padding: 0; }
+  .svc li { display: flex; gap: 12px; justify-content: space-between; padding: 11px 0; border-top: 1px solid #eef2f3; }
+  .svc li:first-child { border-top: 0; }
+  .svc b { display: block; font-size: 14.5px; } .svc small { display: block; color: var(--mu); font-size: 12.5px; margin-top: 3px; line-height: 1.5; }
+  .svc em { font-style: normal; font-weight: 700; white-space: nowrap; font-size: 14px; } .svc em.free { color: var(--g); font-weight: 600; font-size: 13px; }
+  .tot .row.big { margin-top: 4px; padding: 14px 16px; border-radius: 14px; background: #fdf4e3; border: 1px solid #f3dcb0; font-size: 16px; }
+  .tot .row.big span { color: #6b4a12; font-weight: 600; } .tot .row.big b { font-size: 22px; color: #9a5a00; }
+  .methods { display: grid; gap: 10px; }
+  .m { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1.5px solid var(--line); border-radius: 14px; cursor: pointer; background: #fff; }
+  .m input { accent-color: var(--g); width: 18px; height: 18px; margin: 0; }
+  .m b { flex: 1; font-size: 14.5px; } .m:has(input:checked) { border-color: var(--g); background: #f3faf7; }
+  .bdg { font: 700 12px Inter, sans-serif; padding: 4px 9px; border-radius: 7px; direction: ltr; }
+  .b-apple { background: #000; color: #fff; } .b-mada { background: #e9f1fb; color: #1b5fae; } .b-tamara { background: #fbe9dc; color: #b8521a; } .b-tabby { background: #3bf0b0; color: #10232b; }
+  .pay { width: 100%; height: 56px; border: 0; border-radius: 14px; background: var(--g); color: #fff; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 14px; box-shadow: 0 10px 22px rgba(11,107,92,.25); }
+  .pay:disabled { opacity: .6; }
+  .safe { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; color: var(--mu); font-size: 12.5px; }
+  .safe svg { width: 14px; height: 14px; }
+  .state { text-align: center; padding: 28px 18px; }
+  .state .big { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 12px; background: #e7f6ec; color: #15803d; }
+  .state.bad .big { background: #fdecec; color: #dc2626; } .state.wait .big { background: #eef4f5; color: var(--mu); }
+  .state .big svg { width: 30px; height: 30px; } .state h2 { justify-content: center; margin-bottom: 6px; } .state p { color: var(--mu); margin: 0; line-height: 1.6; }
+  .receipt { text-align: start; margin-top: 16px; }
+  .foot { text-align: center; color: var(--mu); font-size: 12.5px; margin-top: 18px; }
+  .ov { position: fixed; inset: 0; background: rgba(16,35,43,.55); display: grid; place-items: center; z-index: 9; color: #fff; font-weight: 700; }
+  .spin { width: 42px; height: 42px; border-radius: 50%; border: 4px solid rgba(255,255,255,.35); border-top-color: #fff; animation: r 1s linear infinite; margin: 0 auto 12px; }
+  .ov[hidden] { display: none; }
+  .invs { display: grid; gap: 8px; margin-top: 18px; }
+  .inv { height: 50px; border: 1.5px solid var(--g); border-radius: 14px; background: #fff; color: var(--g); font: inherit; font-size: 15.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+  .inv svg { width: 19px; height: 19px; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #10232b; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 14px; z-index: 10; max-width: calc(100% - 32px); }
+  .toast[hidden] { display: none; }
+  @keyframes r { to { transform: rotate(360deg); } }
+  .when { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .when div { padding: 14px; border-radius: 14px; background: var(--soft); border: 1px solid var(--line); }
+  .when small { display: block; color: var(--mu); font-size: 12.5px; } .when b { display: block; font-size: 16px; margin-top: 4px; }
+  .map { display: flex; align-items: center; justify-content: center; gap: 8px; height: 50px; margin-top: 14px; border-radius: 14px; background: var(--g); color: #fff; font-weight: 700; text-decoration: none; }
+  .map svg { width: 19px; height: 19px; }
+  .addr { margin: 0; line-height: 1.7; }
+  @media (max-width: 380px) { .when { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="top"><span class="logo"><img src="assets/mada-logo.png" alt=""></span><div class="brand"><b id="brand">مدى كير</b><small id="tag">رعاية كالعائلة</small></div><button type="button" class="lang" id="langBtn">English</button></div>
+  <h1 id="hTitle"></h1><p id="hSub"></p>
+</header>
+<main id="main"></main>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="medical.js"></script>
+<script src="providers.js"></script>
+<script src="rad-share.js"></script>
+<script>
+  // Patient page for an imaging appointment, opened from the link staff send (Medical Requests or Doctor Orders > Share the appointment).
+  // rad-booking.html?t=<token>&l=ar|en. The token is item.radLink.token on the imaging item, a random 128-bit value.
+  // Demo: reads the item from the shared store. TODO: before real patient data, the backend must return only this appointment for the token.
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const qs = new URLSearchParams(location.search), token = qs.get("t") || "";
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 2}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+  const IC = { scan: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/>', pin: '<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', nav: '<path d="m3 11 18-8-8 18-2-8z"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>' };
+  const L = {
+    ar: { brand: "مدى كير", tag: "رعاية كالعائلة", other: "English", title: "موعد الأشعة", sub: "هذي تفاصيل موعدك: المركز والتاريخ والوقت والموقع.",
+      exam: "الفحص", center: "مركز الأشعة", date: "التاريخ", time: "الوقت", patient: "المريض", reqNo: "رقم الطلب", locT: "الموقع", openMap: "افتح الموقع في الخرائط", noLoc: "بيتواصل معك فريق مدى كير لتأكيد الموقع.",
+      loading: "جاري تحميل الموعد…", badT: "الرابط غير صالح", badS: "تأكد من الرابط اللي وصلك، أو تواصل مع فريق مدى كير.", foot: "مدى كير · رعاية صحية منزلية" },
+    en: { brand: "Mada Care", tag: "Caring Like Family", other: "العربية", title: "Your Imaging Appointment", sub: "Here are your appointment details: the center, date, time and location.",
+      exam: "Exam", center: "Imaging center", date: "Date", time: "Time", patient: "Patient", reqNo: "Request No.", locT: "Location", openMap: "Open the location in Maps", noLoc: "The Mada Care team will contact you to confirm the location.",
+      loading: "Loading your appointment…", badT: "This link is not valid", badS: "Check the link you received, or contact the Mada Care team.", foot: "Mada Care · Home healthcare" }
+  };
+  let lang = qs.get("l") === "en" ? "en" : "ar", started = Date.now();
+  const t = () => L[lang], T = v => v && typeof v === "object" ? v[lang] || v.en || v.ar || "" : v || "";
+  const find = () => { if (token.length < 32) return null; for (const r of MadaMedical.all()) { const it = r.items.find(i => i.radLink && i.radLink.token === token); if (it) return { r, it }; } return null; };
+  const state = (k, icon, h, p) => `<section class="card state ${k}"><div class="big">${svg(icon, 2.4)}</div><h2>${h}</h2><p>${p}</p></section>`;
+  function render() {
+    document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.title = lang === "ar" ? "مدى كير | موعد الأشعة" : "Mada Care | Imaging appointment";
+    $("brand").textContent = t().brand; $("tag").textContent = t().tag; $("langBtn").textContent = t().other; $("hTitle").textContent = t().title; $("hSub").textContent = t().sub;
+    const f = find();
+    if (!f || !MadaRadShare.ready(f.it)) {
+      const wait = token.length >= 32 && Date.now() - started < 10000;
+      $("main").innerHTML = wait ? state("wait", IC.clock, t().loading, "") : state("bad", IC.x, t().badT, t().badS);
+      if (wait) setTimeout(render, 1500);
+      return;
+    }
+    const { r, it } = f, b = MadaRadShare.booking(it), loc = MadaRadShare.locOf(r, it);
+    $("main").innerHTML = `
+      <section class="card"><h2><span class="ic">${svg(IC.scan)}</span>${esc(T(it.title))}</h2>
+        <div class="when"><div><small>${t().date}</small><b>${esc(MadaRadShare.fmtDate(b.date, lang))}</b></div><div><small>${t().time}</small><b class="ltr">${esc(MadaRadShare.fmtTime(b.time, lang) || "—")}</b></div></div>
+        <div class="rows" style="margin-top:14px"><div class="row"><span>${t().center}</span><b>${esc(MadaRadShare.centerName(b, lang) || "—")}</b></div>
+          <div class="row"><span>${t().patient}</span><b>${esc(T(r.patient))}</b></div><div class="row"><span>${t().reqNo}</span><b class="ltr">${esc(r.id)}</b></div></div></section>
+      <section class="card"><h2><span class="ic">${svg(IC.pin)}</span>${t().locT}</h2>
+        <p class="addr" dir="auto">${loc.address ? esc(loc.address) : t().noLoc}</p>
+        ${loc.map ? `<a class="map" href="${esc(loc.map)}" target="_blank" rel="noopener">${svg(IC.nav)}${t().openMap}</a>` : ""}</section>
+      <p class="foot">${t().foot}</p>`;
+  }
+  $("langBtn").addEventListener("click", () => { lang = lang === "ar" ? "en" : "ar"; render(); });
+  window.addEventListener("storage", () => render());
+  render();
+</script>
+</body>
+</html>

@@ -184,6 +184,14 @@
   .acts .from-doc { font-size: 12px; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
   .acts .from-doc svg { width: 14px; height: 14px; }
   .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+  .rq-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .rq-hd h2 { margin-bottom: 2px !important; border: 0 !important; padding: 0 !important; }
+  .rq-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+  .rq-list li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: #fbfdfc; }
+  .rq-n { width: 24px; height: 24px; border-radius: 50%; background: #e3f4ee; color: #0f6b52; font-size: 12px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .rq-list b { font-size: 13.5px; color: #15304a; font-weight: 600; flex: 1; min-width: 0; }
+  .rq-c { font-size: 11.5px; font-weight: 700; color: #5b6b70; background: #f1f4f5; border-radius: 6px; padding: 2px 7px; direction: ltr; white-space: nowrap; }
+  .rq-note { margin-top: 12px; font-size: 13px; color: #44545a; }
   .btn:disabled { background: #e9edee; color: #7b898e; border-color: #e9edee; cursor: not-allowed; }
   .btn-doc { background: var(--blue-soft); color: #1e4fa3; border-color: #cfe0fd; }
   .btn-doc:hover { background: #dce8fd; }
@@ -476,6 +484,7 @@
 <script src="nurses.js"></script>
 <script src="orders.js"></script>
 <script src="medical.js"></script>
+<script src="doctor-orders.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -501,7 +510,7 @@
       s1: "1. Sample Tracking", st_ordered: "Ordered by the doctor", st_collected: "Sample collected", st_received: "Sample at the lab", st_resulted: "Results entered", st_reviewed: "Doctor approved",
       notYet: "Not yet", by: "by {n}", markCollected: "Sample collected", markReceived: "Sample received at the lab", fromLabSys: "In the live system the lab system sends this.", trackSaved: "{s} saved.",
       s2: "2. Basic Information", reqNo: "Request Number", bkNo: "Booking Number", patient: "Patient Name", mobile: "Mobile Number", visitDate: "Visit Date", location: "Location", viewMap: "View on Map", noLoc: "No location yet", noVisit: "Not scheduled",
-      s3: "3. Test Results", noRes: "Results are not out yet", noRes_cs: "The nurse enters the results from the lab system. You will see them here as soon as they are entered.", noRes_doc: "You can review the results once the nurse enters them.",
+      s3: "4. Test Results", noRes: "Results are not out yet", noRes_cs: "The nurse enters the results from the lab system. You will see them here as soon as they are entered.", noRes_doc: "You can review the results once the nurse enters them.",
       needLab: "Mark the sample as collected before entering results.", enterTitle: "Enter the results from the lab system", pickTests: "Tests in this order", pickHint: "Choose the tests the doctor ordered.",
       cNo: "#", cName: "Test Name", cCode: "Test Code", cRes: "Result", cUnit: "Unit", cRange: "Reference Range", cStatus: "Status", cPos: "Position",
       s_normal: "Normal", s_low: "Low", s_high: "High", s_critical: "Critical",
@@ -509,16 +518,17 @@
       analysis: "Result Analysis", refRange: "Reference Range", curRes: "Current Result", posTitle: "Result Position", nRange: "Normal", hRange: "High", cRange2: "Critical", lRange: "Low",
       toHigh: "Remaining to High Level", toHighNote: "{v} {u} to reach the high level", aboveHigh: "{v} {u} above the high level", belowLow: "{v} {u} below the normal level", refNote: "Reference ranges may vary by laboratory and patient.",
       reportLbl: "Laboratory Report", reportHint: "PDF, JPG or PNG, up to 1.5 MB", choose: "Choose a file", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
-      s4: "4. Doctor Review", revWait: "Opens after the nurse enters the results.", revPending: "Waiting for the doctor to review the results.", approvedBy: "Approved by {n} · {t}",
+      rq: "3. Requested Tests", rqSub: "The tests the doctor ordered. Print this list for the nurse or the lab.", rqNo: "#", rqTest: "Test", rqCode: "Code", rqNote: "Doctor's note", rqPrint: "Print the list", rqNone: "No tests listed on this request.", rqPrT: "Lab Test Request", rqPrinted: "Printed {t} · by {n}", rqDoc: "Ordering doctor", rqDate: "Ordered", rqSig: "Collected by (name & signature)", rqTotal: "{n} tests",
+      s4: "5. Doctor Review", revWait: "Opens after the nurse enters the results.", revPending: "Waiting for the doctor to review the results.", approvedBy: "Approved by {n} · {t}",
       docNoteLbl: "Doctor's note", docNotePdf: "The note written with the approval goes on the lab report (PDF) sent to the patient.", docNotePh: "Example: HbA1c is high, continue Metformin and repeat in 3 months.", approve: "Approve Results", noteOnly: "Add note only", approvedToast: "Results approved. Customer service can share them now.", noteToast: "Note added.", needNote: "Write the note first.", docNotes: "Doctor's notes",
-      s5: "5. Share With the Patient", fileLbl: "Uploaded File", noFile: "No report file uploaded.", uploadedAt: "Uploaded {t} · by {n}", viewFile: "View File", dlFile: "Download Report", dlRes: "Download Results PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
+      s5: "6. Share With the Patient", fileLbl: "Uploaded File", noFile: "No report file uploaded.", uploadedAt: "Uploaded {t} · by {n}", viewFile: "View File", dlFile: "Download Report", dlRes: "Download Results PDF", pdfMaking: "Preparing the PDF…", pdfDone: "{f} downloaded.", pdfFail: "Could not create the file here. Use Save as PDF in the print window.",
       lp_title: "Lab Results Report", lp_issued: "Issued", lp_approved: "Approved by the doctor", lp_critChip: "Needs attention", lp_hello: "Results for", lp_sumAll: "All your results are within the normal range.", lp_sumOut: "{n} of {t} results are within the normal range. Your doctor reviewed the rest.",
       lp_out: "Out of range", lp_scan: "Scan to open your booking", lp_patient: "Patient", lp_file: "File No.", lp_sample: "Sample", lp_resAt: "Results ready", lp_doctor: "Doctor", lp_ordered: "Ordered by", lp_apBy: "Approved by", lp_apAt: "Approved on",
       lp_results: "Your Results", lp_docNote: "Doctor's Note", lp_noNote: "The doctor reviewed your results with no further comments.", lp_read: "How to Read Your Results",
       lp_rN: "within the healthy range", lp_rH: "outside the range, follow your doctor's advice", lp_rC: "contact your doctor today",
       lp_care: "Questions about your results? Our care team is here for you.", lp_foot: "Mada Care · Home healthcare · This report does not replace a visit to your doctor.",
       lockShare: "Sharing opens after the doctor approves the results.", shareHint: "Download the report or the results sheet and send it to the patient.",
-      s6: "6. Escalation", escText: "If the results are not out {h} hours after the sample was taken, escalate to the supervisor to speed up the data entry.", escIn: "Escalation opens in {t} if the results are still not out.", escNotNeeded: "No escalation needed.",
+      s6: "7. Escalation", escText: "If the results are not out {h} hours after the sample was taken, escalate to the supervisor to speed up the data entry.", escIn: "Escalation opens in {t} if the results are still not out.", escNotNeeded: "No escalation needed.",
       escLbl: "What is the problem", escPh: "Example: patient called twice, results still not entered after 26 hours.", escBtn: "Escalate to Supervisor", escSaved: "Escalated to the supervisor.", escOpen: "Open · {n} · {t}", escDone: "Resolved by {n} · {t}", resolve: "Mark resolved", resolvedToast: "Escalation resolved.", resolveNote: "What was done", needEsc: "Write what the problem is.",
       demoAge: "Demo: make the sample 25 hours old", demoNext: "Demo: {s}", demoSys: "Comes from the nurse, lab and doctor systems.", demoDocNote: "Results reviewed. Continue the current treatment and follow up in 3 months.", supOnly: "The supervisor resolves escalations."
     },
@@ -539,7 +549,7 @@
       s1: "1. تتبع العينة", st_ordered: "طلبها الطبيب", st_collected: "تم سحب العينة", st_received: "العينة في المختبر", st_resulted: "تم إدخال النتائج", st_reviewed: "اعتمدها الطبيب",
       notYet: "لم يتم", by: "بواسطة {n}", markCollected: "تم سحب العينة", markReceived: "وصلت العينة للمختبر", fromLabSys: "في النظام الفعلي نظام المختبر يرسل هذي الخطوة.", trackSaved: "تم حفظ: {s}.",
       s2: "2. المعلومات الأساسية", reqNo: "رقم الطلب", bkNo: "رقم الحجز", patient: "اسم المريض", mobile: "رقم الجوال", visitDate: "تاريخ الزيارة", location: "الموقع", viewMap: "عرض على الخريطة", noLoc: "ما فيه موقع بعد", noVisit: "بدون موعد",
-      s3: "3. نتائج التحاليل", noRes: "النتائج ما طلعت بعد", noRes_cs: "الممرض يدخل النتائج من نظام المختبر، وتظهر لك هنا أول ما تندخل.", noRes_doc: "تقدر تراجع النتائج بعد ما يدخلها الممرض.",
+      s3: "4. نتائج التحاليل", noRes: "النتائج ما طلعت بعد", noRes_cs: "الممرض يدخل النتائج من نظام المختبر، وتظهر لك هنا أول ما تندخل.", noRes_doc: "تقدر تراجع النتائج بعد ما يدخلها الممرض.",
       needLab: "سجّل سحب العينة قبل إدخال النتائج.", enterTitle: "إدخال النتائج من نظام المختبر", pickTests: "التحاليل في هذا الطلب", pickHint: "اختر التحاليل اللي طلبها الطبيب.",
       cNo: "#", cName: "اسم التحليل", cCode: "الرمز", cRes: "النتيجة", cUnit: "الوحدة", cRange: "المعدل الطبيعي", cStatus: "الحالة", cPos: "الموقع",
       s_normal: "طبيعي", s_low: "منخفض", s_high: "مرتفع", s_critical: "حرج",
@@ -547,16 +557,17 @@
       analysis: "تحليل النتيجة", refRange: "المعدل الطبيعي", curRes: "النتيجة الحالية", posTitle: "موقع النتيجة", nRange: "طبيعي", hRange: "مرتفع", cRange2: "حرج", lRange: "منخفض",
       toHigh: "المتبقي للمستوى المرتفع", toHighNote: "باقي {v} {u} للمستوى المرتفع", aboveHigh: "أعلى من المرتفع بـ {v} {u}", belowLow: "أقل من الطبيعي بـ {v} {u}", refNote: "المعدلات الطبيعية ممكن تختلف حسب المختبر والمريض.",
       reportLbl: "تقرير المختبر", reportHint: "PDF أو JPG أو PNG، حتى 1.5 ميجا", choose: "اختر ملف", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جرب ملف أصغر.",
-      s4: "4. مراجعة الطبيب", revWait: "تفتح بعد ما يدخل الممرض النتائج.", revPending: "بانتظار الطبيب يراجع النتائج.", approvedBy: "اعتمدها {n} · {t}",
+      rq: "3. التحاليل المطلوبة", rqSub: "التحاليل اللي طلبها الطبيب. اطبع القائمة للممرض أو المختبر.", rqNo: "#", rqTest: "التحليل", rqCode: "الرمز", rqNote: "ملاحظة الطبيب", rqPrint: "طباعة القائمة", rqNone: "ما فيه تحاليل مسجلة في هذا الطلب.", rqPrT: "طلب تحاليل مخبرية", rqPrinted: "طُبع {t} · بواسطة {n}", rqDoc: "الطبيب الطالب", rqDate: "تاريخ الطلب", rqSig: "سحب العينة (الاسم والتوقيع)", rqTotal: "{n} تحاليل",
+      s4: "5. مراجعة الطبيب", revWait: "تفتح بعد ما يدخل الممرض النتائج.", revPending: "بانتظار الطبيب يراجع النتائج.", approvedBy: "اعتمدها {n} · {t}",
       docNoteLbl: "ملاحظة الطبيب", docNotePdf: "الملاحظة اللي تنكتب مع الاعتماد تطلع في تقرير التحاليل (PDF) اللي يوصل للمريض.", docNotePh: "مثال: السكر التراكمي مرتفع، يستمر على الميتفورمين ويعيد التحليل بعد 3 شهور.", approve: "اعتماد النتائج", noteOnly: "إضافة ملاحظة فقط", approvedToast: "تم اعتماد النتائج. خدمة العملاء تقدر تشاركها الحين.", noteToast: "تمت إضافة الملاحظة.", needNote: "اكتب الملاحظة أول.", docNotes: "ملاحظات الطبيب",
-      s5: "5. المشاركة مع المريض", fileLbl: "الملف المرفوع", noFile: "ما فيه ملف تقرير مرفوع.", uploadedAt: "رُفع {t} · بواسطة {n}", viewFile: "عرض الملف", dlFile: "تحميل التقرير", dlRes: "تحميل النتائج PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدمي حفظ كـ PDF من نافذة الطباعة.",
+      s5: "6. المشاركة مع المريض", fileLbl: "الملف المرفوع", noFile: "ما فيه ملف تقرير مرفوع.", uploadedAt: "رُفع {t} · بواسطة {n}", viewFile: "عرض الملف", dlFile: "تحميل التقرير", dlRes: "تحميل النتائج PDF", pdfMaking: "جاري تجهيز الملف…", pdfDone: "تم تحميل {f}.", pdfFail: "تعذر إنشاء الملف هنا. استخدمي حفظ كـ PDF من نافذة الطباعة.",
       lp_title: "تقرير نتائج التحاليل", lp_issued: "صدر", lp_approved: "معتمد من الطبيب", lp_critChip: "يحتاج انتباه", lp_hello: "نتائج", lp_sumAll: "كل نتائجك ضمن المعدل الطبيعي.", lp_sumOut: "{n} من {t} نتائج ضمن المعدل الطبيعي، والطبيب راجع الباقي.",
       lp_out: "خارج المعدل", lp_scan: "امسح لفتح حجزك", lp_patient: "المريض", lp_file: "رقم الملف", lp_sample: "العينة", lp_resAt: "جاهزية النتائج", lp_doctor: "الطبيب", lp_ordered: "الطبيب الطالب", lp_apBy: "اعتمدها", lp_apAt: "تاريخ الاعتماد",
       lp_results: "نتائجك", lp_docNote: "ملاحظة الطبيب", lp_noNote: "راجع الطبيب نتائجك بدون ملاحظات إضافية.", lp_read: "كيف تقرأ نتائجك",
       lp_rN: "ضمن المعدل الصحي", lp_rH: "خارج المعدل، اتبع توجيهات طبيبك", lp_rC: "تواصل مع طبيبك اليوم",
       lp_care: "عندك سؤال عن نتائجك؟ فريق الرعاية معك.", lp_foot: "مدى كير · رعاية صحية منزلية · هذا التقرير لا يغني عن مراجعة الطبيب.",
       lockShare: "المشاركة تفتح بعد ما يعتمد الطبيب النتائج.", shareHint: "حمّلي التقرير أو ورقة النتائج وأرسليها للمريض.",
-      s6: "6. التصعيد", escText: "إذا ما طلعت النتائج بعد {h} ساعة من سحب العينة، صعّدي للمشرفة عشان تسرّع إدخال البيانات.", escIn: "التصعيد يفتح بعد {t} إذا ما طلعت النتائج.", escNotNeeded: "ما يحتاج تصعيد.",
+      s6: "7. التصعيد", escText: "إذا ما طلعت النتائج بعد {h} ساعة من سحب العينة، صعّدي للمشرفة عشان تسرّع إدخال البيانات.", escIn: "التصعيد يفتح بعد {t} إذا ما طلعت النتائج.", escNotNeeded: "ما يحتاج تصعيد.",
       escLbl: "وش المشكلة", escPh: "مثال: المريض اتصل مرتين، والنتائج ما اندخلت بعد 26 ساعة.", escBtn: "تصعيد للمشرفة", escSaved: "تم التصعيد للمشرفة.", escOpen: "مفتوح · {n} · {t}", escDone: "أنهته {n} · {t}", resolve: "تم الحل", resolvedToast: "تم إنهاء التصعيد.", resolveNote: "وش اللي انعمل", needEsc: "اكتبي وش المشكلة.",
       demoAge: "تجربة: خلّ العينة مسحوبة من 25 ساعة", demoNext: "تجربة: {s}", demoSys: "تجي من نظام التمريض والمختبر والأطباء.", demoDocNote: "تمت مراجعة النتائج. يستمر على العلاج الحالي ومتابعة بعد 3 شهور.", supOnly: "المشرفة هي اللي تنهي التصعيد."
     }
@@ -575,7 +586,7 @@
   const ymdD = s => { const [y, m, d] = s.split("-"); return iso(`${d}/${m}/${y}`); };
   const fmtMin = m => { const h = Math.floor(m / 60); return iso(`${((h + 11) % 12) + 1}:${pad(m % 60)} ${h >= 12 ? "PM" : "AM"}`); };
   const num = v => `<span class="num">${esc(v)}</span>`;
-  const I = {
+  const I = { print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
     cs: '<path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4" height="6" rx="1.5"/><rect x="17.5" y="13" width="4" height="6" rx="1.5"/><path d="M19.5 19a4 4 0 0 1-4 3H13"/>',
     nurse: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 3.5h4M12 2v3"/>',
     doctor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0"/>',
@@ -643,6 +654,49 @@
       ${f(I.cal, "visitDate", visit)}
       ${f(I.pin, "location", loc && loc.address ? `${esc(loc.address)}${loc.lat ? `<br><a class="map-link" target="_blank" rel="noopener" href="https://www.google.com/maps?q=${loc.lat},${loc.lng}">${svg(I.map)}${t().viewMap}</a>` : ""}` : t().noLoc)}
     </dl></section>`;
+  }
+
+  // ----- Requested tests: what the doctor ordered (lab order codes; names from the Doctor Portal catalogue), printable for the nurse or the lab. -----
+  function reqTests(it) {
+    const codes = it.orderCodes || [], names = String(T(it.title) || "").split(/\s*[,،]\s*/).filter(Boolean);
+    if (codes.length) return codes.map((c, i) => { const x = window.DrOrders && DrOrders.item(c); return { code: c, name: x ? (x[current] || x.en) : names[i] || c }; });
+    if ((it.tests || []).length) return it.tests.map(c => { const lt = MadaLabs.byCode[c]; return { code: c, name: lt ? T(lt.name) : c }; });
+    return names.map(n => ({ code: "", name: n }));
+  }
+  function reqHtml(r, it) {
+    const ts = reqTests(it), note = T(it.details);
+    return `<section class="card sec" id="reqSec"><div class="rq-hd"><div><h2>${t().rq}</h2><p class="muted">${t().rqSub}</p></div>
+        ${ts.length ? `<button type="button" class="btn btn-ghost btn-sm" id="rqPrint">${svg(I.print)}${t().rqPrint}</button>` : ""}</div>
+      ${ts.length ? `<ol class="rq-list">${ts.map(x => `<li><span class="rq-n">${ts.indexOf(x) + 1}</span><b dir="auto">${esc(x.name)}</b>${x.code ? `<span class="rq-c">${esc(x.code)}</span>` : ""}</li>`).join("")}</ol>` : `<p class="muted">${t().rqNone}</p>`}
+      ${note ? `<p class="rq-note"><b>${t().rqNote}:</b> <span dir="auto">${esc(note)}</span></p>` : ""}</section>`;
+  }
+  function printReq(r, it) {
+    const ts = reqTests(it), o = MadaOrders.get(r.orderId), lg = current, dir = lg === "ar" ? "rtl" : "ltr", ord = it.log && it.log[0];
+    const kv = (k, v) => `<div><small>${esc(k)}</small><b>${v}</b></div>`;
+    const html = `<!doctype html><html lang="${lg}" dir="${dir}"><head><meta charset="utf-8"><title>${esc(t().rqPrT)} · ${esc(r.id)}</title><style>
+      body { font-family: "Tajawal", "Inter", Arial, sans-serif; color: #10232b; margin: 28px; }
+      header { display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #0b6b5c; padding-bottom: 12px; margin-bottom: 16px; }
+      header img { width: 44px; } header h1 { font-size: 20px; margin: 0; color: #0b6b5c; } header p { margin: 2px 0 0; font-size: 12px; color: #6b7a80; }
+      .kv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 18px; margin-bottom: 18px; font-size: 13px; }
+      .kv small { display: block; color: #6b7a80; font-size: 11px; } .kv b { font-weight: 600; }
+      table { width: 100%; border-collapse: collapse; font-size: 13.5px; } th, td { border: 1px solid #cfd8db; padding: 8px 10px; text-align: start; } th { background: #eef4f3; }
+      td.c { direction: ltr; white-space: nowrap; width: 90px; } td.n { width: 30px; text-align: center; } td.ck { width: 60px; }
+      .note { margin-top: 12px; font-size: 13px; } .sig { margin-top: 36px; display: flex; justify-content: space-between; gap: 30px; font-size: 12.5px; }
+      .sig div { flex: 1; border-top: 1px solid #10232b; padding-top: 6px; } footer { margin-top: 24px; font-size: 11px; color: #6b7a80; }
+      @media print { body { margin: 12mm; } }</style></head><body>
+      <header><img src="${new URL("assets/mada-logo.png", location.href).href}" alt=""><div><h1>${esc(t().rqPrT)}</h1><p>Mada Care · ${lg === "ar" ? "مدى كير" : "Caring Like Family"}</p></div></header>
+      <div class="kv">${kv(t().patient, esc(T(r.patient) || "—"))}${kv(t().lp_file, `<span dir="ltr">${esc(r.mrn || "—")}</span>`)}${kv(t().mobile, `<span dir="ltr">${esc(r.mobile || "—")}</span>`)}
+        ${kv(t().reqNo, `<span dir="ltr">${esc(r.id)}</span>`)}${kv(t().bkNo, `<span dir="ltr">${esc(o ? o.bookingId || o.id : "—")}</span>`)}${kv(t().rqDoc, esc(docName(r) || "—"))}
+        ${kv(t().rqDate, ord ? `<span dir="ltr">${esc(stamp(ord.at))}</span>` : "—")}${kv(t().visitDate, o && o.appointment ? `${ymdD(o.appointment.date)} · ${fmtMin(o.appointment.minute)}` : "—")}${kv(t().location, esc((o && o.location && o.location.address) || "—"))}</div>
+      <table><thead><tr><th>${t().rqNo}</th><th>${t().rqTest}</th><th>${t().rqCode}</th><th>✓</th></tr></thead><tbody>
+        ${ts.map((x, i) => `<tr><td class="n">${i + 1}</td><td>${esc(x.name)}</td><td class="c">${esc(x.code)}</td><td class="ck"></td></tr>`).join("")}</tbody></table>
+      <p class="note"><b>${esc(tx("rqTotal", { n: ts.length }))}</b>${T(it.details) ? ` · <b>${t().rqNote}:</b> ${esc(T(it.details))}` : ""}</p>
+      <div class="sig"><div>${t().rqSig}</div><div>${t().st_collected}</div></div>
+      <footer>${esc(tx("rqPrinted", { t: stamp(new Date().toISOString()), n: who(me && me.name) }))}</footer>
+      <script>onload = () => setTimeout(() => print(), 300)<\/script></body></html>`;
+    const w = window.open("", "_blank");
+    if (!w) return toast(t().rqPrint);
+    w.document.write(html); w.document.close();
   }
 
   // ----- Results -----
@@ -755,7 +809,7 @@
     if (!it) { $("content").innerHTML = `<section class="card missing"><p>${t().missing}</p><p style="margin-top:10px"><a href="medical-requests.html">${t().toList}</a></p></section>`; return; }
     const o = MadaOrders.get(r.orderId);
     $("content").innerHTML = `
-      ${heroHtml(r, it)}${trackHtml(r, it)}${infoHtml(r, o)}${resultsHtml(r, it)}${reviewHtml(r, it)}${shareHtml(r, it)}${escHtml(r, it)}`;
+      ${heroHtml(r, it)}${trackHtml(r, it)}${infoHtml(r, o)}${reqHtml(r, it)}${resultsHtml(r, it)}${reviewHtml(r, it)}${shareHtml(r, it)}${escHtml(r, it)}`;
   }
 
   // ---------- Actions ----------
@@ -925,6 +979,7 @@
   });
   content.addEventListener("click", async e => {
     const r = getR(), it = getIt(r); if (!it) return;
+    if (e.target.closest("#rqPrint")) { printReq(r, it); return; }
     const tb = e.target.closest("[data-track]");
     if (tb) { MadaMedical.advance(id, itemId, me.name, null); render(); toast(tx("trackSaved", { s: t()["st_" + tb.dataset.track] })); return; }
     if (e.target.closest("#demoNext")) {

@@ -151,6 +151,7 @@
   .log b { font-weight: 600; }
   .log .who { color: var(--muted); font-size: 12px; }
   .log .data { display: block; color: #2c3d43; white-space: pre-line; }
+  .file-row { display: inline-flex; flex-wrap: wrap; gap: 6px; } .file-link.dl { color: #44545a; }
   .file-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; padding: 4px 10px; border-radius: 7px; border: 1px solid #d9e1e3; background: #fff; font-size: 12.5px; color: var(--primary); font-weight: 600; cursor: pointer; }
   .file-link svg { width: 14px; height: 14px; }
   .next { border-top: 1px solid #eef2f3; padding: 16px 18px; display: grid; gap: 12px; }
@@ -430,6 +431,7 @@
 <script src="providers.js"></script>
 <script src="rad-report.js"></script>
 <script src="visit-book.js"></script>
+<script src="rad-share.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -469,7 +471,7 @@
       optional: "(optional)", cancel: "Cancel", ch_sms: "SMS", ch_whatsapp: "WhatsApp", ch_email: "Email", ch_call_in: "Patient called", ch_call_out: "We called", datePh: "DD/MM/YYYY", pickDate: "Pick a date",
       required: "Fill in the required fields.", badDate: "Enter the date as DD/MM/YYYY.", badRange: "The end date is before the start date.", tooBig: "The file is larger than 1.5 MB.", noRoom: "The browser has no room left for this file. Try a smaller one.",
       itemDone: "Done", itemRejected: "The patient declined the referral. The doctor can see the reason.", f_decision: "Does the patient agree to the referral?", dc_approved: "Patient agrees", dc_rejected: "Patient declined", f_refFile: "Attach a document", f_refNote: "Note or reason",
-      f_svcDate: "Service date", f_time: "Time", f_provider: "Responsible for the service", f_cost: "Service cost (SAR)", f_payWhen: "Payment", pw_: "Choose", pw_before: "Paid before the service", pw_after: "Paid after the service",
+      dlFile: "Download", f_svcDate: "Service date", f_time: "Time", f_provider: "Responsible for the service", f_cost: "Service cost (SAR)", f_payWhen: "Payment", pw_: "Choose", pw_before: "Paid before the service", pw_after: "Paid after the service",
       d_provider: "Responsible: {v}", d_cost: "Cost: {v} SAR", d_payWhen: "Payment: {v}", d_appt: "Appointment: {v}", badCost: "Enter the cost as a number.", procEmpty: "Fill in at least one field.",
       s_consent: "Patient consent", s_procedures: "Referral procedures", a_consent: "Save the patient's answer", a_procedures: "Add procedure", f_procNote: "What was done", procAdd: "Log another procedure", procSaved: "Procedure saved.",
       refT: "Doctor's referral", refPdf: "Download referral form", rf_spec: "Specialty", rf_pri: "Priority", rf_routine: "Routine", rf_urgent: "Urgent", rf_dest: "Destination", rf_mada: "Mada Care service", rf_ext: "External healthcare provider", rf_prov: "Preferred provider", rf_reason: "Reason for referral", rf_rec: "Clinical recommendation", rf_notes: "Additional notes", rf_by: "Referring doctor",
@@ -517,7 +519,7 @@
       optional: "(اختياري)", cancel: "إلغاء", ch_sms: "رسالة SMS", ch_whatsapp: "واتساب", ch_email: "إيميل", ch_call_in: "المريض اتصل", ch_call_out: "اتصلنا عليه", datePh: "يوم/شهر/سنة", pickDate: "اختر التاريخ",
       required: "عبّي الخانات المطلوبة.", badDate: "اكتب التاريخ بهذا الشكل: يوم/شهر/سنة.", badRange: "تاريخ النهاية قبل تاريخ البداية.", tooBig: "الملف أكبر من 1.5 ميجا.", noRoom: "المتصفح ما فيه مساحة لهذا الملف. جربي ملف أصغر.",
       itemDone: "مكتمل", itemRejected: "المريض رفض التحويل، والطبيب يشوف السبب.", f_decision: "هل المريض موافق على التحويل؟", dc_approved: "المريض موافق", dc_rejected: "المريض رافض", f_refFile: "إرفاق مستند", f_refNote: "ملاحظة أو السبب",
-      f_svcDate: "موعد تقديم الخدمة", f_time: "الوقت", f_provider: "المسؤول عن تقديم الخدمة", f_cost: "تكلفة الخدمة (ريال)", f_payWhen: "الدفع", pw_: "اختر", pw_before: "مدفوعة قبل الخدمة", pw_after: "تُدفع بعد الخدمة",
+      dlFile: "تحميل", f_svcDate: "موعد تقديم الخدمة", f_time: "الوقت", f_provider: "المسؤول عن تقديم الخدمة", f_cost: "تكلفة الخدمة (ريال)", f_payWhen: "الدفع", pw_: "اختر", pw_before: "مدفوعة قبل الخدمة", pw_after: "تُدفع بعد الخدمة",
       d_provider: "المسؤول: {v}", d_cost: "التكلفة: {v} ريال", d_payWhen: "الدفع: {v}", d_appt: "الموعد: {v}", badCost: "اكتب التكلفة رقم.", procEmpty: "عبّي خانة وحدة على الأقل.",
       s_consent: "موافقة المريض", s_procedures: "إجراءات التحويل", a_consent: "حفظ رد المريض", a_procedures: "إضافة إجراء", f_procNote: "وش تم", procAdd: "تسجيل إجراء جديد", procSaved: "تم حفظ الإجراء.",
       refT: "تحويل الطبيب", refPdf: "تحميل نموذج التحويل", rf_spec: "التخصص", rf_pri: "الأولوية", rf_routine: "عادي", rf_urgent: "عاجل", rf_dest: "جهة التحويل", rf_mada: "خدمة من مدى كير", rf_ext: "جهة صحية خارجية", rf_prov: "مقدم الخدمة المفضل", rf_reason: "سبب التحويل", rf_rec: "التوصية السريرية", rf_notes: "ملاحظات إضافية", rf_by: "الطبيب المحوّل",
@@ -592,7 +594,7 @@
       attended: [{ k: "note", ty: "text" }] },
     doctor: VISIT_FORM, nursing: VISIT_FORM, physio: VISIT_FORM, iv: VISIT_FORM,
     lab: { collected: [{ k: "note", ty: "text" }], resulted: [{ k: "result", ty: "area", req: 1 }, { k: "file", ty: "file" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
-    radiology: { scheduled: [{ k: "center", ty: "prov", req: 1 }, { k: "date", ty: "date", req: 1 }], resulted: [{ k: "file", ty: "file", req: 1, lk: "f_radFile" }, { k: "result", ty: "area", lk: "f_radSum" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
+    radiology: { scheduled: [{ k: "center", ty: "prov", req: 1 }, { k: "date", ty: "date", req: 1 }, { k: "time", ty: "time", req: 1 }], resulted: [{ k: "file", ty: "file", req: 1, lk: "f_radFile" }, { k: "result", ty: "area", lk: "f_radSum" }], reviewed: { doctor: true, f: [{ k: "docNote", ty: "area" }] } },
     medication: { dispensed: [{ k: "pharmacy", ty: "text", req: 1 }], delivered: [{ k: "note", ty: "text" }] },
     leave: { issued: [{ k: "leaveNo", ty: "text", req: 1, ltr: 1 }, { k: "from", ty: "date", req: 1 }, { k: "to", ty: "date", req: 1 }, { k: "file", ty: "file" }], sent: [{ k: "channel", ty: "select", opts: ["sms", "whatsapp", "email"], req: 1 }] },
     plan: { explained: [{ k: "note", ty: "area" }] },
@@ -651,10 +653,12 @@
     else if (d.time) parts.push(tx("d_appt", { v: iso(d.time) }));
     if (d.channel) parts.push(esc(tx("d_channel", { v: t()["ch_" + d.channel] })));
     if (d.note) parts.push(esc(d.note));
-    const file = d.file ? `<button type="button" class="file-link" data-file="${esc(d.file.key)}" data-type="${esc(d.file.type)}">${svg(I.file)}${esc(d.file.name)}</button>` : "";
+    const file = d.file ? `<span class="file-row"><button type="button" class="file-link" data-file="${esc(d.file.key)}" data-type="${esc(d.file.type)}">${svg(I.file)}${esc(d.file.name)}</button><button type="button" class="file-link dl" data-file="${esc(d.file.key)}" data-type="${esc(d.file.type)}" data-dl="${esc(d.file.name)}">${svg('<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>')}${t().dlFile}</button></span>` : "";
     return (parts.length ? `<span class="data">${parts.join("\n")}</span>` : "") + file;
   }
 
+  // Booked imaging: share the appointment with the patient and the patient's details with the center (rad-share.js). rsEdit: location form open.
+  const rsEdit = {};
   function itemHtml(r, it) {
     const steps = MadaMedical.STEPS[it.type], done = MadaMedical.isDone(it), open = r.status === "open";
     const sp = it.rejected ? it.log[it.log.length - 1].step : it.step;
@@ -685,7 +689,7 @@
     return `<article class="item${done ? " done" : ""}" id="item-${esc(it.id)}">
       <div class="it-head"><span class="it-ic">${svg(TY_ICON[it.type])}</span><div class="it-main"><span class="it-type">${t()["ty_" + it.type]}</span><b class="it-title">${esc(T(it.title))}</b>${it.details ? `<p class="it-det">${esc(T(it.details))}</p>` : ""}</div>
         <span class="pill ${it.rejected ? "p-red" : done ? "p-green" : "p-orange"}"><span class="dot"></span>${it.rejected ? t().dc_rejected : t()["s_" + stepKey(it)]}</span></div>
-      ${it.type === "referral" && it.order ? refBox(r, it) : ""}${stepper}${log}${foot}</article>`;
+      ${it.type === "referral" && it.order ? refBox(r, it) : ""}${stepper}${log}${foot}${MadaRadShare.ready(it) ? MadaRadShare.html(r, it, current, !!rsEdit[it.id]) : ""}</article>`;
   }
   // What the doctor wrote on the referral (Doctor Portal > Orders > Referrals), with the referral form to download.
   function refBox(r, it) {
@@ -911,7 +915,9 @@
     if (fl) { // Open the stored file in a new tab (a data: link cannot be opened directly).
       const url = MadaStore.get(fl.dataset.file); if (!url) return;
       const bin = atob(url.split(",")[1]), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
-      window.open(URL.createObjectURL(new Blob([buf], { type: fl.dataset.type || "application/octet-stream" })), "_blank"); return;
+      const blob = URL.createObjectURL(new Blob([buf], { type: fl.dataset.type || "application/octet-stream" }));
+      if (fl.dataset.dl) { const a = document.createElement("a"); a.href = blob; a.download = fl.dataset.dl; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(blob), 4000); return; }
+      window.open(blob, "_blank"); return;
     }
 
     const rp = e.target.closest("[data-refpdf]");
@@ -992,6 +998,8 @@
     render();
   });
   window.toast = window.toast || (m => toast(m)); // the imaging report button (rad-report.js) shows its progress here
+  MadaRadShare.bind(document.body, { get: iid => { const r = MadaMedical.get(id); return { r, it: r.items.find(x => x.id === iid) }; }, redraw: () => render(), toast: m => toast(m),
+    lang: () => current, by: () => me.name, edit: (iid, on) => { rsEdit[iid] = on; render(); } });
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
 
   // ---------- Language & header ----------

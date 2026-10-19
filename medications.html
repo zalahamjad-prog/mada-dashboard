@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Medications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Lab Results ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 14px; text-align: start; cursor: pointer; font: inherit; color: inherit; }
+  .stat:hover { border-color: #c9d4d8; }
+  .stat[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary) inset; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .stat-icon svg { width: 21px; height: 21px; }
+  .stat b { display: block; font-size: 22px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; line-height: 1.3; }
+  .s-green { background: var(--primary-soft); color: var(--primary); } .s-orange { background: var(--orange-soft); color: var(--orange); } .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); } .s-purple { background: var(--purple-soft); color: var(--purple); } .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; }
+  .search { flex: 1 1 280px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px; border: 1px solid var(--border); border-radius: 9px; background: #fff; }
+  .search svg { width: 18px; height: 18px; color: #5b6b70; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; }
+  .search:focus-within, .sel:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); outline: 0; }
+  .sel { height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13.5px; min-width: 180px; }
+  .table-wrap { overflow-x: auto; border-top: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { background: #f5f8f9; text-align: start; font-weight: 600; font-size: 12.5px; color: #44545a; padding: 12px 12px; white-space: nowrap; }
+  tbody td { padding: 12px; border-top: 1px solid #eef2f3; vertical-align: top; }
+  tbody tr:hover td { background: #fbfdfc; }
+  td b.pn, td a.pl { display: block; color: #15304a; font-weight: 600; text-decoration: none; }
+  td a.pl:hover { color: #0f766e; text-decoration: underline; }
+  a.fl { color: #0f766e; font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.fl:hover { border-bottom-style: solid; }
+  td.c-who small { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 3px; }
+  td.c-who a.fl { display: inline-block; background: #e6f4f1; border: 1px solid #b7e0d6; border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+  td.c-who a.fl:hover { background: #0f766e; color: #fff; border-color: #0f766e; }
+  td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+  td .num { white-space: nowrap; }
+  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; }
+  .dr small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .tests { display: flex; flex-wrap: wrap; gap: 4px; max-width: 260px; }
+  .tc { font-size: 11px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 2px 7px; border-radius: 6px; direction: ltr; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-orange { background: var(--orange-soft); color: #b45309; } .p-red { background: var(--red-soft); color: #b91c1c; } .p-blue { background: var(--blue-soft); color: #1d4ed8; }
+  .p-green { background: var(--green-soft); color: var(--green); } .p-purple { background: var(--purple-soft); color: var(--purple); } .p-gray { background: #f0f3f4; color: #5b6b70; }
+  .p-crit { background: #b42318; color: #fff; }
+  .due { font-weight: 600; color: #b45309; white-space: nowrap; } .due.late { color: #b91c1c; } .due.ok { color: var(--green); }
+  .dr { min-width: 170px; }
+  .dr b { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+  .dr b svg { width: 15px; height: 15px; }
+  .dr .tl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .dr .tl li { display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .dr .tl b { font-size: 11.5px; font-weight: 600; color: #15304a; display: inline; }
+  .dr .tl em { font-style: normal; color: #6b7a80; }
+  .dr .took { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .dr .took svg { width: 13px; height: 13px; }
+  .dr .took.ok { background: #e7f6ec; color: #15803d; } .dr .took.wait { background: #fff4e5; color: #b45309; }
+  .stat small.avg { color: #15803d; font-weight: 700; margin-top: 3px; }
+  .dr .q { margin-top: 4px; font-size: 12px; color: #44545a; font-style: italic; max-width: 240px; }
+  .d-no { color: #b91c1c; } .d-seen { color: #b45309; } .d-ok { color: var(--green); } .d-na { color: var(--muted); }
+  .acts { display: flex; gap: 6px; justify-content: flex-end; }
+  .ib { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #d9e1e3; background: #fff; display: grid; place-items: center; cursor: pointer; color: #15304a; text-decoration: none; }
+  .ib:hover { background: #f5f8f8; }
+  .ib svg { width: 17px; height: 17px; }
+  .ib[disabled] { opacity: .35; cursor: default; }
+  .none { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+  .ov { position: fixed; inset: 0; z-index: 60; background: rgba(16,35,43,.42); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .dlg { position: relative; width: 100%; max-width: 760px; background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.18); margin: auto; padding: 22px 22px 18px; }
+  .x { position: absolute; top: 14px; inset-inline-end: 14px; width: 34px; height: 34px; border: 0; background: none; border-radius: 8px; cursor: pointer; display: grid; place-items: center; color: #44545a; }
+  .x:hover { background: #f1f4f5; } .x svg { width: 20px; height: 20px; }
+  .dlg h3 { font-size: 19px; color: #15304a; padding-inline-end: 36px; }
+  .dlg .sub { font-size: 13px; color: var(--muted); margin: 4px 0 14px; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-size: 13px; }
+  .kv span { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 3px; }
+  .rt { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .rt h4 { display: flex; gap: 8px; align-items: center; padding: 9px 12px; background: #f5f8f9; font-size: 13.5px; color: #15304a; }
+  .rt td, .rt th { padding: 8px 12px; }
+  .rt th { font-size: 11.5px; color: var(--muted); font-weight: 600; text-align: start; }
+  .fl { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #e3f4ee; color: #0f6b52; }
+  .fl.low, .fl.high { background: #fff1e0; color: #a4520a; } .fl.critical { background: #b42318; color: #fff; }
+  .df { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .df a { text-decoration: none; }
+  @media (max-width: 1180px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .user-meta { display: none; } }
+  @media (max-width: 980px) {
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-who, .table-wrap td.c-tests, .table-wrap td.c-dr { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { grid-column: 1 / -1; }
+    .acts { justify-content: stretch; } .acts .ib { flex: 1; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .ph-icon { width: 40px; height: 40px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .sel { flex: 1 1 100%; }
+    .kv { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .dlg { padding: 18px 14px 14px; }
+    .rt .hm { display: none; }
+  }
+  .pv-acts { grid-column: 1 / -1; display: flex; gap: 8px; border-top: 1px solid #eef2f3; padding-top: 10px; }
+  .pv-acts .btn { height: 34px; padding: 0 12px; font-size: 13px; }
+  .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
+  .fg .wide { grid-column: 1 / -1; }
+  .fg label, .fg .lb { display: block; font-size: 12.5px; font-weight: 600; color: #44545a; margin-bottom: 5px; }
+  .fg em { font-style: normal; font-weight: 500; color: var(--muted); }
+  .inp { width: 100%; height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13.5px; outline: 0; }
+  .inp:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); }
+  .inp.bad { border-color: var(--red); }
+  .logo-up { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px dashed #c9d6d9; border-radius: 12px; background: #fafcfc; }
+  .logo-up .pv-logo { width: 84px; height: 84px; }
+  .logo-up .pv-logo img { max-width: 76px; max-height: 76px; }
+  .logo-up .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .logo-up .btn { height: 36px; font-size: 13px; }
+  /* Catalog pages (diagnoses / medications) */
+  .ph-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tgl { height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; cursor: pointer; white-space: nowrap; }
+  .cnt { padding: 0 14px 10px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .code { display: inline-block; font-size: 12px; font-weight: 700; color: #0f6b52; background: #e3f4ee; border-radius: 6px; padding: 2px 8px; direction: ltr; white-space: nowrap; }
+  td.c-dx b { display: block; color: #15304a; font-weight: 600; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 700; color: #b45309; background: var(--orange-soft); border-radius: 6px; padding: 1px 7px; margin-inline-start: 4px; }
+  .ib.del { color: var(--red); }
+  .fm { display: inline-block; font-size: 12px; color: #44545a; background: #f1f4f5; border-radius: 6px; padding: 2px 8px; margin: 0 4px 4px 0; }
+  .frow { display: grid; grid-template-columns: 1.1fr 1.6fr 1.1fr 36px; gap: 8px; align-items: end; margin-bottom: 8px; }
+  .frow .ib { height: 42px; width: 36px; }
+  .newcls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .frow { grid-template-columns: 1fr 1fr; } .frow .ib { width: 100%; } .newcls { grid-template-columns: 1fr; } .ph-acts { width: 100%; } .ph-acts .btn { flex: 1; } }
+  @media (max-width: 980px) { .table-wrap td.c-dx { grid-column: 1 / -1; } }
+
+  .chk { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+  .err { color: var(--red); font-size: 13px; margin-top: 10px; }
+  .df { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+  @media (max-width: 640px) { .fg { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="m9.5 9.5 5 5"/></svg></span>
+      <div><h1 data-i18n="title">Medications</h1><p data-i18n="subtitle">The medicines doctors search in the treatment plan.</p></div>
+    </div>
+    <div class="ph-acts">
+      <label class="btn btn-ghost" for="impF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><span data-i18n="imp">Import CSV</span></label><input type="file" id="impF" accept=".csv,text/csv" hidden>
+      <button type="button" class="btn btn-ghost" id="expBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="exp">Export CSV</span></button>
+      <button type="button" class="btn btn-primary" id="addBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="add">Add Medication</span></button>
+    </div>
+  </div>
+  <section class="card">
+    <div class="filters">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="q" data-i18n-ph="searchPh" data-i18n-aria="search" placeholder="Search" autocomplete="off"></label>
+      <select class="sel" id="cl" data-i18n-aria="clsLbl"></select>
+      <label class="chk tgl"><input type="checkbox" id="onlyQ"><span data-i18n="onlyQ">Quick picks only</span></label>
+    </div>
+    <div class="cnt" id="cnt"></div>
+    <div class="table-wrap"><table><thead><tr><th data-i18n="thMed">Medication</th><th data-i18n="thCls">Class</th><th>ATC</th><th data-i18n="thForms">Forms & strengths</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+    <div class="none" id="none" hidden></div>
+  </section>
+</main>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="dT"><div class="dlg" id="dlg" style="max-width:700px"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="doctor-plan.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Medications: the list doctors search in the Treatment Plan (doctor-plan.js).
+  // Starts from the built-in list; the first change saves { classes, drugs } in "mada-drugs" and the doctor portal reads it from there.
+  // A medicine keeps its allergy groups (used for the allergy warning) when edited here.
+  const KEY = "mada-drugs", MAXROWS = 300, P = DrPlan;
+  const FORMS = Object.keys(P.UNIT);
+  const i18n = {
+    en: { tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Medications", subtitle: "The medicines doctors search in the treatment plan. Add, edit or delete a medicine and the doctor portal uses the new list.", add: "Add Medication", imp: "Import CSV", exp: "Export CSV",
+      search: "Search", searchPh: "Generic or brand name, class or ATC", clsLbl: "Class", allCls: "All classes", onlyQ: "Quick picks only", thMed: "Medication", thCls: "Class", thForms: "Forms & strengths", quick: "Quick pick",
+      cnt: "{n} medications", cntOf: "Showing {s} of {n}. Search to narrow the list.", edit: "Edit", del: "Delete", none: "No medications match your search.",
+      dAdd: "Add Medication", dEdit: "Edit Medication", dSub: "The generic name, class and at least one form with its strengths.", nameEn: "Generic name in English", nameAr: "Generic name in Arabic", brand: "Brand names", brandPh: "e.g. Panadol, Adol", optional: "(optional)",
+      cls: "Class", newCls: "+ New class", clsEn: "Class name in English", clsAr: "Class name in Arabic", atc: "ATC code", forms: "Forms", form: "Form", strengths: "Strengths", strengthsPh: "e.g. 500 mg, 1 g", route: "Route", addForm: "Add form", rmForm: "Remove form",
+      quickL: "Quick pick: shows as a button in the doctor's medication search", save: "Save", cancel: "Cancel", close: "Close",
+      needAll: "Write the generic name in English and Arabic, and at least one form with a strength.", needCls: "Pick a class, or write the new class name in English and Arabic.", dup: "{n} is already in the list.",
+      saved: "{n} saved.", deleted: "{n} deleted.", delQ: "Delete {n}? Doctors won't find it in the treatment plan any more. Visits that already prescribed it keep it.", storeErr: "Couldn't save. Browser storage may be full.",
+      impDone: "Imported {a} new and updated {u}. Skipped {s} rows.", impBad: "The file has no rows with a name and a form. Columns: name_en, name_ar, brand, class_en, class_ar, atc, form, strengths, route.",
+      impHelp: "CSV columns: name_en, name_ar, brand, class_en, class_ar, atc, form, strengths (separate with ;), route. One row per form." },
+    ar: { tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "الأدوية", subtitle: "الأدوية اللي يبحث فيها الطبيب في الخطة العلاجية. أضف أو عدّل أو احذف دواء، وبوابة الأطباء تستخدم القائمة الجديدة.", add: "إضافة دواء", imp: "استيراد CSV", exp: "تصدير CSV",
+      search: "بحث", searchPh: "الاسم العلمي أو التجاري أو التصنيف أو ATC", clsLbl: "التصنيف", allCls: "كل التصنيفات", onlyQ: "الاختيارات السريعة فقط", thMed: "الدواء", thCls: "التصنيف", thForms: "الأشكال والتراكيز", quick: "اختيار سريع",
+      cnt: "{n} دواء", cntOf: "يظهر {s} من {n}. ابحث عشان تقلل القائمة.", edit: "تعديل", del: "حذف", none: "ما فيه دواء يطابق البحث.",
+      dAdd: "إضافة دواء", dEdit: "تعديل الدواء", dSub: "الاسم العلمي والتصنيف وشكل واحد على الأقل مع تراكيزه.", nameEn: "الاسم العلمي بالإنجليزي", nameAr: "الاسم العلمي بالعربي", brand: "الأسماء التجارية", brandPh: "مثال: Panadol, Adol", optional: "(اختياري)",
+      cls: "التصنيف", newCls: "+ تصنيف جديد", clsEn: "اسم التصنيف بالإنجليزي", clsAr: "اسم التصنيف بالعربي", atc: "رمز ATC", forms: "الأشكال", form: "الشكل", strengths: "التراكيز", strengthsPh: "مثال: 500 mg, 1 g", route: "طريقة الإعطاء", addForm: "إضافة شكل", rmForm: "حذف الشكل",
+      quickL: "اختيار سريع: يطلع كزر في بحث الأدوية عند الطبيب", save: "حفظ", cancel: "إلغاء", close: "إغلاق",
+      needAll: "اكتب الاسم العلمي بالإنجليزي والعربي، وشكل واحد على الأقل مع تركيز.", needCls: "اختر تصنيف، أو اكتب اسم التصنيف الجديد بالإنجليزي والعربي.", dup: "{n} موجود في القائمة.",
+      saved: "انحفظ {n}.", deleted: "انحذف {n}.", delQ: "حذف {n}؟ الطبيب ما راح يلقاه في الخطة العلاجية بعدها. الزيارات اللي انوصف فيها من قبل يبقى فيها.", storeErr: "ما قدرنا نحفظ. ممكن مساحة المتصفح ممتلئة.",
+      impDone: "انضاف {a} جديد وتحدث {u}. تم تخطي {s} صف.", impBad: "الملف ما فيه صفوف فيها اسم وشكل. الأعمدة: name_en, name_ar, brand, class_en, class_ar, atc, form, strengths, route.",
+      impHelp: "أعمدة CSV: name_en, name_ar, brand, class_en, class_ar, atc, form, strengths (افصل بـ ;), route. صف لكل شكل." }
+  };
+  let current = "en", edit = null;
+  const t = () => i18n[current], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n] != null ? v[n] : "");
+  const S = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', plus: '<path d="M12 5v14M5 12h14"/>' };
+  const PL = k => P.L[current][k] || P.L.en[k] || k;
+  const QUICK0 = ["paracetamol", "ibuprofen", "amoxicillin", "azithromycin", "omeprazole", "cetirizine", "salbutamol"];
+  const data = () => { const v = MadaStore.getJSON(KEY, null);
+    return v && Array.isArray(v.drugs) ? { classes: { ...P.C_BASE, ...(v.classes || {}) }, drugs: v.drugs }
+      : { classes: { ...P.C_BASE }, drugs: P.DRUGS_BASE.map(d => ({ ...d, quick: QUICK0.includes(d.id) })) }; };
+  const put = v => { MadaStore.setJSON(KEY, v); const b = MadaStore.getJSON(KEY, {}); if (!b.drugs || b.drugs.length !== v.drugs.length) throw new Error("store"); };
+  const clsName = (v, k) => (v.classes[k] || [k, k])[current === "ar" ? 1 : 0];
+  const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "x";
+  const splitS = s => String(s || "").split(/[;,،]/).map(x => x.trim()).filter(Boolean);
+
+  function render() {
+    const v = data(), q = $("q").value.trim().toLowerCase(), cl = $("cl").value, oq = $("onlyQ").checked;
+    const hits = v.drugs.filter(d => (!cl || d.cls === cl) && (!oq || d.quick) && (!q || [d.en, d.ar, d.brand, d.atc, ...(v.classes[d.cls] || [])].join(" ").toLowerCase().includes(q)))
+      .sort((a, b) => a.en.localeCompare(b.en));
+    $("rows").innerHTML = hits.slice(0, MAXROWS).map(d => `<tr>
+        <td data-l="${t().thMed}" class="c-dx"><b>${esc(current === "ar" ? d.ar || d.en : d.en)}${d.quick ? ` <span class="tag">${t().quick}</span>` : ""}</b><small><bdi>${esc([current === "ar" ? d.en : d.ar, d.brand].filter(Boolean).join(" · "))}</bdi></small></td>
+        <td data-l="${t().thCls}">${esc(clsName(v, d.cls))}</td>
+        <td data-l="ATC">${d.atc ? `<span class="code">${esc(d.atc)}</span>` : "—"}</td>
+        <td data-l="${t().thForms}" class="c-dx">${(d.forms || []).map(([f, st, r]) => `<span class="fm">${esc(PL("f_" + f))} · ${esc(st.join(", "))} · ${esc(PL("r_" + r))}</span>`).join("")}</td>
+        <td class="c-acts"><div class="acts"><button type="button" class="ib" data-edit="${esc(d.id)}" title="${t().edit}" aria-label="${t().edit}">${S(I.pen)}</button><button type="button" class="ib del" data-del="${esc(d.id)}" title="${t().del}" aria-label="${t().del}">${S(I.trash)}</button></div></td></tr>`).join("");
+    $("cnt").textContent = hits.length > MAXROWS ? tx("cntOf", { s: MAXROWS, n: hits.length }) : tx("cnt", { n: hits.length });
+    $("none").hidden = !!hits.length; $("none").textContent = t().none;
+  }
+  function openDlg(d) {
+    edit = d ? { ...d, was: d.id, forms: d.forms.map(([f, st, r]) => ({ f, st: st.join(", "), r })), nc: { en: "", ar: "" } }
+      : { id: "", en: "", ar: "", brand: "", cls: Object.keys(data().classes)[0], atc: "", quick: false, forms: [{ f: "tablet", st: "", r: "oral" }], nc: { en: "", ar: "" } };
+    drawDlg(); $("ov").hidden = false; $("mEn").focus();
+  }
+  function drawDlg(err) {
+    const e = edit, v = data();
+    const opt = (arr, cur, lab) => arr.map(x => `<option value="${x}" ${x === cur ? "selected" : ""}>${esc(lab(x))}</option>`).join("");
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
+      <h3 id="dT">${e.was ? t().dEdit : t().dAdd}</h3><p class="sub">${t().dSub}</p>
+      <div class="fg">
+        <div><label for="mEn">${t().nameEn}</label><input class="inp" id="mEn" dir="ltr" maxlength="120" value="${esc(e.en)}"></div>
+        <div><label for="mAr">${t().nameAr}</label><input class="inp" id="mAr" dir="rtl" maxlength="120" value="${esc(e.ar)}"></div>
+        <div><label for="mBr">${t().brand} <em>${t().optional}</em></label><input class="inp" id="mBr" dir="ltr" maxlength="160" placeholder="${t().brandPh}" value="${esc(e.brand || "")}"></div>
+        <div><label for="mAtc">${t().atc} <em>${t().optional}</em></label><input class="inp" id="mAtc" dir="ltr" maxlength="10" value="${esc(e.atc || "")}"></div>
+        <div class="wide"><label for="mCl">${t().cls}</label><select class="inp" id="mCl">${opt(Object.keys(v.classes), e.cls, k => clsName(v, k))}<option value="__new" ${e.cls === "__new" ? "selected" : ""}>${t().newCls}</option></select></div>
+        ${e.cls === "__new" ? `<div class="wide newcls"><div><label for="ncEn">${t().clsEn}</label><input class="inp" id="ncEn" dir="ltr" value="${esc(e.nc.en)}"></div><div><label for="ncAr">${t().clsAr}</label><input class="inp" id="ncAr" dir="rtl" value="${esc(e.nc.ar)}"></div></div>` : ""}
+        <div class="wide"><span class="lb">${t().forms}</span>
+          ${e.forms.map((f, i) => `<div class="frow"><div><label for="fF${i}">${t().form}</label><select class="inp" id="fF${i}" data-ff="${i}">${opt(FORMS, f.f, k => PL("f_" + k))}</select></div>
+            <div><label for="fS${i}">${t().strengths}</label><input class="inp" id="fS${i}" data-fs="${i}" dir="ltr" placeholder="${t().strengthsPh}" value="${esc(f.st)}"></div>
+            <div><label for="fR${i}">${t().route}</label><select class="inp" id="fR${i}" data-fr="${i}">${opt(P.ROUTES, f.r, k => PL("r_" + k))}</select></div>
+            <button type="button" class="ib del" data-rmf="${i}" title="${t().rmForm}" aria-label="${t().rmForm}" ${e.forms.length < 2 ? "disabled" : ""}>${S(I.trash)}</button></div>`).join("")}
+          <button type="button" class="btn btn-ghost" id="addF">${S(I.plus, 2.2)}${t().addForm}</button></div>
+        <label class="chk wide"><input type="checkbox" id="mQ" ${e.quick ? "checked" : ""}>${t().quickL}</label>
+      </div>
+      ${err ? `<div class="err">${esc(err)}</div>` : ""}
+      <div class="df"><button type="button" class="btn btn-ghost" data-close>${t().cancel}</button><button type="button" class="btn btn-primary" id="mSave">${t().save}</button></div>`;
+  }
+  const keep = () => {
+    if (!edit || !$("mEn")) return;
+    edit.en = $("mEn").value; edit.ar = $("mAr").value; edit.brand = $("mBr").value; edit.atc = $("mAtc").value; edit.cls = $("mCl").value; edit.quick = $("mQ").checked;
+    if ($("ncEn")) { edit.nc.en = $("ncEn").value; edit.nc.ar = $("ncAr").value; }
+    edit.forms.forEach((f, i) => { f.f = $("fF" + i).value; f.st = $("fS" + i).value; f.r = $("fR" + i).value; });
+  };
+  $("dlg").addEventListener("change", e => { if (e.target.id === "mCl") { keep(); drawDlg(); } });
+  $("dlg").addEventListener("click", e => {
+    if (e.target.closest("#addF")) { keep(); edit.forms.push({ f: "tablet", st: "", r: "oral" }); drawDlg(); return; }
+    const rm = e.target.closest("[data-rmf]"); if (rm) { keep(); edit.forms.splice(+rm.dataset.rmf, 1); drawDlg(); return; }
+    if (!e.target.closest("#mSave")) return;
+    keep();
+    const en = edit.en.trim(), ar = edit.ar.trim(), forms = edit.forms.map(f => [f.f, splitS(f.st), f.r]).filter(f => f[1].length);
+    if (!en || !ar || !forms.length) return drawDlg(t().needAll);
+    const v = data(); let cls = edit.cls;
+    if (cls === "__new") {
+      const ce = edit.nc.en.trim(), ca = edit.nc.ar.trim(); if (!ce || !ca) return drawDlg(t().needCls);
+      cls = Object.keys(v.classes).find(k => v.classes[k][0].toLowerCase() === ce.toLowerCase()) || "c-" + slug(ce); v.classes[cls] = [ce, ca];
+    }
+    if (v.drugs.some(d => d.id !== edit.was && d.en.toLowerCase() === en.toLowerCase())) return drawDlg(tx("dup", { n: en }));
+    const old = v.drugs.find(d => d.id === edit.was);
+    let id = edit.was || slug(en); while (!edit.was && v.drugs.some(d => d.id === id)) id += "-2";
+    const rec = { ...(old || {}), id, en, ar, brand: edit.brand.trim(), cls, atc: edit.atc.trim().toUpperCase(), forms, quick: !!edit.quick };
+    if (old) v.drugs[v.drugs.indexOf(old)] = rec; else v.drugs.push(rec);
+    try { put(v); } catch (er) { return drawDlg(t().storeErr); }
+    $("ov").hidden = true; fillSel(); render(); toast(tx("saved", { n: en }));
+  });
+  $("rows").addEventListener("click", e => {
+    const ed = e.target.closest("[data-edit]"); if (ed) return openDlg(data().drugs.find(d => d.id === ed.dataset.edit));
+    const dl = e.target.closest("[data-del]"); if (!dl) return;
+    const v = data(), d = v.drugs.find(x => x.id === dl.dataset.del);
+    if (!d || !confirm(tx("delQ", { n: current === "ar" ? d.ar : d.en }))) return;
+    v.drugs = v.drugs.filter(x => x !== d);
+    try { put(v); } catch (er) { return toast(t().storeErr); }
+    render(); toast(tx("deleted", { n: current === "ar" ? d.ar : d.en }));
+  });
+
+  // CSV, one row per form: name_en, name_ar, brand, class_en, class_ar, atc, form, strengths (; between), route.
+  // Rows with the same English name join into one medicine; a name already in the list is updated.
+  function parseCSV(txt) {
+    const rows = []; let row = [], cell = "", q = false;
+    for (let i = 0; i < txt.length; i++) {
+      const c = txt[i];
+      if (q) { if (c === '"' && txt[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+      else if (c === '"') q = true; else if (c === ",") { row.push(cell); cell = ""; }
+      else if (c === "\n" || c === "\r") { if (c === "\r" && txt[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+      else cell += c;
+    }
+    if (cell || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(r => r.some(x => x.trim()));
+  }
+  const csvCell = x => /[",\n]/.test(String(x)) ? `"${String(x).replace(/"/g, '""')}"` : String(x);
+  const pick = (val, keys, pre) => { const s = String(val || "").trim().toLowerCase(); return keys.find(k => k === s || P.L.en[pre + k].toLowerCase() === s || (P.L.ar[pre + k] || "") === s); };
+  $("impF").addEventListener("change", async e => {
+    const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+    const rows = parseCSV((await f.text()).replace(/^﻿/, ""));
+    let hd = rows[0] ? rows[0].map(h => h.trim().toLowerCase()) : [];
+    const has = hd.includes("name_en"); if (!has) hd = ["name_en", "name_ar", "brand", "class_en", "class_ar", "atc", "form", "strengths", "route"];
+    const g = (r, k) => (r[hd.indexOf(k)] || "").trim();
+    const v = data(), seen = {}; let a = 0, u = 0, s = 0;
+    rows.slice(has ? 1 : 0).forEach(r => {
+      const en = g(r, "name_en"), st = splitS(g(r, "strengths")), fm = pick(g(r, "form"), FORMS, "f_") || "tablet", rt = pick(g(r, "route"), P.ROUTES, "r_") || "oral";
+      if (!en || !st.length) { s++; return; }
+      const ce = g(r, "class_en"); let cls = Object.keys(v.classes).find(k => v.classes[k][0].toLowerCase() === ce.toLowerCase());
+      if (!cls && ce) { cls = "c-" + slug(ce); v.classes[cls] = [ce, g(r, "class_ar") || ce]; }
+      let d = v.drugs.find(x => x.en.toLowerCase() === en.toLowerCase());
+      if (!d) { d = { id: slug(en), en, ar: g(r, "name_ar") || en, brand: g(r, "brand"), cls: cls || Object.keys(v.classes)[0], atc: g(r, "atc").toUpperCase(), forms: [], quick: false }; while (v.drugs.some(x => x.id === d.id)) d.id += "-2"; v.drugs.push(d); a++; seen[d.id] = 1; }
+      else if (!seen[d.id]) { seen[d.id] = 1; u++; d.forms = []; Object.assign(d, { ar: g(r, "name_ar") || d.ar, brand: g(r, "brand") || d.brand, atc: g(r, "atc").toUpperCase() || d.atc }); if (cls) d.cls = cls; }
+      d.forms.push([fm, st, rt]);
+    });
+    if (!a && !u) return toast(t().impBad);
+    try { put(v); } catch (er) { return toast(t().storeErr); }
+    fillSel(); render(); toast(tx("impDone", { a, u, s }));
+  });
+  $("expBtn").addEventListener("click", () => {
+    const v = data(), lines = ["name_en,name_ar,brand,class_en,class_ar,atc,form,strengths,route"];
+    v.drugs.forEach(d => (d.forms || []).forEach(([fm, st, rt]) => lines.push([d.en, d.ar, d.brand || "", ...(v.classes[d.cls] || ["", ""]), d.atc || "", fm, st.join("; "), rt].map(csvCell).join(","))));
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type: "text/csv" })); a.download = "mada-medications.csv"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+  $("addBtn").addEventListener("click", () => openDlg(null));
+  $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) $("ov").hidden = true; });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") $("ov").hidden = true; });
+  $("q").addEventListener("input", render); $("cl").addEventListener("change", render); $("onlyQ").addEventListener("change", render);
+  window.addEventListener("storage", e => { if (!e.key || e.key === KEY) render(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3600); }
+  function fillSel() { const v = data(), sv = $("cl").value; $("cl").innerHTML = `<option value="">${t().allCls}</option>` + Object.keys(v.classes).sort((a, b) => clsName(v, a).localeCompare(clsName(v, b))).map(k => `<option value="${esc(k)}">${esc(clsName(v, k))}</option>`).join(""); $("cl").value = sv || ""; $("impF").previousElementSibling.title = t().impHelp; }
+  const PAGE_TITLE = { en: "Mada Care | Medications", ar: "مدى كير | الأدوية" };
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    fillSel();
+    document.title = PAGE_TITLE[lang];
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    if (!$("ov").hidden && edit) { keep(); drawDlg(); }
+    render();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  setLang(saved);
+</script>
+</body>
+</html>
