@@ -348,6 +348,7 @@
 <script src="auth.js"></script>
 <script src="nurses.js"></script>
 <script src="orders.js"></script>
+<script src="visit-void.js"></script>
 <script src="medical.js"></script>
 <script src="labs.js"></script>
 <script src="lab-samples.js"></script>
@@ -485,7 +486,7 @@
         <td data-l="${esc(t().cBk)}">${o.bookingId ? `<span class="bid">${esc(o.bookingId)}</span>` : `<span class="muted">${t().noBk}</span>`}</td>
         <td class="c-svc" data-l="${esc(t().cSvc)}"><div class="svc"><span class="svc-icon ${cls}">${svg(path)}</span><span>${esc(t()["sv_" + (o.service || "none")])}</span></div></td>
         <td data-l="${esc(t().cWhen)}">${o.appointment ? `<span class="nowrap">${fmtYmd(o.appointment.date)}</span><span class="sub">${fmtMin(o.appointment.minute)}</span>` : `<span class="muted">${t().noTime}</span>`}</td>
-        <td data-l="${esc(t().cStatus)}"><span class="pill ${BS_PILL[o.status] || "p-gray"}"><span class="dot"></span>${t()["bs_" + o.status] || esc(o.status)}</span></td></tr>`; }).join("")}
+        <td data-l="${esc(t().cStatus)}"><span class="pill ${BS_PILL[o.status] || "p-gray"}"><span class="dot"></span>${t()["bs_" + o.status] || esc(o.status)}</span>${MadaVoid.tag(o, current)}</td></tr>`; }).join("")}
       </tbody></table></div>`;
   }
   // Lab results kept on the file once approved (lab-samples.js): a doctor's order after the doctor approves it,
