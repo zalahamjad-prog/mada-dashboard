@@ -217,6 +217,16 @@
   .paybox .pb-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .paybox p { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; line-height: 1.55; }
   .pb-url { margin-top: 10px; background: #fff; border: 1px solid #e3e8ea; border-radius: 8px; padding: 8px 10px; font-size: 12.5px; overflow-wrap: anywhere; }
   .pb-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; } .btn-wa { background: #1f9d55; color: #fff; border-color: #1f9d55; }
+  .svl { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; } .svl li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .svl .ty { margin: 0; }
+  .svl b { font-size: 13px; font-weight: 600; } td.c-ord .svl b { display: inline; } .nsv { font-weight: 700; color: #44545a !important; }
+  .pill.sm { height: 20px; padding: 0 8px; font-size: 11px; } .bk + .bk { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+  .svbs { display: grid; gap: 10px; } .svb { border: 1px solid #e3e8ea; border-radius: 10px; padding: 10px 12px; background: #fbfcfc; }
+  .svb-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .svb-h .ty { margin: 0; } .svb-h b { font-size: 13.5px; flex: 1; min-width: 120px; }
+  .svb .nt { font-size: 12px; color: #44545a; font-style: italic; margin-top: 6px; } .svb-b { margin-top: 10px; }
+  .own { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 13px; color: #44545a; } .own-h { font-size: 12.5px; color: var(--muted); margin: 0; }
+  .sub2 { font-size: 12.5px; color: var(--muted); margin: -4px 0 10px; line-height: 1.55; }
+  .picks { display: grid; gap: 8px; } .pk { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #d9e1e3; border-radius: 10px; cursor: pointer; background: #fff; }
+  .pk.on { border-color: var(--primary); background: #f1f8f6; } .pk input { width: 18px; height: 18px; accent-color: var(--primary); flex: none; } .pk .ty { margin: 0; } .pk b { font-size: 13.5px; }
 </style>
 </head>
 <body>
@@ -297,15 +307,21 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Doctor Orders: only the orders a doctor wrote after reading results (Doctor Portal > Orders > New orders, item.drAdded).
+  // One row per doctor's order, with every service the doctor wrote (lab, IV, imaging, referral, sick leave ...) and each one's status.
   // Nothing else shows here. The operations team calls the patient (item.contacts), then books the visit and assigns a nurse or
   // doctor (visit-book.js; imaging is booked at an imaging center instead). The patient pays after the service.
   const i18n = {
     en: { tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
-      title: "Doctor Orders", subtitle: "Orders a doctor wrote after reading lab or imaging results. Call the patient, book the visit and assign a nurse or doctor.",
+      title: "Doctor Orders", subtitle: "Orders a doctor wrote after reading results, one row per order with each service. Call the patient once, then book the services a nurse can do together in one visit.",
       searchPh: "Patient, file number, mobile, order or doctor", search: "Search", tyLbl: "Service", tyAll: "All services",
       ty_lab: "Lab tests", ty_radiology: "Imaging", ty_nursing: "Nursing", ty_iv: "IV therapy", ty_doctor: "Doctor visit", ty_physio: "Physiotherapy",
       k_all: "All orders", k_new: "New, not called", k_call: "Called, not booked", k_booked: "Booked", k_done: "Done",
+      st_prog: "In progress", nSvc1: "1 service", nSvc: "{n} services", svT: "Services in this order", stepNow: "Now: {s}", go_referral: "Continue the referral", go_leave: "Continue the sick leave",
+      s_requested: "Requested", s_consent: "Patient consent", s_procedures: "Referral in progress", s_attended: "Service delivered", s_issued: "Issued on Sehha", s_sent: "Sent to patient",
+      inVisit: "Book it in the visit below.", bSub: "Tick the services to do in one visit. They go to one provider at one time, as one booking.", bSaveN: "Book {n} services in one visit",
+      pickSvc: "Tick at least one service.", drAlone: "A doctor visit is booked on its own. The other services can go together in one nurse visit.", sameVisit: "Same visit: {s}",
+      ty_referral: "Referral", ty_leave: "Sick leave",
       cPatient: "Patient", cOrder: "Order", cDoctor: "Doctor", cStatus: "Status", cBook: "Booking", cActs: "",
       st_new: "New", st_call: "Called", st_declined: "Patient declined", st_booked: "Booked", st_done: "Done",
       fWho: "Service provider", pickWho: "Choose the nurse or doctor first", fSlot: "Available times", slotHint: "Choose the provider and the date to see their free times.", dayOff: "Day off for this provider. Choose another date.",
@@ -315,17 +331,22 @@
       noBook: "Not booked yet", payAfter: "Pays after the service", payPaid: "Paid", act: "Take action", open: "Open medical request", close: "Close",
       dT: "Doctor's order", noteBy: "Doctor's note", orderedAt: "Ordered {t}",
       cT: "Contact the patient", cOut: "Call result", o_reached: "Reached, agreed to book", o_noAnswer: "No answer", o_callback: "Asked to call back", o_declined: "Declined the service", cNote: "Note", optional: "(optional)", cSave: "Save call",
-      bT: "Book and assign", bTrad: "Book at the imaging center", fDate: "Date", fTime: "Time", fAssign: "Assign to", pick: "Choose a nurse or doctor", nurses: "Nurses", doctors: "Doctors", fCenter: "Imaging center", pickC: "Choose the imaging center", noProv: "No imaging centers added yet.", addProv: "Add one in Service Providers",
+      bT: "Book a visit", bTrad: "Book at the imaging center", fDate: "Date", fTime: "Time", fAssign: "Assign to", pick: "Choose a nurse or doctor", nurses: "Nurses", doctors: "Doctors", fCenter: "Imaging center", pickC: "Choose the imaging center", noProv: "No imaging centers added yet.", addProv: "Add one in Service Providers",
       fNote: "Note for the team", bSave: "Book and assign", bSaveRad: "Save appointment", need: "Fill in the required fields.", badPast: "Choose today or a later date.",
       visit: "Visit {b} with {n}", radAt: "At {c} on {d}", doneMsg: "The service is done.", callSaved: "Call saved.", booked: "Visit {b} booked with {n}.", radSaved: "Imaging appointment saved.",
       none: "No doctor orders here", noneSub: "Orders a doctor writes after reading results show here.", noneQ: "No orders match your search.",
       d: "{n}d", h: "{n}h", m: "{n}m", today: "today", ytd: "yesterday", tmr: "tomorrow" },
     ar: { tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
-      title: "طلبات الطبيب", subtitle: "الطلبات اللي يكتبها الطبيب بعد ما يشوف نتائج التحاليل أو الأشعة. اتصل على المريض واحجز الزيارة وأسندها لممرضة أو طبيب.",
+      title: "طلبات الطبيب", subtitle: "الطلبات اللي يكتبها الطبيب بعد النتائج، كل طلب في صف واحد بخدماته. اتصل على المريض مرة وحدة، واحجز الخدمات اللي تنعمل مع بعض في زيارة وحدة.",
       searchPh: "المريض أو رقم الملف أو الجوال أو الطلب أو الطبيب", search: "بحث", tyLbl: "الخدمة", tyAll: "كل الخدمات",
       ty_lab: "تحاليل", ty_radiology: "أشعة", ty_nursing: "تمريض", ty_iv: "محاليل وريدية", ty_doctor: "زيارة طبيب", ty_physio: "علاج طبيعي",
       k_all: "كل الطلبات", k_new: "جديدة، ما تم الاتصال", k_call: "تم الاتصال، ما انحجزت", k_booked: "محجوزة", k_done: "مكتملة",
+      st_prog: "قيد التنفيذ", nSvc1: "خدمة وحدة", nSvc: "{n} خدمات", svT: "خدمات هذا الطلب", stepNow: "الحين: {s}", go_referral: "كمّل التحويل", go_leave: "كمّل الإجازة المرضية",
+      s_requested: "تم الطلب", s_consent: "موافقة المريض", s_procedures: "التحويل قيد الإجراء", s_attended: "تم تقديم الخدمة", s_issued: "صدرت من صحة", s_sent: "أُرسلت للمريض",
+      inVisit: "احجزها ضمن الزيارة تحت.", bSub: "حدد الخدمات اللي تنعمل في زيارة وحدة. تروح لمقدم خدمة واحد في وقت واحد، بحجز واحد.", bSaveN: "احجز {n} خدمات في زيارة وحدة",
+      pickSvc: "حدد خدمة وحدة على الأقل.", drAlone: "زيارة الطبيب تنحجز لحالها. باقي الخدمات تقدر تنحجز مع بعض في زيارة تمريض وحدة.", sameVisit: "نفس الزيارة: {s}",
+      ty_referral: "تحويل", ty_leave: "إجازة مرضية",
       cPatient: "المريض", cOrder: "الطلب", cDoctor: "الطبيب", cStatus: "الحالة", cBook: "الحجز", cActs: "",
       st_new: "جديد", st_call: "تم الاتصال", st_declined: "المريض رفض", st_booked: "محجوز", st_done: "مكتمل",
       fWho: "مقدم الخدمة", pickWho: "اختر الممرض أو الطبيب أول", fSlot: "الأوقات المتاحة", slotHint: "اختر مقدم الخدمة والتاريخ عشان تطلع أوقاته المتاحة.", dayOff: "هذا اليوم إجازة لمقدم الخدمة. اختر تاريخ ثاني.",
@@ -335,7 +356,7 @@
       noBook: "ما انحجز للحين", payAfter: "الدفع بعد الخدمة", payPaid: "مدفوع", act: "اتخذ إجراء", open: "فتح الطلب الطبي", close: "إغلاق",
       dT: "طلب الطبيب", noteBy: "ملاحظة الطبيب", orderedAt: "انطلب {t}",
       cT: "التواصل مع المريض", cOut: "نتيجة الاتصال", o_reached: "رد ووافق على الحجز", o_noAnswer: "ما رد", o_callback: "طلب نتصل عليه بعدين", o_declined: "رفض الخدمة", cNote: "ملاحظة", optional: "(اختياري)", cSave: "حفظ الاتصال",
-      bT: "احجز وأسند", bTrad: "احجز في مركز الأشعة", fDate: "التاريخ", fTime: "الوقت", fAssign: "إسناد إلى", pick: "اختر ممرضة أو طبيب", nurses: "الممرضات", doctors: "الأطباء", fCenter: "مركز الأشعة", pickC: "اختر مركز الأشعة", noProv: "ما فيه مراكز أشعة مضافة.", addProv: "أضفها من مقدمو الخدمة",
+      bT: "احجز زيارة", bTrad: "احجز في مركز الأشعة", fDate: "التاريخ", fTime: "الوقت", fAssign: "إسناد إلى", pick: "اختر ممرضة أو طبيب", nurses: "الممرضات", doctors: "الأطباء", fCenter: "مركز الأشعة", pickC: "اختر مركز الأشعة", noProv: "ما فيه مراكز أشعة مضافة.", addProv: "أضفها من مقدمو الخدمة",
       fNote: "ملاحظة للفريق", bSave: "احجز وأسند", bSaveRad: "حفظ الموعد", need: "عبّ الخانات المطلوبة.", badPast: "اختر اليوم أو تاريخ بعده.",
       visit: "زيارة {b} مع {n}", radAt: "في {c} بتاريخ {d}", doneMsg: "تم تقديم الخدمة.", callSaved: "انحفظ الاتصال.", booked: "انحجزت الزيارة {b} مع {n}.", radSaved: "انحفظ موعد الأشعة.",
       none: "ما فيه طلبات من الأطباء هنا", noneSub: "الطلبات اللي يكتبها الطبيب بعد النتائج تطلع هنا.", noneQ: "ما فيه طلبات تطابق البحث.",
@@ -348,9 +369,10 @@
   const I = { all: '<path d="M9 4h6v3H9z"/><path d="M8 5H6v16h12V5h-2M9 12h6M9 16h4"/>', new: '<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>', call: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
     booked: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>', done: '<path d="m5 12 5 5 9-10"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', go: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>',
     lab: '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/>', radiology: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 8v8M9 10h6M9 13h6"/>',
-    nursing: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/>', iv: '<path d="M8 3h8v9a4 4 0 0 1-8 0zM12 16v5"/>', doctor: '<circle cx="12" cy="7" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/>', physio: '<circle cx="12" cy="5" r="2"/><path d="M12 7v7l-3 7M12 14l3 7M8 10h8"/>' };
+    nursing: '<path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/>', iv: '<path d="M8 3h8v9a4 4 0 0 1-8 0zM12 16v5"/>', doctor: '<circle cx="12" cy="7" r="4"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/>', physio: '<circle cx="12" cy="5" r="2"/><path d="M12 7v7l-3 7M12 14l3 7M8 10h8"/>',
+    referral: '<path d="M4 12h12M12 6l6 6-6 6"/><path d="M20 4v16"/>', leave: '<rect x="4" y="4" width="16" height="17" rx="2"/><path d="M8 2v4M16 2v4M4 10h16M9 15h6"/>' };
   const KS = [["all", "s-green"], ["new", "s-red"], ["call", "s-orange"], ["booked", "s-blue"], ["done", "s-green"]];
-  const PILL = { new: "p-red", call: "p-orange", declined: "p-gray", booked: "p-blue", done: "p-green" };
+  const PILL = { new: "p-red", call: "p-orange", declined: "p-gray", booked: "p-blue", prog: "p-blue", done: "p-green" };
   const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
   function when(iso) {
     if (!iso) return ""; const d = new Date(iso), a = new Date(d), b = new Date(); a.setHours(0, 0, 0, 0); b.setHours(0, 0, 0, 0);
@@ -363,59 +385,73 @@
   const M = MadaMedical, B = MadaVisitBook, step = it => M.STEPS[it.type][it.step];
   const logOf = (it, k) => [...(it.log || [])].reverse().find(l => M.STEPS[it.type][l.step] === k) || null;
 
-  // One row per order the doctor added.
+  // One item the doctor added, with its own status.
+  function itemCard(r, it) {
+    const v = B.visitOf(it), sc = it.type === "radiology" ? logOf(it, "scheduled") : null, cs = it.contacts || [], last = cs[cs.length - 1];
+    const done = M.isDone(it) || B.visitDone(v) || (it.type === "lab" && M.keyOf(it) !== "ordered") || (it.type === "radiology" && !!logOf(it, "resulted"));
+    // Referral and sick leave have their own steps in the medical request; once started they are in progress.
+    const prog = !done && OWN.includes(it.type) && it.step > 0;
+    const status = done ? "done" : v || sc ? "booked" : prog ? "prog" : last ? (last.outcome === "declined" ? "declined" : "call") : "new";
+    const first = (it.log || [])[0] || {};
+    return { key: r.id + "|" + it.id, r, it, v, sc, cs, status, at: it.addedAt || it.fuAt || first.at || r.createdAt, doctor: it.addedBy || r.byDoctor };
+  }
+  const OWN = ["referral", "leave"];
+  const rank = { new: 0, call: 1, declined: 2, booked: 3, prog: 3, done: 4 };
+  // One row per doctor's order (medical request): every service the doctor added, each with its own status.
+  // The row's status is the service that needs the most work.
   function cards() {
     const out = [];
     M.all().filter(r => r.status !== "cancelled").forEach(r => {
       if (B.sync(r, t().doneMsg)) r = M.get(r.id); // a finished nurse or doctor visit marks the service done
-      r.items.filter(it => it.drAdded).forEach(it => {
-        const v = B.visitOf(it), sc = it.type === "radiology" ? logOf(it, "scheduled") : null, cs = it.contacts || [], last = cs[cs.length - 1];
-        const done = M.isDone(it) || B.visitDone(v) || (it.type === "lab" && M.keyOf(it) !== "ordered") || (it.type === "radiology" && !!logOf(it, "resulted"));
-        const booked = !!v || !!sc;
-        const status = done ? "done" : booked ? "booked" : last ? (last.outcome === "declined" ? "declined" : "call") : "new";
-        const first = (it.log || [])[0] || {};
-        out.push({ key: r.id + "|" + it.id, r, it, v, sc, cs, status, at: it.addedAt || first.at || r.createdAt, doctor: it.addedBy || r.byDoctor });
-      });
+      const items = r.items.filter(it => it.drAdded).map(it => itemCard(r, it));
+      if (!items.length) return;
+      const status = items.reduce((s, c) => rank[c.status] < rank[s] ? c.status : s, "done");
+      const seen = new Set(), cs = items.flatMap(c => c.cs).filter(x => { const k = x.at + x.outcome; if (seen.has(k)) return false; seen.add(k); return true; }).sort((a, b) => String(a.at).localeCompare(String(b.at)));
+      const at = items.map(c => c.at).sort().pop();
+      out.push({ key: r.id, r, items, status, cs, at, doctor: items[items.length - 1].doctor });
     });
-    const rank = { new: 0, call: 1, declined: 2, booked: 3, done: 4 };
     return out.sort((a, b) => rank[a.status] - rank[b.status] || String(b.at).localeCompare(String(a.at)));
   }
-  const IN = { all: () => true, new: c => c.status === "new", call: c => c.status === "call" || c.status === "declined", booked: c => c.status === "booked", done: c => c.status === "done" };
-  function bookHtml(c) {
-    if (c.v) return `<div class="bk"><b class="num">${esc(c.v.bookingId)}</b><small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small><small>${esc(T(B.assignee(c.v)))}</small>
-      <small style="color:${c.v.payment === "paid" ? "var(--green)" : "var(--red)"};font-weight:600">${c.v.payment === "paid" ? t().payPaid : t().payUnpaid}</small></div>`;
-    if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); return `<div class="bk"><b>${esc(p ? T(p.name) : d.center || "—")}</b><small>${esc(dayTxt(d.date))}</small></div>`; }
-    return `<span style="color:var(--muted);font-size:12.5px">${t().noBook}</span>`;
+  const IN = { all: () => true, new: c => c.status === "new", call: c => c.status === "call" || c.status === "declined", booked: c => c.status === "booked" || c.status === "prog", done: c => c.status === "done" };
+  // The visits and appointments of a doctor's order, each once.
+  function bookHtml(g) {
+    const vs = [...new Map(g.items.filter(c => c.v).map(c => [c.v.id, c.v])).values()], scs = g.items.filter(c => c.sc);
+    if (!vs.length && !scs.length) return `<span style="color:var(--muted);font-size:12.5px">${t().noBook}</span>`;
+    return vs.map(v => `<div class="bk"><b class="num">${esc(v.bookingId)}</b><small>${esc(dayTxt(v.appointment.date))} · ${esc(minTxt(v.appointment.minute))}</small><small>${esc(T(B.assignee(v)))}</small>
+      <small style="color:${v.payment === "paid" ? "var(--green)" : "var(--red)"};font-weight:600">${v.payment === "paid" ? t().payPaid : t().payUnpaid}</small></div>`).join("")
+      + scs.map(c => { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); return `<div class="bk"><b>${esc(p ? T(p.name) : d.center || "—")}</b><small>${esc(dayTxt(d.date))}</small></div>`; }).join("");
   }
-  function match(c, q) {
+  function match(g, q) {
     if (!q) return true;
-    const r = c.r; return [r.patient && r.patient.en, r.patient && r.patient.ar, r.mrn, r.mobile, r.id, c.it.title && c.it.title.en, c.it.title && c.it.title.ar, T(c.doctor), c.v && c.v.bookingId].join(" ").toLowerCase().includes(q.toLowerCase());
+    const r = g.r; return [r.patient && r.patient.en, r.patient && r.patient.ar, r.mrn, r.mobile, r.id, T(g.doctor), ...g.items.flatMap(c => [c.it.title && c.it.title.en, c.it.title && c.it.title.ar, c.v && c.v.bookingId])].join(" ").toLowerCase().includes(q.toLowerCase());
   }
+  const chip = c => `<li><span class="ty">${S(I[c.it.type] || I.all, 2)}${t()["ty_" + c.it.type] || c.it.type}</span><b dir="auto">${esc(T(c.it.title))}</b><span class="pill sm ${PILL[c.status]}">${t()["st_" + c.status]}</span></li>`;
   function render() {
     const list = cards(), q = $("q").value.trim(), ty = $("ty").value;
     $("stats").innerHTML = KS.map(([k, cls]) => `<button type="button" class="card stat" data-k="${k}" aria-pressed="${kind === k}"><span class="stat-icon ${cls}">${S(I[k], 2)}</span><span><b>${list.filter(IN[k]).length}</b><small>${t()["k_" + k]}</small></span></button>`).join("");
     $("thead").innerHTML = ["cPatient", "cOrder", "cDoctor", "cStatus", "cBook", "cActs"].map(k => `<th>${t()[k]}</th>`).join("");
-    const rows = list.filter(c => IN[kind](c) && (!ty || c.it.type === ty) && match(c, q));
-    $("rows").innerHTML = rows.map(c => { const r = c.r, det = T(c.it.details); return `<tr>
+    const rows = list.filter(g => IN[kind](g) && (!ty || g.items.some(c => c.it.type === ty)) && match(g, q));
+    $("rows").innerHTML = rows.map(g => { const r = g.r; return `<tr>
         <td class="c-who" data-l="${t().cPatient}">${r.mrn ? `<a class="pn pl" href="patient.html?file=${encodeURIComponent(r.mrn)}">${esc(T(r.patient))}</a>` : `<b class="pn">${esc(T(r.patient))}</b>`}<small><span class="num">${esc(r.mrn || "")}</span></small>${r.mobile ? `<small><a class="tel" href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a></small>` : ""}</td>
-        <td class="c-ord" data-l="${t().cOrder}"><span class="ty">${S(I[c.it.type] || I.all, 2)}${t()["ty_" + c.it.type] || c.it.type}</span><b>${esc(T(c.it.title))}</b>${det ? `<div class="nt" dir="auto">“${esc(det)}”</div>` : ""}</td>
-        <td data-l="${t().cDoctor}"><b style="font-size:13px">${esc(T(c.doctor) || "—")}</b><small>${esc(tx("orderedAt", { t: when(c.at) }))}</small></td>
-        <td data-l="${t().cStatus}"><span class="pill ${PILL[c.status]}">${t()["st_" + c.status]}</span>${c.cs.length ? `<small>${esc(t()["o_" + c.cs[c.cs.length - 1].outcome])} · ${esc(when(c.cs[c.cs.length - 1].at))}</small>` : ""}</td>
-        <td data-l="${t().cBook}">${bookHtml(c)}</td>
-        <td class="c-acts"><div class="acts"><button type="button" class="btn ${c.status === "done" || c.status === "booked" ? "btn-ghost" : "btn-primary"} btn-sm" data-act="${esc(c.key)}">${t().act}</button>
-          <a class="ib" href="medical-request.html?id=${encodeURIComponent(r.id)}#item-${encodeURIComponent(c.it.id)}" title="${t().open}" aria-label="${t().open}">${S(I.go)}</a></div></td></tr>`; }).join("");
+        <td class="c-ord" data-l="${t().cOrder}"><small class="nsv">${esc(g.items.length === 1 ? t().nSvc1 : tx("nSvc", { n: g.items.length }))}</small><ul class="svl">${g.items.map(chip).join("")}</ul></td>
+        <td data-l="${t().cDoctor}"><b style="font-size:13px">${esc(T(g.doctor) || "—")}</b><small>${esc(tx("orderedAt", { t: when(g.at) }))}</small></td>
+        <td data-l="${t().cStatus}"><span class="pill ${PILL[g.status]}">${t()["st_" + g.status]}</span>${g.cs.length ? `<small>${esc(t()["o_" + g.cs[g.cs.length - 1].outcome])} · ${esc(when(g.cs[g.cs.length - 1].at))}</small>` : ""}</td>
+        <td data-l="${t().cBook}">${bookHtml(g)}</td>
+        <td class="c-acts"><div class="acts"><button type="button" class="btn ${g.status === "done" || g.status === "booked" || g.status === "prog" ? "btn-ghost" : "btn-primary"} btn-sm" data-act="${esc(g.key)}">${t().act}</button>
+          <a class="ib" href="medical-request.html?id=${encodeURIComponent(r.id)}" title="${t().open}" aria-label="${t().open}">${S(I.go)}</a></div></td></tr>`; }).join("");
     $("none").hidden = !!rows.length;
     $("none").innerHTML = `<b>${t().none}</b>${q ? t().noneQ : t().noneSub}`;
     if (openKey && !$("ov").hidden) openAct(openKey, true);
   }
 
-  // The action window: call log, then the booking (nurse or doctor visit, or the imaging center).
-  function assignSel(it) {
+  // The action window: one call log for the whole order, every service with its own action, and one visit for the services
+  // a nurse or doctor can do together (lab samples, nursing, physiotherapy, IV): one provider, one time, one booking.
+  function assignSel(doctorFirst) {
     const ps = B.people(), grp = (role, lbl) => { const l = ps.filter(p => p.role === role); return l.length ? `<optgroup label="${esc(lbl)}">${l.map(p => `<option value="${role === "nurse" ? "N" : "D"}:${esc(p.id)}" ${bk.who === (role === "nurse" ? "N:" : "D:") + p.id ? "selected" : ""}>${esc(T(p.name))}</option>`).join("")}</optgroup>` : ""; };
     const ns = grp("nurse", t().nurses), ds = grp("doctor", t().doctors);
-    return `<select class="inp" id="bWho"><option value="">${t().pick}</option>${it.type === "doctor" ? ds + ns : ns + ds}</select>`;
+    return `<select class="inp" id="bWho"><option value="">${t().pick}</option>${doctorFirst ? ds + ns : ns + ds}</select>`;
   }
-  // The booking form keeps what was picked while the window redraws: { key, who, date, time, note }.
+  // The booking form keeps what was picked while the window redraws: { key, sel: [item ids], who, date, time, note }.
   let bk = {};
   function slotsHtml() {
     if (!bk.who || !bk.date) return `<p class="sl-hint">${t().slotHint}</p>`;
@@ -436,77 +472,105 @@
         <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${msg}">${t().payWa}</a><a class="btn btn-ghost" href="sms:${esc(v.mobile || "")}?&body=${msg}">${t().paySms}</a></div>`
         : `<div class="pb-acts"><button type="button" class="btn btn-primary" data-psend="${esc(v.id)}">${t().paySend}</button></div>`}</div>`;
   }
-  function bookForm(c) {
-    const it = c.it;
-    if (c.status === "done") return `<div class="sec2"><div class="vcard">${S(I.done, 2.4)}<span><b>${t().doneMsg}</b>${c.v ? `<small>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</small>` : ""}</span></div></div>`;
-    if (c.v) return `<div class="sec2"><a class="vcard" href="request-details.html?id=${encodeURIComponent(c.v.id)}">${S(I.booked)}<span><b>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</b>
-      <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${payBox(c.v)}</div>`;
-    if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); return `<div class="sec2"><div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) }))}</b></span></div></div>`; }
-    if (c.r.status !== "open") return "";
-    if (it.type === "radiology") {
+  const bookable = (g, c) => g.r.status === "open" && c.status !== "done" && !c.v && B.canBook(c.it);
+  // One service in the window, with its own action.
+  function svcBlock(g, c, shown) {
+    const it = c.it, det = T(it.details), r = g.r, id = esc(it.id);
+    let body = "";
+    if (c.status === "done") body = `<div class="vcard">${S(I.done, 2.4)}<span><b>${t().doneMsg}</b>${c.v ? `<small>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</small>` : ""}</span></div>`;
+    else if (c.v) { const first = !shown.has(c.v.id); shown.add(c.v.id);
+      const with_ = g.items.filter(x => x.v && x.v.id === c.v.id && x !== c).map(x => T(x.it.title));
+      body = `<a class="vcard" href="request-details.html?id=${encodeURIComponent(c.v.id)}">${S(I.booked)}<span><b>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</b>
+        <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${with_.length ? `<small>${esc(tx("sameVisit", { s: with_.join(current === "ar" ? "، " : ", ") }))}</small>` : ""}${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${first ? payBox(c.v) : ""}`; }
+    else if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); body = `<div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) }))}</b></span></div>`; }
+    else if (r.status !== "open") body = "";
+    else if (it.type === "radiology") {
       const ps = MadaProviders.active("imaging");
-      return `<div class="sec2"><h4>${S(I.booked)}${t().bTrad}</h4><div class="fg">
-        <div><label for="bCenter">${t().fCenter}</label>${ps.length ? `<select class="inp" id="bCenter"><option value="">${t().pickC}</option>${ps.map(p => `<option value="${esc(p.id)}">${esc(T(p.name))}</option>`).join("")}</select>`
-          : `<input class="inp" id="bCenter" maxlength="80" dir="auto"><small style="display:block;color:var(--muted);font-size:12px;margin-top:4px">${t().noProv} <a href="providers.html">${t().addProv}</a></small>`}</div>
-        <div><label for="bDate">${t().fDate}</label><input class="inp" type="date" id="bDate" min="${today()}"></div></div>
-        <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bRad">${t().bSaveRad}</button></div></div>`;
+      body = `<div class="fg"><div><label for="bCenter-${id}">${t().fCenter}</label>${ps.length ? `<select class="inp" id="bCenter-${id}"><option value="">${t().pickC}</option>${ps.map(p => `<option value="${esc(p.id)}">${esc(T(p.name))}</option>`).join("")}</select>`
+          : `<input class="inp" id="bCenter-${id}" maxlength="80" dir="auto"><small style="display:block;color:var(--muted);font-size:12px;margin-top:4px">${t().noProv} <a href="providers.html">${t().addProv}</a></small>`}</div>
+        <div><label for="bDate-${id}">${t().fDate}</label><input class="inp" type="date" id="bDate-${id}" min="${today()}"></div></div>
+        <div class="err" id="rErr-${id}" hidden></div><div class="df"><button type="button" class="btn btn-primary" data-rad="${id}">${t().bSaveRad}</button></div>`;
     }
-    if (!B.canBook(it)) return "";
-    if (bk.key !== c.key) bk = { key: c.key };
-    return `<div class="sec2"><h4>${S(I.booked)}${t().bT}</h4><div class="fg">
-      <div><label for="bWho">${t().fWho}</label>${assignSel(it)}</div>
+    else if (OWN.includes(it.type)) body = `<div class="own"><span>${esc(tx("stepNow", { s: t()["s_" + step(it)] || step(it) }))}</span><a class="btn btn-ghost btn-sm" href="medical-request.html?id=${encodeURIComponent(r.id)}#item-${encodeURIComponent(it.id)}">${t()["go_" + it.type]}</a></div>`;
+    else if (bookable(g, c)) body = `<p class="own-h">${t().inVisit}</p>`;
+    return `<div class="svb"><div class="svb-h"><span class="ty">${S(I[it.type] || I.all, 2)}${t()["ty_" + it.type] || it.type}</span><b dir="auto">${esc(T(it.title))}</b><span class="pill ${PILL[c.status]}">${t()["st_" + c.status]}</span></div>
+      ${det ? `<div class="nt" dir="auto">${t().noteBy}: “${esc(det)}”</div>` : ""}${body ? `<div class="svb-b">${body}</div>` : ""}</div>`;
+  }
+  // One visit for several services: tick the services, then one provider, date and time.
+  function visitForm(g) {
+    const can = g.items.filter(c => bookable(g, c)); if (!can.length) return "";
+    if (bk.key !== g.key) { const nd = can.filter(c => B.svcOf(c.it) !== "doctor"); bk = { key: g.key, sel: (nd.length ? nd : can.slice(0, 1)).map(c => c.it.id) }; }
+    const sel = can.filter(c => bk.sel.includes(c.it.id)), dr = sel.some(c => B.svcOf(c.it) === "doctor");
+    return `<div class="sec2"><h4>${S(I.booked)}${t().bT}</h4><p class="sub2">${t().bSub}</p>
+      <div class="picks">${can.map(c => `<label class="pk ${bk.sel.includes(c.it.id) ? "on" : ""}"><input type="checkbox" data-pick="${esc(c.it.id)}" ${bk.sel.includes(c.it.id) ? "checked" : ""}>
+        <span class="ty">${S(I[c.it.type] || I.all, 2)}${t()["ty_" + c.it.type] || c.it.type}</span><b dir="auto">${esc(T(c.it.title))}</b></label>`).join("")}</div>
+      ${can.some(c => B.svcOf(c.it) === "doctor") && can.length > 1 ? `<p class="sl-hint" style="margin-top:8px">${t().drAlone}</p>` : ""}
+      <div class="fg" style="margin-top:12px">
+      <div><label for="bWho">${t().fWho}</label>${assignSel(dr)}</div>
       <div><label for="bDate">${t().fDate}</label><input class="inp" type="date" id="bDate" min="${today()}" value="${esc(bk.date || "")}"></div>
       <div class="w"><label>${t().fSlot}</label><div id="bSlots">${slotsHtml()}</div></div>
       <div class="w"><label for="bNote">${t().fNote2} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="bNote" maxlength="200" dir="auto" value="${esc(bk.note || "")}"></div></div>
-      <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bBook">${t().bSave}</button></div></div>`;
+      <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bBook">${sel.length > 1 ? tx("bSaveN", { n: sel.length }) : t().bSave}</button></div></div>`;
   }
   function openAct(key, keep) {
-    const c = cards().find(x => x.key === key); if (!c) return;
-    openKey = key; const r = c.r, det = T(c.it.details);
+    const g = cards().find(x => x.key === key); if (!g) return;
+    openKey = key; const r = g.r, shown = new Set();
     $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
-      <h3 id="dT">${t().dT} · ${esc(T(c.it.title))}</h3><p class="sub">${esc(T(r.patient))} · <span class="num">${esc(r.mrn || "")}</span>${r.mobile ? ` · <a class="tel" href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a>` : ""}</p>
-      <div class="kv"><div><span>${t().cOrder}</span>${t()["ty_" + c.it.type] || c.it.type}</div><div><span>${t().cDoctor}</span>${esc(T(c.doctor) || "—")}</div><div><span>${t().cStatus}</span><span class="pill ${PILL[c.status]}">${t()["st_" + c.status]}</span></div>
-        ${det ? `<div style="grid-column:1/-1"><span>${t().noteBy}</span><span dir="auto">${esc(det)}</span></div>` : ""}</div>
-      ${c.status === "done" ? "" : `<div class="sec2"><h4>${S(I.call)}${t().cT}</h4>${c.cs.length ? `<ul class="clog">${c.cs.map(x => `<li><b>${esc(t()["o_" + x.outcome])}</b> <span>· ${esc(T(x.by))} · ${esc(when(x.at))}</span>${x.note ? `<div dir="auto">${esc(x.note)}</div>` : ""}</li>`).join("")}</ul>` : ""}
+      <h3 id="dT">${t().dT} · ${esc(T(r.patient))}</h3><p class="sub"><span class="num">${esc(r.mrn || "")}</span>${r.mobile ? ` · <a class="tel" href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a>` : ""}</p>
+      <div class="kv"><div><span>${t().cDoctor}</span>${esc(T(g.doctor) || "—")}</div><div><span>${t().cOrder}</span>${esc(g.items.length === 1 ? t().nSvc1 : tx("nSvc", { n: g.items.length }))}</div><div><span>${t().cStatus}</span><span class="pill ${PILL[g.status]}">${t()["st_" + g.status]}</span></div></div>
+      ${g.status === "done" ? "" : `<div class="sec2"><h4>${S(I.call)}${t().cT}</h4>${g.cs.length ? `<ul class="clog">${g.cs.map(x => `<li><b>${esc(t()["o_" + x.outcome])}</b> <span>· ${esc(T(x.by))} · ${esc(when(x.at))}</span>${x.note ? `<div dir="auto">${esc(x.note)}</div>` : ""}</li>`).join("")}</ul>` : ""}
         <div class="fg"><div><label for="cOut">${t().cOut}</label><select class="inp" id="cOut">${["reached", "noAnswer", "callback", "declined"].map(k => `<option value="${k}">${t()["o_" + k]}</option>`).join("")}</select></div>
           <div><label for="cNote">${t().cNote} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="cNote" maxlength="200" dir="auto"></div></div>
         <div class="df"><button type="button" class="btn btn-ghost" id="cSave">${S(I.call, 2)}${t().cSave}</button></div></div>`}
-      ${bookForm(c)}
-      <div class="df"><a class="btn btn-ghost" href="medical-request.html?id=${encodeURIComponent(r.id)}#item-${encodeURIComponent(c.it.id)}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
+      <div class="sec2"><h4>${S(I.all)}${t().svT}</h4><div class="svbs">${g.items.map(c => svcBlock(g, c, shown)).join("")}</div></div>
+      ${visitForm(g)}
+      <div class="df"><a class="btn btn-ghost" href="medical-request.html?id=${encodeURIComponent(r.id)}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
     $("ov").hidden = false; if (!keep) $("dlg").querySelector(".x").focus();
   }
   $("dlg").addEventListener("click", e => {
-    const c = cards().find(x => x.key === openKey); if (!c) return;
-    const bad = (msg, ...els) => { els.forEach(el => el && el.classList.add("bad")); $("bErr").textContent = msg; $("bErr").hidden = false; };
+    const g = cards().find(x => x.key === openKey); if (!g) return;
+    const bad = (box, msg, ...els) => { els.forEach(el => el && el.classList.add("bad")); box.textContent = msg; box.hidden = false; };
     const sl = e.target.closest("[data-slot]"); if (sl && !sl.disabled) { bk.time = sl.dataset.slot; $("bSlots").innerHTML = slotsHtml(); $("bErr").hidden = true; return; }
     const ps = e.target.closest("[data-psend]"); if (ps) { B.sendPay(MadaOrders.get(ps.dataset.psend), me.name); render(); openAct(openKey, true); return toast(t().payMade); }
     const pc = e.target.closest("[data-pcopy]"); if (pc) { const u = B.payUrl(MadaOrders.get(pc.dataset.pcopy)); try { navigator.clipboard.writeText(u); } catch (er) {} return toast(t().payCopied); }
     if (e.target.closest("#cSave")) {
-      const it = M.get(c.r.id).items.find(x => x.id === c.it.id);
-      M.patchItem(c.r.id, c.it.id, { contacts: [...(it.contacts || []), { outcome: $("cOut").value, note: $("cNote").value.trim() || null, by: me.name, at: new Date().toISOString() }] });
+      // One call covers the whole order: it is saved on every service that is not done yet.
+      const x = { outcome: $("cOut").value, note: $("cNote").value.trim() || null, by: me.name, at: new Date().toISOString() };
+      g.items.filter(c => c.status !== "done").forEach(c => M.patchItem(g.r.id, c.it.id, it => ({ contacts: [...(it.contacts || []), x] })));
       render(); openAct(openKey, true); return toast(t().callSaved);
     }
     if (e.target.closest("#bBook")) {
-      const date = $("bDate").value, time = bk.time, who = $("bWho").value;
-      if (!who || !date) return bad(t().need, !who && $("bWho"), !date && $("bDate"));
-      if (date < today()) return bad(t().badPast, $("bDate"));
-      if (!time) return bad(t().pickSlot);
+      const r = M.get(g.r.id), its = (bk.sel || []).map(id => r.items.find(x => x.id === id)).filter(Boolean);
+      const date = $("bDate").value, time = bk.time, who = $("bWho").value, box = $("bErr");
+      if (!its.length) return bad(box, t().pickSvc);
+      if (its.length > 1 && its.some(it => B.svcOf(it) === "doctor")) return bad(box, t().drAlone);
+      if (!who || !date) return bad(box, t().need, !who && $("bWho"), !date && $("bDate"));
+      if (date < today()) return bad(box, t().badPast, $("bDate"));
+      if (!time) return bad(box, t().pickSlot);
       const [k, id] = who.split(":"), d = { date, time, note: $("bNote").value.trim(), [k === "N" ? "nurseId" : "doctorId"]: id };
-      const v = B.book(M.get(c.r.id), M.get(c.r.id).items.find(x => x.id === c.it.id), d, me.name, current);
+      const v = B.bookMany(r, its, d, me.name, current);
       bk = {}; render(); openAct(openKey, true); return toast(tx("booked", { b: v.bookingId, n: T(B.assignee(v)) }));
     }
-    if (e.target.closest("#bRad")) {
-      const el = $("bCenter"), date = $("bDate").value, v = el.value.trim();
-      if (!v || !date) return bad(t().need, !v && el, !date && $("bDate"));
-      if (date < today()) return bad(t().badPast, $("bDate"));
+    const rb = e.target.closest("[data-rad]");
+    if (rb) {
+      const iid = rb.dataset.rad, el = $("bCenter-" + iid), de = $("bDate-" + iid), date = de.value, v = el.value.trim(), box = $("rErr-" + iid);
+      if (!v || !date) return bad(box, t().need, !v && el, !date && de);
+      if (date < today()) return bad(box, t().badPast, de);
       const p = el.tagName === "SELECT" ? MadaProviders.get(v) : null;
-      M.advance(c.r.id, c.it.id, me.name, p ? { providerId: p.id, center: p.name.en || p.name.ar, date } : { center: v, date });
+      M.advance(g.r.id, iid, me.name, p ? { providerId: p.id, center: p.name.en || p.name.ar, date } : { center: v, date });
       render(); openAct(openKey, true); return toast(t().radSaved);
     }
   });
-  $("dlg").addEventListener("input", e => { e.target.classList.remove("bad"); const er = $("bErr"); if (er) er.hidden = true; if (e.target.id === "bNote") bk.note = e.target.value; });
-  // Provider or date changed: show that provider's free times on that date.
-  $("dlg").addEventListener("change", e => { if (!["bWho", "bDate"].includes(e.target.id)) return;
+  $("dlg").addEventListener("input", e => { e.target.classList.remove("bad"); $("dlg").querySelectorAll(".err").forEach(er => { er.hidden = true; }); if (e.target.id === "bNote") bk.note = e.target.value; });
+  // Provider or date changed: show that provider's free times on that date. A ticked service: a doctor visit is booked on its own.
+  $("dlg").addEventListener("change", e => {
+    const pk = e.target.dataset && e.target.dataset.pick;
+    if (pk) { const g = cards().find(x => x.key === openKey), c = g && g.items.find(x => x.it.id === pk); if (!c) return;
+      const drOf = id => { const x = g.items.find(y => y.it.id === id); return x && B.svcOf(x.it) === "doctor"; };
+      if (!e.target.checked) bk.sel = bk.sel.filter(id => id !== pk);
+      else bk.sel = B.svcOf(c.it) === "doctor" ? [pk] : bk.sel.filter(id => !drOf(id)).concat(pk);
+      return openAct(openKey, true); }
+    if (!["bWho", "bDate"].includes(e.target.id)) return;
     bk[e.target.id === "bWho" ? "who" : "date"] = e.target.value; bk.time = null; const box = $("bSlots"); if (box) box.innerHTML = slotsHtml(); });
   $("rows").addEventListener("click", e => { const b = e.target.closest("[data-act]"); if (b) openAct(b.dataset.act); });
   $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) { $("ov").hidden = true; openKey = null; } });
@@ -525,7 +589,7 @@
     document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
     document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
     if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
-    const sv = $("ty").value; $("ty").innerHTML = [["", "tyAll"], ["lab", "ty_lab"], ["radiology", "ty_radiology"], ["nursing", "ty_nursing"], ["iv", "ty_iv"], ["doctor", "ty_doctor"]].map(([v, k]) => `<option value="${v}">${t()[k]}</option>`).join(""); $("ty").value = sv || "";
+    const sv = $("ty").value; $("ty").innerHTML = [["", "tyAll"], ["lab", "ty_lab"], ["radiology", "ty_radiology"], ["nursing", "ty_nursing"], ["iv", "ty_iv"], ["doctor", "ty_doctor"], ["physio", "ty_physio"], ["referral", "ty_referral"], ["leave", "ty_leave"]].map(([v, k]) => `<option value="${v}">${t()[k]}</option>`).join(""); $("ty").value = sv || "";
     document.title = lang === "ar" ? "مدى كير | طلبات الطبيب" : "Mada Care | Doctor Orders";
     try { localStorage.setItem("mada-lang", lang); } catch (e) {}
     render();

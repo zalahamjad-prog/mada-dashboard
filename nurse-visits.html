@@ -454,7 +454,8 @@
   const ongoing = () => visits().find(o => o.service !== "doctor" && nv(o).status === "ongoing") || null;
   const mapUrl = o => { const L = o.location || {}; return L.lat != null ? `https://www.google.com/maps/search/?api=1&query=${L.lat},${L.lng}` : L.mapLink || ""; };
   const place = o => { const L = o.location || {}; return [o.district && T(o.district), L.address].filter(Boolean).join(" · "); };
-  const svcOf = o => t()["s_" + o.service] || o.service || "—";
+  // A visit booked with several services (lab + IV from a doctor's order) shows them all.
+  const svcOf = o => ((o.services || []).length > 1 ? o.services : [o.service]).map(v => t()["s_" + v] || v).filter(Boolean).join(" + ") || "—";
   const ic = (k, fill) => `<svg viewBox="0 0 24 24" fill="${fill ? "currentColor" : "none"}" stroke="${fill ? "none" : "currentColor"}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 
   function whenTxt(a) {

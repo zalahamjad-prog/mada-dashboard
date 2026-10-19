@@ -572,7 +572,9 @@
   const o0 = MadaOrders.get(id);
   // Doctor visits: the doctor records the whole visit from the doctors system, so the nurse only opens the patient file.
   if (o0 && o0.service === "doctor" && new URLSearchParams(location.search).get("view") !== "1") location.replace(o0.mrn ? "nurse-patient.html?mrn=" + encodeURIComponent(o0.mrn) : "nurse-visits.html");
-  const STEPS = ["arrival", "vitals", ...(FLOW[o0 && o0.service] || []), "nurse", "idform", "consent"].map(k => ALL_STEPS.find(x => x.k === k));
+  // One visit can carry several services booked together from a doctor's order (order.services, visit-book.js): each brings its own steps.
+  const SVCS = o0 && (o0.services || []).length > 1 ? ["blood", "nursing", "iv"].filter(s => o0.services.includes(s)) : [o0 && o0.service];
+  const STEPS = ["arrival", "vitals", ...SVCS.flatMap(s => FLOW[s] || []), "nurse", "idform", "consent"].map(k => ALL_STEPS.find(x => x.k === k));
   const nextOf = k => { const i = STEPS.findIndex(x => x.k === k); return STEPS[Math.min(i + 1, STEPS.length - 1)].k; };
   // The step modules read and write order.doctorVisit; for this order they get order.nurseVisit instead, and the nurse's name on the appointment.
   // Completing a doctor visit's nursing part never completes the order itself (the doctor does).

@@ -521,6 +521,8 @@
   const SORT_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 9 4-4 4 4M8 15l4 4 4-4"/></svg>';
 
   // ---------- Booking model (a paid request) ----------
+  // A visit booked with several services (lab + IV from a doctor's order) shows them all.
+  const svcName = o => ((o.services || []).length > 1 ? o.services : [o.service || "none"]).map(v => t()["sv_" + v] || v).join(" + ");
   const nurseOf = o => {
     const id = o.booking && o.booking.nurseId;
     const n = id ? MadaNurses.NURSES.find(x => x.id === id) : null;
@@ -596,7 +598,7 @@
   try { const s = JSON.parse(localStorage.getItem("mada-bk-cols")); if (Array.isArray(s)) shown = COLS.filter(c => c.lock || s.includes(c.k) || c.k === "left" && !s.includes("left:off")).map(c => c.k); } catch (e) {}
   const sortVal = {
     order: o => parseInt(o.id.split("-")[1], 10), booking: o => parseInt(o.bookingId.split("-")[1], 10), patient: o => T(o.patient) || "",
-    service: o => t()["sv_" + (o.service || "none")], provider: o => (nurseOf(o) ? T(nurseOf(o)) : "~"),
+    service: o => svcName(o), provider: o => (nurseOf(o) ? T(nurseOf(o)) : "~"),
     date: o => o.appointment ? o.appointment.date + pad(o.appointment.minute) : "9999", time: o => o.appointment ? o.appointment.minute : 9999,
     paid: o => (o.paidInfo && o.paidInfo.amount) || o.total || 0, status: o => statusOf(o),
     left: o => { const s = statusOf(o), at = visitAt(o); return s === "completed" || s === "cancelled" ? 9e15 : at ? +at : 8e15; }
@@ -630,7 +632,7 @@
   }));
   const isBlank = f => Object.values(f).every(v => !v);
   function matches(o, f) {
-    if (f.svc && o.service !== f.svc) return false;
+    if (f.svc && o.service !== f.svc && !(o.services || []).includes(f.svc)) return false;
     if (f.status && statusOf(o) !== f.status) return false;
     const day = o.appointment ? o.appointment.date : null;
     if ((f.from || f.to) && !day) return false;
@@ -685,7 +687,7 @@
           <span class="int-tags"><span class="int-tag">${t().intTag}</span><span class="int-tag ${o.payment === "paid" ? "ok" : "due"}">${o.payment === "paid" ? t().paidTag : t().unpaidTag}</span></span>`
         : `<span class="bid">${esc(o.bookingId)}</span><span class="sub">${esc(tx("paidAt", { t: fmtStamp(o.bookedAt) }))}</span>`,
       patient: o => o.patient ? `${esc(T(o.patient))}<span class="sub mobile">${esc(o.mrn || o.mobile)}</span>` : `<span class="mobile">${esc(o.mobile)}</span>`,
-      service: o => { const [cls, path] = ICONS[o.service] || ICONS.none; return `<div class="svc"><span class="svc-icon ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${path}</svg></span><span>${esc(t()["sv_" + (o.service || "none")])}</span></div>`; },
+      service: o => { const [cls, path] = ICONS[o.service] || ICONS.none; return `<div class="svc"><span class="svc-icon ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${path}</svg></span><span>${esc(svcName(o))}</span></div>`; },
       provider: o => { const n = nurseOf(o), d = doctorOf(o); if (!n && !d) return `<span class="muted">${t().unassigned}</span>`;
         return d ? `${esc(T(d.name))}${n ? `<span class="sub">${esc(T(n))}</span>` : ""}` : esc(T(n)); },
       date: o => o.appointment ? `<span class="nowrap">${fmtDate(o.appointment.date)}</span>${(o.reschedules || []).length ? `<span class="sub rs">${t().rsTag}</span>` : ""}` : `<span class="muted">${t().tbd}</span>`,
@@ -755,7 +757,7 @@
     if (!rowsCache.length) return toast(t().nothingToExport);
     const head = [t().cOrder, t().cBooking, t().cPatient, t().cService, t().cProvider, t().cDate, t().cTime, t().cPaid, t().cStatus];
     const clean = s => String(s).replace(/[⁦⁩]/g, "");
-    const rows = rowsCache.map(o => [o.id, o.bookingId, T(o.patient) || o.mobile, t()["sv_" + (o.service || "none")], nurseOf(o) ? T(nurseOf(o)) : "",
+    const rows = rowsCache.map(o => [o.id, o.bookingId, T(o.patient) || o.mobile, svcName(o), nurseOf(o) ? T(nurseOf(o)) : "",
       o.appointment ? clean(fmtDate(o.appointment.date)) : "", o.appointment ? clean(fmtMin(o.appointment.minute)) : "",
       (o.paidInfo && o.paidInfo.amount) || o.total || "", t()["st_" + statusOf(o)]]);
     const csv = "﻿" + [head, ...rows].map(r => r.map(v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`).join(",")).join("\n");

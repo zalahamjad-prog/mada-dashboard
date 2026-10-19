@@ -59,10 +59,14 @@ const NrProc = (() => {
   const nameOf = v => v && typeof v === "object" ? v[lang] || v.en : v || "";
   const now = () => { const d = new Date(); return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; };
   // Booked items for this service, with their names.
-  function items(o) {
+  // On a visit with several services (lab + IV, say) each step lists only its own items: sample = tests and packages, care = nursing, iv = IV.
+  const KINDS = { sample: ["test", "pkg"], care: ["nursing"], iv: ["iv"] };
+  function items(o, k) {
+    const all = o.items || [], groups = new Set(all.map(it => Object.keys(KINDS).find(g => KINDS[g].includes(it.kind))).filter(Boolean));
+    const mine = groups.size > 1 && KINDS[k] ? all.filter(it => KINDS[k].includes(it.kind)) : all;
     const has = typeof MadaLabs !== "undefined", look = it => it.kind === "pkg" ? has && MadaLabs.pkgById[it.code] : it.kind === "test" ? has && MadaLabs.byCode[it.code]
       : it.kind === "nursing" ? typeof MadaNursing !== "undefined" && MadaNursing.byCode[it.code] : it.kind === "iv" ? typeof MadaIV !== "undefined" && MadaIV.byCode[it.code] : null;
-    return (o.items || []).map(it => { const r = look(it); return { code: it.code, name: r ? nameOf(r.name) || it.code : it.code }; });
+    return mine.map(it => { const r = look(it); return { code: it.code, name: r ? nameOf(r.name) || it.code : it.code }; });
   }
   // Every lab test to collect: single tests and the tests inside each package, once each, with where they came from.
   function labTests(o) {
@@ -89,7 +93,7 @@ const NrProc = (() => {
   const savedOf = (o, k) => ((o.doctorVisit || {}).steps || {})[k];
   function load(o, k) {
     if (st && forKey === o.id + k) return;
-    const sv = savedOf(o, k) || {}, list = items(o);
+    const sv = savedOf(o, k) || {}, list = items(o, k);
     if (k === "sample") { const lt = labTests(o);
       st = { status: sv.status || "", time: sv.time || now(), tubes: sv.tubes || "", note: sv.note || "", reason: sv.reason || "", fasting: sv.fasting || "",
         rows: lt.map(x => { const r = (sv.tests || []).find(y => y.code === x.code) || {}; return { code: x.code, ok: r.ok === undefined ? (sv.status === "collected" ? true : null) : r.ok, reason: r.reason || "" }; }) }; }
@@ -110,7 +114,7 @@ const NrProc = (() => {
     return "";
   }
   function form(o, k) {
-    const list = items(o), bad = c => tried && c;
+    const list = items(o, k), bad = c => tried && c;
     if (k === "sample" && st.rows.length) {
       const lt = labTests(o), by = c => lt.find(x => x.code === c) || { code: c, name: c, from: [] }, ft = fastTests(lt), anyOk = st.rows.some(r => r.ok), blood = st.rows.some(r => r.ok && by(r.code).sample === "blood");
       st.needFast = ft.length > 0;
@@ -144,7 +148,7 @@ const NrProc = (() => {
       ${fld("npNote", t().note, 0, inp("npNote", st.note, false, `maxlength="300" dir="auto" placeholder="${E(t().notePh)}"`))}`;
   }
   function summary(o, k, sv) {
-    const list = items(o), nm = c => (list.find(x => x.code === c) || {}).name || c, row = (l, v) => v ? `<div><span>${l}</span><b dir="auto">${E(v)}</b></div>` : "";
+    const list = items(o, k), nm = c => (list.find(x => x.code === c) || {}).name || c, row = (l, v) => v ? `<div><span>${l}</span><b dir="auto">${E(v)}</b></div>` : "";
     if (k === "sample" && (sv.tests || []).length) {
       const lt = labTests(o), by = c => lt.find(x => x.code === c) || { code: c, name: c, sample: "blood" }, okN = sv.tests.filter(r => r.ok).length;
       const st0 = sv.status === "collected" ? t().smYes : sv.status === "partial" ? t().smPart : t().smNone;
@@ -159,7 +163,7 @@ const NrProc = (() => {
   }
   function view(o, c, k) {
     ctx = c; lang = c.lang; load(o, k);
-    const sv = savedOf(o, k), [h, s, ic] = HEAD[k], list = items(o);
+    const sv = savedOf(o, k), [h, s, ic] = HEAD[k], list = items(o, k);
     const when = sv && new Date(sv.at).toLocaleString(c.loc(), { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
     const booked = `<p class="nu-smt"><span>${t().booked}:</span> ${list.length ? E(list.map(x => x.name).join(lang === "ar" ? "، " : ", ")) : t().none}</p>`;
     const card = editing
@@ -205,7 +209,7 @@ const NrProc = (() => {
         else if (k === "sample") d = { status: st.status, time: st.status === "collected" ? st.time : "", tubes: st.status === "collected" ? st.tubes : "", note: st.status === "collected" ? st.note.trim() : "", reason: st.status === "not" ? st.reason.trim() : "" };
         if (k === "care") d = { items: st.rows.map(r => ({ code: r.code, done: r.done, reason: r.done ? "" : r.reason.trim() })), note: st.note.trim() };
         if (k === "iv") d = { site: st.site, start: st.start, end: st.end, reaction: st.reaction, details: st.reaction === "yes" ? st.details.trim() : "", note: st.note.trim() };
-        d.items = d.items || items(o).map(x => x.code);
+        d.items = d.items || items(o, k).map(x => x.code);
         try { ctx.save(k, d); } catch (e) { return ctx.toast(e.message || t().storeErr); }
         ctx.toast(t().saved);
       }
