@@ -1217,7 +1217,8 @@
     if (o.decision !== "approved") { $("main").innerHTML = stateCard("bad", t().notReady, t().notReadySub); return; }
     if (!o.payLink || left() <= 0) { $("main").innerHTML = stateCard("bad", t().expTitle, t().expSub); return; }
 
-    $("timer").hidden = false; tick();
+    // A visit booked from a doctor's order can be paid any time until the visit day ends: no countdown.
+    $("timer").hidden = !!o.fromMr; tick();
     const L = o.location || {}, out = L.lat != null && !covered(L.lat, L.lng), has = (L.lat != null || L.mapLink) && !out;
     const pr = priceOf(o);
     const doc = o.booking && o.booking.doctorId ? MadaOrders.DOCTORS.find(d => d.id === o.booking.doctorId) : null;

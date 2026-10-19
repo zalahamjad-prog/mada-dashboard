@@ -130,6 +130,9 @@
   tbody tr:hover td { background: #fafcfc; }
   .oid { color: var(--primary); font-weight: 600; text-decoration: none; white-space: nowrap; }
   .oid:hover { text-decoration: underline; }
+  .int-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .int-tag { display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 11px; font-weight: 600; background: #efeafd; color: #6d3fd1; white-space: nowrap; }
+  .int-tag.due { background: #fdecec; color: #dc2626; } .int-tag.ok { background: #e7f6ec; color: #15803d; }
   .bid { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
   .svc { display: flex; align-items: center; gap: 10px; }
   .svc-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; }
@@ -441,7 +444,7 @@
       listTitle: "Bookings List", showing: "Showing {n} of {t} bookings", export: "Export", columns: "Columns",
       cOrder: "Order ID", cBooking: "Booking ID", cService: "Service Type", cProvider: "Service Provider", cDate: "Service Date", cTime: "Service Time", cStatus: "Status", cActions: "Actions",
       cPatient: "Patient", cPaid: "Amount Paid",
-      sar: "SAR", paidAt: "Paid {t}", view: "View booking {id}", tbd: "Not set",
+      sar: "SAR", paidAt: "Paid {t}", bookedAt: "Booked {t}", intTag: "Internal · doctor's order", unpaidTag: "Unpaid", paidTag: "Paid", view: "View booking {id}", tbd: "Not set",
       emptyTitle: "No Bookings Yet", emptyText: "No bookings have been created yet.\nA booking appears here as soon as the customer pays.",
       emptyBtn: "Create First Booking", emptyLink: "View Requests",
       noMatchTitle: "No matching bookings", noMatchText: "No bookings match these filters. Try a different date range or status.", clearFilters: "Clear filters",
@@ -477,7 +480,7 @@
       listTitle: "قائمة الحجوزات", showing: "عرض {n} من {t} حجز", export: "تصدير", columns: "الأعمدة",
       cOrder: "رقم الطلب", cBooking: "رقم الحجز", cService: "نوع الخدمة", cProvider: "مقدم الخدمة", cDate: "تاريخ الخدمة", cTime: "وقت الخدمة", cStatus: "الحالة", cActions: "الإجراءات",
       cPatient: "المريض", cPaid: "المبلغ المدفوع",
-      sar: "ريال", paidAt: "دُفع {t}", view: "عرض الحجز {id}", tbd: "لم يحدد",
+      sar: "ريال", paidAt: "دُفع {t}", bookedAt: "انحجز {t}", intTag: "داخلي · طلب الطبيب", unpaidTag: "غير مدفوع", paidTag: "مدفوع", view: "عرض الحجز {id}", tbd: "لم يحدد",
       emptyTitle: "لا توجد حجوزات بعد", emptyText: "لم يتم إنشاء أي حجز حتى الآن.\nيظهر الحجز هنا مباشرة بعد ما يدفع العميل.",
       emptyBtn: "إنشاء أول حجز", emptyLink: "عرض الطلبات",
       noMatchTitle: "لا توجد حجوزات مطابقة", noMatchText: "لا توجد حجوزات تطابق هذه الفلاتر. جرّب فترة أو حالة مختلفة.", clearFilters: "مسح الفلاتر",
@@ -677,7 +680,10 @@
 
     const cell = {
       order: o => `<button type="button" class="oid oid-btn" data-open="${esc(o.id)}">${esc(o.id)}</button>`,
-      booking: o => `<span class="bid">${esc(o.bookingId)}</span><span class="sub">${esc(tx("paidAt", { t: fmtStamp(o.bookedAt) }))}</span>`,
+      // A visit booked from a doctor's order (DBK-) is internal and may still be unpaid.
+      booking: o => o.fromMr ? `<span class="bid">${esc(o.bookingId)}</span><span class="sub">${esc(tx("bookedAt", { t: fmtStamp(o.bookedAt) }))}</span>
+          <span class="int-tags"><span class="int-tag">${t().intTag}</span><span class="int-tag ${o.payment === "paid" ? "ok" : "due"}">${o.payment === "paid" ? t().paidTag : t().unpaidTag}</span></span>`
+        : `<span class="bid">${esc(o.bookingId)}</span><span class="sub">${esc(tx("paidAt", { t: fmtStamp(o.bookedAt) }))}</span>`,
       patient: o => o.patient ? `${esc(T(o.patient))}<span class="sub mobile">${esc(o.mrn || o.mobile)}</span>` : `<span class="mobile">${esc(o.mobile)}</span>`,
       service: o => { const [cls, path] = ICONS[o.service] || ICONS.none; return `<div class="svc"><span class="svc-icon ${cls}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${path}</svg></span><span>${esc(t()["sv_" + (o.service || "none")])}</span></div>`; },
       provider: o => { const n = nurseOf(o), d = doctorOf(o); if (!n && !d) return `<span class="muted">${t().unassigned}</span>`;

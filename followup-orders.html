@@ -205,6 +205,18 @@
   .kv .pill { display: inline-flex; margin: 0; }
   @media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .fg { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+  .slot { height: 44px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
+  .slot:hover:not(:disabled) { border-color: var(--primary); }
+  .slot.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .slot.busy { background: #f5f7f8; color: #9aa7ab; cursor: not-allowed; text-decoration: line-through; } .slot small { font-size: 10.5px; font-weight: 500; text-decoration: none; }
+  .sl-hint { font-size: 13px; color: var(--muted); padding: 10px 12px; border: 1px dashed #d9e1e3; border-radius: 10px; margin: 0; } .sl-hint.warn { color: #b45309; border-color: #f3dcb0; background: #fffaf0; }
+  .vcard .int { color: #6d3fd1 !important; font-weight: 600; }
+  .paybox { margin-top: 10px; border: 1px solid #f3c9c9; background: #fff8f8; border-radius: 12px; padding: 12px 14px; }
+  .paybox.ok { border-color: #bfe3cb; background: #f3faf6; display: flex; align-items: center; gap: 8px; color: var(--green); } .paybox.ok svg { width: 18px; height: 18px; }
+  .paybox .pb-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; } .paybox p { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; line-height: 1.55; }
+  .pb-url { margin-top: 10px; background: #fff; border: 1px solid #e3e8ea; border-radius: 8px; padding: 8px 10px; font-size: 12.5px; overflow-wrap: anywhere; }
+  .pb-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; } .btn-wa { background: #1f9d55; color: #fff; border-color: #1f9d55; }
 </style>
 </head>
 <body>
@@ -274,6 +286,8 @@
 <script src="orders.js"></script>
 <script src="medical.js"></script>
 <script src="nurses.js"></script>
+<script src="staff.js"></script>
+<script src="schedule.js"></script>
 <script src="labs.js"></script>
 <script src="doctor-orders.js"></script>
 <script src="providers.js"></script>
@@ -294,6 +308,10 @@
       k_all: "All orders", k_new: "New, not called", k_call: "Called, not booked", k_booked: "Booked", k_done: "Done",
       cPatient: "Patient", cOrder: "Order", cDoctor: "Doctor", cStatus: "Status", cBook: "Booking", cActs: "",
       st_new: "New", st_call: "Called", st_declined: "Patient declined", st_booked: "Booked", st_done: "Done",
+      fWho: "Service provider", pickWho: "Choose the nurse or doctor first", fSlot: "Available times", slotHint: "Choose the provider and the date to see their free times.", dayOff: "Day off for this provider. Choose another date.",
+      noSlot: "No free times on this date. Choose another date.", sBusy: "Booked", pickSlot: "Choose a time.", fNote2: "Note to follow up with the patient", payUnpaid: "Unpaid", internalT: "Internal booking · from the doctor's order",
+      payT: "Payment", paySub: "The patient can pay now by the link, or at the visit. The visit can't be closed until it is paid.", paySend: "Create payment link", payCopy: "Copy link", payWa: "WhatsApp", paySms: "SMS",
+      payMade: "Payment link ready. Send it to the patient.", payCopied: "Link copied.", payDone: "Paid · {m}", pm_cash: "cash", pm_card: "card", pm_link: "payment link", pm_apple: "Apple Pay", pm_tamara: "Tamara", pm_tabby: "Tabby", amtDue: "Amount due: {a} SAR",
       noBook: "Not booked yet", payAfter: "Pays after the service", payPaid: "Paid", act: "Take action", open: "Open medical request", close: "Close",
       dT: "Doctor's order", noteBy: "Doctor's note", orderedAt: "Ordered {t}",
       cT: "Contact the patient", cOut: "Call result", o_reached: "Reached, agreed to book", o_noAnswer: "No answer", o_callback: "Asked to call back", o_declined: "Declined the service", cNote: "Note", optional: "(optional)", cSave: "Save call",
@@ -310,6 +328,10 @@
       k_all: "كل الطلبات", k_new: "جديدة، ما تم الاتصال", k_call: "تم الاتصال، ما انحجزت", k_booked: "محجوزة", k_done: "مكتملة",
       cPatient: "المريض", cOrder: "الطلب", cDoctor: "الطبيب", cStatus: "الحالة", cBook: "الحجز", cActs: "",
       st_new: "جديد", st_call: "تم الاتصال", st_declined: "المريض رفض", st_booked: "محجوز", st_done: "مكتمل",
+      fWho: "مقدم الخدمة", pickWho: "اختر الممرض أو الطبيب أول", fSlot: "الأوقات المتاحة", slotHint: "اختر مقدم الخدمة والتاريخ عشان تطلع أوقاته المتاحة.", dayOff: "هذا اليوم إجازة لمقدم الخدمة. اختر تاريخ ثاني.",
+      noSlot: "ما فيه أوقات متاحة في هذا التاريخ. اختر تاريخ ثاني.", sBusy: "محجوز", pickSlot: "اختر وقت.", fNote2: "ملاحظة للمتابعة مع المريض", payUnpaid: "غير مدفوع", internalT: "حجز داخلي · من طلب الطبيب",
+      payT: "الدفع", paySub: "المريض يقدر يدفع الحين من الرابط، أو وقت الزيارة. ما تنقفل الزيارة إلا بعد الدفع.", paySend: "إنشاء رابط الدفع", payCopy: "نسخ الرابط", payWa: "واتساب", paySms: "SMS",
+      payMade: "رابط الدفع جاهز. أرسله للمريض.", payCopied: "تم نسخ الرابط.", payDone: "مدفوع · {m}", pm_cash: "كاش", pm_card: "بطاقة", pm_link: "رابط الدفع", pm_apple: "Apple Pay", pm_tamara: "تمارا", pm_tabby: "تابي", amtDue: "المبلغ المطلوب: {a} ريال",
       noBook: "ما انحجز للحين", payAfter: "الدفع بعد الخدمة", payPaid: "مدفوع", act: "اتخذ إجراء", open: "فتح الطلب الطبي", close: "إغلاق",
       dT: "طلب الطبيب", noteBy: "ملاحظة الطبيب", orderedAt: "انطلب {t}",
       cT: "التواصل مع المريض", cOut: "نتيجة الاتصال", o_reached: "رد ووافق على الحجز", o_noAnswer: "ما رد", o_callback: "طلب نتصل عليه بعدين", o_declined: "رفض الخدمة", cNote: "ملاحظة", optional: "(اختياري)", cSave: "حفظ الاتصال",
@@ -361,7 +383,7 @@
   const IN = { all: () => true, new: c => c.status === "new", call: c => c.status === "call" || c.status === "declined", booked: c => c.status === "booked", done: c => c.status === "done" };
   function bookHtml(c) {
     if (c.v) return `<div class="bk"><b class="num">${esc(c.v.bookingId)}</b><small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small><small>${esc(T(B.assignee(c.v)))}</small>
-      <small style="color:${c.v.payment === "paid" ? "var(--green)" : "#b45309"};font-weight:600">${c.v.payment === "paid" ? t().payPaid : t().payAfter}</small></div>`;
+      <small style="color:${c.v.payment === "paid" ? "var(--green)" : "var(--red)"};font-weight:600">${c.v.payment === "paid" ? t().payPaid : t().payUnpaid}</small></div>`;
     if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); return `<div class="bk"><b>${esc(p ? T(p.name) : d.center || "—")}</b><small>${esc(dayTxt(d.date))}</small></div>`; }
     return `<span style="color:var(--muted);font-size:12.5px">${t().noBook}</span>`;
   }
@@ -389,15 +411,36 @@
 
   // The action window: call log, then the booking (nurse or doctor visit, or the imaging center).
   function assignSel(it) {
-    const ns = `<optgroup label="${esc(t().nurses)}">${(MadaNurses.NURSES || []).map(n => `<option value="N:${esc(n.id)}">${esc(T(n.name))}</option>`).join("")}</optgroup>`;
-    const ds = `<optgroup label="${esc(t().doctors)}">${(MadaOrders.DOCTORS || []).map(d => `<option value="D:${esc(d.id)}">${esc(T(d.name))}</option>`).join("")}</optgroup>`;
+    const ps = B.people(), grp = (role, lbl) => { const l = ps.filter(p => p.role === role); return l.length ? `<optgroup label="${esc(lbl)}">${l.map(p => `<option value="${role === "nurse" ? "N" : "D"}:${esc(p.id)}" ${bk.who === (role === "nurse" ? "N:" : "D:") + p.id ? "selected" : ""}>${esc(T(p.name))}</option>`).join("")}</optgroup>` : ""; };
+    const ns = grp("nurse", t().nurses), ds = grp("doctor", t().doctors);
     return `<select class="inp" id="bWho"><option value="">${t().pick}</option>${it.type === "doctor" ? ds + ns : ns + ds}</select>`;
+  }
+  // The booking form keeps what was picked while the window redraws: { key, who, date, time, note }.
+  let bk = {};
+  function slotsHtml() {
+    if (!bk.who || !bk.date) return `<p class="sl-hint">${t().slotHint}</p>`;
+    const list = B.slots(bk.who.slice(2), bk.date);
+    if (!list) return `<p class="sl-hint warn">${t().dayOff}</p>`;
+    const free = list.filter(x => x.state === "free");
+    if (!free.length) return `<p class="sl-hint warn">${t().noSlot}</p>`;
+    return `<div class="slots" role="listbox" aria-label="${esc(t().fSlot)}">${list.filter(x => x.state !== "past").map(x => `<button type="button" class="slot ${x.state}${bk.time === x.time ? " on" : ""}" data-slot="${x.time}" ${x.state === "free" ? "" : "disabled"} aria-selected="${bk.time === x.time}">${esc(minTxt(x.minute))}${x.state === "busy" ? `<small>${t().sBusy}</small>` : ""}</button>`).join("")}</div>`;
+  }
+  // A booked visit from a doctor's order: internal booking, unpaid until the patient pays (link) or pays at the visit.
+  function payBox(v) {
+    if (v.payment === "paid") { const p = v.paidInfo || {}; return `<div class="paybox ok">${S(I.done, 2.4)}<b>${esc(tx("payDone", { m: t()["pm_" + (p.method || "link")] || p.method || "" }))}</b></div>`; }
+    if (!B.unpaid(v)) return "";
+    const live = v.payLink && new Date(v.payLink.expiresAt) > new Date() && !v.payLink.paidAt;
+    const msg = encodeURIComponent(B.payMsg(v, current)), wa = String(v.mobile || "").replace(/\D/g, "").replace(/^0(5\d{8})$/, "966$1");
+    return `<div class="paybox"><div class="pb-h"><span class="pill p-red">${t().payUnpaid}</span><b>${esc(tx("amtDue", { a: B.due(v) }))}</b></div><p>${t().paySub}</p>
+      ${live ? `<div class="pb-url"><span class="num" dir="ltr">${esc(B.payUrl(v))}</span></div><div class="pb-acts"><button type="button" class="btn btn-ghost" data-pcopy="${esc(v.id)}">${t().payCopy}</button>
+        <a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${msg}">${t().payWa}</a><a class="btn btn-ghost" href="sms:${esc(v.mobile || "")}?&body=${msg}">${t().paySms}</a></div>`
+        : `<div class="pb-acts"><button type="button" class="btn btn-primary" data-psend="${esc(v.id)}">${t().paySend}</button></div>`}</div>`;
   }
   function bookForm(c) {
     const it = c.it;
     if (c.status === "done") return `<div class="sec2"><div class="vcard">${S(I.done, 2.4)}<span><b>${t().doneMsg}</b>${c.v ? `<small>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</small>` : ""}</span></div></div>`;
     if (c.v) return `<div class="sec2"><a class="vcard" href="request-details.html?id=${encodeURIComponent(c.v.id)}">${S(I.booked)}<span><b>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</b>
-      <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))} · ${c.v.payment === "paid" ? t().payPaid : t().payAfter}</small></span></a></div>`;
+      <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${payBox(c.v)}</div>`;
     if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId); return `<div class="sec2"><div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) }))}</b></span></div></div>`; }
     if (c.r.status !== "open") return "";
     if (it.type === "radiology") {
@@ -409,11 +452,12 @@
         <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bRad">${t().bSaveRad}</button></div></div>`;
     }
     if (!B.canBook(it)) return "";
+    if (bk.key !== c.key) bk = { key: c.key };
     return `<div class="sec2"><h4>${S(I.booked)}${t().bT}</h4><div class="fg">
-      <div><label for="bDate">${t().fDate}</label><input class="inp" type="date" id="bDate" min="${today()}"></div>
-      <div><label for="bTime">${t().fTime}</label><input class="inp" type="time" id="bTime"></div>
-      <div class="w"><label for="bWho">${t().fAssign}</label>${assignSel(it)}</div>
-      <div class="w"><label for="bNote">${t().fNote} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="bNote" maxlength="200" dir="auto"></div></div>
+      <div><label for="bWho">${t().fWho}</label>${assignSel(it)}</div>
+      <div><label for="bDate">${t().fDate}</label><input class="inp" type="date" id="bDate" min="${today()}" value="${esc(bk.date || "")}"></div>
+      <div class="w"><label>${t().fSlot}</label><div id="bSlots">${slotsHtml()}</div></div>
+      <div class="w"><label for="bNote">${t().fNote2} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="bNote" maxlength="200" dir="auto" value="${esc(bk.note || "")}"></div></div>
       <div class="err" id="bErr" hidden></div><div class="df"><button type="button" class="btn btn-primary" id="bBook">${t().bSave}</button></div></div>`;
   }
   function openAct(key, keep) {
@@ -434,18 +478,22 @@
   $("dlg").addEventListener("click", e => {
     const c = cards().find(x => x.key === openKey); if (!c) return;
     const bad = (msg, ...els) => { els.forEach(el => el && el.classList.add("bad")); $("bErr").textContent = msg; $("bErr").hidden = false; };
+    const sl = e.target.closest("[data-slot]"); if (sl && !sl.disabled) { bk.time = sl.dataset.slot; $("bSlots").innerHTML = slotsHtml(); $("bErr").hidden = true; return; }
+    const ps = e.target.closest("[data-psend]"); if (ps) { B.sendPay(MadaOrders.get(ps.dataset.psend), me.name); render(); openAct(openKey, true); return toast(t().payMade); }
+    const pc = e.target.closest("[data-pcopy]"); if (pc) { const u = B.payUrl(MadaOrders.get(pc.dataset.pcopy)); try { navigator.clipboard.writeText(u); } catch (er) {} return toast(t().payCopied); }
     if (e.target.closest("#cSave")) {
       const it = M.get(c.r.id).items.find(x => x.id === c.it.id);
       M.patchItem(c.r.id, c.it.id, { contacts: [...(it.contacts || []), { outcome: $("cOut").value, note: $("cNote").value.trim() || null, by: me.name, at: new Date().toISOString() }] });
       render(); openAct(openKey, true); return toast(t().callSaved);
     }
     if (e.target.closest("#bBook")) {
-      const date = $("bDate").value, time = $("bTime").value, who = $("bWho").value;
-      if (!date || !time || !who) return bad(t().need, !date && $("bDate"), !time && $("bTime"), !who && $("bWho"));
+      const date = $("bDate").value, time = bk.time, who = $("bWho").value;
+      if (!who || !date) return bad(t().need, !who && $("bWho"), !date && $("bDate"));
       if (date < today()) return bad(t().badPast, $("bDate"));
+      if (!time) return bad(t().pickSlot);
       const [k, id] = who.split(":"), d = { date, time, note: $("bNote").value.trim(), [k === "N" ? "nurseId" : "doctorId"]: id };
       const v = B.book(M.get(c.r.id), M.get(c.r.id).items.find(x => x.id === c.it.id), d, me.name, current);
-      render(); openAct(openKey, true); return toast(tx("booked", { b: v.bookingId, n: T(B.assignee(v)) }));
+      bk = {}; render(); openAct(openKey, true); return toast(tx("booked", { b: v.bookingId, n: T(B.assignee(v)) }));
     }
     if (e.target.closest("#bRad")) {
       const el = $("bCenter"), date = $("bDate").value, v = el.value.trim();
@@ -456,7 +504,10 @@
       render(); openAct(openKey, true); return toast(t().radSaved);
     }
   });
-  $("dlg").addEventListener("input", e => { e.target.classList.remove("bad"); const er = $("bErr"); if (er) er.hidden = true; });
+  $("dlg").addEventListener("input", e => { e.target.classList.remove("bad"); const er = $("bErr"); if (er) er.hidden = true; if (e.target.id === "bNote") bk.note = e.target.value; });
+  // Provider or date changed: show that provider's free times on that date.
+  $("dlg").addEventListener("change", e => { if (!["bWho", "bDate"].includes(e.target.id)) return;
+    bk[e.target.id === "bWho" ? "who" : "date"] = e.target.value; bk.time = null; const box = $("bSlots"); if (box) box.innerHTML = slotsHtml(); });
   $("rows").addEventListener("click", e => { const b = e.target.closest("[data-act]"); if (b) openAct(b.dataset.act); });
   $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) { $("ov").hidden = true; openKey = null; } });
   document.addEventListener("keydown", e => { if (e.key === "Escape") { $("ov").hidden = true; openKey = null; } });

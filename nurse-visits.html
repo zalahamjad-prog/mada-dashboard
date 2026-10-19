@@ -245,6 +245,9 @@
   td.place { white-space: normal; min-width: 140px; max-width: 220px; font-size: 13px; line-height: 1.5; }
   /* Laptop widths: let headers and the address wrap so the actions stay in view. */
   @media (min-width: 901px) and (max-width: 1440px) { thead th { white-space: normal; padding: 14px 7px; } tbody td { padding: 12px 7px; } td.place { min-width: 90px; } .who small { white-space: nowrap; } }
+  .int-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .int-tag { display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 11px; font-weight: 600; background: #efeafd; color: #6d3fd1; white-space: nowrap; }
+  .int-tag.due { background: #fdecec; color: #dc2626; } .int-tag.ok { background: #e7f6ec; color: #15803d; }
 </style>
 </head>
 <body>
@@ -496,7 +499,7 @@
         <td class="c-who"><div class="who"><span class="pa pa-${ix}">${ic("person")}</span><span><b>${esc(T(o.patient) || "—")}</b>${tag ? "<br>" + tag : ""}<small class="mrn num">${esc(o.mrn || "")}</small></span></div></td>
         <td data-l="${esc(t().cSvc)}">${dr ? `<span class="svc svc-doctor">${esc(svcOf(o))}</span><small class="dr-only">${esc(t().drOnly)}</small>` : `<button type="button" class="svc svc-${esc(o.service)}" data-brief="${esc(o.id)}" title="${esc(t().bfOpen)}">${esc(svcOf(o))}${ic("info")}</button>`}</td>
         <td data-l="${esc(t().cMobile)}"><a class="num tel" href="tel:${esc(o.mobile || "")}">${esc(DrPortal.phone(o.mobile) || "—")}</a></td>
-        <td data-l="${esc(t().cBooking)}"><span class="num">${esc(o.bookingId || "—")}</span></td>
+        <td data-l="${esc(t().cBooking)}"><span class="num">${esc(o.bookingId || "—")}</span>${o.fromMr ? `<span class="int-tags"><span class="int-tag">${current === "ar" ? "من طلب الطبيب" : "Doctor's order"}</span><span class="int-tag ${o.payment === "paid" ? "ok" : "due"}">${o.payment === "paid" ? (current === "ar" ? "مدفوع" : "Paid") : (current === "ar" ? "غير مدفوع" : "Unpaid")}</span></span>` : ""}</td>
         <td data-l="${esc(t()[last])}" class="when">${isDone ? doneTxt(doneAt(o)) : isCan ? doneTxt(cancelAt(o)) + (cancelWhy(o) ? `<span class="why">${esc(cancelWhy(o))}</span>` : "") : whenTxt(o.appointment)}</td>
         <td data-l="${esc(t().cPlace)}" class="place">${esc(place(o) || "—")}</td>
         <td class="c-acts"><div class="acts">
