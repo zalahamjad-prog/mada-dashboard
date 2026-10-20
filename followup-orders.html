@@ -227,6 +227,28 @@
   .sub2 { font-size: 12.5px; color: var(--muted); margin: -4px 0 10px; line-height: 1.55; }
   .picks { display: grid; gap: 8px; } .pk { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #d9e1e3; border-radius: 10px; cursor: pointer; background: #fff; }
   .pk.on { border-color: var(--primary); background: #f1f8f6; } .pk input { width: 18px; height: 18px; accent-color: var(--primary); flex: none; } .pk .ty { margin: 0; } .pk b { font-size: 13.5px; }
+  .hd6 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .hd6 b { font-weight: 600; } .hd6 a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+  .tile { display: grid; justify-items: center; gap: 4px; padding: 12px 8px; border: 1px solid #d9e1e3; border-radius: 12px; background: #fff; cursor: pointer; font: inherit; color: inherit; position: relative; }
+  .tile .ti { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); } .tile .ti svg { width: 18px; height: 18px; }
+  .tile b { font-size: 12.5px; font-weight: 600; text-align: center; } .tile em { position: absolute; top: 6px; inset-inline-end: 8px; min-width: 22px; height: 22px; border-radius: 11px; background: var(--primary); color: #fff; font-style: normal; font-size: 12px; font-weight: 700; display: grid; place-items: center; padding: 0 6px; }
+  .tile.zero { opacity: .5; cursor: default; } .tile.zero em { background: #c9d3d6; } .tile.on { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary) inset; background: #f1f8f6; }
+  .ta { height: auto; min-height: 74px; padding: 10px 12px; resize: vertical; width: 100%; font: inherit; }
+  .seg { display: flex; gap: 8px; } .seg button { flex: 1; height: 42px; border: 1px solid #d9e1e3; border-radius: 9px; background: #fff; font: inherit; font-size: 13.5px; cursor: pointer; } .seg button.on { border-color: var(--primary); background: #f1f8f6; color: var(--primary); font-weight: 600; }
+  .otw { overflow-x: auto; border: 1px solid #e3e8ea; border-radius: 10px; } .otb { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .otb th { background: #f5f8f9; text-align: start; font-size: 12px; color: #44545a; font-weight: 600; padding: 9px 10px; white-space: nowrap; } .otb td { padding: 9px 10px; border-top: 1px solid #eef2f3; vertical-align: top; }
+  .otb .ty { margin: 0; } .otb .c-nm b { display: block; font-weight: 600; color: #15304a; } .otb .c-nm small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .otb .code { display: inline-block; font-size: 11px; font-weight: 700; color: #0f6b52; background: #e3f4ee; border-radius: 6px; padding: 1px 6px; direction: ltr; margin: 0 2px 2px 0; }
+  .otb tfoot td { background: #fafcfc; } .otb tr.ed td { background: #fbfdfc; } .otb .acts { justify-content: flex-end; } .otb .ib { width: 32px; height: 32px; } .otb .ib.del { color: var(--red); }
+  .lnk { border: 0; background: none; color: var(--primary); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; margin-inline-start: auto; }
+  .near { margin-top: 12px; padding: 12px; border-radius: 10px; background: #f6fbf9; border: 1px solid #cfe6de; } .near > b { display: block; font-size: 13.5px; color: #0b6b5c; } .near > small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .near-l { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-top: 10px; }
+  .nr { text-align: start; padding: 8px 10px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; cursor: pointer; font: inherit; } .nr b { display: block; font-size: 14px; } .nr small { display: block; font-size: 11.5px; color: var(--muted); } .nr.on { border-color: var(--primary); background: #e9f6f1; }
+  .shb { margin-top: 10px; border: 1px solid #cfe6de; background: #f6fbf9; border-radius: 12px; padding: 12px 14px; } .shb-h b { display: block; font-size: 13.5px; color: #0b6b5c; } .shb-h small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+  .shl { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; padding: 10px 12px; background: #fff; border: 1px solid #e3e8ea; border-radius: 10px; font-size: 13px; } .shl > svg { width: 18px; height: 18px; color: var(--primary); flex: none; margin-top: 2px; }
+  .shl > div { flex: 1; min-width: 0; } .shl small { display: block; font-size: 11.5px; color: var(--muted); } .shl span { display: block; } .shl a { display: inline-block; margin-top: 3px; color: var(--primary); font-weight: 600; font-size: 12.5px; }
+  @media (max-width: 760px) { .hd6 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .otb thead { display: none; } .otb, .otb tbody, .otb tfoot { display: block; } .otb tr { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; padding: 10px; border-top: 1px solid #eef2f3; }
+    .otb td { border: 0; padding: 0; } .otb td.hm { display: none; } .otb td.c-nm, .otb tr.ed td { grid-column: 1 / -1; } .otb td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); } .shl { flex-wrap: wrap; } }
 </style>
 </head>
 <body>
@@ -330,6 +352,17 @@
       payT: "Payment", paySub: "The patient can pay now by the link, or at the visit. The visit can't be closed until it is paid.", paySend: "Create payment link", payCopy: "Copy link", payWa: "WhatsApp", paySms: "SMS",
       payMade: "Payment link ready. Send it to the patient.", payCopied: "Link copied.", payDone: "Paid · {m}", pm_cash: "cash", pm_card: "card", pm_link: "payment link", pm_apple: "Apple Pay", pm_tamara: "Tamara", pm_tabby: "Tabby", amtDue: "Amount due: {a} SAR",
       noBook: "Not booked yet", payAfter: "Pays after the service", payPaid: "Paid", act: "Take action", open: "Open medical request", close: "Close",
+      hFile: "File No.", hMobile: "Mobile", hVisit: "Visit booking", hReq: "Internal request No.", hDoc: "Referring doctor", hStatus: "Status", hClosed: "Closed · {p}", cl_yes: "service provided", cl_no: "service not provided",
+      tilesT: "Services in this request", tileAll: "Show all", ty_count: "{n}",
+      nT: "General notes", nSub: "Notes from the team on this request. Write as often as you need.", nPh: "Write a note for the team...", nNone: "No notes yet.",
+      rqState: "Request", rs_open: "Keep the request open", rs_close: "Close the request", clQ: "Was the service provided?", clYes: "Provided", clNo: "Not provided", clReason: "Why was it not provided?",
+      nSave: "Save", nNeed: "Write a note, or choose to close the request.", clNeed: "Choose whether the service was provided.", clNeedR: "Write why the service was not provided.", nSaved: "Note saved.", clSaved: "Request closed. It went to the quality team.",
+      oT: "Orders", oSub: "Every order in this request with its code and price. Edit or delete an order that is not booked yet.", oNo: "#", oSvc: "Service", oName: "Order", oCode: "Code", oPrice: "Price", oStatus: "Status", oTotal: "Total",
+      oEdit: "Edit", oDel: "Delete", oSaveE: "Save", oCancel: "Cancel", oNote: "Note", oDelQ: "Delete \"{n}\" from this request?", oDeleted: "Order deleted.", oUpdated: "Order updated.", oBadPrice: "Write a valid price.", oLocked: "Booked or done orders can't be changed.", sar: "SAR", free: "No fee",
+      actT: "Service actions", nearT: "Nearest free times", nearS: "The earliest free times for the {r} in the next 7 days. Pick one, or choose the provider and date yourself.", nearNone: "No free times in the next 7 days.", r_nurse: "nurses", r_doctor: "doctors",
+      shT: "Share the booking with the patient", shS: "Booking details, services, time and location, with the link to see and pay. Ask the patient to confirm the location.", shLoc: "Visit location", shNoLoc: "No location on this booking.", shEdit: "Edit location", shAddr: "Address", shMap: "Google Maps link",
+      shSave: "Save location", shWa: "Send by WhatsApp", shCopy: "Copy message", shCopied: "Message copied.", shSaved: "Location saved.", shBadMap: "Paste a map link that starts with https://", shNeed: "Write the address or paste the map link.", shSent: "Sent {t}", openMap: "Open in Maps",
+      sm_head: "Mada Care · Visit booking {b}", sm_hi: "Hello {n},", sm_body: "Your visit is booked:", sm_svc: "Services: {s}", sm_when: "Date: {d} · {t}", sm_with: "With: {w}", sm_loc: "Location: {a}", sm_conf: "Please reply to confirm this location, or send us the right one.", sm_pay: "Amount: {a} SAR. See the details and pay here:", sm_paid: "Details:", sm_thanks: "Wishing you good health 💚",
       dT: "Doctor's order", noteBy: "Doctor's note", orderedAt: "Ordered {t}",
       cT: "Contact the patient", cOut: "Call result", o_reached: "Reached, agreed to book", o_noAnswer: "No answer", o_callback: "Asked to call back", o_declined: "Declined the service", cNote: "Note", optional: "(optional)", cSave: "Save call",
       bT: "Book a visit", bTrad: "Book at the imaging center", fDate: "Date", fTime: "Time", fAssign: "Assign to", pick: "Choose a nurse or doctor", nurses: "Nurses", doctors: "Doctors", fCenter: "Imaging center", pickC: "Choose the imaging center", noProv: "No imaging centers added yet.", addProv: "Add one in Service Providers",
@@ -355,6 +388,17 @@
       payT: "الدفع", paySub: "المريض يقدر يدفع الحين من الرابط، أو وقت الزيارة. ما تنقفل الزيارة إلا بعد الدفع.", paySend: "إنشاء رابط الدفع", payCopy: "نسخ الرابط", payWa: "واتساب", paySms: "SMS",
       payMade: "رابط الدفع جاهز. أرسله للمريض.", payCopied: "تم نسخ الرابط.", payDone: "مدفوع · {m}", pm_cash: "كاش", pm_card: "بطاقة", pm_link: "رابط الدفع", pm_apple: "Apple Pay", pm_tamara: "تمارا", pm_tabby: "تابي", amtDue: "المبلغ المطلوب: {a} ريال",
       noBook: "ما انحجز للحين", payAfter: "الدفع بعد الخدمة", payPaid: "مدفوع", act: "اتخذ إجراء", open: "فتح الطلب الطبي", close: "إغلاق",
+      hFile: "رقم الملف", hMobile: "الجوال", hVisit: "حجز الزيارة", hReq: "رقم الطلب الداخلي", hDoc: "الطبيب المحوّل", hStatus: "الحالة", hClosed: "مقفل · {p}", cl_yes: "تم تقديم الخدمة", cl_no: "ما تم تقديم الخدمة",
+      tilesT: "خدمات هذا الطلب", tileAll: "عرض الكل", ty_count: "{n}",
+      nT: "ملاحظات عامة", nSub: "ملاحظات الفريق على هذا الطلب. تقدر تكتب أكثر من مرة.", nPh: "اكتب ملاحظة للفريق...", nNone: "ما فيه ملاحظات للحين.",
+      rqState: "الطلب", rs_open: "يبقى الطلب مفتوح", rs_close: "إقفال الطلب", clQ: "هل تم تقديم الخدمة؟", clYes: "تم تقديمها", clNo: "ما تم تقديمها", clReason: "ليش ما تم تقديمها؟",
+      nSave: "حفظ", nNeed: "اكتب ملاحظة، أو اختر إقفال الطلب.", clNeed: "حدد هل تم تقديم الخدمة.", clNeedR: "اكتب ليش ما تم تقديم الخدمة.", nSaved: "انحفظت الملاحظة.", clSaved: "انقفل الطلب وراح لقسم الجودة.",
+      oT: "الطلبات", oSub: "كل طلبات هذا الطلب مع الرمز والسعر. تقدر تعدّل أو تحذف الطلب اللي ما انحجز.", oNo: "#", oSvc: "الخدمة", oName: "الطلب", oCode: "الرمز", oPrice: "السعر", oStatus: "الحالة", oTotal: "الإجمالي",
+      oEdit: "تعديل", oDel: "حذف", oSaveE: "حفظ", oCancel: "إلغاء", oNote: "ملاحظة", oDelQ: "تحذف \"{n}\" من هذا الطلب؟", oDeleted: "انحذف الطلب.", oUpdated: "انحدث الطلب.", oBadPrice: "اكتب سعر صحيح.", oLocked: "الطلب المحجوز أو المكتمل ما يتعدّل.", sar: "ريال", free: "بدون رسوم",
+      actT: "إجراءات الخدمات", nearT: "أقرب الأوقات المتاحة", nearS: "أقرب الأوقات الفاضية عند {r} خلال 7 أيام. اختر واحد، أو اختر مقدم الخدمة والتاريخ بنفسك.", nearNone: "ما فيه أوقات فاضية خلال 7 أيام.", r_nurse: "الممرضين", r_doctor: "الأطباء",
+      shT: "مشاركة الحجز مع المريض", shS: "تفاصيل الحجز والخدمات والوقت والموقع، مع رابط يشوف فيه التفاصيل ويدفع. اطلب من المريض يأكد الموقع.", shLoc: "موقع الزيارة", shNoLoc: "ما فيه موقع على هذا الحجز.", shEdit: "تعديل الموقع", shAddr: "العنوان", shMap: "رابط قوقل ماب",
+      shSave: "حفظ الموقع", shWa: "إرسال واتساب", shCopy: "نسخ الرسالة", shCopied: "انسخت الرسالة.", shSaved: "انحفظ الموقع.", shBadMap: "الصق رابط خريطة يبدأ بـ https://", shNeed: "اكتب العنوان أو الصق رابط الخريطة.", shSent: "انرسل {t}", openMap: "فتح في الخرائط",
+      sm_head: "مدى كير · حجز زيارة {b}", sm_hi: "أهلاً {n}،", sm_body: "تم حجز زيارتك:", sm_svc: "الخدمات: {s}", sm_when: "التاريخ: {d} · {t}", sm_with: "مع: {w}", sm_loc: "الموقع: {a}", sm_conf: "فضلاً رد علينا بتأكيد الموقع، أو أرسل لنا الموقع الصحيح.", sm_pay: "المبلغ: {a} ريال. التفاصيل والدفع من هنا:", sm_paid: "التفاصيل:", sm_thanks: "نتمنى لك الصحة والعافية 💚",
       dT: "طلب الطبيب", noteBy: "ملاحظة الطبيب", orderedAt: "انطلب {t}",
       cT: "التواصل مع المريض", cOut: "نتيجة الاتصال", o_reached: "رد ووافق على الحجز", o_noAnswer: "ما رد", o_callback: "طلب نتصل عليه بعدين", o_declined: "رفض الخدمة", cNote: "ملاحظة", optional: "(اختياري)", cSave: "حفظ الاتصال",
       bT: "احجز زيارة", bTrad: "احجز في مركز الأشعة", fDate: "التاريخ", fTime: "الوقت", fAssign: "إسناد إلى", pick: "اختر ممرضة أو طبيب", nurses: "الممرضات", doctors: "الأطباء", fCenter: "مركز الأشعة", pickC: "اختر مركز الأشعة", noProv: "ما فيه مراكز أشعة مضافة.", addProv: "أضفها من مقدمو الخدمة",
@@ -482,7 +526,7 @@
     else if (c.v) { const first = !shown.has(c.v.id); shown.add(c.v.id);
       const with_ = g.items.filter(x => x.v && x.v.id === c.v.id && x !== c).map(x => T(x.it.title));
       body = `<a class="vcard" href="request-details.html?id=${encodeURIComponent(c.v.id)}">${S(I.booked)}<span><b>${esc(tx("visit", { b: c.v.bookingId, n: T(B.assignee(c.v)) }))}</b>
-        <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${with_.length ? `<small>${esc(tx("sameVisit", { s: with_.join(current === "ar" ? "، " : ", ") }))}</small>` : ""}${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${first ? payBox(c.v) : ""}`; }
+        <small>${esc(dayTxt(c.v.appointment.date))} · ${esc(minTxt(c.v.appointment.minute))}</small>${with_.length ? `<small>${esc(tx("sameVisit", { s: with_.join(current === "ar" ? "، " : ", ") }))}</small>` : ""}${c.v.fromMr ? `<small class="int">${t().internalT}</small>` : ""}</span></a>${first ? payBox(c.v) + shareBox(c.v) : ""}`; }
     else if (c.sc) { const d = c.sc.data || {}, p = d.providerId && MadaProviders.get(d.providerId);
       body = `<div class="vcard">${S(I.booked)}<span><b>${esc(tx("radAt", { c: p ? T(p.name) : d.center || "—", d: dayTxt(d.date) + (d.time ? " · " + MadaRadShare.fmtTime(d.time, current) : "") }))}</b></span></div>${MadaRadShare.html(r, it, current, !!rsEdit[it.id])}`; }
     else if (r.status !== "open") body = "";
@@ -508,6 +552,7 @@
       <div class="picks">${can.map(c => `<label class="pk ${bk.sel.includes(c.it.id) ? "on" : ""}"><input type="checkbox" data-pick="${esc(c.it.id)}" ${bk.sel.includes(c.it.id) ? "checked" : ""}>
         <span class="ty">${S(I[c.it.type] || I.all, 2)}${t()["ty_" + c.it.type] || c.it.type}</span><b dir="auto">${esc(T(c.it.title))}</b></label>`).join("")}</div>
       ${can.some(c => B.svcOf(c.it) === "doctor") && can.length > 1 ? `<p class="sl-hint" style="margin-top:8px">${t().drAlone}</p>` : ""}
+      ${(near => `<div class="near"><b>${t().nearT}</b><small>${esc(tx("nearS", { r: t()[dr ? "r_doctor" : "r_nurse"] }))}</small>${near.length ? `<div class="near-l">${near.map(x => `<button type="button" class="nr ${bk.who === x.who && bk.date === x.date && bk.time === x.time ? "on" : ""}" data-near="${esc(x.who + "|" + x.date + "|" + x.time)}"><b>${esc(minTxt(x.minute))}</b><small>${esc(dayTxt(x.date))}</small><small>${esc(T(x.name))}</small></button>`).join("")}</div>` : `<p class="sl-hint warn">${t().nearNone}</p>`}</div>`)(nearest(dr ? "doctor" : "nurse"))}
       <div class="fg" style="margin-top:12px">
       <div><label for="bWho">${t().fWho}</label>${assignSel(dr)}</div>
       <div><label for="bDate">${t().fDate}</label><input class="inp" type="date" id="bDate" min="${today()}" value="${esc(bk.date || "")}"></div>
@@ -519,21 +564,159 @@
   const rsEdit = {};
   MadaRadShare.bind($("dlg"), { get: iid => { const r = M.all().find(x => x.items.some(i => i.id === iid)); return { r, it: r.items.find(i => i.id === iid) }; },
     redraw: () => { render(); openAct(openKey, true); }, toast: m => toast(m), lang: () => current, by: () => me.name, edit: (iid, on) => { rsEdit[iid] = on; openAct(openKey, true); } });
+  // ---------- The action window ----------
+  // From the top: the request's numbers (file, mobile, the visit it came from, the internal request number, the doctor), a tile per
+  // service type with how many orders it has, the team's general notes with keep open / close (provided or not), the call log,
+  // every order with its code and price (edit or delete while not booked), each service's own action, then one visit for the
+  // services a nurse or doctor can do together (nearest free times first), and sharing the booking with the patient.
+  const TILES = ["lab", "nursing", "iv", "radiology", "referral", "leave", "doctor", "physio"];
+  let tyF = "", oEdit = null, nf = { state: "open", prov: "", reason: "" }, shEdit = {};
+  const priceOf = it => { const x = it.order || {}; return it.type === "lab" ? Number(x.price || (it.orderCodes || []).reduce((a, c) => a + Number(((typeof DrOrders !== "undefined" && DrOrders.item(c)) || {}).price || 0), 0)) : Number(x.price || 0); };
+  const codesOf = it => (it.orderCodes && it.orderCodes.length ? it.orderCodes : it.order && it.order.code ? [it.order.code] : []);
+  const money = n => n ? `${Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 })} ${t().sar}` : t().free;
+  const locked = c => c.status === "done" || c.status === "booked" || c.status === "prog" || !!c.v || !!c.sc;
+  function headHtml(g) {
+    const r = g.r, src = r.orderId && MadaOrders.get(r.orderId), cl = r.closed;
+    const f = (k, v) => `<div><span>${t()[k]}</span>${v}</div>`;
+    return `<div class="kv hd6">${f("hFile", `<b class="num">${esc(r.mrn || "—")}</b>`)}${f("hMobile", r.mobile ? `<a class="tel num" href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a>` : "—")}
+      ${f("hVisit", src ? `<a class="num" href="request-details.html?id=${encodeURIComponent(src.id)}">${esc(src.bookingId || src.id)}</a>` : "—")}${f("hReq", `<a class="num" href="medical-request.html?id=${encodeURIComponent(r.id)}">${esc(r.id)}</a>`)}
+      ${f("hDoc", `<b>${esc(T(g.doctor) || "—")}</b>`)}${f("hStatus", r.status !== "open" && cl ? `<span class="pill p-gray">${esc(tx("hClosed", { p: t()[cl.provided === false ? "cl_no" : "cl_yes"] }))}</span>` : `<span class="pill ${PILL[g.status]}">${t()["st_" + g.status]}</span>`)}</div>`;
+  }
+  function tilesHtml(g) {
+    const n = ty => g.items.filter(c => c.it.type === ty).length;
+    return `<div class="sec2"><h4>${S(I.all)}${t().tilesT}</h4><div class="tiles">${TILES.filter((ty, i) => i < 6 || n(ty)).map(ty => `<button type="button" class="tile ${n(ty) ? "" : "zero"} ${tyF === ty ? "on" : ""}" data-tile="${ty}" ${n(ty) ? "" : "disabled"} aria-pressed="${tyF === ty}">
+        <span class="ti">${S(I[ty] || I.all, 2)}</span><b>${t()["ty_" + ty]}</b><em>${n(ty)}</em></button>`).join("")}</div></div>`;
+  }
+  function notesHtml(g) {
+    const r = g.r, ns = (r.notes || []).slice().reverse(), open = r.status === "open";
+    return `<div class="sec2"><h4>${S('<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>')}${t().nT}</h4><p class="sub2">${t().nSub}</p>
+      ${ns.length ? `<ul class="clog">${ns.map(x => `<li><b>${esc(T(x.by))}</b> <span>· ${esc(when(x.at))}</span><div dir="auto">${esc(x.text)}</div></li>`).join("")}</ul>` : `<p class="sl-hint">${t().nNone}</p>`}
+      ${open ? `<textarea class="inp ta" id="nText" maxlength="500" dir="auto" placeholder="${esc(t().nPh)}"></textarea>
+      <div class="fg" style="margin-top:10px"><div><label for="nState">${t().rqState}</label><select class="inp" id="nState">${["open", "close"].map(k => `<option value="${k}" ${nf.state === k ? "selected" : ""}>${t()["rs_" + k]}</option>`).join("")}</select></div>
+        ${nf.state === "close" ? `<div><label>${t().clQ}</label><div class="seg">${[["yes", "clYes"], ["no", "clNo"]].map(([k, l]) => `<button type="button" class="${nf.prov === k ? "on" : ""}" data-prov="${k}">${t()[l]}</button>`).join("")}</div></div>
+          ${nf.prov === "no" ? `<div class="w"><label for="nReason">${t().clReason}</label><input class="inp" id="nReason" maxlength="200" dir="auto" value="${esc(nf.reason)}"></div>` : ""}` : ""}</div>
+      <div class="err" id="nErr" hidden></div><div class="df"><button type="button" class="btn ${nf.state === "close" ? "btn-primary" : "btn-ghost"}" id="nSave">${nf.state === "close" ? t().rs_close : t().nSave}</button></div>` : ""}</div>`;
+  }
+  function callHtml(g) {
+    if (g.status === "done" || g.r.status !== "open") return "";
+    return `<div class="sec2"><h4>${S(I.call)}${t().cT}</h4>${g.cs.length ? `<ul class="clog">${g.cs.map(x => `<li><b>${esc(t()["o_" + x.outcome])}</b> <span>· ${esc(T(x.by))} · ${esc(when(x.at))}</span>${x.note ? `<div dir="auto">${esc(x.note)}</div>` : ""}</li>`).join("")}</ul>` : ""}
+      <div class="fg"><div><label for="cOut">${t().cOut}</label><select class="inp" id="cOut">${["reached", "noAnswer", "callback", "declined"].map(k => `<option value="${k}">${t()["o_" + k]}</option>`).join("")}</select></div>
+        <div><label for="cNote">${t().cNote} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="cNote" maxlength="200" dir="auto"></div></div>
+      <div class="df"><button type="button" class="btn btn-ghost" id="cSave">${S(I.call, 2)}${t().cSave}</button></div></div>`;
+  }
+  function ordersHtml(g) {
+    const list = g.items.filter(c => !tyF || c.it.type === tyF), open = g.r.status === "open";
+    const total = list.reduce((a, c) => a + priceOf(c.it), 0);
+    const row = (c, i) => { const it = c.it, ed = oEdit === it.id;
+      if (ed) return `<tr class="ed"><td>${i + 1}</td><td colspan="6"><b dir="auto">${esc(T(it.title))}</b><div class="fg" style="margin-top:8px"><div><label for="oP">${t().oPrice} (${t().sar})</label><input class="inp num" id="oP" inputmode="decimal" dir="ltr" value="${esc(priceOf(it))}"></div>
+          <div><label for="oN">${t().oNote}</label><input class="inp" id="oN" maxlength="200" dir="auto" value="${esc(T(it.details))}"></div></div><div class="err" id="oErr" hidden></div>
+          <div class="df"><button type="button" class="btn btn-ghost btn-sm" id="oCancel">${t().oCancel}</button><button type="button" class="btn btn-primary btn-sm" id="oSave" data-id="${esc(it.id)}">${t().oSaveE}</button></div></td></tr>`;
+      return `<tr><td class="hm">${i + 1}</td><td data-l="${t().oSvc}"><span class="ty">${S(I[it.type] || I.all, 2)}${t()["ty_" + it.type] || it.type}</span></td><td data-l="${t().oName}" class="c-nm"><b dir="auto">${esc(T(it.title))}</b>${T(it.details) ? `<small dir="auto">${esc(T(it.details))}</small>` : ""}</td>
+        <td data-l="${t().oCode}">${codesOf(it).map(x => `<span class="code">${esc(x)}</span>`).join(" ") || "—"}</td><td data-l="${t().oPrice}" class="num">${esc(money(priceOf(it)))}</td><td data-l="${t().oStatus}"><span class="pill sm ${PILL[c.status]}">${t()["st_" + c.status]}</span></td>
+        <td class="c-acts">${open ? `<div class="acts"><button type="button" class="ib" data-oedit="${esc(it.id)}" title="${t().oEdit}" aria-label="${t().oEdit}" ${locked(c) ? "disabled" : ""}>${S('<path d="M4 20h4L19 9l-4-4L4 16z"/>')}</button><button type="button" class="ib del" data-odel="${esc(it.id)}" title="${t().oDel}" aria-label="${t().oDel}" ${locked(c) ? "disabled" : ""}>${S('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>')}</button></div>` : ""}</td></tr>`; };
+    return `<div class="sec2"><h4>${S(I.all)}${t().oT}${tyF ? ` · ${t()["ty_" + tyF]} <button type="button" class="lnk" data-tile="">${t().tileAll}</button>` : ""}</h4><p class="sub2">${t().oSub}</p>
+      <div class="otw"><table class="otb"><thead><tr><th class="hm">${t().oNo}</th><th>${t().oSvc}</th><th>${t().oName}</th><th>${t().oCode}</th><th>${t().oPrice}</th><th>${t().oStatus}</th><th></th></tr></thead>
+        <tbody>${list.map(row).join("")}</tbody><tfoot><tr><td class="hm"></td><td colspan="3"><b>${t().oTotal}</b></td><td class="num"><b>${esc(money(total))}</b></td><td colspan="2"></td></tr></tfoot></table></div></div>`;
+  }
+  // Nearest free start times over the next 7 days for every nurse (or doctor), earliest first.
+  function nearest(role) {
+    const ps = B.people().filter(p => p.role === role), out = [], d0 = new Date();
+    for (let k = 0; k < 7 && out.length < 40; k++) {
+      const d = new Date(+d0 + k * 864e5), ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      ps.forEach(p => { const l = B.slots(p.id, ds); if (!l) return; l.filter(x => x.state === "free").slice(0, 2).forEach(x => out.push({ who: (role === "nurse" ? "N:" : "D:") + p.id, name: p.name, date: ds, time: x.time, minute: x.minute })); });
+    }
+    return out.sort((a, b) => a.date.localeCompare(b.date) || a.minute - b.minute).slice(0, 6);
+  }
+  // Booking shared with the patient: details, services, time, location (to confirm) and the link to see and pay.
+  const mapOf = l => l ? (l.map || (l.lat != null && l.lng != null ? `https://www.google.com/maps?q=${l.lat},${l.lng}` : "")) : "";
+  function shareMsg(v, lg) {
+    const L2 = i18n[lg], a = v.appointment || {}, lc = lg === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", h = Math.floor((a.minute || 0) / 60), mm = String((a.minute || 0) % 60).padStart(2, "0");
+    const d = a.date ? new Date(a.date + "T00:00").toLocaleDateString(lc, { weekday: "long", day: "numeric", month: "long" }) : "", time = `${h % 12 || 12}:${mm} ${lg === "ar" ? (h < 12 ? "ص" : "م") : (h < 12 ? "AM" : "PM")}`;
+    const nm = v.patient && typeof v.patient === "object" ? v.patient[lg] || v.patient.en : v.patient || "", who = B.assignee(v), l = v.location || {}, f = (k, o) => L2[k].replace(/\{(\w+)\}/g, (_, n) => o[n] != null ? o[n] : "");
+    const svc = v.title ? (v.title[lg] || v.title.en) : "";
+    return [f("sm_head", { b: v.bookingId }), "", f("sm_hi", { n: String(nm).split(/\s+/)[0] }), L2.sm_body, svc ? f("sm_svc", { s: svc }) : "", f("sm_when", { d, t: time }), who ? f("sm_with", { w: who[lg] || who.en }) : "",
+      l.address || mapOf(l) ? f("sm_loc", { a: [l.address, mapOf(l)].filter(Boolean).join(" · ") }) : "", L2.sm_conf, "", B.unpaid(v) ? f("sm_pay", { a: B.due(v) }) : L2.sm_paid, B.payUrl(v), "", L2.sm_thanks].filter((x, i, arr) => x !== "" || arr[i - 1] !== "").join("\n");
+  }
+  function shareBox(v) {
+    if (B.visitDone(v)) return "";
+    const l = v.location || {}, ed = !!shEdit[v.id], last = (v.messages || []).filter(m => m.type === "booking").pop();
+    return `<div class="shb" data-shv="${esc(v.id)}"><div class="shb-h"><b>${t().shT}</b><small>${t().shS}</small></div>
+      ${ed ? `<div class="fg" style="margin-top:10px"><div class="w"><label for="shA">${t().shAddr}</label><input class="inp" id="shA" maxlength="200" dir="auto" value="${esc(l.address || "")}"></div>
+          <div class="w"><label for="shM">${t().shMap}</label><input class="inp" id="shM" dir="ltr" maxlength="400" placeholder="https://maps.google.com/..." value="${esc(mapOf(l))}"></div></div>
+          <div class="err" id="shErr" hidden></div><div class="df"><button type="button" class="btn btn-ghost btn-sm" data-sh="cancel">${t().oCancel}</button><button type="button" class="btn btn-primary btn-sm" data-sh="save">${t().shSave}</button></div>`
+        : `<div class="shl">${S('<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>')}<div><small>${t().shLoc}</small><span dir="auto">${esc(l.address || "") || t().shNoLoc}</span>${mapOf(l) ? `<a href="${esc(mapOf(l))}" target="_blank" rel="noopener">${t().openMap}</a>` : ""}</div>
+          <button type="button" class="btn btn-ghost btn-sm" data-sh="edit">${t().shEdit}</button></div>
+        <div class="df" style="justify-content:flex-start;margin-top:10px"><button type="button" class="btn btn-wa" data-sh="wa">${t().shWa}</button><button type="button" class="btn btn-ghost" data-sh="copy">${t().shCopy}</button></div>
+        ${last ? `<p class="sl-hint" style="margin-top:6px">${esc(tx("shSent", { t: when(last.at) }))}</p>` : ""}`}</div>`;
+  }
   function openAct(key, keep) {
     const g = cards().find(x => x.key === key); if (!g) return;
+    if (openKey !== key) { tyF = ""; oEdit = null; nf = { state: "open", prov: "", reason: "" }; }
     openKey = key; const r = g.r, shown = new Set();
+    const sc = $("ov").hidden ? 0 : $("ov").scrollTop;
+    const acts = g.items.filter(c => !tyF || c.it.type === tyF).map(c => svcBlock(g, c, shown)).filter(h => h.includes("svb-b")).join("");
     $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x, 2)}</button>
-      <h3 id="dT">${t().dT} · ${esc(T(r.patient))}</h3><p class="sub"><span class="num">${esc(r.mrn || "")}</span>${r.mobile ? ` · <a class="tel" href="tel:${esc(r.mobile)}">${esc(r.mobile)}</a>` : ""}</p>
-      <div class="kv"><div><span>${t().cDoctor}</span>${esc(T(g.doctor) || "—")}</div><div><span>${t().cOrder}</span>${esc(g.items.length === 1 ? t().nSvc1 : tx("nSvc", { n: g.items.length }))}</div><div><span>${t().cStatus}</span><span class="pill ${PILL[g.status]}">${t()["st_" + g.status]}</span></div></div>
-      ${g.status === "done" ? "" : `<div class="sec2"><h4>${S(I.call)}${t().cT}</h4>${g.cs.length ? `<ul class="clog">${g.cs.map(x => `<li><b>${esc(t()["o_" + x.outcome])}</b> <span>· ${esc(T(x.by))} · ${esc(when(x.at))}</span>${x.note ? `<div dir="auto">${esc(x.note)}</div>` : ""}</li>`).join("")}</ul>` : ""}
-        <div class="fg"><div><label for="cOut">${t().cOut}</label><select class="inp" id="cOut">${["reached", "noAnswer", "callback", "declined"].map(k => `<option value="${k}">${t()["o_" + k]}</option>`).join("")}</select></div>
-          <div><label for="cNote">${t().cNote} <em style="font-style:normal;color:var(--muted);font-weight:500">${t().optional}</em></label><input class="inp" id="cNote" maxlength="200" dir="auto"></div></div>
-        <div class="df"><button type="button" class="btn btn-ghost" id="cSave">${S(I.call, 2)}${t().cSave}</button></div></div>`}
-      <div class="sec2"><h4>${S(I.all)}${t().svT}</h4><div class="svbs">${g.items.map(c => svcBlock(g, c, shown)).join("")}</div></div>
-      ${visitForm(g)}
+      <h3 id="dT">${t().dT} · ${esc(T(r.patient))}</h3>
+      ${headHtml(g)}${tilesHtml(g)}${notesHtml(g)}${callHtml(g)}${ordersHtml(g)}
+      ${acts ? `<div class="sec2"><h4>${S(I.booked)}${t().actT}</h4><div class="svbs">${acts}</div></div>` : ""}
+      ${r.status === "open" ? visitForm(g) : ""}
       <div class="df"><a class="btn btn-ghost" href="medical-request.html?id=${encodeURIComponent(r.id)}">${t().open}</a><button type="button" class="btn btn-primary" data-close>${t().close}</button></div>`;
-    $("ov").hidden = false; if (!keep) $("dlg").querySelector(".x").focus();
+    $("ov").hidden = false; if (keep) $("ov").scrollTop = sc; else $("dlg").querySelector(".x").focus();
   }
+  // Clicks for the new parts of the window (tiles, notes, orders, nearest times, sharing).
+  $("dlg").addEventListener("click", e => {
+    const g = cards().find(x => x.key === openKey); if (!g) return;
+    const redraw = () => { render(); openAct(openKey, true); };
+    const tl = e.target.closest("[data-tile]"); if (tl) { tyF = tyF === tl.dataset.tile ? "" : tl.dataset.tile; return openAct(openKey, true); }
+    const pv = e.target.closest("[data-prov]"); if (pv) { nf.prov = pv.dataset.prov; return openAct(openKey, true); }
+    if (e.target.closest("#nSave")) {
+      const text = $("nText").value.trim(), box = $("nErr"), at = new Date().toISOString();
+      if (nf.state === "close") { if (!nf.prov) { box.textContent = t().clNeed; box.hidden = false; return; } if (nf.prov === "no" && !nf.reason.trim()) { box.textContent = t().clNeedR; box.hidden = false; return; } }
+      else if (!text) { box.textContent = t().nNeed; box.hidden = false; return; }
+      const r = M.get(g.r.id), notes = [...(r.notes || []), ...(text ? [{ type: "general", text, by: me.name, at }] : [])];
+      if (nf.state === "close") { const why = nf.prov === "no" ? nf.reason.trim() : ""; M.update(r.id, { notes, status: "quality", closed: { by: me.name, at, provided: nf.prov === "yes", reason: why || null, note: [text, why].filter(Boolean).join(" · ") } }); nf = { state: "open", prov: "", reason: "" }; redraw(); return toast(t().clSaved); }
+      M.update(r.id, { notes }); redraw(); return toast(t().nSaved);
+    }
+    const oe = e.target.closest("[data-oedit]"); if (oe) { oEdit = oe.dataset.oedit; return openAct(openKey, true); }
+    if (e.target.closest("#oCancel")) { oEdit = null; return openAct(openKey, true); }
+    const os = e.target.closest("#oSave");
+    if (os) {
+      const c = g.items.find(x => x.it.id === os.dataset.id); if (!c || locked(c)) return toast(t().oLocked);
+      const pr = $("oP").value.trim().replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)), note = $("oN").value.trim();
+      if (!/^\d+(\.\d{1,2})?$/.test(pr)) { const b = $("oErr"); b.textContent = t().oBadPrice; b.hidden = false; return; }
+      M.patchItem(g.r.id, c.it.id, it => ({ order: { ...(it.order || {}), price: Number(pr) }, details: { en: note, ar: note }, edits: [...(it.edits || []), { by: me.name, at: new Date().toISOString(), before: { price: priceOf(it), details: it.details || null } }] }));
+      oEdit = null; redraw(); return toast(t().oUpdated);
+    }
+    const od = e.target.closest("[data-odel]");
+    if (od) {
+      const c = g.items.find(x => x.it.id === od.dataset.odel); if (!c || locked(c)) return toast(t().oLocked);
+      if (!confirm(tx("oDelQ", { n: T(c.it.title) }))) return;
+      const r = M.get(g.r.id), it = r.items.find(x => x.id === c.it.id);
+      M.update(r.id, { items: r.items.filter(x => x.id !== it.id), removed: [...(r.removed || []), { item: it, by: me.name, at: new Date().toISOString() }] });
+      toast(t().oDeleted); if (!cards().some(x => x.key === openKey)) { $("ov").hidden = true; openKey = null; return render(); } return redraw();
+    }
+    const nr = e.target.closest("[data-near]"); if (nr) { const [who, date, time] = nr.dataset.near.split("|"); bk.who = who; bk.date = date; bk.time = time; return openAct(openKey, true); }
+    const sh = e.target.closest("[data-sh]"), sv = sh && sh.closest("[data-shv]");
+    if (sh && sv) {
+      const v = MadaOrders.get(sv.dataset.shv), k = sh.dataset.sh;
+      if (k === "edit" || k === "cancel") { shEdit[v.id] = k === "edit"; return openAct(openKey, true); }
+      if (k === "save") {
+        const a = $("shA").value.trim(), m = $("shM").value.trim(), box = $("shErr");
+        if (!a && !m) { box.textContent = t().shNeed; box.hidden = false; return; }
+        if (m && !/^https:\/\/\S+$/i.test(m)) { box.textContent = t().shBadMap; box.hidden = false; return; }
+        MadaOrders.update(v.id, { location: { ...(v.location || {}), address: a, map: m || null, ...(m && m !== mapOf(v.location) ? { lat: null, lng: null } : {}) } });
+        shEdit[v.id] = false; redraw(); return toast(t().shSaved);
+      }
+      let cur = v; if (B.unpaid(v) && !(v.payLink && new Date(v.payLink.expiresAt) > new Date())) cur = B.sendPay(v, me.name) || MadaOrders.get(v.id);
+      const msg = shareMsg(MadaOrders.get(v.id), current), logIt = ch => { const o = MadaOrders.get(v.id); MadaOrders.update(v.id, { messages: [...(o.messages || []), { type: "booking", ch, at: new Date().toISOString(), by: me.name }] }); };
+      if (k === "copy") { try { navigator.clipboard.writeText(msg); } catch (er) {} logIt("copy"); redraw(); return toast(t().shCopied); }
+      if (k === "wa") { const wa = String(v.mobile || "").replace(/\D/g, "").replace(/^0(5\d{8})$/, "966$1"); window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, "_blank", "noopener"); logIt("wa"); return redraw(); }
+    }
+  });
+  $("dlg").addEventListener("change", e => {
+    if (e.target.id === "nState") { nf.state = e.target.value; nf.prov = ""; const keepTxt = $("nText").value; openAct(openKey, true); $("nText").value = keepTxt; }
+  });
+  $("dlg").addEventListener("input", e => { if (e.target.id === "nReason") nf.reason = e.target.value; });
   $("dlg").addEventListener("click", e => {
     const g = cards().find(x => x.key === openKey); if (!g) return;
     const bad = (box, msg, ...els) => { els.forEach(el => el && el.classList.add("bad")); box.textContent = msg; box.hidden = false; };
