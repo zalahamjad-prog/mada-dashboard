@@ -102,6 +102,7 @@
   .c-rad .sv-ic { background: var(--purple-soft); color: var(--purple); }
   .c-iv .sv-ic { background: var(--orange-soft); color: var(--orange); }
   .c-nurse .sv-ic { background: var(--green-soft); color: var(--green); }
+  .c-physio .sv-ic { background: #e0f4f7; color: #0e7490; }
   .sv-cnt { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .sv-box { border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; background: #fbfcfc; }
   .sv-box small { display: block; font-size: 12px; color: var(--muted); font-weight: 500; }
@@ -177,11 +178,12 @@
 <script src="labs.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="radiology.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
-  // Services hub: the four main sections. Counts are read live from today's two separate catalogues:
+  // Services hub: the five main sections (physio.js: Physiotherapy, dashboard only for now). Counts are read live from today's two separate catalogues:
   // dashboard (labs.js, ivtherapy.js, nursing.js; New Request) and Doctor Portal (doctor-orders.js; Visit > Orders).
   // Next step: a manage page per section that becomes the single list both sides read.
   const SECTIONS = [
@@ -192,7 +194,9 @@
     { key: "iv", cls: "c-iv", href: "services-iv.html", ic: '<path d="M8 3h8v9a4 4 0 0 1-8 0z"/><path d="M8 8h8M12 16v3M12 19c0 1.5 1.5 2 3 2"/>',
       n: [["pkgs", MadaIV.PACKAGES.length]] },
     { key: "nurse", cls: "c-nurse", href: "services-nurse.html", ic: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21c.8-4 3.5-6.5 7-6.5s6.2 2.5 7 6.5"/><path d="M12 15.5v3M10.5 17h3"/>',
-      n: [["svcs", MadaNursing.SERVICES.length]] }
+      n: [["svcs", MadaNursing.SERVICES.length]] },
+    { key: "physio", cls: "c-physio", href: "services-physio.html", ic: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>',
+      n: [["svcs", MadaPhysio.SERVICES.length], ["prog", MadaPhysio.SERVICES.filter(x => (x.sessions || 1) > 1).length]] }
   ];
   const i18n = {
     en: {
@@ -200,7 +204,7 @@
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       title: "Services", subtitle: "The main service sections. Each section is managed on its own and becomes one list for the dashboard and the Doctor Portal.",
       note: "Today the dashboard and the Doctor Portal each keep their own list. We will unify one section at a time, so every service is added once here and shows in both.",
-      lab: "Laboratory", labD: "Lab tests and test packages.", rad: "Radiology", radD: "X-ray, ultrasound and other imaging.", iv: "IV Therapy", ivD: "IV drips and IV packages.", nurse: "Nursing Services", nurseD: "Home nursing care and procedures.",
+      lab: "Laboratory", labD: "Lab tests and test packages.", rad: "Radiology", radD: "X-ray, ultrasound and other imaging.", iv: "IV Therapy", ivD: "IV drips and IV packages.", nurse: "Nursing Services", nurseD: "Home nursing care and procedures.", physio: "Physiotherapy", physioD: "Home physiotherapy sessions and rehab programs.", l_prog: "Programs",
       sec: "Section {n}", inDash: "Dashboard", inDoc: "Doctor Portal", tests: "{n} tests", pkgs: "{n} packages", svcs: "{n} services", drips: "{n} drips", exams: "{n} exams", none: "Not added yet",
       stSplit: "2 separate lists, to unify", stDocOnly: "Doctor Portal only", l_tests: "Tests", l_pkgs: "Packages", l_exams: "Exams", l_svcs: "Services", stLab: "Managed here · Doctor Portal next", shows: "Shows in:",
       wNew: "New Request", wDocOrders: "Doctor visit > Orders", wLabPage: "Lab test page", wDocOrdersList: "Doctor Orders (reports)",
@@ -213,7 +217,7 @@
       note: "الحين لوحة التحكم وبوابة الطبيب كل وحدة لها قائمتها. بنوحّد قسم قسم، عشان كل خدمة تنضاف مرة وحدة هنا وتظهر في الاثنين.",
       lab: "التحاليل", labD: "التحاليل المخبرية وباقات التحاليل.", rad: "الأشعة", radD: "الأشعة السينية والسونار وباقي الفحوصات التصويرية.", iv: "محاليل الوريد", ivD: "المحاليل الوريدية وباقاتها.", nurse: "خدمات التمريض", nurseD: "الرعاية التمريضية والإجراءات في المنزل.",
       sec: "القسم {n}", inDash: "لوحة التحكم", inDoc: "بوابة الطبيب", tests: "{n} تحليل", pkgs: "{n} باقة", svcs: "{n} خدمة", drips: "{n} محلول", exams: "{n} فحص", none: "ما انضاف للحين",
-      stSplit: "قائمتين منفصلة، تحتاج توحيد", stDocOnly: "في بوابة الطبيب فقط", l_tests: "تحليل", l_pkgs: "باقة", l_exams: "فحص", l_svcs: "خدمة", stLab: "تتدار من هنا · بوابة الطبيب الجاية", shows: "يظهر في:",
+      stSplit: "قائمتين منفصلة، تحتاج توحيد", stDocOnly: "في بوابة الطبيب فقط", l_tests: "تحليل", l_pkgs: "باقة", l_exams: "فحص", l_svcs: "خدمة", l_prog: "برنامج", physio: "العلاج الطبيعي", physioD: "جلسات العلاج الطبيعي في البيت وبرامج التأهيل.", stLab: "تتدار من هنا · بوابة الطبيب الجاية", shows: "يظهر في:",
       wNew: "طلب جديد", wDocOrders: "زيارة الطبيب > الطلبات", wLabPage: "صفحة التحليل", wDocOrdersList: "طلبات الطبيب (التقارير)",
       manage: "إدارة", soon: "الخطوة الجاية"
     }

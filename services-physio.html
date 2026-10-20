@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Physiotherapy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  @media (max-width: 1180px) { .user-meta { display: none; } }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+  }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  /* ---------- Patients ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
+  /* ---------- Laboratory catalogue ---------- */
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--primary); text-decoration: none; width: fit-content; }
+  .back svg { width: 16px; height: 16px; }
+  [dir="rtl"] .back svg { transform: scaleX(-1); }
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 8px; }
+  .ico { height: 48px; border: 1.5px solid #d9e1e3; border-radius: 10px; display: grid; place-items: center; cursor: pointer; color: #44545a; background: #fff; position: relative; }
+  .ico input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .ico svg { width: 22px; height: 22px; }
+  .ico:hover { background: #f5f8f8; }
+  .ico:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .ico:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .cic { width: 36px; height: 36px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); display: grid; place-items: center; flex: none; }
+  .cic svg { width: 19px; height: 19px; }
+  .chip svg { width: 17px; height: 17px; color: var(--purple); }
+  .chip[aria-checked="true"] svg { color: var(--primary); }
+  .ph-icon.rad { background: var(--purple-soft); color: var(--purple); }
+  .ph-icon.nurse { background: var(--green-soft); color: var(--green); }
+  .cic.g { background: var(--green-soft); color: var(--green); }
+  .chip.g svg { color: var(--green); }
+  .chip.g[aria-checked="true"] svg { color: var(--primary); }
+  .nm-i { display: flex; align-items: center; gap: 10px; min-width: 240px; }
+  .nm-i .cic { width: 32px; height: 32px; }
+  .nm-i .cic svg { width: 17px; height: 17px; }
+  .tag.rx { background: var(--orange-soft); color: var(--orange); }
+  .tag.norx { background: var(--green-soft); color: var(--green); }
+  .ph-icon.lab { background: var(--blue-soft); color: var(--blue); }
+  .tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .tabs button { flex: none; display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 16px; border: 0; background: none; cursor: pointer; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 2.5px solid transparent; margin-bottom: -1px; }
+  .tabs button small { min-width: 22px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tabs button[aria-selected="true"] { color: var(--primary); border-color: var(--primary); }
+  .tabs button[aria-selected="true"] small { background: var(--primary-soft); }
+  .bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .bar .grow { flex: 1; }
+  .search { position: relative; flex: 1; min-width: 200px; max-width: 360px; }
+  .search svg { position: absolute; top: 50%; inset-inline-start: 12px; width: 17px; height: 17px; transform: translateY(-50%); color: var(--muted); }
+  .search input { padding-inline-start: 38px; }
+  .in { width: 100%; height: 42px; padding: 0 12px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; font-size: 14px; outline: 0; }
+  .in:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.1); }
+  .in.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,.08); }
+  .in[readonly] { background: #f3f6f7; color: #44545a; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  textarea.in { height: auto; min-height: 76px; padding: 10px 12px; line-height: 1.6; resize: vertical; font-family: inherit; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1px solid #d9e1e3; border-radius: 9px; background: #fff; cursor: pointer; font-size: 13.5px; color: var(--ink); }
+  .chip small { color: var(--muted); font-size: 12px; }
+  .chip[aria-checked="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
+  /* Categories */
+  .cat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .cg { padding: 18px 20px; display: grid; gap: 14px; }
+  .cg-h { display: flex; align-items: center; gap: 12px; }
+  .cg-h .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .cg-h .ic svg { width: 21px; height: 21px; }
+  .cg-h .ic.t { background: var(--blue-soft); color: var(--blue); }
+  .cg-h .ic.p { background: var(--purple-soft); color: var(--purple); }
+  .cg-h h2 { font-size: 16px; font-weight: 600; }
+  .cg-h p { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .cg-h .btn { margin-inline-start: auto; height: 36px; padding: 0 12px; }
+  .cl { display: grid; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .cr { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-top: 1px solid #eef2f3; }
+  .cr:first-child { border-top: 0; }
+  .cr .nm { flex: 1; min-width: 0; }
+  .cr .nm b { display: block; font-size: 14px; font-weight: 600; }
+  .cr .nm span { display: block; font-size: 12.5px; color: var(--muted); }
+  .cnt { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+  .ib { width: 34px; height: 34px; border: 1px solid #d9e1e3; border-radius: 8px; background: #fff; display: grid; place-items: center; cursor: pointer; color: #44545a; flex: none; }
+  .ib svg { width: 16px; height: 16px; }
+  .ib:disabled { opacity: .4; cursor: not-allowed; }
+  .ib.red { color: var(--red); border-color: #f3c4c4; }
+  .empty { padding: 28px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  /* Tables */
+  #view, #view > div, #view > div > * { min-width: 0; }
+  .table-wrap { overflow-x: auto; max-width: 100%; position: relative; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: start; font-size: 12.5px; font-weight: 600; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; background: #fbfcfc; }
+  td { padding: 12px 14px; border-bottom: 1px solid #eef2f3; vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.off td { color: #8a979c; }
+  td .nm b { display: block; font-weight: 600; }
+  td .nm span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #44545a; direction: ltr; unicode-bidi: isolate; }
+  .num { white-space: nowrap; }
+  .tag { display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .tag.none { background: var(--green-soft); color: var(--green); }
+  .tag.fast { background: var(--red-soft); color: var(--red); }
+  .tag.morning, .tag.optional { background: var(--orange-soft); color: var(--orange); }
+  .tag.cat { background: #f1f4f5; color: #44545a; font-weight: 500; }
+  .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .st.on { color: var(--green); }
+  .st.off { color: #8a979c; }
+  /* Modal */
+  .md-back { position: fixed; inset: 0; z-index: 70; background: rgba(16,35,43,.45); display: grid; place-items: center; padding: 16px; }
+  .md { width: min(640px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(16,35,43,.25); display: grid; grid-template-rows: auto 1fr auto; }
+  .md-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 22px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: #fff; z-index: 1; }
+  .md-h h2 { font-size: 17px; font-weight: 600; }
+  .md-b { padding: 18px 22px; display: grid; gap: 14px; }
+  .md-f { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--border); position: sticky; bottom: 0; background: #fff; }
+  .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .fld { display: grid; gap: 6px; align-content: start; }
+  .fld > label, .fld > .lbl { font-size: 12.5px; font-weight: 600; color: #44545a; }
+  .fld i { font-style: normal; font-weight: 400; color: var(--muted); }
+  .err { font-size: 12.5px; color: var(--red); }
+  .hint { font-size: 12.5px; color: var(--muted); }
+  .types { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .type { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border: 1.5px solid #d9e1e3; border-radius: 10px; cursor: pointer; }
+  .type input { margin-top: 3px; accent-color: var(--primary); }
+  .type b { display: block; font-size: 14px; font-weight: 600; }
+  .type span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .type:has(input:checked) { border-color: var(--primary); background: var(--primary-soft); }
+  .sw { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; width: fit-content; }
+  .sw input { width: 18px; height: 18px; accent-color: var(--primary); }
+  .pick { border: 1px solid #d9e1e3; border-radius: 10px; max-height: 240px; overflow: auto; }
+  .pick label { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-top: 1px solid #eef2f3; font-size: 13.5px; cursor: pointer; }
+  .pick label:first-child { border-top: 0; }
+  .pick label:hover { background: #f8fafa; }
+  .pick input { width: 17px; height: 17px; accent-color: var(--primary); flex: none; }
+  .pick .grow { flex: 1; min-width: 0; }
+  .pick small { color: var(--muted); }
+  .pick-sum { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; color: var(--muted); flex-wrap: wrap; }
+  .pick.bad { border-color: var(--red); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pr-list { display: grid; gap: 10px; }
+  .pr { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #fbfcfc; display: grid; gap: 10px; }
+  .pr.bad { border-color: #f3b4b4; background: #fffafa; }
+  .pr-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; color: #44545a; }
+  .pr-h .code { font-weight: 400; }
+  .pr-g { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .pr .fld > label { font-size: 11.5px; }
+  .pr .in { height: 38px; font-size: 13.5px; }
+  .pr-add { display: flex; align-items: center; justify-content: center; gap: 8px; height: 42px; border: 1.5px dashed #b9d9cf; border-radius: 10px; background: #f6fbf9; color: var(--primary); font-size: 13.5px; font-weight: 600; cursor: pointer; }
+  .pr-add svg { width: 17px; height: 17px; }
+  .sec-t { font-size: 14px; font-weight: 700; color: #15304a; margin-top: 4px; }
+  .sec-t + .hint { margin-top: -8px; }
+  .tag.miss { background: var(--red-soft); color: var(--red); }
+  .rng { font-size: 12.5px; color: #44545a; white-space: nowrap; }
+  @media (max-width: 760px) { .pr-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .foot { font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .foot svg { width: 15px; height: 15px; color: var(--primary); }
+  @media (max-width: 900px) { .cat-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) {
+    .cg { padding: 16px; }
+    .row2, .types { grid-template-columns: minmax(0, 1fr); }
+    .md-h, .md-b, .md-f { padding-inline: 16px; }
+    .md-f .btn { flex: 1; }
+    .search { max-width: none; min-width: 0; flex-basis: 100%; }
+    .bar .btn { flex: 1; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" aria-current="page" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+<main>
+  <a class="back" href="services.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span data-i18n="back">Services</span></a>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon nurse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/></svg></span>
+      <div><h1 data-i18n="title">Physiotherapy</h1><p data-i18n="subtitle">One physiotherapy list for the whole system. Start with the main categories, then add each service under its category.</p></div>
+    </div>
+  </div>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <section id="view"></section>
+  <p class="foot" id="foot"></p>
+</main>
+<div class="md-back" id="mdBack" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="physio.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Services > Physiotherapy: the one physiotherapy catalogue (MadaPhysio, MadaStore "mada-svc-physio"). Built from services-nurse.html.
+  // Categories first, then services under a category. New services get the next PT-#### code. Services are hidden, not deleted, so old requests keep their names.
+  let d = MadaPhysio.edit();
+  const i18n = {
+    en: {
+      tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      back: "Services", title: "Physiotherapy", subtitle: "One physiotherapy list for the whole system. Start with the main categories, then add each service under its category.",
+      tabCats: "Categories", tabSvcs: "Services",
+      catT: "Physiotherapy Categories", catTD: "Groups for services, e.g. Back & Joints or Post-Surgery Rehab.",
+      addCat: "Add Category", editCat: "Edit Category", catNameEn: "Category name (English)", catNameAr: "Category name (Arabic)", icon: "Icon", allSvc: "All Physiotherapy Services",
+      nSvcs: "{n} services", nSvcs1: "1 service", noCats: "No categories yet. Add the first one.",
+      delCat: "Delete category", delCatQ: "Delete the category “{n}”?", delCatBlock: "Move or hide its {n} services first. A category with services can't be deleted.", catDeleted: "Category deleted.",
+      search: "Search by name or code", addSvc: "Add Service", editSvc: "Edit Service",
+      thName: "Name", thCode: "Code", thCat: "Category", thTime: "Session Time", thSes: "Sessions", thRx: "Doctor Referral", thPrice: "Price", thStatus: "Status", thEdit: "Edit",
+      minsN: "{n} min", sesN: "{n} sessions", sesN1: "1 session", sar: "SAR", rxYes: "Required", rxNo: "Not needed",
+      on: "Active", off: "Hidden", noRows: "Nothing matches.", noneYet: "No services yet.",
+      nameEn: "Name (English)", nameAr: "Name (Arabic)", code: "Code", codeHint: "Generated automatically. It doesn't change after saving.",
+      category: "Category", pickCat: "Choose a category", noSvcCats: "Add a category first.", svcIcon: "Service icon", svcIconHint: "Shown next to the service in New Request.",
+      descEn: "Short description (English)", descAr: "Short description (Arabic)", descHint: "One line under the service name.",
+      aboutEn: "About the service (English)", aboutAr: "About the service (Arabic)", prepEn: "Patient preparation (English)", prepAr: "Patient preparation (Arabic)",
+      mins: "Session time (minutes)", ses: "Number of sessions", sesHint: "Home sessions the price covers. 1 = a single session.", price: "Price (SAR)", priceHint: "Total price for all the sessions.", optional: "(optional)",
+      rx: "Needs a doctor's referral or order",
+      active: "Active: can be ordered", hiddenNote: "Hidden services stay on old requests but can't be ordered.",
+      save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", storeErr: "Couldn't save. Please try again.",
+      req: "Required.", dupName: "A category with this name already exists.", reqNum: "Enter a number above 0.", reqInt: "Enter a whole number, 1 or more.",
+      lastSaved: "Last saved {d} by {n}", sampleData: "Sample list. Changes you save here become the system list.",
+      notes: "The Doctor Portal joins this list in the linking step."
+    },
+    ar: {
+      tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      back: "الخدمات", title: "العلاج الطبيعي", subtitle: "قائمة علاج طبيعي وحدة للنظام كله. ابدأ بالأقسام الرئيسية، وبعدها أضف كل خدمة تحت قسمها.",
+      tabCats: "الأقسام", tabSvcs: "الخدمات",
+      catT: "أقسام العلاج الطبيعي", catTD: "مجموعات للخدمات، مثل الظهر والمفاصل أو التأهيل بعد العمليات.",
+      addCat: "إضافة قسم", editCat: "تعديل القسم", catNameEn: "اسم القسم (إنجليزي)", catNameAr: "اسم القسم (عربي)", icon: "الأيقونة", allSvc: "كل خدمات العلاج الطبيعي",
+      nSvcs: "{n} خدمة", nSvcs1: "خدمة وحدة", noCats: "ما فيه أقسام للحين. أضف أول قسم.",
+      delCat: "حذف القسم", delCatQ: "تبي تحذف قسم «{n}»؟", delCatBlock: "انقل أو أخفِ خدماته ({n}) أول. القسم اللي فيه خدمات ما ينحذف.", catDeleted: "انحذف القسم.",
+      search: "ابحث بالاسم أو الرمز", addSvc: "إضافة خدمة", editSvc: "تعديل الخدمة",
+      thName: "الاسم", thCode: "الرمز", thCat: "القسم", thTime: "مدة الجلسة", thSes: "الجلسات", thRx: "تحويل الطبيب", thPrice: "السعر", thStatus: "الحالة", thEdit: "تعديل",
+      minsN: "{n} دقيقة", sesN: "{n} جلسات", sesN1: "جلسة وحدة", sar: "ريال", rxYes: "مطلوب", rxNo: "ما يحتاج",
+      on: "نشط", off: "مخفي", noRows: "ما فيه نتائج.", noneYet: "ما فيه خدمات للحين.",
+      nameEn: "الاسم (إنجليزي)", nameAr: "الاسم (عربي)", code: "الرمز", codeHint: "يتولد تلقائي، وما يتغير بعد الحفظ.",
+      category: "القسم", pickCat: "اختر القسم", noSvcCats: "أضف قسم أول.", svcIcon: "أيقونة الخدمة", svcIconHint: "تظهر جنب الخدمة في الطلب الجديد.",
+      descEn: "وصف مختصر (إنجليزي)", descAr: "وصف مختصر (عربي)", descHint: "سطر واحد تحت اسم الخدمة.",
+      aboutEn: "عن الخدمة (إنجليزي)", aboutAr: "عن الخدمة (عربي)", prepEn: "تجهيز المريض (إنجليزي)", prepAr: "تجهيز المريض (عربي)",
+      mins: "مدة الجلسة (بالدقائق)", ses: "عدد الجلسات", sesHint: "الجلسات المنزلية اللي يغطيها السعر. 1 = جلسة وحدة.", price: "السعر (ريال)", priceHint: "السعر الكامل لكل الجلسات.", optional: "(اختياري)",
+      rx: "تحتاج تحويل أو طلب من الطبيب",
+      active: "نشط: ينطلب", hiddenNote: "الخدمة المخفية تبقى في الطلبات القديمة بس ما تنطلب.",
+      save: "حفظ", cancel: "إلغاء", close: "إغلاق", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
+      req: "مطلوب.", dupName: "فيه قسم بنفس الاسم.", reqNum: "اكتب رقم أكبر من 0.", reqInt: "اكتب رقم صحيح، 1 أو أكثر.",
+      lastSaved: "آخر حفظ {d} بواسطة {n}", sampleData: "قائمة تجريبية. أي تعديل تحفظه هنا يصير قائمة النظام.",
+      notes: "بوابة الطبيب تنضم لهذي القائمة في خطوة الربط."
+    }
+  };
+  let current = "en", tab = "cats", cat = "all", q = "", modal = null;
+  const t = () => i18n[current];
+  const tx = (k, v) => (v && v.n === 1 && t()[k + "1"] || t()[k]).replace(/\{(\w+)\}/g, (_, x) => v[x]);
+  const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const IC = { plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', check: '<path d="m5 12 5 5 9-10"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    nurse: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>' };
+  const ICONS = MadaPhysio.ICONS;
+  const ICN = { clipboard: ["Assessment", "تقييم"], spine: ["Back & spine", "الظهر"], knee: ["Knee & joints", "الركبة والمفاصل"], brain: ["Neurological", "الأعصاب"],
+    cane: ["Mobility", "الحركة"], run: ["Sports", "الرياضة"], child: ["Children", "الأطفال"], lungs: ["Breathing", "التنفس"], hand: ["Hand", "اليد"], dumbbell: ["Exercise", "التمارين"],
+    heat: ["Heat therapy", "العلاج الحراري"], home: ["Home visit", "زيارة منزلية"] };
+  const icLabel = k => (ICN[k] || [k, k])[current === "ar" ? 1 : 0];
+  const icOf = k => ICONS[k] || ICONS.spine;
+  const nm = x => x.name[current] || x.name.en;
+  const tr = o => (o && (o[current] || o.en)) || "";
+  const norm = s => String(s || "").toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي");
+  const catOf = id => d.cats.find(c => c.id === id);
+  const catLabel = id => { const c = catOf(id); return c ? nm(c) : id; };
+  const itemsIn = c => d.services.filter(x => x.cat === c.id);
+  const byCode = c => d.services.find(x => x.code === c);
+  const status = x => `<span class="st ${x.active === false ? "off" : "on"}">${x.active === false ? t().off : t().on}</span>`;
+  const icons = (name, v) => `<div class="icons" role="radiogroup" aria-labelledby="${name}L">${Object.keys(ICONS).map(k => `<label class="ico" title="${esc(icLabel(k))}"><input type="radio" name="${name}" value="${k}" ${v === k ? "checked" : ""} aria-label="${esc(icLabel(k))}">${svg(ICONS[k], 1.8)}</label>`).join("")}</div>`;
+  // New services continue the PT-#### numbering (PT-1012, PT-1013…).
+  const nextCode = () => "PT-" + String(Math.max(1000, ...d.services.map(x => +((/^PT-(\d+)$/.exec(x.code) || [])[1] || 0))) + 1).padStart(4, "0");
+
+  function render() {
+    const n = { cats: d.cats.length, svcs: d.services.length };
+    $("tabs").innerHTML = [["cats", "tabCats"], ["svcs", "tabSvcs"]].map(([k, l]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${t()[l]}<small>${n[k]}</small></button>`).join("");
+    $("view").innerHTML = tab === "cats" ? catsView() : svcsView();
+    const s = MadaStore.getJSON(MadaPhysio.KEY, null);
+    $("foot").innerHTML = `${svg(IC.info, 2)}<span>${esc(s && s.updatedAt ? tx("lastSaved", { d: new Date(s.updatedAt).toLocaleString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }), n: s.updatedBy ? (s.updatedBy[current] || s.updatedBy.en) : "" }) : t().sampleData)} · ${esc(t().notes)}</span>`;
+  }
+  function catsView() {
+    return `<section class="card cg" style="max-width:720px"><div class="cg-h"><span class="ic p" style="background:var(--green-soft);color:var(--green)">${svg(IC.nurse)}</span><div><h2>${t().catT}</h2><p>${t().catTD}</p></div>
+        <button type="button" class="btn btn-ghost" data-addcat>${svg(IC.plus, 2.2)}${t().addCat}</button></div>
+      ${d.cats.length ? `<div class="cl">${d.cats.map(c => { const n = itemsIn(c).length; return `<div class="cr"><span class="cic g">${svg(icOf(c.icon), 1.8)}</span><div class="nm"><b>${esc(nm(c))}</b><span>${esc(current === "ar" ? c.name.en : c.name.ar)}</span></div>
+        <span class="cnt">${tx("nSvcs", { n })}</span>
+        <button type="button" class="ib" data-editcat="${esc(c.id)}" aria-label="${t().editCat}: ${esc(nm(c))}" title="${t().editCat}">${svg(IC.edit)}</button>
+        <button type="button" class="ib red" data-delcat="${esc(c.id)}" aria-label="${t().delCat}: ${esc(nm(c))}" title="${n ? esc(tx("delCatBlock", { n })) : t().delCat}" ${n ? 'aria-disabled="true"' : ""}>${svg(IC.trash)}</button></div>`; }).join("")}</div>`
+        : `<div class="empty">${t().noCats}</div>`}</section>`;
+  }
+  function svcsView() {
+    if (cat !== "all" && !catOf(cat)) cat = "all";
+    const hit = x => !q || norm([x.code, x.name.en, x.name.ar, x.desc && x.desc.en, x.desc && x.desc.ar].join(" ")).includes(norm(q));
+    const rows = d.services.filter(x => (cat === "all" || x.cat === cat) && hit(x));
+    return `<div style="display:grid;gap:14px"><div class="bar"><label class="search">${svg(IC.search, 2)}<input class="in" id="q" type="search" value="${esc(q)}" placeholder="${t().search}" aria-label="${t().search}"></label><span class="grow"></span>
+        <button type="button" class="btn btn-primary" data-addsvc>${svg(IC.plus, 2.2)}${t().addSvc}</button></div>
+      <div class="chips" role="radiogroup">${[{ id: "all" }, ...d.cats].map(c => `<button type="button" class="chip g" role="radio" aria-checked="${cat === c.id}" data-cat="${esc(c.id)}">${svg(c.id === "all" ? '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/>' : icOf(c.icon), 1.8)}${esc(c.id === "all" ? t().allSvc : nm(c))}<small>${c.id === "all" ? d.services.length : d.services.filter(x => x.cat === c.id).length}</small></button>`).join("")}</div>
+      <div class="card table-wrap">${rows.length ? `<table><thead><tr><th>${t().thName}</th><th>${t().thCode}</th><th>${t().thCat}</th><th>${t().thTime}</th><th>${t().thSes}</th><th>${t().thRx}</th><th>${t().thPrice}</th><th>${t().thStatus}</th><th><span class="sr">${t().thEdit}</span></th></tr></thead><tbody>
+        ${rows.map(x => `<tr class="${x.active === false ? "off" : ""}"><td><div class="nm-i"><span class="cic g">${svg(icOf(x.icon), 1.8)}</span><div class="nm"><b>${esc(nm(x))}</b><span>${esc(tr(x.desc))}</span></div></div></td><td><span class="code">${esc(x.code)}</span></td>
+          <td><span class="tag cat">${esc(catLabel(x.cat))}</span></td><td class="num">${esc(tx("minsN", { n: x.mins }))}</td><td class="num">${esc(tx("sesN", { n: x.sessions || 1 }))}</td><td>${x.rx ? `<span class="tag rx">${t().rxYes}</span>` : `<span class="tag norx">${t().rxNo}</span>`}</td><td class="num"><b>${x.price}</b> ${t().sar}</td><td>${status(x)}</td>
+          <td><button type="button" class="ib" data-editsvc="${esc(x.code)}" aria-label="${t().editSvc}: ${esc(nm(x))}" title="${t().editSvc}">${svg(IC.edit)}</button></td></tr>`).join("")}</tbody></table>`
+        : `<div class="empty">${d.services.length ? t().noRows : t().noneYet}</div>`}</div></div>`;
+  }
+
+  // ---------- Forms ----------
+  const fld = (id, label, inner, err, opt) => `<div class="fld"><label for="${id}">${label}${opt ? ` <i>${t().optional}</i>` : ""}</label>${inner}${err ? `<span class="err" id="${id}-e">${err}</span>` : ""}</div>`;
+  const inp = (id, v, o = {}) => `<input class="in ${o.bad ? "bad" : ""}" id="${id}" value="${esc(v)}" ${o.dir ? `dir="${o.dir}"` : ""} ${o.type ? `type="${o.type}" min="0" step="any" inputmode="decimal"` : ""} ${o.ph ? `placeholder="${esc(o.ph)}"` : ""} ${o.ro ? "readonly" : ""} ${o.bad ? `aria-invalid="true" aria-describedby="${id}-e"` : ""} maxlength="${o.max || 120}">`;
+  const sel = (id, v, opts, bad) => `<select class="in ${bad ? "bad" : ""}" id="${id}" ${bad ? `aria-invalid="true" aria-describedby="${id}-e"` : ""}>${opts.map(([k, l]) => `<option value="${esc(k)}" ${String(v) === String(k) ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>`;
+  const area = (id, v, dir) => `<textarea class="in" id="${id}" dir="${dir}" maxlength="400">${esc(v)}</textarea>`;
+  function modalHTML() {
+    const m = modal, f = m.f, e = m.err, T = t();
+    let title, body;
+    if (m.kind === "cat") {
+      title = m.isNew ? T.addCat : T.editCat;
+      body = `<div class="row2">${fld("fEn", T.catNameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en, max: 60 }), e.en)}${fld("fAr", T.catNameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar, max: 60 }), e.ar)}</div>
+        <div class="fld"><span class="lbl" id="ciconL">${T.icon}</span>${icons("cicon", f.icon)}</div>`;
+    } else {
+      title = m.isNew ? T.addSvc : T.editSvc;
+      body = `<div class="row2"><div class="fld"><label for="fCode">${T.code}</label>${inp("fCode", f.code, { dir: "ltr", ro: true, max: 16 })}<span class="hint">${T.codeHint}</span></div>
+          ${fld("fCat", T.category, d.cats.length ? sel("fCat", f.cat, [["", T.pickCat], ...d.cats.map(c => [c.id, nm(c)])], e.cat) : `<span class="err">${T.noSvcCats}</span>`, e.cat)}</div>
+        <div class="row2">${fld("fEn", T.nameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en }), e.en)}${fld("fAr", T.nameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar }), e.ar)}</div>
+        <div class="fld"><span class="lbl" id="siconL">${T.svcIcon}</span>${icons("sicon", f.icon)}<span class="hint">${T.svcIconHint}</span></div>
+        <div class="row2">${fld("fDescEn", T.descEn, inp("fDescEn", f.descEn, { dir: "ltr", max: 140 }), "", true)}${fld("fDescAr", T.descAr, inp("fDescAr", f.descAr, { dir: "rtl", max: 140 }), "", true)}</div>
+        <div class="row2">${fld("fMins", T.mins, inp("fMins", f.mins, { type: "number", dir: "ltr", bad: e.mins }), e.mins)}
+          ${fld("fSes", T.ses, inp("fSes", f.sessions, { type: "number", dir: "ltr", bad: e.sessions }) + `<span class="hint">${T.sesHint}</span>`, e.sessions)}</div>
+        <div class="row2">${fld("fPrice", T.price, inp("fPrice", f.price, { type: "number", dir: "ltr", bad: e.price }) + `<span class="hint">${T.priceHint}</span>`, e.price)}<div></div></div>
+        <div class="row2">${fld("fAboutEn", T.aboutEn, area("fAboutEn", f.aboutEn, "ltr"), "", true)}${fld("fAboutAr", T.aboutAr, area("fAboutAr", f.aboutAr, "rtl"), "", true)}</div>
+        <div class="row2">${fld("fPrepEn", T.prepEn, area("fPrepEn", f.prepEn, "ltr"), "", true)}${fld("fPrepAr", T.prepAr, area("fPrepAr", f.prepAr, "rtl"), "", true)}</div>
+        <div class="fld"><label class="sw"><input type="checkbox" id="fRx" ${f.rx ? "checked" : ""}>${T.rx}</label></div>
+        <div class="fld"><label class="sw"><input type="checkbox" id="fActive" ${f.active ? "checked" : ""}>${T.active}</label><span class="hint">${T.hiddenNote}</span></div>`;
+    }
+    return `<div class="md" role="dialog" aria-modal="true" aria-labelledby="mdT"><div class="md-h"><h2 id="mdT">${title}</h2><button type="button" class="ib" data-close aria-label="${T.close}">${svg(IC.x, 2)}</button></div>
+      <div class="md-b">${body}</div><div class="md-f"><button type="button" class="btn btn-ghost" data-close>${T.cancel}</button><button type="button" class="btn btn-primary" id="mdSave">${svg(IC.check, 2.2)}${T.save}</button></div></div>`;
+  }
+  let opener = null;
+  function openModal(m) { opener = document.activeElement; modal = { err: {}, ...m }; drawModal(); const f = $("mdBack").querySelector("input:not([disabled]):not([readonly]):not([type=radio]),select"); if (f) f.focus(); }
+  function drawModal() { $("mdBack").innerHTML = modalHTML(); $("mdBack").hidden = false; document.body.style.overflow = "hidden"; }
+  function closeModal() { modal = null; $("mdBack").hidden = true; $("mdBack").innerHTML = ""; document.body.style.overflow = ""; if (opener && document.contains(opener)) opener.focus(); }
+  function readModal() {
+    if (!modal) return; const f = modal.f;
+    const map = { fEn: "en", fAr: "ar", fCat: "cat", fDescEn: "descEn", fDescAr: "descAr", fAboutEn: "aboutEn", fAboutAr: "aboutAr", fPrepEn: "prepEn", fPrepAr: "prepAr", fMins: "mins", fSes: "sessions", fPrice: "price" };
+    Object.entries(map).forEach(([id, k]) => { if ($(id)) f[k] = $(id).value; });
+    if ($("fRx")) f.rx = $("fRx").checked;
+    if ($("fActive")) f.active = $("fActive").checked;
+    const ic = $("mdBack").querySelector('input[name="cicon"]:checked,input[name="sicon"]:checked'); if (ic) f.icon = ic.value;
+  }
+  const num = x => { const n = Number(String(x).trim()); return String(x).trim() !== "" && isFinite(n) && n > 0 ? n : null; };
+  function validate() {
+    const m = modal, f = m.f, e = {}, T = t();
+    if (!f.en.trim()) e.en = T.req; if (!f.ar.trim()) e.ar = T.req;
+    if (m.kind === "cat") {
+      const same = d.cats.filter(c => c.id !== m.id);
+      if (!e.en && same.some(c => norm(c.name.en.trim()) === norm(f.en.trim()))) e.en = T.dupName;
+      if (!e.ar && same.some(c => norm(c.name.ar.trim()) === norm(f.ar.trim()))) e.ar = T.dupName;
+    } else {
+      if (!f.cat) e.cat = T.req;
+      if (!num(f.price)) e.price = T.reqNum;
+      if (!num(f.mins)) e.mins = T.reqNum;
+      if (!Number.isInteger(num(f.sessions))) e.sessions = T.reqInt;
+    }
+    return e;
+  }
+  function persist(next) {
+    try { MadaPhysio.save(next, me ? me.name : null); const s = MadaStore.getJSON(MadaPhysio.KEY, null); if (!s || !s.updatedAt) throw 0; } catch (x) { toast(t().storeErr); return false; }
+    d = next; return true;
+  }
+  const slug = s => (String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 24) || "cat");
+  const uniq = (base, taken) => { let id = base, i = 2; while (taken.includes(id)) id = base + "-" + i++; return id; };
+  function saveModal() {
+    readModal(); const m = modal, f = m.f; m.err = validate();
+    if (Object.keys(m.err).length) { drawModal(); const b = $("mdBack").querySelector("[aria-invalid]"); if (b) b.focus(); return; }
+    const next = JSON.parse(JSON.stringify(d));
+    if (m.kind === "cat") {
+      const name = { en: f.en.trim(), ar: f.ar.trim() };
+      if (m.isNew) next.cats.push({ id: uniq(slug(f.en), next.cats.map(c => c.id)), icon: f.icon, name }); else Object.assign(next.cats.find(c => c.id === m.id), { name, icon: f.icon });
+    } else {
+      const code = m.isNew && next.services.some(x => x.code === f.code) ? nextCode() : f.code;
+      const old = m.isNew ? {} : next.services.find(x => x.code === m.id);
+      const x = { ...old, code, cat: f.cat, icon: f.icon || (catOf(f.cat) || {}).icon || "care", name: { en: f.en.trim(), ar: f.ar.trim() }, desc: { en: f.descEn.trim(), ar: f.descAr.trim() },
+        about: { en: f.aboutEn.trim(), ar: f.aboutAr.trim() }, prep: { en: f.prepEn.trim(), ar: f.prepAr.trim() }, mins: num(f.mins), sessions: num(f.sessions), price: num(f.price), rx: f.rx, active: f.active };
+      if (m.isNew) next.services.push(x); else next.services[next.services.findIndex(y => y.code === m.id)] = x;
+    }
+    if (!persist(next)) return;
+    closeModal(); render(); toast(t().saved);
+  }
+
+  document.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.tab) { tab = b.dataset.tab; cat = "all"; q = ""; render(); return; }
+    if (b.dataset.cat && b.closest("#view")) { cat = b.dataset.cat; render(); return; }
+    if (b.hasAttribute("data-addcat")) return openModal({ kind: "cat", isNew: true, f: { en: "", ar: "", icon: "spine" } });
+    if (b.dataset.editcat) { const c = catOf(b.dataset.editcat); return openModal({ kind: "cat", id: c.id, f: { en: c.name.en, ar: c.name.ar, icon: ICONS[c.icon] ? c.icon : "spine" } }); }
+    if (b.dataset.delcat) {
+      const c = catOf(b.dataset.delcat), n = itemsIn(c).length;
+      if (n) return toast(tx("delCatBlock", { n }));
+      if (!confirm(tx("delCatQ", { n: nm(c) }))) return;
+      const next = JSON.parse(JSON.stringify(d)); next.cats = next.cats.filter(x => x.id !== c.id);
+      if (persist(next)) { render(); toast(t().catDeleted); } return;
+    }
+    if (b.hasAttribute("data-addsvc")) { const c = cat !== "all" ? catOf(cat) : null;
+      return openModal({ kind: "svc", isNew: true, f: { code: nextCode(), en: "", ar: "", cat: c ? c.id : "", icon: c && ICONS[c.icon] ? c.icon : "spine", descEn: "", descAr: "", aboutEn: "", aboutAr: "", prepEn: "", prepAr: "", mins: "", sessions: "1", price: "", rx: false, active: true } }); }
+    if (b.dataset.editsvc) { const x = byCode(b.dataset.editsvc); return openModal({ kind: "svc", id: x.code, f: { code: x.code, en: x.name.en, ar: x.name.ar, cat: x.cat, icon: ICONS[x.icon] ? x.icon : "spine",
+      descEn: (x.desc || {}).en || "", descAr: (x.desc || {}).ar || "", aboutEn: (x.about || {}).en || "", aboutAr: (x.about || {}).ar || "", prepEn: (x.prep || {}).en || "", prepAr: (x.prep || {}).ar || "",
+      mins: x.mins, sessions: x.sessions || 1, price: x.price, rx: !!x.rx, active: x.active !== false } }); }
+    if (b.hasAttribute("data-close")) return closeModal();
+    if (b.id === "mdSave") return saveModal();
+  });
+  $("mdBack").addEventListener("mousedown", e => { if (e.target === $("mdBack")) closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && modal) closeModal(); });
+  document.addEventListener("input", e => {
+    if (e.target.id === "q") { q = e.target.value; const pos = e.target.selectionStart; render(); const i = $("q"); i.focus(); i.setSelectionRange(pos, pos); return; }
+  });
+  // A new service takes its category's icon until an icon is picked by hand.
+  document.addEventListener("change", e => {
+    if (!modal) return;
+    if (e.target.name === "sicon") modal.iconSet = true;
+    if (e.target.id === "fCat" && modal.isNew && !modal.iconSet) { readModal(); const c = catOf(modal.f.cat); if (c && ICONS[c.icon]) { modal.f.icon = c.icon; drawModal(); $("fCat").focus(); } }
+  });
+  // Typing in or changing a field clears its error, also from the saved form errors so a redraw doesn't bring it back.
+  const ERRKEY = { fEn: "en", fAr: "ar", fCat: "cat", fMins: "mins", fSes: "sessions", fPrice: "price" };
+  const clearErr = el => { if (!modal || !el.classList || !el.classList.contains("bad")) return; el.classList.remove("bad"); el.removeAttribute("aria-invalid"); const er = $(el.id + "-e"); if (er) er.remove(); if (ERRKEY[el.id]) delete modal.err[ERRKEY[el.id]]; };
+  document.addEventListener("change", e => clearErr(e.target), true);
+  document.addEventListener("input", e => clearErr(e.target), true);
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    readModal();
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | العلاج الطبيعي" : "Mada Care | Physiotherapy";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render(); if (modal) drawModal();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+  { const n = MadaOrders.needsAction(), c = $("navCount"); c.hidden = !n; c.textContent = n; }
+
+  let saved = "en";
+  try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+  if (location.hash === "#services") tab = "svcs";
+  setLang(saved);
+</script>
+</body>
+</html>
