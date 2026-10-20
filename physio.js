@@ -3,6 +3,7 @@
 // Replace with the real physiotherapy price list (prices incl. VAT).
 // Kept in MadaStore "mada-svc-physio": { cats: [{ id, icon, name }], services: [...], updatedAt, updatedBy }. Until it is first saved, the lists below are used.
 // service: { code, cat, icon, price, mins, sessions, rx, name, desc, about, prep (each {en, ar}), active }
+// package: { code "PTP-####", svc (the session service it is made of), sessions, price (total), name, desc ({en, ar}), active }
 //   sessions: home sessions the price covers (1 = a single session). mins: time of one session. rx: needs a doctor's referral or order.
 const MadaPhysio = (() => {
   const DEF_CATS = [
@@ -41,6 +42,10 @@ const MadaPhysio = (() => {
     S("PT-1011", "chest", "lungs", 250, 45, 1, true, "Chest Physiotherapy Session", "جلسة علاج طبيعي تنفسي",
       "One home chest physiotherapy session.", "جلسة علاج طبيعي تنفسي وحدة في البيت.")
   ];
+  // Session packages: several sessions of one service at one price (e.g. 3 or 4 sessions).
+  const P = (code, sessions, price) => ({ code, svc: "PT-1002", sessions, price, name: { en: `${sessions} Physiotherapy Sessions`, ar: `باقة ${sessions} جلسات علاج طبيعي` },
+    desc: { en: "", ar: "" }, active: true });
+  const DEF_PACKAGES = [P("PTP-1001", 3, 700), P("PTP-1002", 4, 900), P("PTP-1003", 6, 1300), P("PTP-1004", 8, 1700), P("PTP-1005", 10, 2100)];
   // Icons a category or service can use (chosen on services-physio.html).
   const ICONS = {
     clipboard: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/>',
@@ -61,14 +66,15 @@ const MadaPhysio = (() => {
   const copy = x => JSON.parse(JSON.stringify(x));
   DEF_SERVICES.forEach(s => { s.active = true; });
   const saved = (() => { try { return typeof MadaStore !== "undefined" ? MadaStore.getJSON(KEY, null) : null; } catch (e) { return null; } })();
-  const data = saved && Array.isArray(saved.cats) ? saved : { cats: copy(DEF_CATS), services: copy(DEF_SERVICES) };
-  const CAT_LIST = data.cats, ALL_SERVICES = data.services;
+  const data = saved && Array.isArray(saved.cats) ? { packages: copy(DEF_PACKAGES), ...saved } : { cats: copy(DEF_CATS), services: copy(DEF_SERVICES), packages: copy(DEF_PACKAGES) };
+  const CAT_LIST = data.cats, ALL_SERVICES = data.services, ALL_PACKAGES = data.packages || [];
+  const PACKAGES = ALL_PACKAGES.filter(x => x.active !== false), pkgByCode = Object.fromEntries(ALL_PACKAGES.map(x => [x.code, x]));
   const CATS = CAT_LIST.map(c => c.id);
   const SERVICES = ALL_SERVICES.filter(s => s.active !== false);
   // byCode keeps hidden services so older requests still show their name and price.
   const byCode = Object.fromEntries(ALL_SERVICES.map(s => [s.code, s]));
   const catName = (id, lang) => { const c = CAT_LIST.find(x => x.id === id); return c ? (c.name[lang] || c.name.en) : id; };
-  const save = (d, by) => MadaStore.setJSON(KEY, { cats: d.cats, services: d.services, updatedAt: new Date().toISOString(), updatedBy: by || null });
-  const edit = () => copy({ cats: CAT_LIST, services: ALL_SERVICES });
-  return { KEY, ICONS, iconSvg, CATS, CAT_LIST, SERVICES, ALL_SERVICES, byCode, catName, save, edit };
+  const save = (d, by) => MadaStore.setJSON(KEY, { cats: d.cats, services: d.services, packages: d.packages || [], updatedAt: new Date().toISOString(), updatedBy: by || null });
+  const edit = () => copy({ cats: CAT_LIST, services: ALL_SERVICES, packages: ALL_PACKAGES });
+  return { KEY, ICONS, iconSvg, CATS, CAT_LIST, SERVICES, ALL_SERVICES, byCode, PACKAGES, ALL_PACKAGES, pkgByCode, catName, save, edit };
 })();

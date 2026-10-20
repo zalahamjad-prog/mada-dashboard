@@ -324,7 +324,12 @@
       save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", storeErr: "Couldn't save. Please try again.",
       req: "Required.", dupName: "A category with this name already exists.", reqNum: "Enter a number above 0.", reqInt: "Enter a whole number, 1 or more.",
       lastSaved: "Last saved {d} by {n}", sampleData: "Sample list. Changes you save here become the system list.",
-      notes: "The Doctor Portal joins this list in the linking step."
+      notes: "The Doctor Portal joins this list in the linking step.",
+      tabPkgs: "Packages", addPkg: "Add Package", editPkg: "Edit Package", pkgSearch: "Search packages by name or code", noPkgs: "No packages yet. Add the first one.",
+      thPkg: "Package", thBase: "Session", thPer: "Per Session", thSaving: "Saving", perN: "{n} SAR", saveN: "{n} SAR", noSave: "—",
+      baseSvc: "Session service", pickSvc: "Choose the session", baseHint: "The single session this package is made of. Its price is used to show the saving.",
+      pkgSes: "Number of sessions", pkgSesHint: "e.g. 3 or 4 sessions.", pkgPrice: "Package price (SAR)", pkgPriceHint: "Total price for all the sessions in the package.",
+      reqMin2: "Enter a whole number, 2 or more.", pkgNameEn: "{n} Physiotherapy Sessions", pkgNameAr: "باقة {n} جلسات علاج طبيعي", pkgCodeHint: "Generated automatically (PTP-####). It doesn't change after saving."
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -349,7 +354,12 @@
       save: "حفظ", cancel: "إلغاء", close: "إغلاق", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
       req: "مطلوب.", dupName: "فيه قسم بنفس الاسم.", reqNum: "اكتب رقم أكبر من 0.", reqInt: "اكتب رقم صحيح، 1 أو أكثر.",
       lastSaved: "آخر حفظ {d} بواسطة {n}", sampleData: "قائمة تجريبية. أي تعديل تحفظه هنا يصير قائمة النظام.",
-      notes: "بوابة الطبيب تنضم لهذي القائمة في خطوة الربط."
+      notes: "بوابة الطبيب تنضم لهذي القائمة في خطوة الربط.",
+      tabPkgs: "الباقات", addPkg: "إضافة باقة", editPkg: "تعديل الباقة", pkgSearch: "ابحث في الباقات بالاسم أو الرمز", noPkgs: "ما فيه باقات للحين. أضف أول باقة.",
+      thPkg: "الباقة", thBase: "الجلسة", thPer: "سعر الجلسة", thSaving: "التوفير", perN: "{n} ريال", saveN: "{n} ريال", noSave: "—",
+      baseSvc: "نوع الجلسة", pickSvc: "اختر الجلسة", baseHint: "الجلسة الوحدة اللي تتكون منها الباقة. سعرها يُستخدم لحساب التوفير.",
+      pkgSes: "عدد الجلسات", pkgSesHint: "مثال: 3 أو 4 جلسات.", pkgPrice: "سعر الباقة (ريال)", pkgPriceHint: "السعر الكامل لكل جلسات الباقة.",
+      reqMin2: "اكتب رقم صحيح، 2 أو أكثر.", pkgNameEn: "{n} Physiotherapy Sessions", pkgNameAr: "باقة {n} جلسات علاج طبيعي", pkgCodeHint: "يتولد تلقائي (PTP-####)، وما يتغير بعد الحفظ."
     }
   };
   let current = "en", tab = "cats", cat = "all", q = "", modal = null;
@@ -357,7 +367,7 @@
   const tx = (k, v) => (v && v.n === 1 && t()[k + "1"] || t()[k]).replace(/\{(\w+)\}/g, (_, x) => v[x]);
   const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   const IC = { plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
-    x: '<path d="M6 6l12 12M18 6 6 18"/>', search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', check: '<path d="m5 12 5 5 9-10"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', check: '<path d="m5 12 5 5 9-10"/>', pkg: '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
     nurse: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>' };
   const ICONS = MadaPhysio.ICONS;
   const ICN = { clipboard: ["Assessment", "تقييم"], spine: ["Back & spine", "الظهر"], knee: ["Knee & joints", "الركبة والمفاصل"], brain: ["Neurological", "الأعصاب"],
@@ -378,9 +388,9 @@
   const nextCode = () => "PT-" + String(Math.max(1000, ...d.services.map(x => +((/^PT-(\d+)$/.exec(x.code) || [])[1] || 0))) + 1).padStart(4, "0");
 
   function render() {
-    const n = { cats: d.cats.length, svcs: d.services.length };
-    $("tabs").innerHTML = [["cats", "tabCats"], ["svcs", "tabSvcs"]].map(([k, l]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${t()[l]}<small>${n[k]}</small></button>`).join("");
-    $("view").innerHTML = tab === "cats" ? catsView() : svcsView();
+    const n = { cats: d.cats.length, svcs: d.services.length, pkgs: (d.packages || []).length };
+    $("tabs").innerHTML = [["cats", "tabCats"], ["svcs", "tabSvcs"], ["pkgs", "tabPkgs"]].map(([k, l]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${t()[l]}<small>${n[k]}</small></button>`).join("");
+    $("view").innerHTML = tab === "cats" ? catsView() : tab === "pkgs" ? pkgsView() : svcsView();
     const s = MadaStore.getJSON(MadaPhysio.KEY, null);
     $("foot").innerHTML = `${svg(IC.info, 2)}<span>${esc(s && s.updatedAt ? tx("lastSaved", { d: new Date(s.updatedAt).toLocaleString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }), n: s.updatedBy ? (s.updatedBy[current] || s.updatedBy.en) : "" }) : t().sampleData)} · ${esc(t().notes)}</span>`;
   }
@@ -407,6 +417,24 @@
         : `<div class="empty">${d.services.length ? t().noRows : t().noneYet}</div>`}</div></div>`;
   }
 
+  // Session packages: several sessions of one service at one price. The saving is against buying the sessions one by one.
+  const singles = () => d.services.filter(x => (x.sessions || 1) === 1);
+  const per = x => Math.round(x.price / x.sessions * 100) / 100;
+  const saving = x => { const b = byCode(x.svc); const v = b && (b.sessions || 1) === 1 ? Math.round((b.price * x.sessions - x.price) * 100) / 100 : 0; return v > 0 ? v : 0; };
+  const nextPkgCode = () => "PTP-" + String(Math.max(1000, ...(d.packages || []).map(x => +((/^PTP-(\d+)$/.exec(x.code) || [])[1] || 0))) + 1).padStart(4, "0");
+  function pkgsView() {
+    const hit = x => !q || norm([x.code, x.name.en, x.name.ar].join(" ")).includes(norm(q));
+    const rows = (d.packages || []).filter(hit);
+    return `<div style="display:grid;gap:14px"><div class="bar"><label class="search">${svg(IC.search, 2)}<input class="in" id="q" type="search" value="${esc(q)}" placeholder="${t().pkgSearch}" aria-label="${t().pkgSearch}"></label><span class="grow"></span>
+        <button type="button" class="btn btn-primary" data-addpkg>${svg(IC.plus, 2.2)}${t().addPkg}</button></div>
+      <div class="card table-wrap">${rows.length ? `<table><thead><tr><th>${t().thPkg}</th><th>${t().thCode}</th><th>${t().thBase}</th><th>${t().thSes}</th><th>${t().thPrice}</th><th>${t().thPer}</th><th>${t().thSaving}</th><th>${t().thStatus}</th><th><span class="sr">${t().thEdit}</span></th></tr></thead><tbody>
+        ${rows.map(x => { const b = byCode(x.svc), sv = saving(x); return `<tr class="${x.active === false ? "off" : ""}"><td><div class="nm-i"><span class="cic g">${svg(IC.pkg, 1.8)}</span><div class="nm"><b>${esc(nm(x))}</b><span>${esc(tr(x.desc))}</span></div></div></td>
+          <td><span class="code">${esc(x.code)}</span></td><td>${b ? `<span class="tag cat">${esc(nm(b))}</span>` : "—"}</td><td class="num"><b>${esc(tx("sesN", { n: x.sessions }))}</b></td>
+          <td class="num"><b>${x.price}</b> ${t().sar}</td><td class="num">${esc(tx("perN", { n: per(x) }))}</td><td class="num">${sv ? `<span class="tag norx">${esc(tx("saveN", { n: sv }))}</span>` : t().noSave}</td><td>${status(x)}</td>
+          <td><button type="button" class="ib" data-editpkg="${esc(x.code)}" aria-label="${t().editPkg}: ${esc(nm(x))}" title="${t().editPkg}">${svg(IC.edit)}</button></td></tr>`; }).join("")}</tbody></table>`
+        : `<div class="empty">${(d.packages || []).length ? t().noRows : t().noPkgs}</div>`}</div></div>`;
+  }
+
   // ---------- Forms ----------
   const fld = (id, label, inner, err, opt) => `<div class="fld"><label for="${id}">${label}${opt ? ` <i>${t().optional}</i>` : ""}</label>${inner}${err ? `<span class="err" id="${id}-e">${err}</span>` : ""}</div>`;
   const inp = (id, v, o = {}) => `<input class="in ${o.bad ? "bad" : ""}" id="${id}" value="${esc(v)}" ${o.dir ? `dir="${o.dir}"` : ""} ${o.type ? `type="${o.type}" min="0" step="any" inputmode="decimal"` : ""} ${o.ph ? `placeholder="${esc(o.ph)}"` : ""} ${o.ro ? "readonly" : ""} ${o.bad ? `aria-invalid="true" aria-describedby="${id}-e"` : ""} maxlength="${o.max || 120}">`;
@@ -415,7 +443,17 @@
   function modalHTML() {
     const m = modal, f = m.f, e = m.err, T = t();
     let title, body;
-    if (m.kind === "cat") {
+    if (m.kind === "pkg") {
+      title = m.isNew ? T.addPkg : T.editPkg;
+      const ss = singles();
+      body = `<div class="row2"><div class="fld"><label for="fCode">${T.code}</label>${inp("fCode", f.code, { dir: "ltr", ro: true, max: 16 })}<span class="hint">${T.pkgCodeHint}</span></div>
+          ${fld("fSvc", T.baseSvc, sel("fSvc", f.svc, [["", T.pickSvc], ...ss.map(x => [x.code, `${nm(x)} · ${x.price} ${T.sar}`])], e.svc) + `<span class="hint">${T.baseHint}</span>`, e.svc)}</div>
+        <div class="row2">${fld("fSes", T.pkgSes, inp("fSes", f.sessions, { type: "number", dir: "ltr", bad: e.sessions }) + `<span class="hint">${T.pkgSesHint}</span>`, e.sessions)}
+          ${fld("fPrice", T.pkgPrice, inp("fPrice", f.price, { type: "number", dir: "ltr", bad: e.price }) + `<span class="hint">${T.pkgPriceHint}</span>`, e.price)}</div>
+        <div class="row2">${fld("fEn", T.nameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en }), e.en)}${fld("fAr", T.nameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar }), e.ar)}</div>
+        <div class="row2">${fld("fDescEn", T.descEn, inp("fDescEn", f.descEn, { dir: "ltr", max: 140 }), "", true)}${fld("fDescAr", T.descAr, inp("fDescAr", f.descAr, { dir: "rtl", max: 140 }), "", true)}</div>
+        <div class="fld"><label class="sw"><input type="checkbox" id="fActive" ${f.active ? "checked" : ""}>${T.active}</label><span class="hint">${T.hiddenNote}</span></div>`;
+    } else if (m.kind === "cat") {
       title = m.isNew ? T.addCat : T.editCat;
       body = `<div class="row2">${fld("fEn", T.catNameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en, max: 60 }), e.en)}${fld("fAr", T.catNameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar, max: 60 }), e.ar)}</div>
         <div class="fld"><span class="lbl" id="ciconL">${T.icon}</span>${icons("cicon", f.icon)}</div>`;
@@ -443,7 +481,7 @@
   function closeModal() { modal = null; $("mdBack").hidden = true; $("mdBack").innerHTML = ""; document.body.style.overflow = ""; if (opener && document.contains(opener)) opener.focus(); }
   function readModal() {
     if (!modal) return; const f = modal.f;
-    const map = { fEn: "en", fAr: "ar", fCat: "cat", fDescEn: "descEn", fDescAr: "descAr", fAboutEn: "aboutEn", fAboutAr: "aboutAr", fPrepEn: "prepEn", fPrepAr: "prepAr", fMins: "mins", fSes: "sessions", fPrice: "price" };
+    const map = { fEn: "en", fAr: "ar", fCat: "cat", fSvc: "svc", fDescEn: "descEn", fDescAr: "descAr", fAboutEn: "aboutEn", fAboutAr: "aboutAr", fPrepEn: "prepEn", fPrepAr: "prepAr", fMins: "mins", fSes: "sessions", fPrice: "price" };
     Object.entries(map).forEach(([id, k]) => { if ($(id)) f[k] = $(id).value; });
     if ($("fRx")) f.rx = $("fRx").checked;
     if ($("fActive")) f.active = $("fActive").checked;
@@ -453,7 +491,11 @@
   function validate() {
     const m = modal, f = m.f, e = {}, T = t();
     if (!f.en.trim()) e.en = T.req; if (!f.ar.trim()) e.ar = T.req;
-    if (m.kind === "cat") {
+    if (m.kind === "pkg") {
+      if (!f.svc) e.svc = T.req;
+      const n = num(f.sessions); if (!Number.isInteger(n) || n < 2) e.sessions = T.reqMin2;
+      if (!num(f.price)) e.price = T.reqNum;
+    } else if (m.kind === "cat") {
       const same = d.cats.filter(c => c.id !== m.id);
       if (!e.en && same.some(c => norm(c.name.en.trim()) === norm(f.en.trim()))) e.en = T.dupName;
       if (!e.ar && same.some(c => norm(c.name.ar.trim()) === norm(f.ar.trim()))) e.ar = T.dupName;
@@ -475,7 +517,13 @@
     readModal(); const m = modal, f = m.f; m.err = validate();
     if (Object.keys(m.err).length) { drawModal(); const b = $("mdBack").querySelector("[aria-invalid]"); if (b) b.focus(); return; }
     const next = JSON.parse(JSON.stringify(d));
-    if (m.kind === "cat") {
+    if (m.kind === "pkg") {
+      next.packages = next.packages || [];
+      const code = m.isNew && next.packages.some(x => x.code === f.code) ? nextPkgCode() : f.code;
+      const x = { ...(m.isNew ? {} : next.packages.find(y => y.code === m.id)), code, svc: f.svc, sessions: num(f.sessions), price: num(f.price),
+        name: { en: f.en.trim(), ar: f.ar.trim() }, desc: { en: f.descEn.trim(), ar: f.descAr.trim() }, active: f.active };
+      if (m.isNew) next.packages.push(x); else next.packages[next.packages.findIndex(y => y.code === m.id)] = x;
+    } else if (m.kind === "cat") {
       const name = { en: f.en.trim(), ar: f.ar.trim() };
       if (m.isNew) next.cats.push({ id: uniq(slug(f.en), next.cats.map(c => c.id)), icon: f.icon, name }); else Object.assign(next.cats.find(c => c.id === m.id), { name, icon: f.icon });
     } else {
@@ -507,22 +555,29 @@
     if (b.dataset.editsvc) { const x = byCode(b.dataset.editsvc); return openModal({ kind: "svc", id: x.code, f: { code: x.code, en: x.name.en, ar: x.name.ar, cat: x.cat, icon: ICONS[x.icon] ? x.icon : "spine",
       descEn: (x.desc || {}).en || "", descAr: (x.desc || {}).ar || "", aboutEn: (x.about || {}).en || "", aboutAr: (x.about || {}).ar || "", prepEn: (x.prep || {}).en || "", prepAr: (x.prep || {}).ar || "",
       mins: x.mins, sessions: x.sessions || 1, price: x.price, rx: !!x.rx, active: x.active !== false } }); }
+    if (b.hasAttribute("data-addpkg")) { const s1 = singles()[0];
+      return openModal({ kind: "pkg", isNew: true, autoName: true, f: { code: nextPkgCode(), svc: s1 ? s1.code : "", sessions: "3", price: "", en: tx("pkgNameEn", { n: 3 }), ar: tx("pkgNameAr", { n: 3 }), descEn: "", descAr: "", active: true } }); }
+    if (b.dataset.editpkg) { const x = (d.packages || []).find(y => y.code === b.dataset.editpkg); return openModal({ kind: "pkg", id: x.code, f: { code: x.code, svc: x.svc, sessions: x.sessions, price: x.price,
+      en: x.name.en, ar: x.name.ar, descEn: (x.desc || {}).en || "", descAr: (x.desc || {}).ar || "", active: x.active !== false } }); }
     if (b.hasAttribute("data-close")) return closeModal();
     if (b.id === "mdSave") return saveModal();
   });
   $("mdBack").addEventListener("mousedown", e => { if (e.target === $("mdBack")) closeModal(); });
   document.addEventListener("keydown", e => { if (e.key === "Escape" && modal) closeModal(); });
   document.addEventListener("input", e => {
+    if (modal && modal.kind === "pkg" && /^f(En|Ar)$/.test(e.target.id)) modal.autoName = false;
+    if (modal && modal.kind === "pkg" && modal.autoName && e.target.id === "fSes") { const n = parseInt(e.target.value, 10); if (n > 0) { $("fEn").value = tx("pkgNameEn", { n }); $("fAr").value = tx("pkgNameAr", { n }); } }
     if (e.target.id === "q") { q = e.target.value; const pos = e.target.selectionStart; render(); const i = $("q"); i.focus(); i.setSelectionRange(pos, pos); return; }
   });
   // A new service takes its category's icon until an icon is picked by hand.
   document.addEventListener("change", e => {
     if (!modal) return;
     if (e.target.name === "sicon") modal.iconSet = true;
+    if (/^f(En|Ar)$/.test(e.target.id)) modal.autoName = false;
     if (e.target.id === "fCat" && modal.isNew && !modal.iconSet) { readModal(); const c = catOf(modal.f.cat); if (c && ICONS[c.icon]) { modal.f.icon = c.icon; drawModal(); $("fCat").focus(); } }
   });
   // Typing in or changing a field clears its error, also from the saved form errors so a redraw doesn't bring it back.
-  const ERRKEY = { fEn: "en", fAr: "ar", fCat: "cat", fMins: "mins", fSes: "sessions", fPrice: "price" };
+  const ERRKEY = { fEn: "en", fAr: "ar", fCat: "cat", fMins: "mins", fSes: "sessions", fPrice: "price", fSvc: "svc" };
   const clearErr = el => { if (!modal || !el.classList || !el.classList.contains("bad")) return; el.classList.remove("bad"); el.removeAttribute("aria-invalid"); const er = $(el.id + "-e"); if (er) er.remove(); if (ERRKEY[el.id]) delete modal.err[ERRKEY[el.id]]; };
   document.addEventListener("change", e => clearErr(e.target), true);
   document.addEventListener("input", e => clearErr(e.target), true);
@@ -549,6 +604,7 @@
   let saved = "en";
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
   if (location.hash === "#services") tab = "svcs";
+  if (location.hash === "#packages") tab = "pkgs";
   setLang(saved);
 </script>
 </body>
