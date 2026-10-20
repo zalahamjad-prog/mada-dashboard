@@ -73,8 +73,12 @@ const MadaPhysio = (() => {
   const SERVICES = ALL_SERVICES.filter(s => s.active !== false);
   // byCode keeps hidden services so older requests still show their name and price.
   const byCode = Object.fromEntries(ALL_SERVICES.map(s => [s.code, s]));
+  // A service or a package by code, in one shape: { code, name, price, mins, sessions, rx, pkg, svc }.
+  const item = code => { const s = byCode[code]; if (s) return { ...s, sessions: s.sessions || 1, pkg: false };
+    const p = pkgByCode[code]; if (!p) return null; const b = byCode[p.svc] || {};
+    return { ...p, icon: b.icon || "spine", cat: b.cat || null, mins: b.mins || null, rx: !!b.rx, pkg: true }; };
   const catName = (id, lang) => { const c = CAT_LIST.find(x => x.id === id); return c ? (c.name[lang] || c.name.en) : id; };
   const save = (d, by) => MadaStore.setJSON(KEY, { cats: d.cats, services: d.services, packages: d.packages || [], updatedAt: new Date().toISOString(), updatedBy: by || null });
   const edit = () => copy({ cats: CAT_LIST, services: ALL_SERVICES, packages: ALL_PACKAGES });
-  return { KEY, ICONS, iconSvg, CATS, CAT_LIST, SERVICES, ALL_SERVICES, byCode, PACKAGES, ALL_PACKAGES, pkgByCode, catName, save, edit };
+  return { KEY, item, ICONS, iconSvg, CATS, CAT_LIST, SERVICES, ALL_SERVICES, byCode, PACKAGES, ALL_PACKAGES, pkgByCode, catName, save, edit };
 })();

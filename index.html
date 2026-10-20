@@ -390,7 +390,7 @@
       forgot: "Forgot password?", forgotMsg: "Ask the administration for a temporary password. You will choose a new one when you log in.", login: "Login", or: "or",
       trust: "Secure • Trusted • Reliable",
       show: "Show password", hide: "Hide password", label: "English",
-      doctorHere: "Doctors sign in from the Doctor Portal.", nurseHere: "Nurses sign in from the Nursing Portal.", nurseLink: "Go to Nursing Portal", doctorLink: "Go to Doctor Portal", doctorQ: "Are you a doctor?", nurseQ: "Are you a nurse?",
+      doctorHere: "Doctors sign in from the Doctor Portal.", nurseHere: "Nurses sign in from the Nursing Portal.", physioHere: "The Physiotherapist Portal is coming soon. This account can't sign in here.", nurseLink: "Go to Nursing Portal", doctorLink: "Go to Doctor Portal", doctorQ: "Are you a doctor?", nurseQ: "Are you a nurse?",
       cpTitle: "Reset Your Password", cpHi: "Welcome {n}. For your security, you need to create a new password before continuing.",
       cpTempT: "You are using a temporary password.", cpTempS: "Please create a new password to continue using the system.",
       cpNew: "New Password", cpConfirm: "Confirm New Password",
@@ -411,7 +411,7 @@
       forgot: "نسيت كلمة المرور؟", forgotMsg: "تواصل مع الإدارة يعطونك كلمة مرور مؤقتة، وتختار كلمة جديدة أول ما تدخل.", login: "تسجيل الدخول", or: "أو",
       trust: "آمن • موثوق • يعتمد عليه",
       show: "إظهار كلمة المرور", hide: "إخفاء كلمة المرور", label: "العربية",
-      doctorHere: "الأطباء يدخلون من بوابة الطبيب.", nurseHere: "التمريض يدخلون من بوابة التمريض.", nurseLink: "الذهاب لبوابة التمريض", doctorLink: "الذهاب لبوابة الطبيب", doctorQ: "أنت طبيب؟", nurseQ: "أنت من التمريض؟",
+      doctorHere: "الأطباء يدخلون من بوابة الطبيب.", nurseHere: "التمريض يدخلون من بوابة التمريض.", physioHere: "بوابة أخصائي العلاج الطبيعي قريباً. هذا الحساب ما يدخل من هنا.", nurseLink: "الذهاب لبوابة التمريض", doctorLink: "الذهاب لبوابة الطبيب", doctorQ: "أنت طبيب؟", nurseQ: "أنت من التمريض؟",
       cpTitle: "غيّر كلمة المرور", cpHi: "أهلاً {n}. لحماية حسابك، لازم تنشئ كلمة مرور جديدة قبل ما تكمل.",
       cpTempT: "أنت تستخدم كلمة مرور مؤقتة.", cpTempS: "أنشئ كلمة مرور جديدة عشان تكمل استخدام النظام.",
       cpNew: "كلمة المرور الجديدة", cpConfirm: "تأكيد كلمة المرور الجديدة",
@@ -483,6 +483,7 @@
       const res = MadaAuth.login(u.value, pw.value);
       if (res === "wrong-portal") {
         const nurse = MadaAuth.portalOf(u.value) === "nurse-login.html";
+        if (MadaAuth.portalOf(u.value) === "index.html") { formError.textContent = i18n[current].physioHere; formError.classList.add("show"); return; }
         formError.innerHTML = i18n[current][nurse ? "nurseHere" : "doctorHere"] + ` <a href="${nurse ? "nurse-login.html" : "doctor-login.html"}">` + i18n[current][nurse ? "nurseLink" : "doctorLink"] + "</a>";
         formError.classList.add("show");
       } else if (res) {

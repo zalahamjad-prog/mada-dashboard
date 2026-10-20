@@ -246,6 +246,7 @@
 <script src="auth.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
 <script>
@@ -301,7 +302,7 @@
   const when = iso => new Date(iso).toLocaleString(loc(), { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
   const norm = s => String(s).toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي");
   const X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
-  const itemOf = it => it.type === "pkg" ? L.pkgById[it.id] : it.type === "nursing" ? MadaNursing.byCode[it.id] : it.type === "iv" ? MadaIV.byCode[it.id] : L.byCode[it.id];
+  const itemOf = it => it.type === "pkg" ? L.pkgById[it.id] : it.type === "nursing" ? MadaNursing.byCode[it.id] : it.type === "physio" ? (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.id) : null) : it.type === "iv" ? MadaIV.byCode[it.id] : L.byCode[it.id];
   const price = it => itemOf(it).price;
   const nameOf = it => itemOf(it).name[current];
   function fastBadge(f, h) {

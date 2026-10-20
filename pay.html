@@ -1054,6 +1054,7 @@
 <script src="nurses.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="orders.js"></script>
 <script src="coupons.js"></script>
@@ -1079,7 +1080,7 @@
       otherLang: "English", brand: "مدى كير", demoBar: "تجربة: هذي الصفحة اللي يفتحها العميل من رابط الرسالة.", backStaff: "رجوع للطلب",
       title: "زيارتك جاهزة، أكمل الدفع", sub: "خطوة أخيرة لتأكيد زيارتك المنزلية مع مدى كير", held: "موعدك محجوز لك لمدة",
       details: "تفاصيل الزيارة", edit: "تعديل", dateTime: "التاريخ والوقت", patient: "المريض", file: "ملف", address: "عنوان الزيارة", change: "تغيير",
-      sv_doctor: "زيارة الطبيب المنزلية", sv_nursing: "زيارة التمريض المنزلية", sv_blood: "سحب التحاليل المنزلي", sv_iv: "المحاليل الوريدية المنزلية",
+      sv_doctor: "زيارة الطبيب المنزلية", sv_nursing: "زيارة التمريض المنزلية", sv_blood: "سحب التحاليل المنزلي", sv_iv: "المحاليل الوريدية المنزلية", sv_physio: "جلسة العلاج الطبيعي المنزلية",
       lb_home: "البيت", lb_work: "العمل", lb_other: "موقع آخر", needLoc: "حدد موقع الزيارة", needLocSub: "اضغط هنا وحرّك الخريطة على باب بيتك، عشان يوصلك الفريق بدون اتصالات.",
       noTime: "سيتم تأكيد الموعد معك", team: "الفريق المشارك في زيارتك", licensed: "مرخصون", teamSub: "تعرّف على الفريق الصحي المشارك في تقديم زيارتك.",
       teamTbd: "بنرسل لك أسماء الفريق قبل الزيارة.", doctorRole: "طبيب", nurseRole: "ممرضة", years: "{n} سنوات", yearsMany: "{n} سنة", spec_fm: "طب عام",
@@ -1111,7 +1112,7 @@
       otherLang: "العربية", brand: "Mada Care", demoBar: "Demo: this is the page the customer opens from the SMS link.", backStaff: "Back to the request",
       title: "Your visit is ready, complete the payment", sub: "One last step to confirm your home visit with Mada Care", held: "Your appointment is held for",
       details: "Visit details", edit: "Edit", dateTime: "Date and time", patient: "Patient", file: "File", address: "Visit address", change: "Change",
-      sv_doctor: "Home Doctor Visit", sv_nursing: "Home Nursing Visit", sv_blood: "Home Blood Test", sv_iv: "Home IV Therapy",
+      sv_doctor: "Home Doctor Visit", sv_nursing: "Home Nursing Visit", sv_blood: "Home Blood Test", sv_iv: "Home IV Therapy", sv_physio: "Home Physiotherapy",
       lb_home: "Home", lb_work: "Work", lb_other: "Other", needLoc: "Set the visit location", needLocSub: "Tap here and move the map to your door, so the team reaches you without calls.",
       noTime: "We will confirm the time with you", team: "Your care team", licensed: "Licensed", teamSub: "Meet the health team taking part in your visit.",
       teamTbd: "We will send you the team names before the visit.", doctorRole: "Doctor", nurseRole: "Nurse", years: "{n} years", yearsMany: "{n} years", spec_fm: "General doctor",
@@ -1290,7 +1291,7 @@
   // What the customer is paying for: each service with its price.
   function svcRows(o) {
     const src = { pkg: MadaLabs.pkgById, test: MadaLabs.byCode, nursing: MadaNursing.byCode, iv: MadaIV.byCode };
-    return (o.items || []).map(it => { const p = src[it.kind] && src[it.kind][it.code]; return p && { code: it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code, name: T(p.name), price: p.price, n: it.kind === "pkg" ? p.tests.length : 0 }; }).filter(Boolean);
+    return (o.items || []).map(it => { const p = it.kind === "physio" ? (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : null) : src[it.kind] && src[it.kind][it.code]; return p && { code: it.kind === "pkg" ? "PKG-" + it.code.toUpperCase() : it.code, name: T(p.name), price: p.price, n: it.kind === "pkg" ? p.tests.length : 0 }; }).filter(Boolean);
   }
   // Simple invoice for the paid booking (A4 PDF). Not a tax invoice yet.
   // TODO: tax invoice fields (VAT registration number, e-invoice QR) once Mada Care's approved invoice format is provided.

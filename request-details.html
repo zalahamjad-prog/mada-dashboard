@@ -534,6 +534,7 @@
 <script src="auth.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
 <script src="patients.js"></script>
@@ -549,6 +550,8 @@
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const id = new URLSearchParams(location.search).get("id");
+  // A physiotherapy request is booked with a physiotherapist (Staff role physio); every other visit with a nurse.
+  { const o0 = MadaOrders.get(id); if (o0) MadaNurses.use(o0.service); }
 
   const i18n = {
     en: {
@@ -569,7 +572,7 @@
       closeNoteLbl: "Closing note", closeNotePh: "e.g. Called the family, the patient was admitted to the ER.", closeErr: "Write the closing note.",
       cancel: "Cancel", closeGo: "Close Case", closedToast: "{id} closed. The agent can see your note.",
       service: "Service", items: "Requested items", total: "Total", sar: "SAR", payAfterSvc: "Pays after the service", noItems: "No items were chosen.",
-      sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_none: "Not chosen",
+      sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_physio: "Physiotherapy", sv_none: "Not chosen",
       visit: "Visit", nurse: "Nurse", noVisit: "No visit booked.", patient: "Patient name", mrn: "Medical record", createdBy: "Created by", unknown: "Not recorded",
       payment: "Payment", paid: "Paid", notPaid: "Not Paid", decision: "Customer decision", status: "Status",
       approved: "Approved", rejected: "Rejected", pending: "Pending", on_hold: "On Hold",
@@ -598,7 +601,7 @@
       closeNoteLbl: "ملاحظة الإقفال", closeNotePh: "مثال: تم التواصل مع الأهل والمريض دخل الطوارئ.", closeErr: "اكتبي ملاحظة الإقفال.",
       cancel: "إلغاء", closeGo: "إقفال الحالة", closedToast: "تم إقفال {id}. الموظفة تقدر تشوف ملاحظتك.",
       service: "الخدمة", items: "الخدمات المطلوبة", total: "الإجمالي", sar: "ريال", payAfterSvc: "الدفع بعد تقديم الخدمة", noItems: "لم يتم اختيار خدمات.",
-      sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_none: "لم تُحدد",
+      sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_physio: "العلاج الطبيعي", sv_none: "لم تُحدد",
       visit: "الزيارة", nurse: "الممرض/ة", noVisit: "لا يوجد موعد.", patient: "اسم المريض", mrn: "الملف الطبي", createdBy: "أنشأ الطلب", unknown: "غير مسجل",
       payment: "الدفع", paid: "مدفوع", notPaid: "غير مدفوع", decision: "قرار العميل", status: "الحالة",
       approved: "موافق", rejected: "مرفوض", pending: "بانتظار الرد", on_hold: "معلّق",
@@ -646,7 +649,7 @@
     holdBanner: "This request is on hold. Finish it in the request form, then assign the team here.", holdGo: "Continue Request",
     docBanner: "Waiting for the doctor to choose the tests. You can assign the team and add the location now. Payment opens after the customer approves.",
     doneBanner: "This visit is completed, so the booking and payment are read only.",
-    doctorLbl: "Assigned Doctor", nurseLbl: "Assigned Nurse", dateLbl: "Visit Date", timeLbl: "Visit Time", fileLbl: "File Number",
+    doctorLbl: "Assigned Doctor", nurseLbl: "Assigned Nurse", physioLbl: "Assigned Physiotherapist", dateLbl: "Visit Date", timeLbl: "Visit Time", fileLbl: "File Number",
     selDoctor: "Select doctor", selNurse: "Select nurse", selTime: "Select time", pickDateFirst: "Choose the date first",
     docNo: "Doctor not assigned", docOpt: "Optional for this service", noDoctorOpt: "This service doesn't need a doctor", docNone: "No doctor needed", nurseAuto: "Assigned automatically: first available nurse at this time", nurseNo: "Nurse not assigned", dateNo: "Visit date not scheduled", timeNo: "Visit time not scheduled",
     assigned: "Assigned", scheduled: "Scheduled", nurseAvail: "Available", nurseBusy: "Not available", full: "Full", noFile: "No file created yet",
@@ -681,7 +684,7 @@
     cancelDlgText: "Choose why the request is cancelled and add a short note.",
     cancelNoteLbl: "Note", cancelNotePh: "e.g. The customer called back and cancelled.", cancelNoteErr: "Write a short note.", keep: "Keep Request", confirmCancel: "Cancel Request",
     cancelledAgent: "{id} sent to the supervisor to close.", cancelledSup: "{id} cancelled.",
-    statusLbl: "Status:", createdByLbl: "Created by {n}", openCustomer: "Open Customer Page", custLoc: "The customer set the exact location from the payment link · {t}", pm_apple: "Apple Pay", pm_card: "Bank card", pm_tamara: "Tamara", pm_tabby: "Tabby", payMethod: "Method", openedLbl: "Opened", notOpened: "Not opened yet", opensN: "Opened {n} times, last at {t}", timeLeft: "Time left", expiryAt: "Expires {t}", trackLbl: "Link Tracking", tr_sent: "Sent", tr_opened: "Opened", tr_located: "Location set", tr_paid: "Paid", trWaiting: "Waiting", trMissed: "Did not happen", ev_opened: "Customer opened the payment link", reqServices: "Requested Services", colCode: "Code", colService: "Service", colPrice: "Price", totalVat: "Total (incl. VAT)", ty_pkg: "Lab package", ty_test: "Lab test", ty_nursing: "Nursing", ty_iv: "IV therapy", pkgTests: "{n} tests: {l}", fastH: "Fasting {h} hours", morningSample: "Morning sample preferred", noFast: "No fasting", mins: "{m} min", needsRx: "Needs a prescription", outArea: "Outside the service area. We only serve {c} for now.", shareLbl: "Share the link with the customer", copyLink: "Copy Link", viaWa: "WhatsApp", viaSms: "SMS", linkCopied: "Link copied. Paste it in the chat with the customer.", ev_shared: "Link shared by {c}", ev_copied: "Link copied to send", ch_whatsapp: "WhatsApp", ch_sms: "SMS", ev_located: "Customer set the visit location", city_riyadh: "Riyadh", city_jeddah: "Jeddah"
+    statusLbl: "Status:", createdByLbl: "Created by {n}", openCustomer: "Open Customer Page", custLoc: "The customer set the exact location from the payment link · {t}", pm_apple: "Apple Pay", pm_card: "Bank card", pm_tamara: "Tamara", pm_tabby: "Tabby", payMethod: "Method", openedLbl: "Opened", notOpened: "Not opened yet", opensN: "Opened {n} times, last at {t}", timeLeft: "Time left", expiryAt: "Expires {t}", trackLbl: "Link Tracking", tr_sent: "Sent", tr_opened: "Opened", tr_located: "Location set", tr_paid: "Paid", trWaiting: "Waiting", trMissed: "Did not happen", ev_opened: "Customer opened the payment link", reqServices: "Requested Services", colCode: "Code", colService: "Service", colPrice: "Price", totalVat: "Total (incl. VAT)", ty_pkg: "Lab package", ty_test: "Lab test", ty_nursing: "Nursing", ty_physio: "Physiotherapy", sessions: "{n} sessions", needsRef: "Needs a doctor's referral", ty_iv: "IV therapy", pkgTests: "{n} tests: {l}", fastH: "Fasting {h} hours", morningSample: "Morning sample preferred", noFast: "No fasting", mins: "{m} min", needsRx: "Needs a prescription", outArea: "Outside the service area. We only serve {c} for now.", shareLbl: "Share the link with the customer", copyLink: "Copy Link", viaWa: "WhatsApp", viaSms: "SMS", linkCopied: "Link copied. Paste it in the chat with the customer.", ev_shared: "Link shared by {c}", ev_copied: "Link copied to send", ch_whatsapp: "WhatsApp", ch_sms: "SMS", ev_located: "Customer set the visit location", city_riyadh: "Riyadh", city_jeddah: "Jeddah"
   });
   Object.assign(i18n.ar, {
 
@@ -718,7 +721,7 @@
     holdBanner: "هذا الطلب معلّق. كمّلي الطلب في نموذج الطلب، وبعدها أسندي الفريق من هنا.", holdGo: "إكمال الطلب",
     docBanner: "بانتظار الطبيب يختار التحاليل. تقدرين تسندين الفريق وتضيفين الموقع الحين، والدفع يفتح بعد موافقة العميل.",
     doneBanner: "اكتملت الزيارة، فالحجز والدفع للعرض فقط.",
-    doctorLbl: "الطبيب المسند", nurseLbl: "الممرضة المسندة", dateLbl: "تاريخ الزيارة", timeLbl: "وقت الزيارة", fileLbl: "رقم الملف",
+    doctorLbl: "الطبيب المسند", nurseLbl: "الممرضة المسندة", physioLbl: "أخصائي العلاج الطبيعي المسند", dateLbl: "تاريخ الزيارة", timeLbl: "وقت الزيارة", fileLbl: "رقم الملف",
     selDoctor: "اختاري الطبيب", selNurse: "اختاري الممرضة", selTime: "اختاري الوقت", pickDateFirst: "اختاري التاريخ أولاً",
     docNo: "لم يتم إسناد طبيب", docOpt: "اختياري لهذه الخدمة", noDoctorOpt: "هذي الخدمة ما تحتاج طبيب", docNone: "ما تحتاج طبيب", nurseAuto: "تم الإسناد تلقائي: أول ممرضة متاحة في هذا الوقت", nurseNo: "لم يتم إسناد ممرضة", dateNo: "لم يتم تحديد تاريخ الزيارة", timeNo: "لم يتم تحديد وقت الزيارة",
     assigned: "تم الإسناد", scheduled: "تم التحديد", nurseAvail: "متاحة", nurseBusy: "غير متاحة", full: "ممتلئ", noFile: "لم يُنشأ ملف بعد",
@@ -753,7 +756,7 @@
     cancelDlgText: "اختاري سبب الإلغاء واكتبي ملاحظة قصيرة.",
     cancelNoteLbl: "الملاحظة", cancelNotePh: "مثال: العميل اتصل وألغى الطلب.", cancelNoteErr: "اكتبي ملاحظة قصيرة.", keep: "إبقاء الطلب", confirmCancel: "إلغاء الطلب",
     cancelledAgent: "تم إرسال {id} للمشرفة عشان تقفله.", cancelledSup: "تم إلغاء {id}.",
-    statusLbl: "الحالة:", createdByLbl: "أنشأ الطلب: {n}", openCustomer: "فتح صفحة العميل", custLoc: "العميل حدد موقعه الفعلي من رابط الدفع · {t}", pm_apple: "Apple Pay", pm_card: "البطاقة البنكية", pm_tamara: "تمارا", pm_tabby: "تابي", payMethod: "طريقة الدفع", openedLbl: "فتح الرابط", notOpened: "لم يُفتح بعد", opensN: "فُتح {n} مرات، آخرها {t}", timeLeft: "الوقت المتبقي", expiryAt: "ينتهي {t}", trackLbl: "تتبع الرابط", tr_sent: "أُرسل", tr_opened: "فتحه العميل", tr_located: "حدد الموقع", tr_paid: "دفع", trWaiting: "بالانتظار", trMissed: "لم يحدث", ev_opened: "العميل فتح رابط الدفع", reqServices: "الخدمات المطلوبة", colCode: "الكود", colService: "الخدمة", colPrice: "السعر", totalVat: "الإجمالي (شامل الضريبة)", ty_pkg: "باقة تحاليل", ty_test: "تحليل", ty_nursing: "تمريض", ty_iv: "محاليل وريدية", pkgTests: "{n} تحاليل: {l}", fastH: "صيام {h} ساعات", morningSample: "يفضّل أخذ العينة صباحاً", noFast: "بدون صيام", mins: "{m} دقيقة", needsRx: "يحتاج وصفة طبية", outArea: "خارج نطاق التغطية. نخدم حالياً في {c} فقط.", shareLbl: "شاركي الرابط مع العميل", copyLink: "نسخ الرابط", viaWa: "واتساب", viaSms: "رسالة SMS", linkCopied: "تم نسخ الرابط. الصقيه في المحادثة مع العميل.", ev_shared: "تمت مشاركة الرابط عبر {c}", ev_copied: "تم نسخ الرابط للإرسال", ch_whatsapp: "واتساب", ch_sms: "رسالة SMS", ev_located: "العميل حدد موقع الزيارة", city_riyadh: "الرياض", city_jeddah: "جدة"
+    statusLbl: "الحالة:", createdByLbl: "أنشأ الطلب: {n}", openCustomer: "فتح صفحة العميل", custLoc: "العميل حدد موقعه الفعلي من رابط الدفع · {t}", pm_apple: "Apple Pay", pm_card: "البطاقة البنكية", pm_tamara: "تمارا", pm_tabby: "تابي", payMethod: "طريقة الدفع", openedLbl: "فتح الرابط", notOpened: "لم يُفتح بعد", opensN: "فُتح {n} مرات، آخرها {t}", timeLeft: "الوقت المتبقي", expiryAt: "ينتهي {t}", trackLbl: "تتبع الرابط", tr_sent: "أُرسل", tr_opened: "فتحه العميل", tr_located: "حدد الموقع", tr_paid: "دفع", trWaiting: "بالانتظار", trMissed: "لم يحدث", ev_opened: "العميل فتح رابط الدفع", reqServices: "الخدمات المطلوبة", colCode: "الكود", colService: "الخدمة", colPrice: "السعر", totalVat: "الإجمالي (شامل الضريبة)", ty_pkg: "باقة تحاليل", ty_test: "تحليل", ty_nursing: "تمريض", ty_physio: "علاج طبيعي", sessions: "{n} جلسات", needsRef: "يحتاج تحويل من الطبيب", ty_iv: "محاليل وريدية", pkgTests: "{n} تحاليل: {l}", fastH: "صيام {h} ساعات", morningSample: "يفضّل أخذ العينة صباحاً", noFast: "بدون صيام", mins: "{m} دقيقة", needsRx: "يحتاج وصفة طبية", outArea: "خارج نطاق التغطية. نخدم حالياً في {c} فقط.", shareLbl: "شاركي الرابط مع العميل", copyLink: "نسخ الرابط", viaWa: "واتساب", viaSms: "رسالة SMS", linkCopied: "تم نسخ الرابط. الصقيه في المحادثة مع العميل.", ev_shared: "تمت مشاركة الرابط عبر {c}", ev_copied: "تم نسخ الرابط للإرسال", ch_whatsapp: "واتساب", ch_sms: "رسالة SMS", ev_located: "العميل حدد موقع الزيارة", city_riyadh: "الرياض", city_jeddah: "جدة"
   });
   let current = "en";
   const t = () => i18n[current];
@@ -773,7 +776,7 @@
     lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'
   };
   const svg = (p, sw) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw || 1.8}" aria-hidden="true">${p}</svg>`;
-  const SVC_ICON = {
+  const SVC_ICON = { physio: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>',
     doctor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0"/>',
     nursing: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 3.5h4M12 2v3"/>',
     blood: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
@@ -783,7 +786,7 @@
     : `<span class="status-chip non">${svg('<path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 11C19 15.6 12 20 12 20z"/><path d="M7 12h3l1-2 2 4 1-2h3"/>', 2)}${t().nonEmergency}</span>`;
   function itemInfo(it) {
     const src = it.kind === "pkg" ? MadaLabs.pkgById : it.kind === "test" ? MadaLabs.byCode : it.kind === "nursing" ? MadaNursing.byCode : it.kind === "iv" ? MadaIV.byCode : null;
-    const p = src && src[it.code]; return p ? { name: p.name, price: p.price } : null;
+    const p = it.kind === "physio" ? (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : null) : src && src[it.code]; return p ? { name: p.name, price: p.price } : null;
   }
 
   // A paid request opens as a booking: own title, back link and menu item.
@@ -841,7 +844,7 @@
         <div class="divider"></div>`;
     if (isRej) {
       html += `<div class="row2 svc-row">
-          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv"].map(k =>
+          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv", "physio"].map(k =>
             `<span class="svc-opt ${o.service === k ? "on" : ""}">${svg(SVC_ICON[k])}<span>${t()["sv_" + k]}</span><span class="radio"></span></span>`).join("")}</div></div>
           <div><span class="lbl">${t().decision}</span><span class="status-chip emg">${svg('<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>', 2)}${t().notApproved}</span></div>
         </div>
@@ -1211,7 +1214,7 @@
 
       <div style="display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:10px;margin-top:10px">
         ${card(I2.user, t().pdfPatient, kvS(t().pdfName, esc(T(o.patient) || "—")) + kvS(t().fileLbl, ltr(o.mrn || "—")) + kvS(t().mobile, ltr(o.mobile || "—")))}
-        ${card(I2.team, t().pdfTeam, kvS(t().nurseLbl, esc(nurse)) + kvS(t().doctorLbl, doc ? esc(T(doc.name)) : esc(t().pdfNoDoc), doc ? esc(T(doc.spec)) : "") + (drv ? kvS(t().drvLbl, esc(T(drv.name)), esc(T(drv.car))) : ""))}
+        ${card(I2.team, t().pdfTeam, kvS(o.service === "physio" ? t().physioLbl : t().nurseLbl, esc(nurse)) + kvS(t().doctorLbl, doc ? esc(T(doc.name)) : esc(t().pdfNoDoc), doc ? esc(T(doc.spec)) : "") + (drv ? kvS(t().drvLbl, esc(T(drv.name)), esc(T(drv.car))) : ""))}
         ${card(I2.pin, t().pdfLoc, kvS(t().addrLbl, esc(addr)) + ((L.floor || A.floor) ? kvS(t().floorLbl, esc(L.floor || A.floor)) : "") + ((L.landmark || A.landmark) ? kvS(t().landmarkLbl, esc(L.landmark || A.landmark)) : "") + (map ? kvS(t().mapLbl, `<span dir="ltr" style="font-weight:400;font-size:9.5px;color:${G};word-break:break-all">${esc(map)}</span>`) : ""))}
       </div>
 
@@ -1357,7 +1360,7 @@
         </div>
         <div class="divider"></div>
         <div class="row2 svc-row">
-          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv"].map(k =>
+          <div><span class="lbl">${t().svcRequested}</span><div class="svc-opts">${["doctor", "nursing", "blood", "iv", "physio"].map(k =>
             `<span class="svc-opt ${o.service === k ? "on" : ""}">${svg(SVC_ICON[k])}<span>${t()["sv_" + k]}</span><span class="radio"></span></span>`).join("")}</div></div>
           <div><span class="lbl">${t().decision}</span>${dec}</div>
         </div>
@@ -1381,7 +1384,7 @@
         <div class="fld"><label class="lbl" for="bkDoctor">${t().doctorLbl}</label>
           <select class="sel" id="bkDoctor" ${bdis}><option value="">${t().selDoctor}</option><option value="none" ${o.service === "doctor" ? "disabled" : ""}>${t().noDoctorOpt}</option>${MadaOrders.DOCTORS.map(d => `<option value="${d.id}">${esc(T(d.name))} · ${esc(T(d.spec))}</option>`).join("")}</select>
           <div id="hDoc"></div></div>
-        <div class="fld"><label class="lbl" for="bkNurse">${t().nurseLbl}</label>
+        <div class="fld"><label class="lbl" for="bkNurse">${o.service === "physio" ? t().physioLbl : t().nurseLbl}</label>
           <select class="sel" id="bkNurse" ${bdis}></select><div id="hNurse"></div></div>
         <div class="fld"><label class="lbl" for="bkDate">${t().dateLbl}</label>
           <div class="in-ic">${svg(I.cal)}<input class="in ltr" id="bkDate" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off" ${bdis}></div><div id="hDate"></div></div>
@@ -1507,6 +1510,7 @@
     if (it.kind === "pkg") { const p = MadaLabs.pkgById[it.code]; return p && { type: t().ty_pkg, name: p.name, price: p.price, sub: tx("pkgTests", { n: p.tests.length, l: p.tests.join(", ") }), fast: p.fasting === "fast" }; }
     if (it.kind === "test") { const p = MadaLabs.byCode[it.code]; return p && { type: t().ty_test, name: p.name, price: p.price, sub: p.fasting === "fast" ? tx("fastH", { h: p.fastHours || "8" }) : p.fasting === "morning" ? t().morningSample : t().noFast }; }
     if (it.kind === "nursing") { const p = MadaNursing.byCode[it.code]; return p && { type: t().ty_nursing, name: p.name, price: p.price, sub: [tx("mins", { m: p.mins }), p.rx ? t().needsRx : ""].filter(Boolean).join(" · ") }; }
+    if (it.kind === "physio") { const p = (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : null); return p && { type: t().ty_physio, name: p.name, price: p.price, sub: [p.pkg || p.sessions > 1 ? tx("sessions", { n: p.sessions }) : "", p.mins ? tx("mins", { m: p.mins }) : "", p.rx ? t().needsRef : ""].filter(Boolean).join(" · ") }; }
     if (it.kind === "iv") { const p = MadaIV.byCode[it.code]; return p && { type: t().ty_iv, name: p.name, price: p.price, sub: [p.includes ? T(p.includes).join("، ") : "", p.mins ? tx("mins", { m: p.mins }) : ""].filter(Boolean).join(" · ") }; }
     return null;
   }
@@ -1636,7 +1640,7 @@
     // The nurse is picked automatically: the first nurse free at the chosen time (staff can still change her).
     // TODO: at linking, pick the nearest free nurse to the visit address, using the work schedules.
     if (bk.canAuto && free && free.length && !bk.nurseId) { bk.nurseId = free[0]; bk.autoNurse = true; }
-    sel.innerHTML = `<option value="">${free ? t().selNurse : t().pickTimeForNurse}</option>` + MadaNurses.NURSES.map(n => {
+    sel.innerHTML = `<option value="">${free ? t().selNurse : t().pickTimeForNurse}</option>` + MadaNurses.NURSES.filter(n => n.role === (o.service === "physio" ? "physio" : "nurse")).map(n => {
       const ok = !free || free.includes(n.id);
       return `<option value="${n.id}" ${ok ? "" : "disabled"} ${bk.nurseId === n.id ? "selected" : ""}>${esc(T(n.name))}${free ? " · " + (ok ? t().nurseAvail : t().nurseBusy) : ""}</option>`;
     }).join("");

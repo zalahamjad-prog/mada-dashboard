@@ -21,7 +21,7 @@ const MadaRx = (() => {
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Booked items that need a prescription.
   function needs(o) {
-    const look = it => it.kind === "nursing" && typeof MadaNursing !== "undefined" ? MadaNursing.byCode[it.code] : it.kind === "iv" && typeof MadaIV !== "undefined" ? MadaIV.byCode[it.code] : null;
+    const look = it => it.kind === "physio" && typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : it.kind === "nursing" && typeof MadaNursing !== "undefined" ? MadaNursing.byCode[it.code] : it.kind === "iv" && typeof MadaIV !== "undefined" ? MadaIV.byCode[it.code] : null;
     return ((o && o.items) || []).map(it => ({ it, s: look(it) })).filter(x => x.s && x.s.rx).map(x => ({ code: x.it.code, name: x.s.name }));
   }
   const list = oid => { try { return JSON.parse(MadaStore.get(key(oid)) || "[]") || []; } catch (e) { return []; } };

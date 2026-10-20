@@ -1065,7 +1065,7 @@
         <p data-i18n="sv_iv_d">x</p>
         <button type="button" class="pick" aria-pressed="false"><span data-i18n="select">Select</span><span class="tick" aria-hidden="true"></span></button>
       </article>
-      <article class="service soon">
+      <article class="service available" data-service="physio">
         <div class="art"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="58" fill="#fdeedd"/>
   <rect x="10" y="88" width="100" height="8" rx="3" fill="#3f6fb5"/><rect x="16" y="96" width="5" height="14" fill="#2f5490"/><rect x="99" y="96" width="5" height="14" fill="#2f5490"/>
   <ellipse cx="22" cy="80" rx="9" ry="9" fill="#efc09c"/><path d="M14 76c2-6 8-8 14-5" stroke="#2b1d16" stroke-width="5" fill="none" stroke-linecap="round"/>
@@ -1074,7 +1074,8 @@
   <circle cx="84" cy="22" r="9" fill="#efc09c"/><path d="M75 20c0-8 6-11 11-10 6 1 8 6 7 10-3-4-7-5-10-5-3 0-6 2-8 5z" fill="#2b1d16"/>
   <path d="M74 34h20l2 28H72z" fill="#fff" stroke="#d6e6e1"/><path d="M74 40l-6 14 12 4" stroke="#efc09c" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M94 40l2 16-8 4" stroke="#efc09c" stroke-width="6" fill="none" stroke-linecap="round"/></svg></div>
         <h3>5. <span data-i18n="sv_physio">x</span></h3>
-        <span class="soon-badge" data-i18n="soon">Coming Soon</span>
+        <p data-i18n="sv_physio_d">x</p>
+        <button type="button" class="pick" aria-pressed="false"><span data-i18n="select">Select</span><span class="tick" aria-hidden="true"></span></button>
       </article>
       <article class="service soon">
         <div class="art"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="58" fill="#e6eefb"/>
@@ -1285,6 +1286,80 @@
     </div>
     <div class="footer">
       <button type="button" class="btn btn-ghost" id="nsBack">
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        <span data-i18n="labBack">Back to services</span>
+      </button>
+      <span class="count" data-i18n="stepCount2" style="margin-inline:auto">Step 2 of 4</span>
+    </div>
+  </div>
+  <div id="stepPhysio" hidden>
+    <div class="lab-layout">
+      <section class="card lab-main">
+        <div class="lab-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/></svg>
+          <div><h2 data-i18n="ptTitle">Nursing Services</h2><p data-i18n="ptSub">Choose the nursing services the patient needs</p></div>
+          <button type="button" class="cart-jump" id="ptCartJump" data-i18n-aria="labCartAria" aria-label="Go to cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h2l2.4 11h10.8L20.5 7H6.2"/></svg>
+            <span class="badge" id="ptBadge">0</span>
+          </button>
+        </div>
+        <div class="lab-tools ns-tools">
+          <label class="lab-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="ptSearch" data-i18n-ph="ptSearchPh" placeholder="Search service by name or code..." autocomplete="off">
+          </label>
+          <button type="button" class="btn btn-ghost filter-btn" id="ptFilterBtn" aria-expanded="false" aria-controls="ptFilter">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+            <span class="lbl" data-i18n="labFilter">Filter</span><span class="badge" id="ptFilterCount" hidden>0</span>
+          </button>
+          <div class="filter-pop" id="ptFilter" hidden>
+            <strong data-i18n="ptFltRx">Doctor referral</strong>
+            <label><input type="checkbox" id="ptNoRx"><span data-i18n="ptNoRx">No referral needed</span></label>
+            <strong data-i18n="ptFltKind">Type</strong>
+            <label><input type="checkbox" id="ptSingle"><span data-i18n="ptSingle">Single sessions only</span></label>
+          </div>
+        </div>
+        <div class="lab-cats ns-cats" id="ptCats" role="radiogroup" data-i18n-aria="ptCatAria" aria-label="Category"></div>
+
+        <h3 class="lab-sec" id="ptSvcH"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/></svg><span><span data-i18n="ptSvcT">Nursing Services</span><small style="display:block;font-size:12px;font-weight:400;color:var(--muted)" data-i18n="ptListSub">Choose from our available nursing services</small></span></h3>
+        <div class="ns-head-row" id="ptSvcHead" aria-hidden="true"><span data-i18n="ptThName">Service Name</span><span data-i18n="thCode">Code</span><span class="h-cat" data-i18n="ptThCat">Category</span><span data-i18n="ptThTime">Visit Time</span><span data-i18n="ptThRx">Prescription</span><span data-i18n="thPrice">Price (SAR)</span><span data-i18n="thAdd">Add</span></div>
+        <div class="ns-list" id="ptList"></div>
+        <h3 class="lab-sec" id="ptPkgH" style="margin-top:22px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg><span><span data-i18n="ptPkgT">Session Packages</span><small style="display:block;font-size:12px;font-weight:400;color:var(--muted)" data-i18n="ptPkgSub">Several sessions at one price</small></span></h3>
+        <div class="ns-head-row" id="ptPkgHead" aria-hidden="true"><span data-i18n="ptThPkg">Package</span><span data-i18n="thCode">Code</span><span class="h-cat" data-i18n="ptThSes">Sessions</span><span data-i18n="ptThPer">Per Session</span><span data-i18n="ptThRx">Referral</span><span data-i18n="thPrice">Price (SAR)</span><span data-i18n="thAdd">Add</span></div>
+        <div class="ns-list" id="ptPkgList"></div>
+        <p class="lab-empty" id="ptEmpty" data-i18n="ptEmpty" hidden>No services match your search.</p>
+      </section>
+
+      <aside class="lab-side">
+        <section class="card cart" id="ptCart">
+          <div class="cart-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h2l2.4 11h10.8L20.5 7H6.2"/></svg>
+            <h3 id="ptCartTitle"></h3>
+            <button type="button" class="clear-all" id="ptClear" data-i18n="clearAll">Clear All</button>
+          </div>
+          <div class="cart-list" id="ptCartList"></div>
+          <div class="cart-total">
+            <div class="cart-total-row"><span id="ptTotalLabel"></span><b id="ptTotal"></b></div>
+            <div class="vat"><span data-i18n="vatNote">Prices include VAT</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg></div>
+            <div class="rx-note" id="ptRxNote" hidden></div>
+          </div>
+        </section>
+        <div class="doc-card">
+          <div class="doc-card-top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2z"/><path d="M9 14.5v2.5a2 2 0 0 0 4 0M15 15v3"/></svg>
+            <div><strong data-i18n="docReqTitle">Create Doctor Request</strong><p data-i18n="ptDocText">Add a doctor consultation request to get a recommendation for the services.</p></div>
+          </div>
+          <button type="button" class="btn btn-ghost" id="ptDocReq" aria-haspopup="dialog"><span data-i18n="ptDocBtn">Create Request</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+        <button type="button" class="btn btn-primary lab-confirm" id="ptNext">
+          <span data-i18n="ptNext">Next: Schedule &amp; Time</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <p class="s3-err" id="ptErr" role="alert" data-i18n="ptErrEmpty">Add at least one service to continue.</p>
+      </aside>
+    </div>
+    <div class="footer">
+      <button type="button" class="btn btn-ghost" id="ptBack">
         <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
         <span data-i18n="labBack">Back to services</span>
       </button>
@@ -1665,6 +1740,22 @@
     </div>
   </div>
 </div>
+<div class="overlay" id="ptOverlay" hidden>
+  <div class="dialog test-dialog" role="dialog" aria-modal="true" aria-labelledby="ptdName">
+    <div class="td-head">
+      <span class="td-icon" id="ptdIcon"></span>
+      <div><h3 id="ptdName"></h3><div class="sub" id="ptdSub"></div></div>
+      <button type="button" class="td-x" id="ptdClose" data-i18n-aria="close" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <dl class="td-facts" id="ptdFacts"></dl>
+    <div class="td-sec"><h4 data-i18n="ptdAbout">What the nurse does</h4><p id="ptdAbout"></p></div>
+    <div class="td-sec"><h4 data-i18n="tdPrep">Patient preparation</h4><ul id="ptdPrep"></ul></div>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost" id="ptdCancel" data-i18n="close">Close</button>
+      <button type="button" class="btn btn-primary" id="ptdAdd"></button>
+    </div>
+  </div>
+</div>
 <div class="overlay" id="ivOverlay" hidden>
   <div class="dialog test-dialog" role="dialog" aria-modal="true" aria-labelledby="ivdName">
     <div class="td-head">
@@ -1812,6 +1903,7 @@
 <script src="nurses.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
 <script src="orders.js"></script>
@@ -1849,7 +1941,7 @@
       sv_nursing: "Nursing Services", sv_nursing_d: "Professional nursing care at home.",
       sv_blood: "Blood Samples", sv_blood_d: "Blood sample collection for laboratory testing.",
       sv_iv: "IV Fluids & Vitamins", sv_iv_d: "IV fluids and vitamin therapy at home.",
-      sv_physio: "Physiotherapy", sv_radiology: "Radiology", sv_companion: "Health Companion", sv_lymph: "Lymphatic Massage",
+      sv_physio: "Physiotherapy", sv_physio_d: "Physiotherapy sessions and rehab at home.", sv_radiology: "Radiology", sv_companion: "Health Companion", sv_lymph: "Lymphatic Massage",
       select: "Select", selected: "Selected", soon: "Coming Soon", next: "Next", stepCount2: "Step 2 of 4",
       serviceErr: "Select a service to continue.",
       helpTitle: "Not sure which service to choose?", helpText: "Our care team is here to help you choose the most appropriate service for the patient.",
@@ -1876,6 +1968,7 @@
       f_doctor: ["Doctor consultation at home", "Nursing care included", "Comprehensive assessment", "Personalized care plan"],
       f_nursing: ["Wound care and dressings", "Injections and medication", "Vital signs monitoring", "Post-hospital care"],
       f_blood: ["Sample collection at home", "Certified laboratory testing", "Results shared digitally", "Fasting guidance"],
+      f_physio: ["Assessment and treatment plan", "Home exercise program", "Rehab after surgery", "Back, neck and joint pain"],
       f_iv: ["IV hydration", "Vitamin infusions", "Monitored by a nurse", "Doctor-approved plan"],
       s4: "Patient Record", step4Title: "Step 4: Create Patient Record", step4Sub: "Please enter the patient's basic information to create a medical record.",
       whoTitle: "Who is this medical record for?", whoSelf: "The caller", whoSelfHint: "The caller is the patient.",
@@ -1943,6 +2036,17 @@
       successDoctor: "Sent to the Doctor", successDoctorText: "The patient file is ready. A doctor will call the patient and choose the tests, then you will get an alert to confirm the price and time.",
       docService: "Doctor consultation (free)", docNoteShort: "Complaint",
       docBannerTitle: "Tests chosen by {d}", docBannerAt: "Chosen {t}. Confirm the price with the patient, then book the visit.",
+      ptTitle: "Physiotherapy", ptSub: "Choose the physiotherapy sessions or package the patient needs", ptSearchPh: "Search session or package by name or code...",
+      ptCatAria: "Category", ptCatAllChip: "All Physiotherapy", ptPkgChip: "Packages", ptFltRx: "Doctor referral", ptNoRx: "No referral needed", ptFltKind: "Type", ptSingle: "Single sessions only",
+      ptSvcT: "Sessions & Programs", ptListSub: "Choose from our physiotherapy services", ptPkgT: "Session Packages", ptPkgSub: "Several sessions at one price",
+      ptThName: "Service Name", ptThCat: "Category", ptThTime: "Session Time", ptThRx: "Referral", ptThPkg: "Package", ptThSes: "Sessions", ptThPer: "Per Session",
+      ptEmpty: "No sessions or packages match your search.", ptSesN: "{n} sessions", ptSesN1: "1 session", ptPerN: "{n} SAR",
+      ptCartEmpty: "Nothing added yet. Search for a session or package, or pick one from the list.", ptTotalLbl: "Total ({n} items)",
+      ptRxNote: "A doctor's referral is needed for {x}. Ask the patient to have the referral or medical report ready.",
+      ptDocText: "Add a doctor consultation request to get a recommendation for the physiotherapy plan.", ptDocBtn: "Create Request",
+      ptNext: "Next: Schedule & Time", ptErrEmpty: "Add at least one session or package to continue.",
+      ptdAbout: "About the service", ptdTime: "Session time", ptdSes: "Sessions", ptdRx: "Doctor referral", ptRxPrep: "A doctor's referral or order is required.", sumPhysio: "Physiotherapy",
+      ptPkgOf: "Package of {s}", apptPhysio: "Physiotherapist", s3_pt: "Schedule & Physiotherapist", step3Title_pt: "Step 3: Schedule & Physiotherapist", step3Sub_pt: "Find the earliest appointment based on physiotherapist availability.", earliestTitle_pt: "Earliest available physiotherapist",
       nsTitle: "Nursing Services", nsSub: "Choose the nursing services the patient needs", nsSearchPh: "Search service by name or code...",
       nsCatAria: "Category", nsCatAll: "All categories", nsCatAllChip: "All Nursing Services", ivCatAll: "All IV Packages", nscat_injections: "Injections & IV", nscat_wound: "Wound Care", nscat_monitoring: "Monitoring",
       nscat_tubes: "Tubes & Catheters", nscat_respiratory: "Respiratory", nscat_medication: "Medication", nscat_general: "General Care",
@@ -2017,7 +2121,7 @@
       sv_nursing: "خدمات التمريض", sv_nursing_d: "رعاية تمريضية متخصصة في المنزل.",
       sv_blood: "سحب عينات الدم", sv_blood_d: "سحب عينات الدم للتحاليل المخبرية.",
       sv_iv: "المحاليل والفيتامينات الوريدية", sv_iv_d: "علاج بالمحاليل والفيتامينات الوريدية في المنزل.",
-      sv_physio: "العلاج الطبيعي", sv_radiology: "الأشعة", sv_companion: "مرافق صحي", sv_lymph: "المساج اللمفاوي",
+      sv_physio: "العلاج الطبيعي", sv_physio_d: "جلسات العلاج الطبيعي والتأهيل في المنزل.", sv_radiology: "الأشعة", sv_companion: "مرافق صحي", sv_lymph: "المساج اللمفاوي",
       select: "اختيار", selected: "تم الاختيار", soon: "قريباً", next: "التالي", stepCount2: "الخطوة 2 من 4",
       serviceErr: "اختر خدمة للمتابعة.",
       helpTitle: "لست متأكداً من الخدمة المناسبة؟", helpText: "فريق الرعاية جاهز لمساعدتك في اختيار الخدمة الأنسب للمريض.",
@@ -2044,6 +2148,7 @@
       f_doctor: ["استشارة طبيب في المنزل", "تشمل رعاية تمريضية", "تقييم شامل", "خطة رعاية مخصصة"],
       f_nursing: ["العناية بالجروح والضمادات", "الحقن والأدوية", "متابعة العلامات الحيوية", "الرعاية بعد الخروج من المستشفى"],
       f_blood: ["سحب العينة في المنزل", "تحاليل في مختبر معتمد", "إرسال النتائج إلكترونياً", "إرشادات الصيام"],
+      f_physio: ["تقييم الحالة وخطة العلاج", "برنامج تمارين منزلية", "التأهيل بعد العمليات", "آلام الظهر والرقبة والمفاصل"],
       f_iv: ["محاليل وريدية", "فيتامينات وريدية", "بإشراف ممرضة", "خطة معتمدة من الطبيب"],
       s4: "ملف المريض", step4Title: "الخطوة 4: إنشاء ملف المريض", step4Sub: "يرجى إدخال المعلومات الأساسية للمريض لإنشاء ملف طبي.",
       whoTitle: "لمن هذا الملف الطبي؟", whoSelf: "المتصل نفسه", whoSelfHint: "المتصل هو المريض.",
@@ -2111,6 +2216,17 @@
       successDoctor: "تم الإرسال للطبيب", successDoctorText: "ملف المريض جاهز. سيتصل الطبيب بالمريض ويحدد التحاليل، ثم يصلك تنبيه لتأكيد السعر والموعد.",
       docService: "استشارة طبيب (مجانية)", docNoteShort: "الشكوى",
       docBannerTitle: "التحاليل التي حددها {d}", docBannerAt: "تم التحديد {t}. أكّد السعر مع المريض ثم احجز الموعد.",
+      ptTitle: "العلاج الطبيعي", ptSub: "اختر جلسات العلاج الطبيعي أو الباقة اللي يحتاجها المريض", ptSearchPh: "ابحث عن جلسة أو باقة بالاسم أو الرمز...",
+      ptCatAria: "التصنيف", ptCatAllChip: "كل العلاج الطبيعي", ptPkgChip: "الباقات", ptFltRx: "تحويل الطبيب", ptNoRx: "بدون تحويل", ptFltKind: "النوع", ptSingle: "الجلسات المفردة فقط",
+      ptSvcT: "الجلسات والبرامج", ptListSub: "اختر من خدمات العلاج الطبيعي", ptPkgT: "باقات الجلسات", ptPkgSub: "عدة جلسات بسعر واحد",
+      ptThName: "اسم الخدمة", ptThCat: "القسم", ptThTime: "مدة الجلسة", ptThRx: "التحويل", ptThPkg: "الباقة", ptThSes: "الجلسات", ptThPer: "سعر الجلسة",
+      ptEmpty: "لا توجد جلسات أو باقات مطابقة للبحث.", ptSesN: "{n} جلسات", ptSesN1: "جلسة وحدة", ptPerN: "{n} ريال",
+      ptCartEmpty: "ما انضاف شي للحين. ابحث عن جلسة أو باقة أو اخترها من القائمة.", ptTotalLbl: "الإجمالي ({n} عناصر)",
+      ptRxNote: "يلزم تحويل من الطبيب لـ {x}. اطلب من المريض يجهز التحويل أو التقرير الطبي.",
+      ptDocText: "أضف طلب استشارة طبيب للحصول على توصية بخطة العلاج الطبيعي.", ptDocBtn: "إنشاء طلب",
+      ptNext: "التالي: الموعد والوقت", ptErrEmpty: "أضف جلسة أو باقة وحدة على الأقل للمتابعة.",
+      ptdAbout: "عن الخدمة", ptdTime: "مدة الجلسة", ptdSes: "الجلسات", ptdRx: "تحويل الطبيب", ptRxPrep: "يلزم تحويل أو طلب من الطبيب.", sumPhysio: "العلاج الطبيعي",
+      ptPkgOf: "باقة من {s}", apptPhysio: "أخصائي العلاج الطبيعي", s3_pt: "الموعد والأخصائي", step3Title_pt: "الخطوة 3: الموعد وأخصائي العلاج الطبيعي", step3Sub_pt: "اعثر على أقرب موعد حسب أوقات أخصائيي العلاج الطبيعي المتاحة.", earliestTitle_pt: "أقرب أخصائي متاح",
       nsTitle: "خدمات التمريض", nsSub: "اختر خدمات التمريض التي يحتاجها المريض", nsSearchPh: "ابحث عن خدمة بالاسم أو الرمز...",
       nsCatAria: "التصنيف", nsCatAll: "كل التصنيفات", nsCatAllChip: "كل خدمات التمريض", ivCatAll: "كل باقات المحاليل", nscat_injections: "الحقن والمحاليل", nscat_wound: "العناية بالجروح", nscat_monitoring: "القياسات والمتابعة",
       nscat_tubes: "الأنابيب والقساطر", nscat_respiratory: "الجهاز التنفسي", nscat_medication: "الأدوية", nscat_general: "رعاية عامة",
@@ -2178,6 +2294,7 @@
     if (typeof renderStep3 === "function" && state.service) renderStep3();
     if (typeof renderLab === "function" && !$("stepLab").hidden) { renderLab(); renderTestDialog(); renderPkgDialog(); }
     if (typeof renderNurse === "function" && !$("stepNurse").hidden) { renderNurse(); renderNurseDialog(); }
+    if (typeof renderPhysio === "function" && !$("stepPhysio").hidden) { renderPhysio(); renderPhysioDialog(); }
     if (typeof renderIV === "function" && !$("stepIV").hidden) { renderIV(); renderIVDialog(); }
     if (typeof fillDistricts === "function") { fillDistricts(); updateDobNote(); }
     if (typeof renderSuccess === "function") renderSuccess();
@@ -2299,7 +2416,7 @@
 
   // Step navigation
   function goStep(n) {
-    $("stepLab").hidden = true; $("stepNurse").hidden = true; $("stepIV").hidden = true;
+    $("stepLab").hidden = true; $("stepNurse").hidden = true; $("stepPhysio").hidden = true; $("stepIV").hidden = true;
     [1, 2, 3, 4].forEach(i => {
       $("step" + i).hidden = n !== i;
       $("st" + i).classList.toggle("active", n === i);
@@ -2319,7 +2436,7 @@
 
   // Back arrow (and browser Back): one step back from the page on screen; only step 1 leaves to the dashboard.
   function stepBack() {
-    const btn = ["step2:backTo1", "stepLab:labBack", "stepNurse:nsBack", "stepIV:ivBack", "step3:backTo2", "step4:backTo3"]
+    const btn = ["step2:backTo1", "stepLab:labBack", "stepNurse:nsBack", "stepPhysio:ptBack", "stepIV:ivBack", "step3:backTo2", "step4:backTo3"]
       .map(x => x.split(":")).find(([page]) => !$(page).hidden);
     if (btn && $("successOverlay").hidden) { $(btn[1]).click(); return true; }
     return false;
@@ -2349,6 +2466,7 @@
     try { sessionStorage.setItem("mada-request-draft", JSON.stringify(draft({ service: state.service }))); } catch (e) {}
     if (state.service === "blood") return showLab();
     if (state.service === "nursing") return showNurse();
+    if (state.service === "physio") return showPhysio();
     if (state.service === "iv") return showIV();
     goStep(3);
   });
@@ -2761,8 +2879,127 @@
     $("step2").hidden = true; $("stepNurse").hidden = false;
     renderNurse();
   }
-  // The items in the cart of the page the agent is on (lab tests or nursing services).
-  const serviceItems = () => state.service === "nursing" ? nurse.items : state.service === "iv" ? iv.items : lab.items;
+
+  // Step 2e: physiotherapy (shown when the physiotherapy service is chosen). Sessions and programs (physio.js services) and session packages.
+  // Cart items { type: "physio", id: PT-#### | PTP-#### }; MadaPhysio.item(code) reads either.
+  const PT = MadaPhysio;
+  const physio = { items: [], q: "", cat: "all" };
+  const ptIn = code => physio.items.some(x => x.id === code);
+  const ptFilters = () => ["ptNoRx", "ptSingle"].filter(id => $(id).checked).length;
+  const ptSes = n => n === 1 ? i18n[current].ptSesN1 : tx("ptSesN", { n });
+  function ptRow(x) {
+    const t = i18n[current], on = ptIn(x.code);
+    const mid = x.pkg ? `<span class="ns-cat">${esc(ptSes(x.sessions))}</span><span class="ns-time">${esc(tx("ptPerN", { n: Math.round(x.price / x.sessions * 100) / 100 }))}</span>`
+      : `<span class="ns-cat">${esc(PT.catName(x.cat, current))}${x.sessions > 1 ? ` · ${esc(ptSes(x.sessions))}` : ""}</span><span class="ns-time">${esc(tx("nsMins", { n: x.mins }))}</span>`;
+    return `<div class="ns-row${on ? " in" : ""}">
+        <button type="button" class="ns-name" data-pt-info="${x.code}"><span class="ns-ico">${x.pkg ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>' : PT.iconSvg(x.icon)}</span>
+          <span><strong>${esc(x.name[current])}</strong><small>${esc((x.desc || {})[current] || "")}</small></span></button>
+        <div class="ns-meta"><span class="ns-code">${x.code}</span>${mid}
+          <span class="ns-rxt ${x.rx ? "yes" : "no"}" title="${esc(t.ptdRx)}"><span class="ns-rxl">${esc(t.ptdRx)}: </span>${esc(x.rx ? t.nsRxYes : t.nsRxNo)}</span><span class="ns-price">${x.price} ${esc(t.sar)}</span></div>
+        <div class="ns-addcell"><button type="button" class="ns-add${on ? " on" : ""}" data-pt-add="${x.code}" aria-pressed="${on}" aria-label="${esc((on ? t.tdRemove : t.tdAdd) + ": " + x.name[current])}">${on ? ICON.check : CART_ADD}</button></div>
+      </div>`;
+  }
+  function renderPhysio() {
+    if (!$("stepPhysio") || $("stepPhysio").hidden) return;
+    const t = i18n[current];
+    if (physio.cat !== "all" && physio.cat !== "pkgs" && !PT.CATS.includes(physio.cat)) physio.cat = "all";
+    const ALL_IC = '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h1M4 12h1M4 18h1"/>', PK_IC = '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>';
+    const chip = (id, ic, label) => `<button type="button" class="chip" role="radio" aria-checked="${physio.cat === id}" data-pt-cat="${esc(id)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ic}</svg>${esc(label)}</button>`;
+    $("ptCats").innerHTML = chip("all", ALL_IC, t.ptCatAllChip) + (PT.PACKAGES.length ? chip("pkgs", PK_IC, t.ptPkgChip) : "")
+      + PT.CAT_LIST.filter(c => PT.SERVICES.some(x => x.cat === c.id)).map(c => chip(c.id, PT.ICONS[c.icon] || PT.ICONS.spine, c.name[current] || c.name.en)).join("");
+    const hit = x => !physio.q || norm([x.code, x.name.en, x.name.ar, (x.desc || {}).en, (x.desc || {}).ar].join(" ")).includes(norm(physio.q));
+    const noRx = $("ptNoRx").checked, single = $("ptSingle").checked;
+    const svcs = physio.cat === "pkgs" ? [] : PT.SERVICES.map(x => PT.item(x.code)).filter(x => (physio.cat === "all" || x.cat === physio.cat) && (!noRx || !x.rx) && (!single || x.sessions === 1) && hit(x));
+    const pkgs = (physio.cat === "all" || physio.cat === "pkgs") && !single ? PT.PACKAGES.map(x => PT.item(x.code)).filter(x => (!noRx || !x.rx) && hit(x)) : [];
+    $("ptList").innerHTML = svcs.map(ptRow).join(""); $("ptPkgList").innerHTML = pkgs.map(ptRow).join("");
+    ["ptSvcH", "ptSvcHead", "ptList"].forEach(id => $(id).hidden = !svcs.length);
+    ["ptPkgH", "ptPkgHead", "ptPkgList"].forEach(id => $(id).hidden = !pkgs.length);
+    $("ptEmpty").hidden = svcs.length + pkgs.length > 0;
+    $("ptFilterCount").hidden = !ptFilters(); $("ptFilterCount").textContent = ptFilters();
+    renderPhysioCart();
+  }
+  function physioSummary() {
+    const rows = physio.items.map(x => PT.item(x.id)).filter(Boolean);
+    return { rows, total: rows.reduce((s, r) => s + r.price, 0), rx: rows.filter(r => r.rx) };
+  }
+  function renderPhysioCart() {
+    const t = i18n[current], s = physioSummary(), n = s.rows.length;
+    $("ptCartTitle").textContent = tx("cartTitle", { n });
+    $("ptBadge").textContent = n;
+    $("ptClear").hidden = !n;
+    $("ptCartList").innerHTML = n ? s.rows.map((r, i) => `<div class="cart-item"><div><h4><button type="button" data-pt-info="${r.code}">${esc(r.name[current])}</button></h4><div class="sub">${esc(t.codeLbl)}: <span class="code">${r.code}</span></div></div>
+        <button type="button" class="del-btn" data-pt-del="${i}" aria-label="${esc(t.tdRemove + ": " + r.name[current])}">${ICON.trash}</button>
+        <div class="meta"><span class="hrs">${ICON.clock}${esc(r.sessions > 1 ? ptSes(r.sessions) : tx("nsMins", { n: r.mins }))}</span><span class="price">${r.price} ${esc(t.sar)}</span></div></div>`).join("")
+      : `<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/><path d="M3 4h2l2.4 11h10.8L20.5 7H6.2"/></svg>${esc(t.ptCartEmpty)}</div>`;
+    $("ptTotalLabel").textContent = tx("ptTotalLbl", { n });
+    $("ptTotal").textContent = `${s.total} ${t.sar}`;
+    $("ptRxNote").hidden = !s.rx.length;
+    $("ptRxNote").innerHTML = s.rx.length ? ICON.info.replace('class="info"', "") + `<span>${esc(tx("ptRxNote", { x: s.rx.map(r => r.code).join(", ") }))}</span>` : "";
+    if (n) $("ptErr").classList.remove("show");
+  }
+  function togglePhysio(code) {
+    const i = physio.items.findIndex(x => x.id === code);
+    if (i >= 0) physio.items.splice(i, 1);
+    else { physio.items.push({ type: "physio", id: code }); toast(tx("toastAdded", { x: PT.item(code).name[current] })); }
+    renderPhysio();
+  }
+  let ptdCode = null;
+  function openPhysioInfo(code) { ptdCode = code; renderPhysioDialog(); $("ptOverlay").hidden = false; $("ptdAdd").focus(); }
+  function renderPhysioDialog() {
+    if (!ptdCode) return;
+    const t = i18n[current], x = PT.item(ptdCode), b = x.pkg ? PT.byCode[x.svc] : null;
+    $("ptdIcon").innerHTML = PT.iconSvg(x.icon);
+    $("ptdName").textContent = x.name[current];
+    $("ptdSub").innerHTML = `<span class="ns-code">${x.code}</span> · <span>${esc(x.pkg ? tx("ptPkgOf", { s: b ? b.name[current] : "" }) : PT.catName(x.cat, current))}</span>`;
+    $("ptdFacts").innerHTML = [[t.tdPrice, `${x.price} ${t.sar}`], [t.ptdSes, ptSes(x.sessions)], [t.ptdTime, x.mins ? tx("nsMins", { n: x.mins }) : "—"], [t.ptdRx, x.rx ? t.nsRxYes : t.nsRxNo]]
+      .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
+    const src = b || x;
+    $("ptdAbout").textContent = (x.about || {})[current] || (x.desc || {})[current] || (src.about || {})[current] || (src.desc || {})[current] || "";
+    const prep = [(src.prep || {})[current] || t.nsPrepNone];
+    if (x.rx) prep.unshift(t.ptRxPrep);
+    $("ptdPrep").innerHTML = prep.map(p => `<li>${esc(p)}</li>`).join("");
+    $("ptdAdd").textContent = ptIn(x.code) ? t.tdRemove : t.tdAdd;
+  }
+  const closePhysioInfo = () => { $("ptOverlay").hidden = true; ptdCode = null; };
+  $("ptdClose").addEventListener("click", closePhysioInfo);
+  $("ptdCancel").addEventListener("click", closePhysioInfo);
+  $("ptOverlay").addEventListener("click", e => { if (e.target === e.currentTarget) closePhysioInfo(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("ptOverlay").hidden) closePhysioInfo(); });
+  $("ptdAdd").addEventListener("click", () => { const c = ptdCode; closePhysioInfo(); togglePhysio(c); });
+  $("stepPhysio").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.ptAdd) togglePhysio(b.dataset.ptAdd);
+    else if (b.dataset.ptInfo) openPhysioInfo(b.dataset.ptInfo);
+    else if (b.dataset.ptDel != null) { physio.items.splice(+b.dataset.ptDel, 1); renderPhysio(); }
+  });
+  $("ptSearch").addEventListener("input", e => { physio.q = e.target.value.trim(); renderPhysio(); });
+  $("ptCats").addEventListener("click", e => { const b = e.target.closest("[data-pt-cat]"); if (b) { physio.cat = b.dataset.ptCat; renderPhysio(); } });
+  $("ptFilterBtn").addEventListener("click", () => {
+    const open = $("ptFilter").hidden; $("ptFilter").hidden = !open; $("ptFilterBtn").setAttribute("aria-expanded", open);
+  });
+  document.addEventListener("click", e => { if (!e.target.closest("#ptFilter, #ptFilterBtn")) { $("ptFilter").hidden = true; $("ptFilterBtn").setAttribute("aria-expanded", "false"); } });
+  ["ptNoRx", "ptSingle"].forEach(id => $(id).addEventListener("change", renderPhysio));
+  $("ptClear").addEventListener("click", () => { physio.items = []; renderPhysio(); });
+  $("ptCartJump").addEventListener("click", () => $("ptCart").scrollIntoView({ behavior: "smooth", block: "start" }));
+  $("ptDocReq").addEventListener("click", openDocDialog);
+  $("ptBack").addEventListener("click", () => goStep(2));
+  $("ptNext").addEventListener("click", () => {
+    if (!physio.items.length) { $("ptErr").classList.add("show"); return; }
+    state.doctorFlow = null;
+    try { sessionStorage.setItem("mada-request-draft", JSON.stringify(draft({ service: state.service, physioOrder: physioOrder() }))); } catch (e) {}
+    goStep(3);
+  });
+  function physioOrder() {
+    const s = physioSummary();
+    return { services: s.rows.map(r => r.code), totalSar: s.total, referralNeeded: s.rx.map(r => r.code) };
+  }
+  function showPhysio() {
+    goStep(2);
+    $("step2").hidden = true; $("stepPhysio").hidden = false;
+    renderPhysio();
+  }
+  // The items in the cart of the page the agent is on (lab tests, nursing, physiotherapy or IV).
+  const serviceItems = () => state.service === "nursing" ? nurse.items : state.service === "physio" ? physio.items : state.service === "iv" ? iv.items : lab.items;
 
   // Step 2d: IV fluids & vitamin therapy packages (shown when the IV service is chosen)
   const IVD = MadaIV;
@@ -2890,7 +3127,7 @@
   }
 
 
-  const goService = () => state.service === "blood" ? showLab() : state.service === "nursing" ? showNurse() : state.service === "iv" ? showIV() : goStep(2);
+  const goService = () => state.service === "blood" ? showLab() : state.service === "nursing" ? showNurse() : state.service === "physio" ? showPhysio() : state.service === "iv" ? showIV() : goStep(2);
 
   // Step 3: schedule & nurse (slots come from nurse availability only)
   const s3 = { month: null, date: null, minute: null, nurseId: null, earliest: null };
@@ -2921,6 +3158,7 @@
     return N.earliest();
   }
   function initStep3() {
+    N.use(state.service === "physio" ? "physio" : "nurse");
     s3.earliest = earliestFor();
     if (!s3.date && s3.earliest) selectSlot(s3.earliest.date, s3.earliest.minute);
     else if (!s3.date) { s3.date = N.ymd(new Date()); }
@@ -2937,6 +3175,8 @@
   }
 
   function renderStep3() {
+    // Physiotherapy visits are booked with a physiotherapist: the step's labels say so.
+    { const pt = state.service === "physio"; ["s3", "step3Title", "step3Sub", "earliestTitle"].forEach(k => document.querySelectorAll(`[data-i18n="${k}"]`).forEach(el => el.textContent = i18n[current][pt ? k + "_pt" : k])); }
     if ($("step3").hidden) return;
     const t = i18n[current];
     // Service summary
@@ -2951,8 +3191,8 @@
       $("sumFeatures").innerHTML = ls.rows.map(r => `<li>${tick}<span style="flex:1">${esc(r.name[current])}</span><span class="price">${r.price} ${esc(t.sar)}</span></li>`).join("")
         + `<li style="font-weight:600"><span style="flex:1">${esc(t.s3LabTotal)}</span><span class="price" style="color:var(--primary)">${ls.total} ${esc(t.sar)}</span></li>`;
     }
-    const nsOn = (state.service === "nursing" && nurse.items.length) || (state.service === "iv" && iv.items.length);
-    const ns = nsOn ? (state.service === "iv" ? ivSummary() : nurseSummary()) : null;
+    const nsOn = (state.service === "nursing" && nurse.items.length) || (state.service === "physio" && physio.items.length) || (state.service === "iv" && iv.items.length);
+    const ns = nsOn ? (state.service === "iv" ? ivSummary() : state.service === "physio" ? physioSummary() : nurseSummary()) : null;
     if (nsOn) {
       $("sumFeatures").innerHTML = ns.rows.map(r => `<li>${tick}<span style="flex:1">${esc(r.name[current])}</span><span class="price">${r.price} ${esc(t.sar)}</span></li>`).join("")
         + `<li style="font-weight:600"><span style="flex:1">${esc(t.s3LabTotal)}</span><span class="price" style="color:var(--primary)">${ns.total} ${esc(t.sar)}</span></li>`;
@@ -2964,7 +3204,7 @@
     $("s3Fast").innerHTML = fnote ? ICON.warn + `<span>${esc(fnote)}</span>` : "";
     if (nsOn && ns.rx.length) {
       $("s3Fast").hidden = false; $("s3Fast").className = "rx-note";
-      $("s3Fast").innerHTML = ICON.info.replace('class="info"', "") + `<span>${esc(tx(state.service === "iv" ? "ivRxNote" : "nsRxNote", { x: ns.rx.map(r => r.code).join(", ") }))}</span>`;
+      $("s3Fast").innerHTML = ICON.info.replace('class="info"', "") + `<span>${esc(tx(state.service === "iv" ? "ivRxNote" : state.service === "physio" ? "ptRxNote" : "nsRxNote", { x: ns.rx.map(r => r.code).join(", ") }))}</span>`;
     }
     // Earliest
     const e = s3.earliest;
@@ -3011,13 +3251,14 @@
     if (s3.minute == null) { $("appt").innerHTML = `<div class="appt-row"><dd style="font-weight:500;color:var(--muted)">${esc(t.noSlot)}</dd></div>`; return; }
     const slot = N.slotsFor(s3.date).find(x => x.minute === s3.minute);
     const nurses = slot ? slot.nurses : [];
+    const provLbl = state.service === "physio" ? t.apptPhysio : t.apptNurse;
     const nurseCell = nurses.length > 1
-      ? `<select id="nurseSel" aria-label="${esc(t.apptNurse)}">${nurses.map(n => `<option value="${n.id}" ${n.id === s3.nurseId ? "selected" : ""}>${esc(n.name[current])}</option>`).join("")}</select>`
+      ? `<select id="nurseSel" aria-label="${esc(provLbl)}">${nurses.map(n => `<option value="${n.id}" ${n.id === s3.nurseId ? "selected" : ""}>${esc(n.name[current])}</option>`).join("")}</select>`
       : esc(nurses[0] ? nurses[0].name[current] : "");
     $("appt").innerHTML = `
       <div class="appt-row"><dt>${esc(t.apptDate)}</dt><dd>${esc(fmtLong(s3.date))}</dd></div>
       <div class="appt-row"><dt>${esc(t.apptTime)}</dt><dd>${esc(fmtTime(s3.minute))}</dd></div>
-      <div class="appt-row"><dt>${esc(t.apptNurse)}</dt><dd>${nurseCell}</dd></div>`;
+      <div class="appt-row"><dt>${esc(provLbl)}</dt><dd>${nurseCell}</dd></div>`;
     const sel = $("nurseSel"); if (sel) sel.addEventListener("change", () => s3.nurseId = sel.value);
   }
 
@@ -3224,6 +3465,7 @@
   function orderItems() {
     if (state.service === "blood") return { items: lab.items.map(x => ({ kind: x.type === "pkg" ? "pkg" : "test", code: x.id })), total: lab.items.length ? labSummary().total : null };
     if (state.service === "nursing") return { items: nurse.items.map(x => ({ kind: "nursing", code: x.id })), total: nurse.items.length ? nurseSummary().total : null };
+    if (state.service === "physio") return { items: physio.items.map(x => ({ kind: "physio", code: x.id })), total: physio.items.length ? physioSummary().total : null };
     if (state.service === "iv") return { items: iv.items.map(x => ({ kind: "iv", code: x.id })), total: iv.items.length ? ivSummary().total : null };
     return { items: [], total: null };
   }
@@ -3266,7 +3508,7 @@
     };
     if (FILE_MODE) return openFileOnly(patient);
     // TODO: send to backend to create the request, patient file and nurse booking
-    const request = draft({ service: state.service, appointment: state.appt, patient, labOrder: state.service === "blood" ? labOrder() : null, nursingOrder: state.service === "nursing" ? nursingOrder() : null, ivOrder: state.service === "iv" ? ivOrder() : null });
+    const request = draft({ service: state.service, appointment: state.appt, patient, labOrder: state.service === "blood" ? labOrder() : null, nursingOrder: state.service === "nursing" ? nursingOrder() : null, physioOrder: state.service === "physio" ? physioOrder() : null, ivOrder: state.service === "iv" ? ivOrder() : null });
     try { sessionStorage.setItem("mada-request-draft", JSON.stringify(request)); } catch (e) {}
     const existing = state.fileNo && state.fileNo !== "new";
     const mrn = existing ? state.fileNo : newRecordNumber();
@@ -3325,13 +3567,17 @@
       const ns = nurseSummary();
       rows.push([t.sumNursing, `${ns.rows.map(r => r.code).join(", ")} · ${ns.total} ${t.sar}`]);
     }
+    if (state.service === "physio" && physio.items.length && !state.doctorFlow) {
+      const ns = physioSummary();
+      rows.push([t.sumPhysio, `${ns.rows.map(r => r.code).join(", ")} · ${ns.total} ${t.sar}`]);
+    }
     if (state.service === "iv" && iv.items.length && !state.doctorFlow) {
       const ns = ivSummary();
       rows.push([t.sumIV, `${ns.rows.map(r => r.code).join(", ")} · ${ns.total} ${t.sar}`]);
     }
     if (state.appt) {
       rows.push([t.sumVisit, `${fmtLong(state.appt.date)} · ${fmtTime(state.appt.minute)}`]);
-      if (state.appt.nurse) rows.push([t.apptNurse, state.appt.nurse[current]]);
+      if (state.appt.nurse) rows.push([state.service === "physio" ? t.apptPhysio : t.apptNurse, state.appt.nurse[current]]);
     }
     $("successSummary").innerHTML = rows.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
   }
@@ -3389,7 +3635,7 @@
     const primary = f.querySelector(".btn-primary");
     primary ? primary.insertAdjacentHTML("beforebegin", FOOT_HOLD) : f.insertAdjacentHTML("beforeend", FOOT_HOLD);
   });
-  const VIEWS = ["step1", "step2", "stepLab", "stepNurse", "stepIV", "step3", "step4"];
+  const VIEWS = ["step1", "step2", "stepLab", "stepNurse", "stepPhysio", "stepIV", "step3", "step4"];
   const currentView = () => VIEWS.find(v => !$(v).hidden);
   function snapshot() {
     const fields = {};
@@ -3401,7 +3647,7 @@
     const dec = document.querySelector("input[name=decision]:checked"), rsn = document.querySelector("input[name=reason]:checked");
     return {
       view: currentView(), mobile: $("mobile").value, fileNo: state.fileNo, source: state.source, otherSource: $("otherSource").value, cond: state.cond,
-      service: state.service, lab: lab.items, nurse: nurse.items, iv: iv.items, doctorFlow: state.doctorFlow || null,
+      service: state.service, lab: lab.items, nurse: nurse.items, physio: physio.items, iv: iv.items, doctorFlow: state.doctorFlow || null,
       s3: { date: s3.date, minute: s3.minute, nurseId: s3.nurseId, decision: dec ? dec.value : null, reason: rsn ? rsn.value : null, reasonOther: $("reasonOther").value },
       appt: state.appt || null, rel: state.rel || null, fields: s4Init ? fields : null
     };
@@ -3478,10 +3724,10 @@
     if (sn.cond) document.querySelector(`[data-cond="${sn.cond}"]`).click();
     if (sn.view === "step1" || !sn.view) return;
     if (sn.service) document.querySelector(`.service[data-service="${sn.service}"]`).click();
-    lab.items = sn.lab || []; nurse.items = sn.nurse || []; iv.items = sn.iv || [];
+    lab.items = sn.lab || []; nurse.items = sn.nurse || []; physio.items = sn.physio || []; iv.items = sn.iv || [];
     state.doctorFlow = sn.doctorFlow || null;
     if (sn.view === "step2") return goStep(2);
-    if (["stepLab", "stepNurse", "stepIV"].includes(sn.view)) return goService();
+    if (["stepLab", "stepNurse", "stepPhysio", "stepIV"].includes(sn.view)) return goService();
     // A slot in the past is dropped; step 3 then offers the earliest one again.
     if (sn.s3 && sn.s3.date && sn.s3.date >= MadaNurses.ymd(new Date())) {
       s3.date = sn.s3.date; s3.minute = sn.s3.minute; s3.nurseId = sn.s3.nurseId;

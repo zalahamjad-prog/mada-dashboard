@@ -21,7 +21,7 @@ const MadaSchedule = (() => {
   function people() {
     const staff = MadaStaff.all();
     const out = MadaOrders.DOCTORS.map(d => ({ id: d.id, role: "doctor", name: d.name, spec: d.spec, staff: !!d.staff, active: d.active !== false }));
-    MadaNurses.NURSES.forEach(n => out.push({ id: n.id, role: "nurse", name: n.name, spec: null, staff: false, active: true }));
+    MadaNurses.NURSES.forEach(n => out.push({ id: n.id, role: n.role || "nurse", name: n.name, spec: null, staff: false, active: true }));
     staff.filter(s => s.role === "nurse" && !out.some(p => p.id === s.id)).forEach(s => out.push({ id: s.id, role: "nurse", name: s.name, spec: s.specialty ? { en: s.specialty, ar: s.specialty } : null, staff: true, active: s.status === "active" }));
     return out;
   }

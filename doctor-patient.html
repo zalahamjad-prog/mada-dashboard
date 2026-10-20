@@ -141,6 +141,7 @@
 
 <script src="auth.js"></script>
 <script src="orders.js"></script>
+<script src="visit-void.js"></script>
 <script src="patients.js"></script>
 <script src="labs.js"></script>
 <script src="medical.js"></script>
@@ -211,7 +212,7 @@
       famNone: "No other people are registered on this mobile number.", openFile: "Open file",
       medReport: "Medical Report", pvT: "Previous Visits", pvS: "Visit history for this patient.", bk: "Booking No.", ord: "Order No.", vdate: "Visit Date", status: "Status", viewVisit: "View Visit Details", curVisit: "This visit",
       pvNone: "No visits yet on this file.", st_done: "Completed", st_on: "In progress", st_booked: "Scheduled", st_off: "Cancelled", st_open: "Open",
-      sv_doctor: "Doctor Visit", sv_nursing: "Nursing", sv_blood: "Lab Tests", sv_iv: "IV Therapy",
+      sv_doctor: "Doctor Visit", sv_nursing: "Nursing", sv_blood: "Lab Tests", sv_iv: "IV Therapy", sv_physio: "Physiotherapy",
       mfT: "Medical File", mfS: "Information kept on the patient's file for every visit.",
       t_emergency: "Emergency Information", t_meds: "Medications", t_labs: "Laboratory Results", t_reports: "External Medical Reports", t_lifestyle: "Lifestyle",
       save: "Save Changes", cancel: "Cancel", saved: "Saved.", updated: "Last updated {d} by {n}", storeErr: "Couldn't save. The browser storage is full.", fixErr: "Check the highlighted fields.",
@@ -267,7 +268,7 @@
       famNone: "ما فيه أشخاص ثانيين مسجلين على هذا الرقم.", openFile: "فتح الملف",
       medReport: "التقرير الطبي", pvT: "الزيارات السابقة", pvS: "سجل زيارات هذا المريض.", bk: "رقم الحجز", ord: "رقم الطلب", vdate: "تاريخ الزيارة", status: "الحالة", viewVisit: "عرض تفاصيل الزيارة", curVisit: "هذه الزيارة",
       pvNone: "ما فيه زيارات على هذا الملف للحين.", st_done: "مكتملة", st_on: "جارية", st_booked: "مجدولة", st_off: "ملغاة", st_open: "مفتوحة",
-      sv_doctor: "زيارة طبيب", sv_nursing: "تمريض", sv_blood: "تحاليل", sv_iv: "علاج وريدي",
+      sv_doctor: "زيارة طبيب", sv_nursing: "تمريض", sv_blood: "تحاليل", sv_iv: "علاج وريدي", sv_physio: "العلاج الطبيعي",
       mfT: "الملف الطبي", mfS: "معلومات محفوظة في ملف المريض لكل زيارة.",
       t_emergency: "معلومات الطوارئ", t_meds: "الأدوية", t_labs: "نتائج المختبر", t_reports: "التقارير الطبية الخارجية", t_lifestyle: "نمط الحياة",
       save: "حفظ التغييرات", cancel: "إلغاء", saved: "انحفظ.", updated: "آخر تحديث {d} بواسطة {n}", storeErr: "ما قدرنا نحفظ. مساحة المتصفح ممتلئة.", fixErr: "راجع الخانات المحددة.",
@@ -464,7 +465,7 @@
         const [cls, lbl] = stOf(o), mine = o.booking && o.booking.doctorId === me.doctorId && o.doctorVisit && cls === "done";
         return `<div class="pv"><div class="pv-svc"><span class="ic">${svg(svcIc[o.service] || IC.folder)}</span><span><b>${esc(t()["sv_" + o.service] || o.service || "")}</b>${o.id === from ? `<span class="pv-cur">${t().curVisit}</span>` : ""}</span></div>
           <div><small>${t().bk}</small><b class="num">${esc(o.bookingId || "—")}</b></div><div><small>${t().ord}</small><b class="num">${esc(o.id)}</b></div>
-          <div><small>${t().vdate}</small><b>${esc(fmtD(d))}</b><div style="margin-top:6px"><span class="pv-st ${cls}">${lbl}</span></div></div>
+          <div><small>${t().vdate}</small><b>${esc(fmtD(d))}</b><div style="margin-top:6px"><span class="pv-st ${cls}">${lbl}</span>${MadaVoid.tag(o, current)}</div></div>
           <div class="pv-acts">${mine ? `<a class="pb out sm" href="doctor-visit.html?id=${encodeURIComponent(o.id)}&view=1">${svg(IC.eye)}${t().viewVisit}</a><a class="pb out sm" href="doctor-reports.html?id=${encodeURIComponent(o.id)}">${svg(IC.report)}${t().medReport}</a>` : ""}</div></div>`;
       }).join("")}</div>` : empty(t().pvNone)}</div></section>`;
   }

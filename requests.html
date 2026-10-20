@@ -345,6 +345,7 @@
       <select class="field" id="svc">
         <option value="" data-i18n="allServices">All Service Types</option>
         <option value="nursing" data-i18n="sv_nursing">Nursing Services</option>
+          <option value="physio" data-i18n="sv_physio">Physiotherapy</option>
         <option value="doctor" data-i18n="sv_doctor">Doctor Visit with Nursing</option>
         <option value="blood" data-i18n="sv_blood">Blood Tests</option>
         <option value="iv" data-i18n="sv_iv">IV Vitamin Therapy</option>
@@ -494,6 +495,7 @@
 <script src="auth.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
 <script src="orders.js"></script>
@@ -508,7 +510,7 @@
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services", newRequest: "New Request",
       title: "Requests", subtitle: "Manage and track all service requests", filters: "Filters",
       search: "Search", searchPh: "Mobile Number – Patient Name – Order ID", serviceType: "Service Type", allServices: "All Service Types",
-      sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_none: "Not chosen",
+      sv_nursing: "Nursing Services", sv_doctor: "Doctor Visit with Nursing", sv_blood: "Blood Tests", sv_iv: "IV Vitamin Therapy", sv_physio: "Physiotherapy", sv_none: "Not chosen",
       dateRange: "Date Range", to: "to", from: "From", toAria: "To", today: "Today", thisWeek: "This Week", thisMonth: "This Month", custom: "Custom",
       medicalStatus: "Medical Status", emergency: "Emergency", nonEmergency: "Non-Emergency",
       customerDecision: "Customer Decision", approved: "Approved", pending: "Pending", notApproved: "Not Approved", rejected: "Rejected",
@@ -547,7 +549,7 @@
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات", newRequest: "طلب جديد",
       title: "الطلبات", subtitle: "إدارة ومتابعة جميع طلبات الخدمات", filters: "التصفية",
       search: "بحث", searchPh: "رقم الجوال – اسم المريض – رقم الطلب", serviceType: "نوع الخدمة", allServices: "جميع الخدمات",
-      sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_none: "لم تُحدد",
+      sv_nursing: "خدمات التمريض", sv_doctor: "زيارة طبيب مع تمريض", sv_blood: "تحاليل الدم", sv_iv: "المحاليل والفيتامينات الوريدية", sv_physio: "العلاج الطبيعي", sv_none: "لم تُحدد",
       dateRange: "الفترة", to: "إلى", from: "من", toAria: "إلى", today: "اليوم", thisWeek: "هذا الأسبوع", thisMonth: "هذا الشهر", custom: "مخصص",
       medicalStatus: "الحالة الطبية", emergency: "طارئة", nonEmergency: "غير طارئة",
       customerDecision: "قرار العميل", approved: "موافق", pending: "بانتظار الرد", notApproved: "غير موافق", rejected: "مرفوض",
@@ -607,6 +609,7 @@
     if (it.kind === "test") { const p = MadaLabs.byCode[it.code]; return p ? { name: p.name, price: p.price } : null; }
     if (it.kind === "nursing") { const p = MadaNursing.byCode[it.code]; return p ? { name: p.name, price: p.price } : null; }
     if (it.kind === "iv") { const p = MadaIV.byCode[it.code]; return p ? { name: p.name, price: p.price } : null; }
+    if (it.kind === "physio") { const p = (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : null); return p ? { name: p.name, price: p.price } : null; }
     return null;
   }
   const dateOf = iso => { const d = new Date(iso); return new Date(d.getFullYear(), d.getMonth(), d.getDate()); };

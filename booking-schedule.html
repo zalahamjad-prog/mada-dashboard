@@ -487,6 +487,7 @@
 <script src="auth.js"></script>
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
+<script src="physio.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="nurses.js"></script>
 <script src="orders.js"></script>
@@ -507,7 +508,7 @@
       title: "Booking Schedule", subtitle: "Every booking by day, doctor and nurse.", listView: "Bookings List", addBooking: "Add Internal Booking",
       person: "Doctor or nurse", allStaff: "All doctors and nurses", grpDoctors: "Doctors", grpNurses: "Nurses", inactive: "inactive",
       today: "Today", prevW: "Previous week", nextW: "Next week", prevD: "Previous day", nextD: "Next day", mDay: "Day", mWeek: "Week",
-      k_all: "All", k_doctor: "Doctor Visit", k_nursing: "Nursing", k_blood: "Lab Samples", k_iv: "IV Therapy", k_internal: "Internal", k_followup: "Doctor Follow-up", k_care: "Nursing Care Plan", k_none: "Service",
+      k_all: "All", k_doctor: "Doctor Visit", k_nursing: "Nursing", k_blood: "Lab Samples", k_iv: "IV Therapy", k_physio: "Physiotherapy", k_internal: "Internal", k_followup: "Doctor Follow-up", k_care: "Nursing Care Plan", k_none: "Service",
       role_doctor: "Doctor", role_nurse: "Nurse",
       nBk: "{n} bookings", nBk1: "1 booking", nBk0: "No bookings", off: "Off", noSched: "No schedule",
       pcWeek: "This week", pcHours: "Work hours", pcNoSched: "No work schedule set", pcProfile: "Work schedule", hrsW: "{h} h / week", bkOne: "booking", bkMany: "bookings", thSrc: "Source", srcSys: "System", srcInt: "Internal",
@@ -546,7 +547,7 @@
       title: "جدول الحجوزات", subtitle: "كل الحجوزات حسب اليوم والطبيب والممرضة.", listView: "قائمة الحجوزات", addBooking: "إضافة حجز داخلي",
       person: "الطبيب أو الممرضة", allStaff: "كل الأطباء والممرضات", grpDoctors: "الأطباء", grpNurses: "التمريض", inactive: "غير نشط",
       today: "اليوم", prevW: "الأسبوع السابق", nextW: "الأسبوع التالي", prevD: "اليوم السابق", nextD: "اليوم التالي", mDay: "يوم", mWeek: "أسبوع",
-      k_all: "الكل", k_doctor: "زيارة طبيب", k_nursing: "تمريض", k_blood: "سحب عينات", k_iv: "محاليل وريدية", k_internal: "داخلي", k_followup: "متابعة طبيب", k_care: "خطة علاج تمريضية", k_none: "خدمة",
+      k_all: "الكل", k_doctor: "زيارة طبيب", k_nursing: "تمريض", k_blood: "سحب عينات", k_iv: "محاليل وريدية", k_physio: "العلاج الطبيعي", k_internal: "داخلي", k_followup: "متابعة طبيب", k_care: "خطة علاج تمريضية", k_none: "خدمة",
       role_doctor: "طبيب", role_nurse: "ممرضة",
       nBk: "{n} حجوزات", nBk1: "حجز واحد", nBk0: "لا يوجد حجوزات", off: "إجازة", noSched: "بدون جدول",
       pcWeek: "هذا الأسبوع", pcHours: "ساعات الدوام", pcNoSched: "ما فيه جدول دوام", pcProfile: "جدول الدوام", hrsW: "{h} ساعة بالأسبوع", bkOne: "حجز", bkMany: "حجوزات", thSrc: "المصدر", srcSys: "النظام", srcInt: "داخلي",
@@ -630,7 +631,7 @@
   const onDay = (d, list) => (list || all).filter(e => e.date === d && matches(e)).sort((a, b) => a.minute - b.minute || (a.status === "cancelled") - (b.status === "cancelled"));
 
   function itemName(it) {
-    const p = it.kind === "test" ? MadaLabs.byCode[it.code] : it.kind === "pkg" ? MadaLabs.pkgById[it.code] : it.kind === "nursing" ? MadaNursing.byCode[it.code] : it.kind === "iv" ? MadaIV.byCode[it.code] : null;
+    const p = it.kind === "test" ? MadaLabs.byCode[it.code] : it.kind === "pkg" ? MadaLabs.pkgById[it.code] : it.kind === "nursing" ? MadaNursing.byCode[it.code] : it.kind === "iv" ? MadaIV.byCode[it.code] : it.kind === "physio" ? (typeof MadaPhysio !== "undefined" ? MadaPhysio.item(it.code) : null) : null;
     return p ? T(p.name) : it.code;
   }
   function svcSub(e) {
