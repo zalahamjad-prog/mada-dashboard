@@ -352,7 +352,7 @@
   const $ = id => document.getElementById(id), esc = DrPortal.esc;
   // Physiotherapist Portal · My Visits (built from nurse-visits.html). Visits: paid bookings assigned to this physiotherapist
   // (booking.nurseId holds the visit's provider, nurses.js) that are not finished or cancelled.
-  // Progress is order.physioVisit { status: "ontheway" | "arrived" | "ongoing" | "paused" | "done", onWayAt, arrivedAt, startedAt, completedAt };
+  // Progress is order.physioVisit { status: "ongoing" | "paused" | "done", onWayAt, arrivedAt, startedAt, completedAt };
   // on the way and arrival are also written to order.visit.steps and order.arrival, so the dashboard (Bookings) sees them.
   const myId = me && me.physioId;
   const PER = 10;
@@ -471,11 +471,9 @@
     const dt = new Date(at), loc = current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-US";
     return `<b class="num">${esc(dt.toLocaleTimeString(loc, { hour: "2-digit", minute: "2-digit" }))}</b><small>${esc(dt.toLocaleDateString(loc, { day: "numeric", month: "short", year: "numeric" }))}</small>`;
   }
-  // The next step button: On My Way, then I Arrived, then Start / Continue Visit.
+  // The visit button: Start Visit straight away (no On My Way / I Arrived for physio), then Continue / Resume.
   function stepBtn(o) {
     const s = nv(o).status;
-    if (!s) return `<button type="button" class="btn btn-dark" data-step="ontheway" data-id="${esc(o.id)}">${ic("car")}${t().onway}</button>`;
-    if (s === "ontheway") return `<button type="button" class="btn btn-amber" data-step="arrived" data-id="${esc(o.id)}">${ic("check")}${t().arrived}</button>`;
     return `<button type="button" class="btn ${s === "ongoing" ? "btn-go" : "btn-dark"}" data-start="${esc(o.id)}">${ic("play", true)}${s === "ongoing" ? t().cont : s === "paused" ? t().resume : t().start}</button>`;
   }
   function render() {
@@ -519,15 +517,6 @@
       `<button type="button" data-pg="${page + 1}" ${page === pages ? "disabled" : ""} aria-label="${t().next}">${arrow("M9 6l6 6-6 6")}</button>`;
   }
 
-  // On My Way / I Arrived: saved on the visit and shown to the team on the dashboard.
-  function step(id, k) {
-    const o = MadaOrders.get(id), now = new Date().toISOString(), by = me.name, steps = { ...((o.visit || {}).steps || {}) };
-    const patch = { physioVisit: { ...nv(o), status: k, [k === "ontheway" ? "onWayAt" : "arrivedAt"]: now } };
-    steps[k] = now; patch.visit = { ...(o.visit || {}), steps };
-    if (k === "arrived" && !o.arrival) patch.arrival = { at: now, by };
-    try { MadaOrders.update(id, patch); } catch (e) { return toast(e.message); }
-    render(); toast(t()[k === "ontheway" ? "onwayOk" : "arrivedOk"]);
-  }
   // Start Visit: switch away from another ongoing visit first, then the reminders (unless turned off), then start.
   function startFlow(id) {
     const cur = ongoing();
@@ -547,7 +536,9 @@
   function begin() {
     const now = new Date().toISOString(), cur = ongoing(), o = MadaOrders.get(pending);
     if (cur && cur.id !== pending) MadaOrders.update(cur.id, { physioVisit: { ...nv(cur), status: "paused", pausedAt: now } });
-    MadaOrders.update(pending, { physioVisit: { ...nv(o), status: "ongoing", startedAt: nv(o).startedAt || now, resumedAt: nv(o).startedAt ? now : undefined } });
+    const patch = { physioVisit: { ...nv(o), status: "ongoing", startedAt: nv(o).startedAt || now, resumedAt: nv(o).startedAt ? now : undefined } };
+    if (!o.arrival) patch.arrival = { at: now, by: me.name };
+    MadaOrders.update(pending, patch);
     pending = null; render(); toast(tx("startedOk", { n: T(o.patient) }) + " " + t().workNext);
   }
   // TODO: the session screen (physio-visit.html: assessment, treatment, home exercises, consent) is the next step.
@@ -577,10 +568,9 @@
   document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".ov:not([hidden])").forEach(ov => { close(ov.id); pending = null; }); });
 
   $("rows").addEventListener("click", e => {
-    const s = e.target.closest("[data-start]"), st = e.target.closest("[data-step]"), nm = e.target.closest('[aria-disabled="true"]'), bf = e.target.closest("[data-brief]");
+    const s = e.target.closest("[data-start]"), nm = e.target.closest('[aria-disabled="true"]'), bf = e.target.closest("[data-brief]");
     if (bf) openBrief(bf.dataset.brief);
     else if (s) startFlow(s.dataset.start);
-    else if (st) step(st.dataset.id, st.dataset.step);
     else if (nm) toast(t().noMap);
   });
   $("pager").addEventListener("click", e => { const b = e.target.closest("[data-pg]"); if (b && !b.disabled) { page = +b.dataset.pg; render(); } });
