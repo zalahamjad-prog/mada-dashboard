@@ -161,7 +161,7 @@ const PtSteps = (() => {
     }
     if (k === "ptFunc") st = { none: false, acts: {}, ...clone(sv || {}) };
     if (k === "ptGoals") st = { short: { goal: "", measure: "", dur: "", durOther: "" }, long: { goal: "", measure: "", dur: "", durOther: "" }, expect: "", expectOther: "", review: "", reviewOther: "", note: "", ...clone(sv || {}) };
-    if (k === "ptExam") st = { areas: [], areaOther: "", side: "", rom: "", power: "", fn: "", note: "", ...clone(sv || {}) };
+    if (k === "ptExam") st = { areas: [], areaOther: "", side: "", rom: "", power: "", fn: "", note: "", ...clone(sv || (ctx && ctx.prevExam) || {}) }; // a reassessment starts from the last examination
     delete st.at; delete st.by;
     forKey = o.id + k; editing = !sv;
   }
@@ -338,5 +338,10 @@ const PtSteps = (() => {
       reset(); ctx.go(ctx.nextKey);
     });
   }
-  return { view, bind, reset, L, KEYS: Object.keys(HEAD), ICONS: HEAD };
+  // Read-only summaries for the follow-up session overview (physio-follow.js).
+  const sum = (k, sv, lg, c) => { lang = lg; ctx = c; return summary(null, k, sv); };
+  const sumText = (what, sv, lg) => { lang = lg; const J = a => a.filter(Boolean).join(lang === "ar" ? "، " : ", ");
+    if (what === "pain") return painSum(sv);
+    return J((sv.areas || []).map(v => v === "other" ? sv.areaOther : t()["ar_" + v])) + (sv.side && sv.side !== "na" ? ` (${t()["sd_" + sv.side]})` : ""); };
+  return { view, bind, reset, L, KEYS: Object.keys(HEAD), ICONS: HEAD, sum, sumText };
 })();

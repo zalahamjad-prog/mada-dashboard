@@ -57,8 +57,10 @@ const PtHep = (() => {
   function load(o) {
     if (st && forKey === o.id) return;
     const sv = savedOf(o);
-    st = { items: [], days: 7, note: "", none: false, ...clone(sv || {}) };
+    // A follow-up session starts from the program the patient already has (ctx.prevHep); it gets its own new link when saved.
+    st = { items: [], days: 7, note: "", none: false, ...clone(sv || (ctx && ctx.prevHep) || {}) };
     delete st.at; delete st.by;
+    if (!sv) ["token", "sent", "opens", "openedAt", "lastOpenedAt"].forEach(k => delete st[k]);
     const ea = examAreas(o); area = ea[0] || "";
     forKey = o.id; editing = !sv;
   }

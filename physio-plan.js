@@ -42,7 +42,8 @@ const PtPlan = (() => {
       viaWa: "WhatsApp", viaSms: "SMS", copy: "Copy message", openLink: "Open payment page", copied: "Copied.", linkNote: "Once the patient pays, the session shows in My Visits.",
       cancelBk: "Cancel booking", cancelQ: "Cancel this booking? The time will be free again.", cancelled: "The booking was cancelled.", cancelWhy: "Changed by the physiotherapist during the visit",
       needPlan: "Write the treatment plan.", viaQr: "QR code", qrT: "Scan to pay", qrS: "The patient opens the phone camera and scans the code; the payment page opens.", qrSave: "Download QR", qrErr: "Couldn't load the QR code. Try again.", close: "Close",
-      leftMin: "The patient has {n} min to pay; the time is counted down on the payment page.", expired: "The payment time (1 hour) ended before the patient paid.", renew: "Renew link (1 hour)", renewed: "The link is open for another hour.", pkgOnly: "Package", sessionN: "Session"
+      leftMin: "The patient has {n} min to pay; the time is counted down on the payment page.", expired: "The payment time (1 hour) ended before the patient paid.", renew: "Renew link (1 hour)", renewed: "The link is open for another hour.", pkgOnly: "Package", sessionN: "Session",
+      sesNext: "Next session of the package ({n} of {m})", inPkg: "Covered by the package", bookPkg: "Book the next session", bookedPkg: "The next session is booked. It is covered by the package, so there is nothing to pay."
     },
     ar: {
       stepOf: "الخطوة {n} من {m}", prev: "السابق", cont: "حفظ ومتابعة", next: "متابعة", edit: "تعديل", cancel: "إلغاء", savedAt: "انحفظت {t} · {n}", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
@@ -61,7 +62,8 @@ const PtPlan = (() => {
       viaWa: "واتساب", viaSms: "رسالة نصية", copy: "نسخ الرسالة", openLink: "فتح صفحة الدفع", copied: "انسخت.", linkNote: "أول ما يدفع المريض، تطلع الجلسة في زياراتي.",
       cancelBk: "إلغاء الحجز", cancelQ: "تلغي هذا الحجز؟ الوقت يرجع فاضي.", cancelled: "انلغى الحجز.", cancelWhy: "عدّلها الأخصائي أثناء الزيارة",
       needPlan: "اكتب الخطة العلاجية.", viaQr: "رمز QR", qrT: "امسح وادفع", qrS: "يفتح المريض كاميرا الجوال ويمسح الرمز، وتفتح له صفحة الدفع.", qrSave: "تحميل الرمز", qrErr: "ما قدرنا نحمّل رمز QR. حاول مرة ثانية.", close: "إغلاق",
-      leftMin: "باقي للمريض {n} دقيقة للدفع، والعد التنازلي يطلع له في صفحة الدفع.", expired: "انتهت مدة الدفع (ساعة) قبل ما يدفع المريض.", renew: "تجديد الرابط (ساعة)", renewed: "الرابط مفتوح ساعة ثانية.", pkgOnly: "باقة", sessionN: "جلسة"
+      leftMin: "باقي للمريض {n} دقيقة للدفع، والعد التنازلي يطلع له في صفحة الدفع.", expired: "انتهت مدة الدفع (ساعة) قبل ما يدفع المريض.", renew: "تجديد الرابط (ساعة)", renewed: "الرابط مفتوح ساعة ثانية.", pkgOnly: "باقة", sessionN: "جلسة",
+      sesNext: "الجلسة الجاية من الباقة ({n} من {m})", inPkg: "ضمن الباقة", bookPkg: "احجز الجلسة الجاية", bookedPkg: "انحجزت الجلسة الجاية. هي ضمن الباقة، فما فيه شي يندفع."
     }
   };
   let ctx = null, lang = "en", st = null, forKey = null, editing = false, tried = false;
@@ -74,6 +76,7 @@ const PtPlan = (() => {
   const savedOf = o => (dvOf(o).steps || {}).ptPlan;
   const clone = x => JSON.parse(JSON.stringify(x));
   const money = n => `${Math.round(Number(n || 0) * 100) / 100} ${t().sar}`;
+  const SES = "__pkgNext";
   const pkgs = () => typeof MadaPhysio === "undefined" ? [] : (MadaPhysio.PACKAGES || []).filter(p => p.active !== false);
   const pkgOf = code => typeof MadaPhysio === "undefined" ? null : MadaPhysio.item(code);
   // VAT as on the payment page (MadaOrders.vatRate: the same rule for the same patient).
@@ -84,7 +87,8 @@ const PtPlan = (() => {
   function load(o) {
     if (st && forKey === o.id) return;
     const sv = savedOf(o), dr = dvOf(o).ptPlanDraft;
-    st = { plan: "", imaging: [], next: null, ...clone(dr || sv || {}), open: "", xrReason: "", pick: { code: "", date: "", time: "" } };
+    // A follow-up session starts from the plan already approved (ctx.prevPlan).
+    st = { plan: "", imaging: [], next: null, ...clone(dr || sv || (ctx && ctx.prevPlan ? { plan: ctx.prevPlan } : {})), open: "", xrReason: "", pick: { code: "", date: "", time: "" } };
     delete st.at; delete st.by;
     forKey = o.id; editing = !sv || !!dr;
   }
@@ -99,7 +103,7 @@ const PtPlan = (() => {
   function nextCard() {
     const n = st.next, bo = n && MadaOrders.get(n.orderId), p = n && pkgOf(n.code); if (!bo) return "";
     const paid = bo.payment === "paid", due = MadaVisitBook.due(bo);
-    return `<div class="pp-bk"><div class="pp-bkh">${S(I.check, 2.6)}<b>${t().booked}</b><span class="pp-ps ${paid ? "ok" : ""}">${paid ? t().paid : t().unpaid}</span></div>
+    return `<div class="pp-bk"><div class="pp-bkh">${S(I.check, 2.6)}<b>${t().booked}</b><span class="pp-ps ${paid ? "ok" : ""}">${paid ? (bo.pkgSession ? t().inPkg : t().paid) : t().unpaid}</span></div>
       <dl class="pp-kv"><div><dt>${t().pkgOnly}</dt><dd>${E(p ? nameOf(p.name) : n.code)} <code>${E(n.code)}</code></dd></div><div><dt>${t().bookingNo}</dt><dd class="num">${E(bo.bookingId || "—")}</dd></div>
         <div><dt>${t().when}</dt><dd>${E(fmtDay(n.date, { weekday: "long", day: "numeric", month: "short" }))} · ${E(fmtTime(n.time))}</dd></div><div><dt>${t().amount}</dt><dd class="num">${money(due)}</dd></div></dl>
       ${paid ? "" : expired(bo) ? `<div class="pp-exp">${S(I.info)}<span>${t().expired}</span><button type="button" class="hx-btn dark" data-pp="renew">${S(I.send)}${t().renew}</button></div>${editing ? `<button type="button" class="pp-cx" data-pp="cancel">${S(I.x, 2.2)}${t().cancelBk}</button>` : ""}` : `<p class="pp-left">${S(I.clock, 2)}<span>${E(leftTxt(bo))}</span></p><div class="pp-share"><button type="button" class="hx-btn pp-wa" data-pp="wa">${S(I.wa)}${t().viaWa}</button><button type="button" class="hx-btn out" data-pp="sms">${S(I.sms)}${t().viaSms}</button>
@@ -108,10 +112,14 @@ const PtPlan = (() => {
         ${editing ? `<button type="button" class="pp-cx" data-pp="cancel">${S(I.x, 2.2)}${t().cancelBk}</button>` : ""}`}</div>`;
   }
   function ptWizard(o) {
-    const list = pkgs(), pk = st.pick, sel = pk.code && pkgOf(pk.code), D = sel ? days() : [], day = D.find(x => x.ds === pk.date);
+    // The next session of the package the patient already paid for (ctx.pkgNext): no payment, booked straight away.
+    const pn = ctx.pkgNext, cur = pn && pkgOf(pn.code), ses = pk => pk.code === SES && cur ? { ...cur, code: cur.code, price: 0, ses: true } : null;
+    const list = pkgs(), pk = st.pick, sel = pk.code && (ses(pk) || pkgOf(pk.code)), D = sel ? days() : [], day = D.find(x => x.ds === pk.date);
     const price = sel ? Number(sel.price || 0) : 0, rate = vatRateOf(o), vat = Math.round(price * rate * 100) / 100;
     return `<div class="pp-wz">
       <h4>${S(I.pkg, 2)}${t().s1}</h4>
+      ${cur ? `<div class="pp-pkgs" style="margin-bottom:8px"><button type="button" class="pp-pkg ${pk.code === SES ? "on" : ""}" data-pkg="${SES}" aria-pressed="${pk.code === SES}"><span class="pp-rd">${pk.code === SES ? S(I.check, 3) : ""}</span>
+          <span class="pp-pt"><b>${E(tx("sesNext", { n: pn.n + 1, m: pn.m }))}</b><small>${E(nameOf(cur.name))} · <code>${E(cur.code)}</code> · ${t().inPkg}</small></span><b class="pp-pr num">${money(0)}</b></button></div>` : ""}
       ${list.length ? `<div class="pp-pkgs">${list.map(p => { const on = pk.code === p.code, per = p.sessions ? Math.round(p.price / p.sessions) : p.price;
         return `<button type="button" class="pp-pkg ${on ? "on" : ""}" data-pkg="${E(p.code)}" aria-pressed="${on}"><span class="pp-rd">${on ? S(I.check, 3) : ""}</span>
           <span class="pp-pt"><b>${E(nameOf(p.name))}</b><small><code>${E(p.code)}</code> · ${E(tx("sessions", { n: p.sessions }))} · ${E(tx("perS", { n: per }))}</small></span><b class="pp-pr num">${money(p.price)}</b></button>`; }).join("")}</div>`
@@ -122,10 +130,10 @@ const PtPlan = (() => {
           ${day ? (day.slots.some(s => s.state === "free") ? `<div class="pp-times">${day.slots.filter(s => s.state !== "past").map(s => `<button type="button" class="pp-time ${pk.time === s.time ? "on" : ""}" data-time="${s.time}" ${s.state === "free" ? "" : "disabled"}>${E(fmtTime(s.time))}</button>`).join("")}</div>` : `<p class="pp-mt">${t().noSlots}</p>`) : ""}`
           : `<p class="pp-mt">${t().noDays}</p>`}
         <h4>${S(I.cart, 2)}${t().s3}</h4>
-        <div class="pp-cart"><div class="pp-line"><span><b>${E(nameOf(sel.name))}</b><small><code>${E(sel.code)}</code> · ${E(tx("sessions", { n: sel.sessions }))}${pk.date && pk.time ? ` · ${E(fmtDay(pk.date, { weekday: "short", day: "numeric", month: "short" }))} ${E(fmtTime(pk.time))}` : ""}</small></span><b class="num">${money(price)}</b></div>
+        <div class="pp-cart"><div class="pp-line"><span><b>${E(nameOf(sel.name))}</b><small><code>${E(sel.code)}</code> · ${E(sel.ses ? tx("sesNext", { n: pn.n + 1, m: pn.m }) : tx("sessions", { n: sel.sessions }))}${pk.date && pk.time ? ` · ${E(fmtDay(pk.date, { weekday: "short", day: "numeric", month: "short" }))} ${E(fmtTime(pk.time))}` : ""}</small></span><b class="num">${money(price)}</b></div>
           <div class="pp-sum"><span>${t().subtotal}</span><span class="num">${money(price)}</span></div>${rate ? `<div class="pp-sum"><span>${tx("vat", { n: Math.round(rate * 100) })}</span><span class="num">${money(vat)}</span></div>` : ""}
           <div class="pp-sum tot"><span>${t().total}</span><b class="num">${money(price + vat)}</b></div>
-          <button type="button" class="hx-btn dark pp-go" id="ppBook" ${pk.date && pk.time ? "" : "disabled"}>${S(I.send)}${t().book}</button></div>` : ""}
+          <button type="button" class="hx-btn dark pp-go" id="ppBook" ${pk.date && pk.time ? "" : "disabled"}>${S(I.send)}${sel.ses ? t().bookPkg : t().book}</button></div>` : ""}
     </div>`;
   }
   function form(o) {
@@ -169,8 +177,18 @@ const PtPlan = (() => {
   }
   // Physiotherapy plan: one booking for the chosen package, on the chosen time, assigned to this physiotherapist, with its payment link.
   function bookNext(o) {
-    const pk = st.pick, p = pkgOf(pk.code); if (!p) return ctx.toast(t().pickPkg); if (!pk.date || !pk.time) return ctx.toast(t().pickTime);
+    const pk = st.pick, pn = ctx.pkgNext, inPkg = pk.code === SES && pn, p = pkgOf(inPkg ? pn.code : pk.code); if (!p) return ctx.toast(t().pickPkg); if (!pk.date || !pk.time) return ctx.toast(t().pickTime);
     const src = MadaOrders.get(o.id) || o, me = ctx.me, [h, m] = pk.time.split(":").map(Number), now = new Date().toISOString();
+    if (inPkg) {
+      // Already paid with the package: a booking with nothing to pay, linked to the package (order.pkgSession).
+      const bo = MadaOrders.book({ service: "physio", mrn: src.mrn, patient: src.patient, mobile: src.mobile, location: src.location, address: src.address,
+        items: [{ kind: "physio", code: p.code }], total: 0, appointment: { date: pk.date, minute: h * 60 + (m || 0), nurse: me.name }, payment: "paid", paidInfo: { method: "package", amount: 0, at: now, by: me.name },
+        booking: { nurseId: me.physioId, doctorId: null, noDoctor: true, by: me.name, at: now }, staff: me.name, fromPt: { visitId: src.id, by: me.name, at: now },
+        pkgSession: { orderId: pn.orderId, code: p.code, n: pn.n + 1, m: pn.m } });
+      st.next = { orderId: bo.id, bookingId: bo.bookingId, code: p.code, date: pk.date, time: pk.time, total: 0, pkgSes: pn.n + 1 };
+      st.pick = { code: "", date: "", time: "" }; st.open = ""; keep();
+      ctx.toast(t().bookedPkg); return ctx.rerender();
+    }
     let bo = MadaOrders.book({ service: "physio", mrn: src.mrn, patient: src.patient, mobile: src.mobile, location: src.location, address: src.address,
       items: [{ kind: "physio", code: p.code }], total: Number(p.price || 0), appointment: { date: pk.date, minute: h * 60 + (m || 0), nurse: me.name },
       payment: "unpaid", booking: { nurseId: me.physioId, doctorId: null, noDoctor: true, by: me.name, at: now }, staff: me.name, fromPt: { visitId: src.id, by: me.name, at: now } });
