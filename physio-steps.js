@@ -6,12 +6,16 @@
 //                                        red: "none" | "yes", redNote, redAction: "continue" | "referred" | "stopped", level, work, daily }
 //                                        Starts from the last physio visit of the same patient file, so nothing is asked twice.
 //   ptFunc    (Functional Limitations): { none, acts: { walk: { lvl, ex }, .. } }, lvl: "mild" | "moderate" | "help" | "unable"
+//   ptExam    (Objective Examination):  { areas: ["neck" | "shoulder" | "back" | "knee" | "hip" | "other"], areaOther, side: "r" | "l" | "b" | "na",
+//                                        rom: "normal" | "limited" | "painful" | "nt", power: "normal" | "weak" | "nt",
+//                                        fn: "normal" | "mild" | "moderate" | "severe" | "nt", note }. The area is picked on a body figure or the chips.
 // Everything is tap-first: chips and 0–10 buttons, with a free-text box only where "Other" is picked.
 const PtSteps = (() => {
   const I = {
     pain: '<path d="M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M9 10h.01M15 10h.01M9 16c1.5-1.3 4.5-1.3 6 0"/>',
     hist: '<path d="M12 8v4l3 2"/><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4"/>',
     func: '<circle cx="13" cy="4" r="2"/><path d="m9 20 3-6 3 3v4M6 12l3-4 4 1 3 3M12 14l-2-3"/>',
+    exam: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M8 9.5h8M12 14l-3 7M12 14l3 7"/>',
     check: '<path d="m5 12 5 5 9-10"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
     plus: '<path d="M12 5v14M5 12h14"/>', back: '<path d="M19 12H5M11 6l-6 6 6 6"/>', arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>', warn: '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/>'
@@ -46,6 +50,13 @@ const PtSteps = (() => {
       work: "Work", workPh: "Job or daily work", daily: "Daily needs", dailyPh: "What the patient needs to do every day",
       needChronic: "Choose the chronic conditions, or None.", needMeds: "Add the current medicines, or choose No current medicines.", needMedsOk: "Confirm you reviewed the medicine list.",
       needAllergy: "Choose the allergy status.", needAlRows: "Write each allergy's substance.", needRed: "Choose the red-flag result.", needRedNote: "Write what was found and choose the action.", needSurg: "Write the type of each surgery or injury.",
+      ptExam: "Objective Examination", ptExamS: "Pick the affected area on the body or the list, then the examination results.",
+      area: "Affected area", areaS: "Tap the body or the list. More than one is allowed.", ar_neck: "Neck", ar_shoulder: "Shoulder", ar_back: "Back", ar_knee: "Knee", ar_hip: "Hip",
+      side: "Side", results: "Examination results", rom: "Range of motion (ROM)", rom_normal: "Normal", rom_limited: "Limited", rom_painful: "Painful", rom_nt: "Not tested",
+      power: "Muscle strength", pw_normal: "Normal", pw_weak: "Weakness", pw_nt: "Not tested",
+      fnEx: "Functional ability and movement", fx_normal: "Normal", fx_mild: "Mild difficulty", fx_moderate: "Moderate difficulty", fx_severe: "Severe difficulty", fx_nt: "Not assessed",
+      note: "Physiotherapist notes", notePh: "Findings, tests done, anything to follow up",
+      needArea: "Choose the affected area.", needSide: "Choose the side.", needRom: "Choose the range of motion result.", needPower: "Choose the muscle strength result.", needFnEx: "Choose the functional ability result.",
       ptFunc: "Functional Limitations", ptFuncS: "Tap each affected activity, then how hard it is.",
       fnQ: "Which activities are affected?", fnNone: "No functional limitations",
       a_walk: "Walking", a_stairs: "Climbing stairs", a_sit: "Sitting", a_stand: "Standing", a_sleep: "Sleeping", a_dress: "Bathing and dressing",
@@ -71,7 +82,7 @@ const PtSteps = (() => {
       fromLast: "تعبّت من آخر زيارة علاج طبيعي بتاريخ {d}. راجعها مع المريض وحدّث اللي تغيّر.",
       chronic: "الأمراض المزمنة", c_dm: "السكري", c_htn: "ارتفاع ضغط الدم", c_heart: "أمراض القلب", c_lung: "الربو أو أمراض الرئة", c_osteo: "هشاشة العظام",
       c_arth: "التهاب المفاصل", c_stroke: "جلطة دماغية", c_kidney: "أمراض الكلى", c_thyroid: "أمراض الغدة الدرقية", chronicNotePh: "تفاصيل عند الحاجة",
-      surg: "العمليات والإصابات السابقة", surgType: "النوع", surgTypePh: "مثال: تغيير مفصل الركبة", surgDate: "التاريخ", surgSide: "الجهة", sd_r: "يمين", sd_l: "يسار", sd_b: "الجهتين", sd_na: "لا ينطبق", noSurg: "ما فيه عمليات أو إصابات مضافة.",
+      surg: "العمليات والإصابات السابقة", surgType: "النوع", surgTypePh: "مثال: تغيير مفصل الركبة", surgDate: "التاريخ", surgSide: "الجهة", sd_r: "يمين", sd_l: "يسار", sd_b: "الجهتان", sd_na: "لا ينطبق", noSurg: "ما فيه عمليات أو إصابات مضافة.",
       meds: "الأدوية الحالية", medsNone: "ما يستخدم أدوية حالياً", medPh: "اسم الدواء", medsOk: "راجعت قائمة الأدوية مع المريض",
       allergy: "الحساسية", alNone: "ما عنده حساسية معروفة", al_none: "ما عنده حساسية معروفة", al_yes: "عنده حساسية", alSub: "المادة", alReact: "رد الفعل",
       reports: "التقارير والفحوصات السابقة", reportsPh: "التقرير وتاريخه ومصدره (مثال: رنين الركبة · مارس 2026 · مستشفى الملك فهد)",
@@ -82,6 +93,13 @@ const PtSteps = (() => {
       work: "العمل", workPh: "الوظيفة أو العمل اليومي", daily: "الاحتياجات اليومية", dailyPh: "وش يحتاج المريض يسويه كل يوم",
       needChronic: "اختر الأمراض المزمنة، أو لا يوجد.", needMeds: "أضف الأدوية الحالية، أو اختر ما يستخدم أدوية.", needMedsOk: "أكّد إنك راجعت قائمة الأدوية.",
       needAllergy: "اختر حالة الحساسية.", needAlRows: "اكتب المادة لكل حساسية.", needRed: "اختر نتيجة علامات الخطر.", needRedNote: "اكتب وش لقيت واختر الإجراء.", needSurg: "اكتب نوع كل عملية أو إصابة.",
+      ptExam: "الفحص السريري", ptExamS: "اختر المنطقة المتأثرة من الجسم أو القائمة، بعدها نتائج الفحص.",
+      area: "المنطقة المتأثرة", areaS: "اضغط على الجسم أو القائمة. تقدر تختار أكثر من منطقة.", ar_neck: "الرقبة", ar_shoulder: "الكتف", ar_back: "الظهر", ar_knee: "الركبة", ar_hip: "الورك",
+      side: "الجهة", results: "نتائج الفحص", rom: "مدى الحركة (ROM)", rom_normal: "طبيعي", rom_limited: "محدود", rom_painful: "مؤلم", rom_nt: "لم يُفحص",
+      power: "القوة العضلية", pw_normal: "طبيعية", pw_weak: "يوجد ضعف", pw_nt: "لم تُفحص",
+      fnEx: "القدرة الوظيفية والحركة", fx_normal: "طبيعية", fx_mild: "صعوبة بسيطة", fx_moderate: "صعوبة متوسطة", fx_severe: "صعوبة شديدة", fx_nt: "لم تُقيّم",
+      note: "ملاحظات الأخصائي", notePh: "النتائج، الاختبارات اللي سويتها، وأي شي يحتاج متابعة",
+      needArea: "اختر المنطقة المتأثرة.", needSide: "اختر الجهة.", needRom: "اختر نتيجة مدى الحركة.", needPower: "اختر نتيجة القوة العضلية.", needFnEx: "اختر نتيجة القدرة الوظيفية.",
       ptFunc: "القيود الوظيفية", ptFuncS: "اضغط كل نشاط متأثر، بعدها مستوى الصعوبة.",
       fnQ: "وش الأنشطة اللي تأثرت؟", fnNone: "ما فيه قيود وظيفية",
       a_walk: "المشي", a_stairs: "صعود الدرج", a_sit: "الجلوس", a_stand: "الوقوف", a_sleep: "النوم", a_dress: "الاستحمام وارتداء الملابس",
@@ -93,8 +111,9 @@ const PtSteps = (() => {
   const PERIODS = ["24h", "week", "month", "other"], NATURE = ["ache", "sharp", "burn", "rad"], PATTERN = ["constant", "intermittent", "activity"];
   const WORSE = ["walk", "sit", "stand", "bend", "sleep"], EASE = ["rest", "move", "meds", "pos"];
   const CHRONIC = ["dm", "htn", "heart", "lung", "osteo", "arth", "stroke", "kidney", "thyroid"], SYMPTOMS = ["numb", "ting", "weak", "swell", "stiff", "dizzy", "head"];
+  const AREAS = ["neck", "shoulder", "back", "knee", "hip"], ROM = ["normal", "limited", "painful", "nt"], POWER = ["normal", "weak", "nt"], FN = ["normal", "mild", "moderate", "severe", "nt"];
   const SIDES = ["r", "l", "b", "na"], ACTS = ["walk", "stairs", "sit", "stand", "sleep", "dress", "work", "lift", "balance", "sport"], LVLS = ["mild", "moderate", "help", "unable"];
-  const HEAD = { ptPain: I.pain, ptHistory: I.hist, ptFunc: I.func };
+  const HEAD = { ptPain: I.pain, ptHistory: I.hist, ptFunc: I.func, ptExam: I.exam };
   let ctx = null, lang = "en", st = null, forKey = null, editing = false, tried = false, fromLast = null;
   const t = () => L[lang];
   const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
@@ -122,6 +141,7 @@ const PtSteps = (() => {
       if (!sv) { st.medsOk = false; st.red = ""; st.redNote = ""; st.redAction = ""; }
     }
     if (k === "ptFunc") st = { none: false, acts: {}, ...clone(sv || {}) };
+    if (k === "ptExam") st = { areas: [], areaOther: "", side: "", rom: "", power: "", fn: "", note: "", ...clone(sv || {}) };
     delete st.at; delete st.by;
     forKey = o.id + k; editing = !sv;
   }
@@ -143,6 +163,7 @@ const PtSteps = (() => {
     if (k === "ptHistory") return !st.chronic.length ? "needChronic" : st.surg.some(r => !r.type.trim()) ? "needSurg" : !st.medsNone && !st.meds.some(r => r.name.trim()) ? "needMeds"
       : !st.medsNone && !st.medsOk ? "needMedsOk" : !st.allergy ? "needAllergy" : st.allergy === "yes" && (!st.allergies.length || st.allergies.some(r => !r.sub.trim())) ? "needAlRows"
       : !st.red ? "needRed" : st.red === "yes" && (!st.redNote.trim() || !st.redAction) ? "needRedNote" : "";
+    if (k === "ptExam") return !st.areas.length ? "needArea" : needOther(st.areas, st.areaOther) ? "needOther" : !st.side ? "needSide" : !st.rom ? "needRom" : !st.power ? "needPower" : !st.fn ? "needFnEx" : "";
     if (k === "ptFunc") { const keys = Object.keys(st.acts); return !st.none && !keys.length ? "needFn" : keys.some(a => !st.acts[a].lvl) ? "needLvl" : ""; }
     return "";
   }
@@ -185,7 +206,24 @@ const PtSteps = (() => {
           <div class="pt-lv">${LVLS.map(l => `<button type="button" class="pt-lvb ${l} ${st.acts[a].lvl === l ? "on" : ""}" data-lvl="${a}" data-v="${l}" aria-pressed="${st.acts[a].lvl === l}">${t()["lvl_" + l]}</button>`).join("")}</div>
           ${inp(`acts.${a}.ex`, st.acts[a].ex, t().exPh)}</div>`).join("")}</div>` : ""}`;
     }
+    if (k === "ptExam") return `<div class="pt-exam"><div class="pt-body">${body(st.areas)}</div><div class="pt-exf">
+        ${fld(t().area, 1, many("areas", st.areas, [...AREAS, "other"], "ar_", b(!st.areas.length)) + (st.areas.includes("other") ? inp("areaOther", st.areaOther, t().otherPh, b(!st.areaOther.trim())) : ""), t().areaS)}
+        ${fld(t().side, 1, one("side", st.side, SIDES, "sd_", b(!st.side)))}</div></div>
+      <h3 class="pt-h3">${t().results}</h3>
+      ${fld(t().rom, 1, one("rom", st.rom, ROM, "rom_", b(!st.rom)))}
+      ${fld(t().power, 1, one("power", st.power, POWER, "pw_", b(!st.power)))}
+      ${fld(t().fnEx, 1, one("fn", st.fn, FN, "fx_", b(!st.fn)))}
+      ${fld(t().note, 0, `<textarea class="hx-in pt-ta" data-in="note" rows="3" maxlength="800" dir="auto" placeholder="${E(t().notePh)}">${E(st.note)}</textarea>`)}`;
     return "";
+  }
+  // A simple front-view body figure: tap a dot to pick that area (same as the chips).
+  const SPOTS = { neck: [[60, 47]], shoulder: [[37, 62], [83, 62]], back: [[60, 100]], hip: [[47, 132], [73, 132]], knee: [[49, 186], [71, 186]] };
+  function body(areas) {
+    const fig = `<g class="pt-fig"><circle cx="60" cy="24" r="14"/><path d="M54 37h12v10H54z"/><path d="M36 54q24-10 48 0l4 66q-28 10-56 0z"/>
+      <path d="M36 56q-10 4-12 18l-6 52 8 2 9-48"/><path d="M84 56q10 4 12 18l6 52-8 2-9-48"/>
+      <path d="M38 122h44l-4 34-4 82h-11l-3-76-3 76H46l-4-82z"/></g>`;
+    return `<svg viewBox="0 0 120 250" role="group" aria-label="${E(t().area)}">${fig}${Object.entries(SPOTS).map(([a, pts]) => pts.map(([x, y]) =>
+      `<g class="pt-hs ${areas.includes(a) ? "on" : ""}" data-many="areas" data-v="${a}" role="button" tabindex="0" aria-pressed="${areas.includes(a)}" aria-label="${E(t()["ar_" + a])}"><circle cx="${x}" cy="${y}" r="9"/><circle class="c" cx="${x}" cy="${y}" r="3.5"/></g>`).join("")).join("")}</svg>`;
   }
   function summary(o, k, sv) {
     const row = (l, v, wide) => v ? `<div class="${wide ? "w" : ""}"><span>${l}</span><b dir="auto">${E(v)}</b></div>` : "";
@@ -199,6 +237,8 @@ const PtSteps = (() => {
       ${row(t().reports, sv.reports)}${row(t().symptoms, lst(sv.symptoms, "s_", sv.symptomsNote))}
       ${row(t().red, sv.red === "yes" ? `${sv.redNote} · ${t()["ra_" + sv.redAction]}` : t().redNone, sv.red === "yes")}
       ${row(t().level, sv.level && t()["lv_" + sv.level])}${row(t().work, sv.work)}${row(t().daily, sv.daily)}</div>`;
+    if (k === "ptExam") return `<div class="np-sum">${row(t().area, lst(sv.areas, "ar_", sv.areaOther))}${row(t().side, t()["sd_" + sv.side])}${row(t().rom, t()["rom_" + sv.rom])}
+      ${row(t().power, t()["pw_" + sv.power])}${row(t().fnEx, t()["fx_" + sv.fn])}${row(t().note, sv.note, 1)}</div>`;
     if (k === "ptFunc") return `<div class="np-sum">${sv.none ? row(t().fnQ, t().fnNone, 1) : ACTS.filter(a => sv.acts && sv.acts[a]).map(a => row(t()["a_" + a], t()["lvl_" + sv.acts[a].lvl] + (sv.acts[a].ex ? " · " + sv.acts[a].ex : ""))).join("")}</div>`;
     return "";
   }
@@ -224,6 +264,7 @@ const PtSteps = (() => {
     ctx = c;
     const $ = s => root.querySelector(s), all = (s, f) => root.querySelectorAll(s).forEach(f), re = () => ctx.rerender();
     all("[data-sc]", b => b.addEventListener("click", () => { const key = b.dataset.sc, v = +b.dataset.v; st[key] = st[key] === v && key !== "now" ? null : v; re(); }));
+    all(".pt-hs", g => g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); g.dispatchEvent(new MouseEvent("click", { bubbles: true })); } }));
     all("[data-one]", b => b.addEventListener("click", () => { st[b.dataset.one] = b.dataset.v; re(); }));
     all("[data-many]", b => b.addEventListener("click", () => {
       const key = b.dataset.many, v = b.dataset.v;
