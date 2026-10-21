@@ -305,5 +305,7 @@ const PtFu = (() => {
       reset(); ctx.go(ctx.nextKey);
     });
   }
-  return { view, bind, reset, info, L, KEYS, ICONS };
+  // Read-only summaries for the physiotherapy report (physio-report.js).
+  const sum = (k, sv, lg, c) => { lang = lg; ctx = c; return summary(null, k, sv); };
+  return { view, bind, reset, info, sum, L, KEYS, ICONS };
 })();
