@@ -539,10 +539,10 @@
     const patch = { physioVisit: { ...nv(o), status: "ongoing", startedAt: nv(o).startedAt || now, resumedAt: nv(o).startedAt ? now : undefined } };
     if (!o.arrival) patch.arrival = { at: now, by: me.name };
     MadaOrders.update(pending, patch);
-    pending = null; render(); toast(tx("startedOk", { n: T(o.patient) }) + " " + t().workNext);
+    const vid = pending; pending = null; try { sessionStorage.setItem("mada-dr-toast", tx("startedOk", { n: T(o.patient) })); } catch (e) {} openVisit(vid, true);
   }
-  // TODO: the session screen (physio-visit.html: assessment, treatment, home exercises, consent) is the next step.
-  function openVisit() { render(); toast(t().workNext); }
+  // The visit screen (physio-visit.html); a visit just started opens with the patient file on top.
+  function openVisit(id, file) { location.href = "physio-visit.html?id=" + encodeURIComponent(id) + (file ? "&file=1" : ""); }
   $("swYes").addEventListener("click", () => { close("swOv"); tipsOrStart(); });
   $("tipGo").addEventListener("click", () => { if ($("tipOff").checked) MadaStore.set(TIP_KEY, "1"); close("tipOv"); begin(); });
   function open(id) { $(id).hidden = false; const f = $(id).querySelector(".btn-dark"); if (f) f.focus(); }
