@@ -1,0 +1,75 @@
+/* Physiotherapy steps of a physio visit (physio-steps.js) */
+.ptx .pt-f { margin-top: 18px; }
+.ptx .pt-f > label { display: block; font-size: 14.5px; font-weight: 600; color: #15304a; margin-bottom: 8px; }
+.ptx .pt-f > label .req { color: #dc2626; }
+.pt-sub { display: block; font-size: 12.5px; color: #6b7a80; margin: -4px 0 8px; line-height: 1.5; }
+.ptx .hx-in.bad { border-color: #dc2626; }
+.ptx .hx-in { margin-top: 8px; }
+.pt-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 22px; }
+/* 0–10 scale: green to red */
+.pt-sc { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 5px; }
+.pt-scb { height: 42px; border-radius: 9px; border: 1px solid #dfe6e8; background: #fff; font: inherit; font-size: 15px; font-weight: 700; color: #44545a; cursor: pointer; padding: 0; }
+.pt-scb:hover { border-color: #9fb3b9; }
+.pt-scb.on { color: #fff; border-color: transparent; transform: scale(1.06); box-shadow: 0 3px 10px rgba(21, 48, 74, .18); }
+.pt-scb.s0.on { background: #0f8f6f; } .pt-scb.s1.on, .pt-scb.s2.on { background: #3fa15a; } .pt-scb.s3.on, .pt-scb.s4.on { background: #9bb83a; }
+.pt-scb.s5.on, .pt-scb.s6.on { background: #e0a21b; } .pt-scb.s7.on, .pt-scb.s8.on { background: #e5701f; } .pt-scb.s9.on, .pt-scb.s10.on { background: #d63a2f; }
+.pt-sc.bad .pt-scb { border-color: #f0b4b4; background: #fff7f7; }
+.pt-scl { display: flex; justify-content: space-between; font-size: 12px; color: #6b7a80; margin-top: 6px; }
+/* Chips */
+.pt-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.pt-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 14px; border-radius: 20px; border: 1px solid #dfe6e8; background: #fff; font: inherit; font-size: 14px; color: #2c3d43; cursor: pointer; }
+.pt-chip svg { width: 15px; height: 15px; }
+.pt-chip.on { background: #ecf8f3; border-color: #7cc4a4; color: #0f6b52; font-weight: 600; }
+.pt-chip.nn { border-style: dashed; }
+.pt-chip.nn.on { border-style: solid; background: #f1f4f6; border-color: #9aa7ab; color: #2c3d43; }
+.pt-chips.bad .pt-chip { border-color: #f0b4b4; background: #fff7f7; }
+.pt-psum { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding: 14px 16px; border-radius: 12px; background: #f1f7fb; color: #15304a; }
+.pt-psum svg { width: 24px; height: 24px; color: #2b6cb0; flex: none; }
+.pt-psum b { display: block; font-size: 13px; color: #5d6d78; font-weight: 600; }
+.pt-psum span { font-size: 15px; font-weight: 700; }
+/* History sections */
+.pt-sec { padding: 16px 0; border-top: 1px solid #eef2f3; }
+.pt-sec:first-of-type { border-top: 0; padding-top: 4px; }
+.pt-sec h3 { margin: 0 0 10px; font-size: 15px; color: #15304a; }
+.pt-sec .pt-f { margin-top: 12px; }
+.pt-last { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; margin-bottom: 12px; border-radius: 12px; background: #eef6ff; color: #23527c; font-size: 13.5px; line-height: 1.55; }
+.pt-last svg { width: 20px; height: 20px; flex: none; }
+.pt-rows { display: grid; gap: 8px; margin-bottom: 8px; }
+.pt-row { display: flex; gap: 8px; align-items: center; }
+.pt-row .hx-in { margin-top: 0; }
+.pt-row .grow { flex: 1; min-width: 0; }
+.pt-mon { width: 160px; flex: none; }
+.pt-side { width: 120px; flex: none; appearance: auto; }
+.pt-del { width: 40px; height: 40px; flex: none; border-radius: 9px; border: 1px solid #f0d2d2; background: #fff; color: #c0392b; cursor: pointer; display: grid; place-items: center; }
+.pt-del svg { width: 16px; height: 16px; }
+.pt-add { display: inline-flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px; border-radius: 9px; border: 1px dashed #7cc4a4; background: #f6fcf9; color: #0f6b52; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+.pt-add svg { width: 15px; height: 15px; }
+.pt-mt { margin: 0; font-size: 13px; color: #8a979c; }
+.pt-ok { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 14px; color: #2c3d43; cursor: pointer; padding: 10px 12px; border-radius: 10px; background: #f5f8f9; }
+.pt-ok input { width: 18px; height: 18px; accent-color: #0f8f6f; }
+.pt-ok.bad { background: #fff7f7; box-shadow: inset 0 0 0 1px #f0b4b4; }
+.pt-ta { height: auto; padding: 12px 14px; resize: vertical; line-height: 1.6; width: 100%; }
+.pt-redbox { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: #fff6f5; border: 1px solid #f5cdc8; }
+.pt-redw { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding: 10px 12px; border-radius: 10px; background: #fff1f0; color: #b42318; font-weight: 600; font-size: 14px; }
+.pt-redw svg { width: 18px; height: 18px; }
+.np-sum > div.w { grid-column: 1 / -1; }
+/* Functional limitations */
+.pt-acts { display: grid; gap: 10px; margin-top: 16px; }
+.pt-act { padding: 14px; border: 1px solid #e3e8ea; border-radius: 12px; }
+.pt-act.bad { border-color: #f0b4b4; background: #fff7f7; }
+.pt-act b { display: block; font-size: 15px; color: #15304a; margin-bottom: 10px; }
+.pt-lv { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.pt-lvb { min-height: 40px; padding: 4px 8px; border-radius: 9px; border: 1px solid #dfe6e8; background: #fff; font: inherit; font-size: 13px; font-weight: 600; color: #44545a; cursor: pointer; }
+.pt-lvb.on.mild { background: #e9f6ee; border-color: #6cc08f; color: #17673b; }
+.pt-lvb.on.moderate { background: #fff4dc; border-color: #f0c36b; color: #8a5a00; }
+.pt-lvb.on.help { background: #ffece0; border-color: #f2a36b; color: #9a4310; }
+.pt-lvb.on.unable { background: #fdecec; border-color: #ec9a9a; color: #a3201b; }
+@media (max-width: 720px) {
+  .pt-two { grid-template-columns: 1fr; }
+  .pt-sc { gap: 3px; }
+  .pt-scb { height: 38px; font-size: 13.5px; border-radius: 7px; }
+  .pt-lv { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pt-row { flex-wrap: wrap; }
+  .pt-row .grow { flex-basis: calc(100% - 48px); }
+  .pt-mon, .pt-side { flex: 1; width: auto; }
+}

@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="doctor-consent.css">
 <link rel="stylesheet" href="doctor-idform.css">
 <link rel="stylesheet" href="nurse-proc.css">
+<link rel="stylesheet" href="physio-steps.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -539,13 +540,14 @@
 <script src="ivtherapy.js"></script>
 <script src="rx-docs.js"></script>
 <script src="nurse-proc.js"></script>
+<script src="physio-steps.js"></script>
 <script src="lab-samples.js"></script>
 <script>
   const me = MadaAuth.requireAuth("physio");
   const $ = id => document.getElementById(id), esc = DrPortal.esc;
   // The physiotherapist's visit workspace (physio-visit.html?id=ORD-...), cloned from the nurse's visit screen (nurse-visit.html).
   // Steps so far: Arrival Confirmation, Identity Confirmation and Patient Consent (signing completes the visit);
-  // the physiotherapy session steps go in FLOW.physio. Saved in order.physioVisit.
+  // the physiotherapy steps (physio-steps.js: Pain, History, Function) go between Arrival and Identity. Saved in order.physioVisit.
   const id = new URLSearchParams(location.search).get("id");
   const ALL_STEPS = [
     { k: "arrival", icon: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>' },
@@ -562,10 +564,11 @@
     { k: "consent", icon: '<path d="M4 20h16"/><path d="M5 16c3-6 5-9 6.5-9S12 12 9 16s4-5 6-5 0 5 2 5 2-2 3-3"/>' },
     { k: "sample", icon: '<path d="M9 3h6M10 3v13a2 2 0 0 0 4 0V3"/><path d="M10 10h4"/>' },
     { k: "care", icon: '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/><path d="M9.5 11h5M12 8.5v5"/>' },
+    ...PtSteps.KEYS.map(k => ({ k, icon: PtSteps.ICONS[k] })),
     { k: "iv", icon: '<path d="M8 3h8v7a4 4 0 0 1-8 0z"/><path d="M8 7h8M12 14v3M12 17c0 2 1 4 4 4"/>' }
   ];
   // The steps for this visit: the base steps, with the service's own steps after Vital Signs.
-  const FLOW = { physio: [] };
+  const FLOW = { physio: PtSteps.KEYS };
   const SERVICE_STEPS = ["sample", "care", "iv"];
   const o0 = MadaOrders.get(id);
   // One visit can carry several services booked together from a doctor's order (order.services, visit-book.js): each brings its own steps.
@@ -638,7 +641,7 @@
       pfNid: "ID / Iqama No.", pfNat: "Nationality", pfCity: "City", pfAl: "Allergies", pfNoAl: "No known allergies", pfAlNr: "Not recorded yet in this visit",
       pfNow: "This Visit", pfDx: "Diagnosis", pfStepsN: "Steps done", pfVit: "Vitals", pfPrev: "Previous Visits", pfNoPrev: "No previous visits on this file",
       sv_doctor: "Doctor Visit", sv_nursing: "Nursing", sv_physio: "Physiotherapy", sv_blood: "Lab Tests", sv_iv: "IV Therapy", sv_physio: "Physiotherapy", st_completed: "Completed", st_cancelled: "Cancelled", st_other: "Open",
-      s_arrival: "Arrival Confirmation", s_history: "Case History", s_vitals: "Vital Signs", s_exam: "Clinical Examination", s_allergy: "Allergy History", s_assess: "Diagnosis", s_plan: "Treatment Plan", s_orders: "Orders & Services", s_nurse: "Nurse Note", s_edu: "Family Education", s_idform: "Identity Confirmation", s_consent: "Patient Consent", s_sample: "Sample Collection", s_care: "Nursing Procedure", s_iv: "IV Therapy", s_physio: "Physiotherapy", allergyT: "Allergy:", draftB: "Draft", missT: "Finish these steps before completing the visit:",
+      s_arrival: "Arrival Confirmation", s_history: "Case History", s_vitals: "Vital Signs", s_exam: "Clinical Examination", s_allergy: "Allergy History", s_assess: "Diagnosis", s_plan: "Treatment Plan", s_orders: "Orders & Services", s_nurse: "Nurse Note", s_edu: "Family Education", s_idform: "Identity Confirmation", s_consent: "Patient Consent", s_sample: "Sample Collection", s_care: "Nursing Procedure", s_iv: "IV Therapy", s_physio: "Physiotherapy", s_ptPain: "Pain Assessment", s_ptHistory: "Medical History", s_ptFunc: "Functional Limitations", allergyT: "Allergy:", draftB: "Draft", missT: "Finish these steps before completing the visit:",
       payBar: "Payment open: {n} still to collect. You can carry on with the visit.", payBarRef: "Refund due: {n} to return to the patient.", payGo: "Collect payment", payView: "Review payment",
       lockedMsg: "Finish the steps before this one first.",
       arrSub: "Verify patient identity and confirm arrival at the correct location.",
@@ -668,7 +671,7 @@
       pfNid: "رقم الهوية / الإقامة", pfNat: "الجنسية", pfCity: "المدينة", pfAl: "الحساسية", pfNoAl: "لا توجد حساسية معروفة", pfAlNr: "ما انسجلت في هذه الزيارة للحين",
       pfNow: "هذه الزيارة", pfDx: "التشخيص", pfStepsN: "الخطوات المكتملة", pfVit: "العلامات الحيوية", pfPrev: "الزيارات السابقة", pfNoPrev: "ما فيه زيارات سابقة على هذا الملف",
       sv_doctor: "زيارة طبيب", sv_nursing: "تمريض", sv_physio: "العلاج الطبيعي", sv_blood: "تحاليل", sv_iv: "علاج وريدي", sv_physio: "العلاج الطبيعي", st_completed: "مكتملة", st_cancelled: "ملغاة", st_other: "مفتوحة",
-      s_arrival: "تأكيد الوصول", s_history: "التاريخ المرضي", s_vitals: "العلامات الحيوية", s_exam: "الفحص السريري", s_allergy: "تاريخ الحساسية", s_assess: "التشخيص", s_plan: "الخطة العلاجية", s_orders: "الطلبات والخدمات", s_nurse: "ملاحظة التمريض", s_edu: "تثقيف الأسرة", s_idform: "تأكيد هوية المريض", s_consent: "موافقة المريض", s_sample: "سحب العينة", s_care: "الإجراء التمريضي", s_iv: "العلاج الوريدي", s_physio: "العلاج الطبيعي", allergyT: "حساسية:", draftB: "مسودة", missT: "كمّل هذه الخطوات قبل إنهاء الزيارة:",
+      s_arrival: "تأكيد الوصول", s_history: "التاريخ المرضي", s_vitals: "العلامات الحيوية", s_exam: "الفحص السريري", s_allergy: "تاريخ الحساسية", s_assess: "التشخيص", s_plan: "الخطة العلاجية", s_orders: "الطلبات والخدمات", s_nurse: "ملاحظة التمريض", s_edu: "تثقيف الأسرة", s_idform: "تأكيد هوية المريض", s_consent: "موافقة المريض", s_sample: "سحب العينة", s_care: "الإجراء التمريضي", s_iv: "العلاج الوريدي", s_physio: "العلاج الطبيعي", s_ptPain: "تقييم الألم", s_ptHistory: "التاريخ المرضي وعوامل الخطورة", s_ptFunc: "القيود الوظيفية", allergyT: "حساسية:", draftB: "مسودة", missT: "كمّل هذه الخطوات قبل إنهاء الزيارة:",
       payBar: "الدفع مفتوح: باقي {n} للتحصيل. تقدر تكمل الزيارة عادي.", payBarRef: "استرجاع مستحق: {n} يرجع للمريض.", payGo: "تحصيل الدفع", payView: "مراجعة الدفع",
       lockedMsg: "خلّص الخطوات اللي قبلها أول.",
       arrSub: "تحقق من هوية المريض وأكد الوصول للموقع الصحيح.",
@@ -926,7 +929,7 @@
     if (!o) { $("vw").innerHTML = `<div class="card missing"><h1 style="font-size:22px;color:#15304a">${t().missingT}</h1><p style="margin:8px 0 18px;color:var(--muted)">${t().missingS}</p><a class="back" href="physio-visits.html">${svg(IC.back, 2)}${t().back}</a></div>`; return; }
     if (!active) active = STEPS[Math.min(doneCount(o), STEPS.length - 1)].k;
     if (!VIEW) markOpen(o, active);
-    const hx = active === "history"; let body = active === "arrival" ? arrivalCard(o) : hx ? DrHistory.view(o, hxCtx) : active === "vitals" ? vitalsCard(o) : active === "exam" ? DrExam.view(o, exCtx) : active === "allergy" ? DrAllergy.view(o, alCtx) : active === "assess" ? DrDiagnosis.view(o, dxCtx) : active === "plan" ? DrPlan.view(o, planCtx) : active === "orders" ? DrOrders.view(o, orCtx) : active === "nurse" ? DrNurse.view(o, nuCtx) : active === "edu" ? DrEdu.view(o, edCtx) : active === "idform" ? DrIdForm.view(o, idCtx) : active === "consent" ? DrConsent.view(o, csCtx) : SERVICE_STEPS.includes(active) ? NrProc.view(o, prCtx(active), active) : soonCard(active);
+    const hx = active === "history"; let body = active === "arrival" ? arrivalCard(o) : hx ? DrHistory.view(o, hxCtx) : active === "vitals" ? vitalsCard(o) : active === "exam" ? DrExam.view(o, exCtx) : active === "allergy" ? DrAllergy.view(o, alCtx) : active === "assess" ? DrDiagnosis.view(o, dxCtx) : active === "plan" ? DrPlan.view(o, planCtx) : active === "orders" ? DrOrders.view(o, orCtx) : active === "nurse" ? DrNurse.view(o, nuCtx) : active === "edu" ? DrEdu.view(o, edCtx) : active === "idform" ? DrIdForm.view(o, idCtx) : active === "consent" ? DrConsent.view(o, csCtx) : SERVICE_STEPS.includes(active) ? NrProc.view(o, prCtx(active), active) : PtSteps.KEYS.includes(active) ? PtSteps.view(o, prCtx(active), active) : soonCard(active);
     body = vdWrap(o, body);
     const backA = `<a class="back" href="physio-visits.html">${svg(IC.back, 2)}${t().back}</a>`;
     $("vw").innerHTML = `${backA}${VIEW ? `<div class="ro-bar">${svg(IC.info, 2)}<span><b>${t().roT}</b> ${t().roS}</span></div>` : ""}${strip(o)}${VIEW ? "" : payBar(o)}${VIEW ? "" : MadaVisitBook.payPanel(o, current)}
@@ -945,6 +948,7 @@
     if (active === "idform") DrIdForm.bind($("stepCard"), o, idCtx);
     if (active === "consent") DrConsent.bind($("stepCard"), o, csCtx);
     if (SERVICE_STEPS.includes(active)) NrProc.bind($("stepCard"), o, prCtx(active), active);
+    if (PtSteps.KEYS.includes(active)) PtSteps.bind($("stepCard"), o, prCtx(active), active);
     // The step modules link back to the doctor's visit list; on this page it is the nurse's.
     $("stepCard").querySelectorAll('a[href^="doctor-visits.html"]').forEach(a => a.setAttribute("href", "physio-visits.html"));
     if (VIEW) applyRo();
@@ -962,7 +966,7 @@
     const i = STEPS.findIndex(x => x.k === k), pad = n => String(n).padStart(2, "0");
     return { get stepOf() { return { n: pad(i + 1), m: pad(STEPS.length) }; }, prevKey: STEPS[Math.max(i - 1, 0)].k, nextKey: STEPS[Math.min(i + 1, STEPS.length - 1)].k };
   };
-  function goStep(k) { active = k; DrHistory.reset(); DrExam.reset(); DrAllergy.reset(); DrDiagnosis.reset(); DrPlan.reset(); DrOrders.reset(); DrNurse.reset(); DrEdu.reset(); DrIdForm.reset(); DrConsent.reset(); NrProc.reset(); editing = false; tried = false; render(); window.scrollTo(0, 0); }
+  function goStep(k) { active = k; DrHistory.reset(); DrExam.reset(); DrAllergy.reset(); DrDiagnosis.reset(); DrPlan.reset(); DrOrders.reset(); DrNurse.reset(); DrEdu.reset(); DrIdForm.reset(); DrConsent.reset(); NrProc.reset(); PtSteps.reset(); editing = false; tried = false; render(); window.scrollTo(0, 0); }
   // What the examination module needs from this page. Saving throws when browser storage is full (photos).
   function putVisit(patch) {
     const o = MadaOrders.get(id), dv = { ...o.doctorVisit, ...patch };
