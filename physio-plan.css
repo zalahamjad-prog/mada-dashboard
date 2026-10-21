@@ -66,3 +66,12 @@
   .pp-reqs li > span:nth-child(2) { flex-basis: calc(100% - 46px); }
   .pp-reqs .pp-ps { margin-inline-start: 46px; }
 }
+.pp-left { display: flex; align-items: center; gap: 8px; margin: 12px 0 0; font-size: 13px; color: #8a5a00; background: #fff8e8; padding: 8px 12px; border-radius: 10px; }
+.pp-left svg { width: 16px; height: 16px; flex: none; }
+.pp-exp { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: #fff1f0; color: #b42318; font-size: 13.5px; }
+.pp-exp svg { width: 18px; height: 18px; flex: none; } .pp-exp span { flex: 1; min-width: 180px; }
+.pp-qr { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; margin-top: 14px; padding: 16px; border-radius: 14px; background: #fff; border: 1px solid #e3e8ea; }
+.pp-qr .or-qrc { width: 240px; }
+.pp-qr > b { font-size: 16px; color: #15304a; } .pp-qr > small { font-size: 13px; color: #6b7a80; max-width: 340px; line-height: 1.6; }
+.pp-qri { font-size: 13.5px; color: #44545a; }
+.pp-qra { display: flex; gap: 8px; }

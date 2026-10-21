@@ -6,7 +6,7 @@
 //     they call a doctor, get the imaging order from them and arrange the imaging.
 //   - Physiotherapy treatment plan: pick one of the packages set on the dashboard (physio.js), the next session from their own free times
 //     (visit-book.js slots: work hours on the staff profile and bookings), see the cart, then book it. The session is a normal booking
-//     (MadaOrders.book, service physio, unpaid) assigned to this physiotherapist, with a payment link (pay.html) to send to the patient,
+//     (MadaOrders.book, service physio, unpaid) assigned to this physiotherapist, with a payment link (pay.html, 1 hour to pay, renewable; WhatsApp, SMS, QR, copy) to send to the patient,
 //     the same as the doctor's orders. Once paid it shows in their My Visits.
 const PtPlan = (() => {
   const I = {
@@ -20,6 +20,8 @@ const PtPlan = (() => {
     pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', back: '<path d="M19 12H5M11 6l-6 6 6 6"/>', arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     wa: '<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.5-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/>',
     sms: '<path d="M4 5h16v11H9l-5 4z"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+    qr: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M14 21h3M21 17v4h-4"/>',
+    dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     open: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>'
   };
   const L = {
@@ -39,7 +41,8 @@ const PtPlan = (() => {
       bookingNo: "Booking No.", when: "Date & time", amount: "Amount", payState: "Payment", paid: "Paid", unpaid: "Waiting for payment",
       viaWa: "WhatsApp", viaSms: "SMS", copy: "Copy message", openLink: "Open payment page", copied: "Copied.", linkNote: "Once the patient pays, the session shows in My Visits.",
       cancelBk: "Cancel booking", cancelQ: "Cancel this booking? The time will be free again.", cancelled: "The booking was cancelled.", cancelWhy: "Changed by the physiotherapist during the visit",
-      needPlan: "Write the treatment plan.", pkgOnly: "Package", sessionN: "Session"
+      needPlan: "Write the treatment plan.", viaQr: "QR code", qrT: "Scan to pay", qrS: "The patient opens the phone camera and scans the code; the payment page opens.", qrSave: "Download QR", qrErr: "Couldn't load the QR code. Try again.", close: "Close",
+      leftMin: "The patient has {n} min to pay; the time is counted down on the payment page.", expired: "The payment time (1 hour) ended before the patient paid.", renew: "Renew link (1 hour)", renewed: "The link is open for another hour.", pkgOnly: "Package", sessionN: "Session"
     },
     ar: {
       stepOf: "الخطوة {n} من {m}", prev: "السابق", cont: "حفظ ومتابعة", next: "متابعة", edit: "تعديل", cancel: "إلغاء", savedAt: "انحفظت {t} · {n}", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. حاول مرة ثانية.",
@@ -57,7 +60,8 @@ const PtPlan = (() => {
       bookingNo: "رقم الحجز", when: "التاريخ والوقت", amount: "المبلغ", payState: "الدفع", paid: "مدفوع", unpaid: "بانتظار الدفع",
       viaWa: "واتساب", viaSms: "رسالة نصية", copy: "نسخ الرسالة", openLink: "فتح صفحة الدفع", copied: "انسخت.", linkNote: "أول ما يدفع المريض، تطلع الجلسة في زياراتي.",
       cancelBk: "إلغاء الحجز", cancelQ: "تلغي هذا الحجز؟ الوقت يرجع فاضي.", cancelled: "انلغى الحجز.", cancelWhy: "عدّلها الأخصائي أثناء الزيارة",
-      needPlan: "اكتب الخطة العلاجية.", pkgOnly: "باقة", sessionN: "جلسة"
+      needPlan: "اكتب الخطة العلاجية.", viaQr: "رمز QR", qrT: "امسح وادفع", qrS: "يفتح المريض كاميرا الجوال ويمسح الرمز، وتفتح له صفحة الدفع.", qrSave: "تحميل الرمز", qrErr: "ما قدرنا نحمّل رمز QR. حاول مرة ثانية.", close: "إغلاق",
+      leftMin: "باقي للمريض {n} دقيقة للدفع، والعد التنازلي يطلع له في صفحة الدفع.", expired: "انتهت مدة الدفع (ساعة) قبل ما يدفع المريض.", renew: "تجديد الرابط (ساعة)", renewed: "الرابط مفتوح ساعة ثانية.", pkgOnly: "باقة", sessionN: "جلسة"
     }
   };
   let ctx = null, lang = "en", st = null, forKey = null, editing = false, tried = false;
@@ -65,7 +69,7 @@ const PtPlan = (() => {
   const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
   const S = (p, w) => ctx.svg(p, w), E = s => ctx.esc(s);
   const nameOf = v => v && typeof v === "object" ? v[lang] || v.en : v || "";
-  const reset = () => { st = null; forKey = null; editing = false; tried = false; };
+  const reset = () => { st = null; forKey = null; editing = false; tried = false; qrOpen = false; };
   const dvOf = o => o.doctorVisit || {};
   const savedOf = o => (dvOf(o).steps || {}).ptPlan;
   const clone = x => JSON.parse(JSON.stringify(x));
@@ -98,8 +102,8 @@ const PtPlan = (() => {
     return `<div class="pp-bk"><div class="pp-bkh">${S(I.check, 2.6)}<b>${t().booked}</b><span class="pp-ps ${paid ? "ok" : ""}">${paid ? t().paid : t().unpaid}</span></div>
       <dl class="pp-kv"><div><dt>${t().pkgOnly}</dt><dd>${E(p ? nameOf(p.name) : n.code)} <code>${E(n.code)}</code></dd></div><div><dt>${t().bookingNo}</dt><dd class="num">${E(bo.bookingId || "—")}</dd></div>
         <div><dt>${t().when}</dt><dd>${E(fmtDay(n.date, { weekday: "long", day: "numeric", month: "short" }))} · ${E(fmtTime(n.time))}</dd></div><div><dt>${t().amount}</dt><dd class="num">${money(due)}</dd></div></dl>
-      ${paid ? "" : `<div class="pp-share"><button type="button" class="hx-btn pp-wa" data-pp="wa">${S(I.wa)}${t().viaWa}</button><button type="button" class="hx-btn out" data-pp="sms">${S(I.sms)}${t().viaSms}</button>
-        <button type="button" class="hx-btn out" data-pp="copy">${S(I.copy)}${t().copy}</button><a class="hx-btn out" href="${E(MadaVisitBook.payUrl(bo))}" target="_blank" rel="noopener">${S(I.open)}${t().openLink}</a></div>
+      ${paid ? "" : expired(bo) ? `<div class="pp-exp">${S(I.info)}<span>${t().expired}</span><button type="button" class="hx-btn dark" data-pp="renew">${S(I.send)}${t().renew}</button></div>${editing ? `<button type="button" class="pp-cx" data-pp="cancel">${S(I.x, 2.2)}${t().cancelBk}</button>` : ""}` : `<p class="pp-left">${S(I.clock, 2)}<span>${E(leftTxt(bo))}</span></p><div class="pp-share"><button type="button" class="hx-btn pp-wa" data-pp="wa">${S(I.wa)}${t().viaWa}</button><button type="button" class="hx-btn out" data-pp="sms">${S(I.sms)}${t().viaSms}</button>
+        <button type="button" class="hx-btn out" data-pp="qr">${S(I.qr)}${t().viaQr}</button><button type="button" class="hx-btn out" data-pp="copy">${S(I.copy)}${t().copy}</button><a class="hx-btn out" href="${E(MadaVisitBook.payUrl(bo))}" target="_blank" rel="noopener">${S(I.open)}${t().openLink}</a></div>${qrBox(bo)}
         <p class="pp-note">${S(I.info)}<span>${t().linkNote}</span></p>
         ${editing ? `<button type="button" class="pp-cx" data-pp="cancel">${S(I.x, 2.2)}${t().cancelBk}</button>` : ""}`}</div>`;
   }
@@ -171,9 +175,34 @@ const PtPlan = (() => {
       items: [{ kind: "physio", code: p.code }], total: Number(p.price || 0), appointment: { date: pk.date, minute: h * 60 + (m || 0), nurse: me.name },
       payment: "unpaid", booking: { nurseId: me.physioId, doctorId: null, noDoctor: true, by: me.name, at: now }, staff: me.name, fromPt: { visitId: src.id, by: me.name, at: now } });
     bo = MadaVisitBook.sendPay(bo, me.name);
+    bo = holdHour(bo);
     st.next = { orderId: bo.id, bookingId: bo.bookingId, code: p.code, date: pk.date, time: pk.time, total: Number(p.price || 0) };
     st.pick = { code: "", date: "", time: "" }; st.open = ""; keep();
     ctx.toast(t().bookedOk); ctx.rerender();
+  }
+  // The patient has one hour to pay (MadaOrders.PAY_MINUTES), counted down on the payment page; after that the link can be renewed.
+  function holdHour(bo) {
+    const now = Date.now();
+    return MadaOrders.update(bo.id, { payLink: { ...(bo.payLink || {}), sentAt: new Date(now).toISOString(), expiresAt: new Date(now + (MadaOrders.PAY_MINUTES || 60) * 60000).toISOString() } });
+  }
+  const expired = bo => !bo.payLink || new Date(bo.payLink.expiresAt) <= Date.now();
+  const leftTxt = bo => { const m = Math.max(0, Math.ceil((new Date(bo.payLink.expiresAt) - Date.now()) / 60000)); return tx("leftMin", { n: m }); };
+  // QR of the payment link: the patient scans it with the phone camera (doctor-qr.js, loaded when first needed).
+  let qrOpen = false;
+  function qrBox(bo) {
+    if (!qrOpen) return "";
+    const url = MadaVisitBook.payUrl(bo);
+    return `<div class="pp-qr"><div class="or-qrc"><div class="or-qrb">${window.MadaQR ? MadaQR.svg(url) : ""}</div>${window.MadaQR ? `<img class="or-qrl" src="assets/mada-logo.png" alt="">` : ""}</div>
+      <b>${t().qrT}</b><small>${t().qrS}</small><span class="pp-qri">${E(nameOf(bo.patient))} · <b class="num">${money(MadaVisitBook.due(bo))}</b></span>
+      <div class="pp-qra"><button type="button" class="hx-btn out" data-pp="qrClose">${t().close}</button><button type="button" class="hx-btn dark" data-pp="qrSave">${S(I.dl)}${t().qrSave}</button></div></div>`;
+  }
+  function qrSave(bo) {
+    const img = new Image(), c = document.createElement("canvas"), W = 1000; c.width = c.height = W;
+    const done = () => { const a = document.createElement("a"); a.href = c.toDataURL("image/png"); a.download = `mada-pay-${bo.id}.png`; a.click(); };
+    img.onload = () => { const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, W, W); g.drawImage(img, 0, 0, W, W);
+      const lg = new Image(); lg.onload = () => { const r = W * .12, lw = r * 1.3, lh = lw * lg.height / lg.width; g.fillStyle = "#fff"; g.beginPath(); g.arc(W / 2, W / 2, r, 0, 7); g.fill(); g.drawImage(lg, (W - lw) / 2, (W - lh) / 2, lw, lh); done(); };
+      lg.onerror = done; lg.src = "assets/mada-logo.png"; };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(MadaQR.svg(MadaVisitBook.payUrl(bo)));
   }
   function share(ch) {
     const bo = MadaOrders.get(st.next.orderId); if (!bo) return;
@@ -201,6 +230,15 @@ const PtPlan = (() => {
         const bo = MadaOrders.get(st.next.orderId);
         if (bo && bo.payment !== "paid") MadaOrders.update(bo.id, { status: "cancelled", decision: "rejected", reason: { en: L.en.cancelWhy, ar: L.ar.cancelWhy } });
         st.next = null; keep(); ctx.toast(t().cancelled); return re();
+      }
+      const bo = st.next && MadaOrders.get(st.next.orderId); if (!bo) return;
+      if (k === "renew") { holdHour(bo); ctx.toast(t().renewed); return re(); }
+      if (k === "qrClose") { qrOpen = false; return re(); }
+      if (k === "qrSave") return window.MadaQR && qrSave(bo);
+      if (k === "qr") {
+        const show = () => { qrOpen = true; MadaOrders.update(bo.id, { messages: [...(bo.messages || []), { type: "share", channel: "qr", at: new Date().toISOString(), by: ctx.me.name }] }); re(); };
+        if (window.MadaQR) return show();
+        const sc = document.createElement("script"); sc.src = "doctor-qr.js"; sc.onload = show; sc.onerror = () => ctx.toast(t().qrErr); document.head.appendChild(sc); return;
       }
       share(k);
     }));

@@ -1083,7 +1083,7 @@
       sv_doctor: "زيارة الطبيب المنزلية", sv_nursing: "زيارة التمريض المنزلية", sv_blood: "سحب التحاليل المنزلي", sv_iv: "المحاليل الوريدية المنزلية", sv_physio: "جلسة العلاج الطبيعي المنزلية",
       lb_home: "البيت", lb_work: "العمل", lb_other: "موقع آخر", needLoc: "حدد موقع الزيارة", needLocSub: "اضغط هنا وحرّك الخريطة على باب بيتك، عشان يوصلك الفريق بدون اتصالات.",
       noTime: "سيتم تأكيد الموعد معك", team: "الفريق المشارك في زيارتك", licensed: "مرخصون", teamSub: "تعرّف على الفريق الصحي المشارك في تقديم زيارتك.",
-      teamTbd: "بنرسل لك أسماء الفريق قبل الزيارة.", doctorRole: "طبيب", nurseRole: "ممرضة", years: "{n} سنوات", yearsMany: "{n} سنة", spec_fm: "طب عام",
+      teamTbd: "بنرسل لك أسماء الفريق قبل الزيارة.", doctorRole: "طبيب", nurseRole: "ممرضة", physioRole: "أخصائي علاج طبيعي", years: "{n} سنوات", yearsMany: "{n} سنة", spec_fm: "طب عام",
       howPay: "كيف تحب تدفع؟", howPaySub: "اختر طريقة الدفع المناسبة لك.",
       m_apple: "Apple Pay", m_appleD: "ادفع بسرعة وأمان باستخدام Apple Pay.", m_card: "البطاقة البنكية", m_cardD: "مدى، Visa، Mastercard",
       m_tamara: "تمارا", m_tamaraD: "قسّم دفعتك على 4 دفعات بدون فوائد، حسب الشروط والأهلية.", m_tabby: "تابي", m_tabbyD: "ادفع على 4 دفعات بدون فوائد، حسب الشروط والأهلية.",
@@ -1115,7 +1115,7 @@
       sv_doctor: "Home Doctor Visit", sv_nursing: "Home Nursing Visit", sv_blood: "Home Blood Test", sv_iv: "Home IV Therapy", sv_physio: "Home Physiotherapy",
       lb_home: "Home", lb_work: "Work", lb_other: "Other", needLoc: "Set the visit location", needLocSub: "Tap here and move the map to your door, so the team reaches you without calls.",
       noTime: "We will confirm the time with you", team: "Your care team", licensed: "Licensed", teamSub: "Meet the health team taking part in your visit.",
-      teamTbd: "We will send you the team names before the visit.", doctorRole: "Doctor", nurseRole: "Nurse", years: "{n} years", yearsMany: "{n} years", spec_fm: "General doctor",
+      teamTbd: "We will send you the team names before the visit.", doctorRole: "Doctor", nurseRole: "Nurse", physioRole: "Physiotherapist", years: "{n} years", yearsMany: "{n} years", spec_fm: "General doctor",
       howPay: "How would you like to pay?", howPaySub: "Choose the payment method that suits you.",
       m_apple: "Apple Pay", m_appleD: "Pay quickly and safely with Apple Pay.", m_card: "Bank card", m_cardD: "mada, Visa, Mastercard",
       m_tamara: "Tamara", m_tamaraD: "Split into 4 interest-free payments, subject to eligibility.", m_tabby: "Tabby", m_tabbyD: "Pay in 4 interest-free payments, subject to eligibility.",
@@ -1249,7 +1249,7 @@
     <section class="card">
       <div class="team-head"><h3>${t().team}</h3><span class="lic">${svg(ICO.shield)}${t().licensed}</span></div>
       <p class="team-sub">${t().teamSub}</p>
-      ${doc || nurse ? `<div class="team">${doc ? member(doc, t().doctorRole, ICO.doctor, T(doc.spec)) : ""}${nurse ? member(nurse, t().nurseRole, ICO.nurse) : ""}</div>` : `<div class="team-empty">${t().teamTbd}</div>`}
+      ${doc || nurse ? `<div class="team">${doc ? member(doc, t().doctorRole, ICO.doctor, T(doc.spec)) : ""}${nurse ? member(nurse, nurse.role === "physio" ? t().physioRole : t().nurseRole, ICO.nurse) : ""}</div>` : `<div class="team-empty">${t().teamTbd}</div>`}
     </section>
 
     <div class="sec-title"><h3>${t().howPay}</h3><p>${t().howPaySub}</p></div>
