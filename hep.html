@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>مدى كير | برنامجك المنزلي</title>
+<meta name="description" content="رعايتك أقرب مع مدى كير 💚 برنامج التمارين المنزلية من أخصائي العلاج الطبيعي.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="مدى كير | Mada Care">
+<meta property="og:title" content="مدى كير | برنامجك المنزلي">
+<meta property="og:description" content="رعايتك أقرب مع مدى كير 💚 برنامج التمارين المنزلية من أخصائي العلاج الطبيعي.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --primary: #0b6b5c; --primary-dark: #08584b; --primary-deep: #063f36; --primary-soft: #e6f3ef; --ink: #15304a; --muted: #6b7a80; --line: #e3e8ea; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f3f6f6; color: var(--ink); font-family: "Tajawal", "Inter", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  html[dir="ltr"] body { font-family: "Inter", "Tajawal", system-ui, sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  .hero { position: relative; padding: 18px 18px 58px; color: #fff; background: radial-gradient(120% 90% at 100% 0%, #13806e 0%, var(--primary) 45%, var(--primary-deep) 100%); }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+  .brand img { height: 30px; width: auto; filter: brightness(0) invert(1); }
+  .lang { height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.12); color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .hero h1 { margin: 22px 0 6px; font-size: 24px; line-height: 1.3; }
+  .hero p { margin: 0; font-size: 14.5px; opacity: .92; line-height: 1.6; }
+  .main { padding: 0 14px 40px; margin-top: -40px; position: relative; }
+  .card { background: #fff; border-radius: 18px; border: 1px solid var(--line); box-shadow: 0 6px 20px rgba(6, 63, 54, .06); padding: 16px; margin-bottom: 12px; }
+  .who { display: flex; align-items: center; gap: 12px; }
+  .face { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); flex: none; }
+  .face svg { width: 24px; height: 24px; }
+  .who b { display: block; font-size: 15.5px; } .who small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .fact { padding: 10px; border-radius: 12px; background: #f5f8f8; text-align: center; }
+  .fact b { display: block; font-size: 18px; color: var(--primary-deep); font-family: "Inter", sans-serif; }
+  .fact span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .note { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: #eef6ff; color: #23527c; font-size: 14px; line-height: 1.6; margin-top: 12px; white-space: pre-wrap; }
+  .note svg, .warn svg { width: 20px; height: 20px; flex: none; margin-top: 1px; }
+  .warn { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: #fff6e8; color: #8a5a00; font-size: 13.5px; line-height: 1.6; }
+  .ex { padding: 0; overflow: hidden; }
+  .media { position: relative; aspect-ratio: 16 / 9; background: #eef5f3; color: var(--primary); display: grid; place-items: center; }
+  .media img, .media iframe, .media video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; background: #000; }
+  .media img { background: #eef5f3; }
+  .media .fig { width: 46%; max-width: 220px; }
+  .media .fig svg { width: 100%; height: auto; display: block; }
+  .exb { padding: 14px 16px 16px; }
+  .exh { display: flex; align-items: center; gap: 10px; }
+  .num { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: #fff; display: grid; place-items: center; font-family: "Inter", sans-serif; font-weight: 700; font-size: 14px; flex: none; }
+  .exh h2 { margin: 0; font-size: 17px; line-height: 1.35; }
+  .dose { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .dose span { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px; border-radius: 15px; background: var(--primary-soft); color: var(--primary-deep); font-size: 13px; font-weight: 700; }
+  .how { margin: 12px 0 0; font-size: 14.5px; line-height: 1.75; color: #2c3d43; }
+  .exn { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #f5f8f8; font-size: 13.5px; color: #44545a; line-height: 1.6; }
+  .exn b { color: var(--ink); }
+  .vlink { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; color: var(--primary); font-weight: 700; font-size: 14px; text-decoration: none; }
+  .vlink svg { width: 18px; height: 18px; }
+  .empty { text-align: center; padding: 36px 18px; }
+  .empty .face { margin: 0 auto 12px; width: 60px; height: 60px; }
+  .empty b { display: block; font-size: 17px; } .empty p { color: var(--muted); font-size: 14px; line-height: 1.6; margin: 8px 0 0; }
+  .foot { text-align: center; font-size: 12.5px; color: var(--muted); margin-top: 18px; line-height: 1.6; }
+  @media (max-width: 420px) { .hero h1 { font-size: 21px; } .facts { gap: 6px; } .fact b { font-size: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero"><div class="top"><div class="brand"><img src="assets/mada-logo.png" alt=""><span id="brand"></span></div><button type="button" class="lang" id="lang"></button></div>
+    <h1 id="h1"></h1><p id="sub"></p></header>
+  <main class="main" id="main"></main>
+</div>
+<script src="auth.js"></script>
+<script src="patients.js"></script>
+<script src="nurses.js"></script>
+<script src="labs.js"></script>
+<script src="nursing.js"></script>
+<script src="physio.js"></script>
+<script src="ivtherapy.js"></script>
+<script src="orders.js"></script>
+<script src="exercises.js"></script>
+<script>
+  // Patient's home exercise program, opened from the link the physiotherapist sends at the visit (hep.html?t=TOKEN, &l=en for English).
+  // The program is saved on the visit (order.physioVisit.steps.ptHep, physio-hep.js); the exercises come from the library (exercises.js).
+  // Opening it records opens / openedAt so the physiotherapist sees it was opened (&pv=1, the staff preview, is not counted).
+  // Demo: reads the order from MadaStore. In production this is a public page served by the backend for a signed token.
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const qs = new URLSearchParams(location.search), token = qs.get("t") || "", preview = qs.get("pv") === "1";
+  let lang = qs.get("l") === "en" ? "en" : "ar";
+  const svg = (p, w = 2) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+    warn: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/>', play: '<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/>', none: '<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>' };
+  const T = {
+    ar: { brand: "مدى كير", other: "English", title: "برنامجك المنزلي", hi: "مرحبًا {n}، هذه التمارين اللي حددها لك أخصائي العلاج الطبيعي.", hi0: "هذه التمارين اللي حددها لك أخصائي العلاج الطبيعي.",
+      by: "أخصائي العلاج الطبيعي", at: "تاريخ البرنامج {d}", nEx: "تمارين", perWeek: "أيام في الأسبوع", perDay: "مرات في اليوم", noteT: "ملاحظات الأخصائي",
+      warn: "سوّ التمارين مثل ما هي موضحة. إذا زاد الألم وقّف وتواصل معنا.", sets: "{n} مجموعات", reps: "{n} تكرار", hold: "ثبات {n} ثانية", times: "{n} مرات في اليوم",
+      exNote: "ملاحظة:", video: "شاهد الفيديو", gone: "ما لقينا البرنامج", goneS: "الرابط غير صحيح أو انتهى. تواصل مع مدى كير وبنرسل لك الرابط من جديد.", foot: "مدى كير · رعايتك أقرب 💚", pv: "معاينة للفريق: فتح هذه الصفحة ما ينحسب للمريض." },
+    en: { brand: "Mada Care", other: "العربية", title: "Your home exercise program", hi: "Hello {n}, these are the exercises your physiotherapist chose for you.", hi0: "These are the exercises your physiotherapist chose for you.",
+      by: "Physiotherapist", at: "Program date {d}", nEx: "Exercises", perWeek: "Days a week", perDay: "Times a day", noteT: "Notes from your physiotherapist",
+      warn: "Do the exercises as shown. If the pain gets worse, stop and contact us.", sets: "{n} sets", reps: "{n} reps", hold: "Hold {n} s", times: "{n}× a day",
+      exNote: "Note:", video: "Watch the video", gone: "We couldn't find this program", goneS: "The link isn't right or has expired. Contact Mada Care and we'll send it again.", foot: "Mada Care · Care, closer to you 💚", pv: "Team preview: opening this page isn't counted for the patient." }
+  };
+  const t = () => T[lang], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
+  const nm = v => v && typeof v === "object" ? v[lang] || v.en || v.ar : v || "";
+  const find = () => token.length >= 16 ? MadaOrders.all().find(o => ((((o.physioVisit || {}).steps || {}).ptHep) || {}).token === token) || null : null;
+  // Count the first opening in this browser tab (refreshing the page doesn't count again).
+  function recordOpen(o) {
+    const k = "mada-hep-open-" + token;
+    try { if (preview || sessionStorage.getItem(k)) return; sessionStorage.setItem(k, "1"); } catch (e) { if (preview) return; }
+    const pv = o.physioVisit, h = pv.steps.ptHep, now = new Date().toISOString();
+    try { MadaOrders.update(o.id, { physioVisit: { ...pv, steps: { ...pv.steps, ptHep: { ...h, opens: (h.opens || 0) + 1, openedAt: h.openedAt || now, lastOpenedAt: now } } } }); } catch (e) {}
+  }
+  function media(x) {
+    const v = x.video && MadaExercises.embed(x.video);
+    if (v && v.kind === "frame") return `<div class="media"><iframe src="${esc(v.src)}" title="${esc(nm(x.name))}" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`;
+    if (v && v.kind === "video") return `<div class="media"><video src="${esc(v.src)}" controls playsinline preload="metadata"${x.img ? ` poster="${esc(x.img)}"` : ""}></video></div>`;
+    return `<div class="media">${x.img ? `<img src="${esc(x.img)}" alt="${esc(nm(x.name))}">` : `<span class="fig">${MadaExercises.fig(x.area)}</span>`}</div>`;
+  }
+  function render() {
+    document.documentElement.lang = lang; document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.title = (lang === "ar" ? "مدى كير | " : "Mada Care | ") + t().title;
+    $("brand").textContent = t().brand; $("lang").textContent = t().other; $("h1").textContent = t().title;
+    const o = find(), h = o && o.physioVisit.steps.ptHep;
+    if (!o || h.none || !(h.items || []).length) {
+      $("sub").textContent = "";
+      $("main").innerHTML = `<section class="card empty"><span class="face">${svg(I.none)}</span><b>${t().gone}</b><p>${t().goneS}</p></section><p class="foot">${t().foot}</p>`;
+      return;
+    }
+    const first = String(nm(o.patient) || "").trim().split(/\s+/)[0];
+    $("sub").textContent = first ? tx("hi", { n: first }) : t().hi0;
+    const by = nm((o.appointment || {}).nurse || h.by), lib = MadaExercises.byCode;
+    const date = new Date(h.at || o.updatedAt || Date.now()).toLocaleDateString(lang === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const ex = h.items.map(it => ({ ...(lib[it.code] || { name: { en: it.code, ar: it.code }, steps: {}, area: "" }), ...it }));
+    const pd = Math.max(...ex.map(x => Number(x.perDay) || 0));
+    $("main").innerHTML = `${preview ? `<div class="warn" style="margin-bottom:12px;background:#eef6ff;color:#23527c">${svg(I.info)}<span>${t().pv}</span></div>` : ""}
+      <section class="card"><div class="who"><span class="face">${svg(I.user)}</span><div><b>${esc(by)}</b><small>${t().by} · ${esc(tx("at", { d: date }))}</small></div></div>
+        <div class="facts"><div class="fact"><b>${ex.length}</b><span>${t().nEx}</span></div><div class="fact"><b>${esc(h.days || 7)}</b><span>${t().perWeek}</span></div><div class="fact"><b>${pd || "-"}</b><span>${t().perDay}</span></div></div>
+        ${h.note ? `<div class="note">${svg(I.info)}<div><b>${t().noteT}</b><br><span dir="auto">${esc(h.note)}</span></div></div>` : ""}</section>
+      <div class="warn" style="margin-bottom:12px">${svg(I.warn)}<span>${t().warn}</span></div>
+      ${ex.map((x, i) => { const v = x.video && MadaExercises.embed(x.video);
+        return `<section class="card ex">${media(x)}<div class="exb"><div class="exh"><span class="num">${i + 1}</span><h2>${esc(nm(x.name))}</h2></div>
+          <div class="dose">${x.sets ? `<span>${esc(tx("sets", { n: x.sets }))}</span>` : ""}${x.reps ? `<span>${esc(tx("reps", { n: x.reps }))}</span>` : ""}${Number(x.hold) > 0 ? `<span>${esc(tx("hold", { n: x.hold }))}</span>` : ""}${Number(x.perDay) > 0 ? `<span>${esc(tx("times", { n: x.perDay }))}</span>` : ""}</div>
+          ${nm(x.steps) ? `<p class="how">${esc(nm(x.steps))}</p>` : ""}
+          ${x.note ? `<div class="exn"><b>${t().exNote}</b> <span dir="auto">${esc(x.note)}</span></div>` : ""}
+          ${v && v.kind === "link" ? `<a class="vlink" href="${esc(v.src)}" target="_blank" rel="noopener">${svg(I.play)}${t().video}</a>` : ""}</div></section>`; }).join("")}
+      <p class="foot">${t().foot}</p>`;
+  }
+  $("lang").addEventListener("click", () => { lang = lang === "ar" ? "en" : "ar"; render(); });
+  const o0 = find(); if (o0 && !o0.physioVisit.steps.ptHep.none) recordOpen(o0);
+  render();
+</script>
+</body>
+</html>

@@ -233,6 +233,28 @@
     .search { max-width: none; min-width: 0; flex-basis: 100%; }
     .bar .btn { flex: 1; }
   }
+  .ex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+  .ex-c { border: 1px solid var(--border); border-radius: 14px; background: #fff; overflow: hidden; display: grid; grid-template-rows: auto 1fr; }
+  .ex-c.off { opacity: .6; }
+  .ex-m { position: relative; aspect-ratio: 16 / 9; background: #f1f7f6; display: grid; place-items: center; color: #0e7490; }
+  .ex-m img { width: 100%; height: 100%; object-fit: cover; }
+  .ex-m, .ex-pv { overflow: hidden; } .ex-m img { position: absolute; inset: 0; }
+  .ex-fig { position: absolute; inset: 0; display: grid; place-items: center; } .ex-fig svg { display: block; height: 76%; width: auto; max-width: 70%; }
+  .ex-pv { position: relative; }
+  .ex-vid { position: absolute; inset-inline-start: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 12px; background: rgba(16,35,43,.75); color: #fff; font-size: 12px; font-weight: 600; }
+  .ex-vid svg { width: 14px; height: 14px; }
+  .ex-b { padding: 12px 14px; display: grid; gap: 8px; align-content: start; }
+  .ex-t { display: flex; align-items: center; justify-content: space-between; gap: 8px; } .ex-t b { font-size: 15px; }
+  .ex-b .tag { width: fit-content; }
+  .ex-b p { font-size: 13px; color: var(--muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .ex-f { display: flex; align-items: center; gap: 8px; margin-top: 2px; } .ex-d { flex: 1; font-size: 12.5px; font-weight: 600; color: #15304a; }
+  .ex-g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ex-up { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .ex-pv { width: 160px; aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #f1f7f6; color: #0e7490; display: grid; place-items: center; border: 1px solid var(--border); }
+  .ex-pv img { width: 100%; height: 100%; object-fit: cover; }
+  .ex-ua { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } .ex-ua .hint { flex-basis: 100%; }
+  .ex-ua label.btn { cursor: pointer; }
+  @media (max-width: 760px) { .ex-g { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>
 </head>
 <body>
@@ -293,13 +315,14 @@
 <script src="auth.js"></script>
 <script src="orders.js"></script>
 <script src="physio.js"></script>
+<script src="exercises.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   // Services > Physiotherapy: the one physiotherapy catalogue (MadaPhysio, MadaStore "mada-svc-physio"). Built from services-nurse.html.
   // Categories first, then services under a category. New services get the next PT-#### code. Services are hidden, not deleted, so old requests keep their names.
-  let d = MadaPhysio.edit();
+  let d = MadaPhysio.edit(), ex = MadaExercises.edit(), exArea = "all";
   const i18n = {
     en: {
       tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
@@ -325,6 +348,14 @@
       req: "Required.", dupName: "A category with this name already exists.", reqNum: "Enter a number above 0.", reqInt: "Enter a whole number, 1 or more.",
       lastSaved: "Last saved {d} by {n}", sampleData: "Sample list. Changes you save here become the system list.",
       notes: "The Doctor Portal joins this list in the linking step.",
+      tabExs: "Exercises", addEx: "Add Exercise", editEx: "Edit Exercise", exSearch: "Search exercises by name or code", allEx: "All Exercises", noEx: "No exercises yet. Add the first one.",
+      exHint: "The home exercise library. The physiotherapist picks from it at the visit and sends the program to the patient by a link. Sample list: review the instructions and doses before use.",
+      hasVideo: "Video", exArea: "Body area", exCodeHint: "Generated automatically (EX-####). It doesn't change after saving.", stepsEn: "How to do it (English)", stepsAr: "How to do it (Arabic)",
+      exDose: "Default dose", exDoseHint: "The physiotherapist can change it for each patient.", sets: "Sets", reps: "Repetitions", hold: "Hold (seconds)", perDay: "Times a day", reqInt0: "Enter a whole number, 0 or more.",
+      exMediaT: "Photo or video", exMediaHint: "A photo, a video link, or both. With neither, the patient sees the drawing of the body area.",
+      photoAdd: "Add photo", photoChange: "Change photo", photoDel: "Remove", photoHint: "JPG or PNG. Made smaller automatically.", photoBad: "Choose a photo file.", photoBig: "Couldn't save. The photo may be too big; try a smaller one.",
+      video: "Video link", videoHint: "A YouTube or Vimeo link, or a link to an .mp4 file.", videoOk: "The video plays inside the patient's program.", videoLink: "This link opens in a new page (only YouTube, Vimeo and .mp4 play inside).", videoBad: "The link must start with https://",
+      exActive: "Active: can be added to a program", exHiddenNote: "Hidden exercises stay in programs already sent but can't be added.",
       tabPkgs: "Packages", addPkg: "Add Package", editPkg: "Edit Package", pkgSearch: "Search packages by name or code", noPkgs: "No packages yet. Add the first one.",
       thPkg: "Package", thBase: "Session", thPer: "Per Session", thSaving: "Saving", perN: "{n} SAR", saveN: "{n} SAR", noSave: "—",
       baseSvc: "Session service", pickSvc: "Choose the session", baseHint: "The single session this package is made of. Its price is used to show the saving.",
@@ -355,6 +386,14 @@
       req: "مطلوب.", dupName: "فيه قسم بنفس الاسم.", reqNum: "اكتب رقم أكبر من 0.", reqInt: "اكتب رقم صحيح، 1 أو أكثر.",
       lastSaved: "آخر حفظ {d} بواسطة {n}", sampleData: "قائمة تجريبية. أي تعديل تحفظه هنا يصير قائمة النظام.",
       notes: "بوابة الطبيب تنضم لهذي القائمة في خطوة الربط.",
+      tabExs: "التمارين", addEx: "إضافة تمرين", editEx: "تعديل التمرين", exSearch: "ابحث في التمارين بالاسم أو الرمز", allEx: "كل التمارين", noEx: "ما فيه تمارين للحين. أضف أول تمرين.",
+      exHint: "مكتبة التمارين المنزلية. يختار منها الأخصائي في الزيارة ويرسل البرنامج للمريض برابط. قائمة تجريبية: راجع الطريقة والتكرارات قبل الاستخدام.",
+      hasVideo: "فيديو", exArea: "منطقة الجسم", exCodeHint: "يتولد تلقائي (EX-####)، وما يتغير بعد الحفظ.", stepsEn: "طريقة التمرين (إنجليزي)", stepsAr: "طريقة التمرين (عربي)",
+      exDose: "التكرار الافتراضي", exDoseHint: "الأخصائي يقدر يغيّره لكل مريض.", sets: "المجموعات", reps: "التكرارات", hold: "الثبات (ثواني)", perDay: "مرات في اليوم", reqInt0: "اكتب رقم صحيح، 0 أو أكثر.",
+      exMediaT: "صورة أو فيديو", exMediaHint: "صورة، أو رابط فيديو، أو الاثنين. بدونهم يشوف المريض رسمة منطقة الجسم.",
+      photoAdd: "إضافة صورة", photoChange: "تغيير الصورة", photoDel: "حذف", photoHint: "JPG أو PNG. تتصغّر تلقائي.", photoBad: "اختر ملف صورة.", photoBig: "ما قدرنا نحفظ. يمكن الصورة كبيرة، جرّب صورة أصغر.",
+      video: "رابط الفيديو", videoHint: "رابط يوتيوب أو فيميو، أو رابط ملف mp4.", videoOk: "الفيديو يشتغل داخل برنامج المريض.", videoLink: "هذا الرابط يفتح في صفحة ثانية (يوتيوب وفيميو وmp4 بس تشتغل داخل الصفحة).", videoBad: "الرابط لازم يبدأ بـ https://",
+      exActive: "نشط: ينضاف للبرنامج", exHiddenNote: "التمرين المخفي يبقى في البرامج المرسلة بس ما ينضاف لبرامج جديدة.",
       tabPkgs: "الباقات", addPkg: "إضافة باقة", editPkg: "تعديل الباقة", pkgSearch: "ابحث في الباقات بالاسم أو الرمز", noPkgs: "ما فيه باقات للحين. أضف أول باقة.",
       thPkg: "الباقة", thBase: "الجلسة", thPer: "سعر الجلسة", thSaving: "التوفير", perN: "{n} ريال", saveN: "{n} ريال", noSave: "—",
       baseSvc: "نوع الجلسة", pickSvc: "اختر الجلسة", baseHint: "الجلسة الوحدة اللي تتكون منها الباقة. سعرها يُستخدم لحساب التوفير.",
@@ -368,7 +407,8 @@
   const svg = (p, w) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w || 1.9}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
   const IC = { plus: '<path d="M12 5v14M5 12h14"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>', trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>', search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', check: '<path d="m5 12 5 5 9-10"/>', pkg: '<path d="M3 8l9-5 9 5v8l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>', info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
-    nurse: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>' };
+    nurse: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>', play: '<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/>',
+    img: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-8 8"/>' };
   const ICONS = MadaPhysio.ICONS;
   const ICN = { clipboard: ["Assessment", "تقييم"], spine: ["Back & spine", "الظهر"], knee: ["Knee & joints", "الركبة والمفاصل"], brain: ["Neurological", "الأعصاب"],
     cane: ["Mobility", "الحركة"], run: ["Sports", "الرياضة"], child: ["Children", "الأطفال"], lungs: ["Breathing", "التنفس"], hand: ["Hand", "اليد"], dumbbell: ["Exercise", "التمارين"],
@@ -388,9 +428,9 @@
   const nextCode = () => "PT-" + String(Math.max(1000, ...d.services.map(x => +((/^PT-(\d+)$/.exec(x.code) || [])[1] || 0))) + 1).padStart(4, "0");
 
   function render() {
-    const n = { cats: d.cats.length, svcs: d.services.length, pkgs: (d.packages || []).length };
-    $("tabs").innerHTML = [["cats", "tabCats"], ["svcs", "tabSvcs"], ["pkgs", "tabPkgs"]].map(([k, l]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${t()[l]}<small>${n[k]}</small></button>`).join("");
-    $("view").innerHTML = tab === "cats" ? catsView() : tab === "pkgs" ? pkgsView() : svcsView();
+    const n = { cats: d.cats.length, svcs: d.services.length, pkgs: (d.packages || []).length, exs: ex.length };
+    $("tabs").innerHTML = [["cats", "tabCats"], ["svcs", "tabSvcs"], ["pkgs", "tabPkgs"], ["exs", "tabExs"]].map(([k, l]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${t()[l]}<small>${n[k]}</small></button>`).join("");
+    $("view").innerHTML = tab === "cats" ? catsView() : tab === "pkgs" ? pkgsView() : tab === "exs" ? exsView() : svcsView();
     const s = MadaStore.getJSON(MadaPhysio.KEY, null);
     $("foot").innerHTML = `${svg(IC.info, 2)}<span>${esc(s && s.updatedAt ? tx("lastSaved", { d: new Date(s.updatedAt).toLocaleString(current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }), n: s.updatedBy ? (s.updatedBy[current] || s.updatedBy.en) : "" }) : t().sampleData)} · ${esc(t().notes)}</span>`;
   }
@@ -435,6 +475,31 @@
         : `<div class="empty">${(d.packages || []).length ? t().noRows : t().noPkgs}</div>`}</div></div>`;
   }
 
+  // Home exercise library (exercises.js): what the physiotherapist picks for the patient's home program at the visit.
+  const exBy = c => ex.find(x => x.code === c);
+  const exMedia = x => x.img ? `<img src="${esc(x.img)}" alt="">` : `<span class="ex-fig">${MadaExercises.fig(x.area)}</span>`;
+  function exsView() {
+    const hit = x => !q || norm([x.code, x.name.en, x.name.ar].join(" ")).includes(norm(q));
+    const rows = ex.filter(x => (exArea === "all" || x.area === exArea) && hit(x));
+    return `<div style="display:grid;gap:14px"><div class="bar"><label class="search">${svg(IC.search, 2)}<input class="in" id="q" type="search" value="${esc(q)}" placeholder="${t().exSearch}" aria-label="${t().exSearch}"></label><span class="grow"></span>
+        <button type="button" class="btn btn-primary" data-addex>${svg(IC.plus, 2.2)}${t().addEx}</button></div>
+      <div class="chips" role="radiogroup">${["all", ...MadaExercises.AREAS].map(a => `<button type="button" class="chip g" role="radio" aria-checked="${exArea === a}" data-exarea="${a}">${esc(a === "all" ? t().allEx : MadaExercises.areaName(a, current))}<small>${a === "all" ? ex.length : ex.filter(x => x.area === a).length}</small></button>`).join("")}</div>
+      <p class="hint">${t().exHint}</p>
+      ${rows.length ? `<div class="ex-grid">${rows.map(x => `<article class="ex-c ${x.active === false ? "off" : ""}"><div class="ex-m">${exMedia(x)}${x.video ? `<span class="ex-vid">${svg(IC.play, 2)}${t().hasVideo}</span>` : ""}</div>
+          <div class="ex-b"><div class="ex-t"><b>${esc(nm(x))}</b><span class="code">${esc(x.code)}</span></div><span class="tag cat">${esc(MadaExercises.areaName(x.area, current))}</span>
+            <p>${esc(tr(x.steps))}</p><div class="ex-f"><span class="ex-d">${esc(MadaExercises.dose(x, current))}</span>${status(x)}
+            <button type="button" class="ib" data-editex="${esc(x.code)}" aria-label="${t().editEx}: ${esc(nm(x))}" title="${t().editEx}">${svg(IC.edit)}</button></div></div></article>`).join("")}</div>`
+        : `<div class="card"><div class="empty">${ex.length ? t().noRows : t().noEx}</div></div>`}</div>`;
+  }
+  // A photo from the computer or phone, made smaller (max 720 px, JPEG) so it fits in the browser storage.
+  function readPhoto(file, done) {
+    if (!file || !/^image\//.test(file.type)) return toast(t().photoBad);
+    const r = new FileReader(); r.onload = () => { const img = new Image(); img.onload = () => {
+      const k = Math.min(1, 720 / Math.max(img.width, img.height)), c = document.createElement("canvas"); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height); done(c.toDataURL("image/jpeg", 0.8)); }; img.onerror = () => toast(t().photoBad); img.src = r.result; };
+    r.readAsDataURL(file);
+  }
+
   // ---------- Forms ----------
   const fld = (id, label, inner, err, opt) => `<div class="fld"><label for="${id}">${label}${opt ? ` <i>${t().optional}</i>` : ""}</label>${inner}${err ? `<span class="err" id="${id}-e">${err}</span>` : ""}</div>`;
   const inp = (id, v, o = {}) => `<input class="in ${o.bad ? "bad" : ""}" id="${id}" value="${esc(v)}" ${o.dir ? `dir="${o.dir}"` : ""} ${o.type ? `type="${o.type}" min="0" step="any" inputmode="decimal"` : ""} ${o.ph ? `placeholder="${esc(o.ph)}"` : ""} ${o.ro ? "readonly" : ""} ${o.bad ? `aria-invalid="true" aria-describedby="${id}-e"` : ""} maxlength="${o.max || 120}">`;
@@ -453,6 +518,21 @@
         <div class="row2">${fld("fEn", T.nameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en }), e.en)}${fld("fAr", T.nameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar }), e.ar)}</div>
         <div class="row2">${fld("fDescEn", T.descEn, inp("fDescEn", f.descEn, { dir: "ltr", max: 140 }), "", true)}${fld("fDescAr", T.descAr, inp("fDescAr", f.descAr, { dir: "rtl", max: 140 }), "", true)}</div>
         <div class="fld"><label class="sw"><input type="checkbox" id="fActive" ${f.active ? "checked" : ""}>${T.active}</label><span class="hint">${T.hiddenNote}</span></div>`;
+    } else if (m.kind === "ex") {
+      title = m.isNew ? T.addEx : T.editEx;
+      const emb = MadaExercises.embed(f.video);
+      body = `<div class="row2"><div class="fld"><label for="fCode">${T.code}</label>${inp("fCode", f.code, { dir: "ltr", ro: true, max: 16 })}<span class="hint">${T.exCodeHint}</span></div>
+          ${fld("fArea", T.exArea, sel("fArea", f.area, MadaExercises.AREAS.map(a => [a, MadaExercises.areaName(a, current)])))}</div>
+        <div class="row2">${fld("fEn", T.nameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en }), e.en)}${fld("fAr", T.nameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar }), e.ar)}</div>
+        <div class="row2">${fld("fStepsEn", T.stepsEn, area("fStepsEn", f.stepsEn, "ltr"), "", true)}${fld("fStepsAr", T.stepsAr, area("fStepsAr", f.stepsAr, "rtl"), "", true)}</div>
+        <div class="sec-t">${T.exDose}</div><p class="hint">${T.exDoseHint}</p>
+        <div class="pr-g ex-g">${[["fSets", "sets", T.sets], ["fReps", "reps", T.reps], ["fHold", "hold", T.hold], ["fPerDay", "perDay", T.perDay]].map(([id, k, l]) => fld(id, l, inp(id, f[k], { type: "number", dir: "ltr", bad: e[k] }), e[k])).join("")}</div>
+        <div class="sec-t">${T.exMediaT}</div><p class="hint">${T.exMediaHint}</p>
+        <div class="ex-up"><div class="ex-pv">${f.img ? `<img src="${esc(f.img)}" alt="">` : `<span class="ex-fig">${MadaExercises.fig(f.area)}</span>`}</div>
+          <div class="ex-ua"><label class="btn btn-ghost" for="fImg">${svg(IC.img, 2)}${f.img ? T.photoChange : T.photoAdd}</label><input type="file" id="fImg" accept="image/*" hidden>
+            ${f.img ? `<button type="button" class="btn btn-ghost" data-noimg>${svg(IC.trash)}${T.photoDel}</button>` : ""}<span class="hint">${T.photoHint}</span></div></div>
+        ${fld("fVideo", T.video, inp("fVideo", f.video, { dir: "ltr", ph: "https://www.youtube.com/watch?v=…", max: 300, bad: e.video }) + `<span class="hint" id="fVideoH">${emb ? (emb.kind === "link" ? T.videoLink : T.videoOk) : T.videoHint}</span>`, e.video, true)}
+        <div class="fld"><label class="sw"><input type="checkbox" id="fActive" ${f.active ? "checked" : ""}>${T.exActive}</label><span class="hint">${T.exHiddenNote}</span></div>`;
     } else if (m.kind === "cat") {
       title = m.isNew ? T.addCat : T.editCat;
       body = `<div class="row2">${fld("fEn", T.catNameEn, inp("fEn", f.en, { dir: "ltr", bad: e.en, max: 60 }), e.en)}${fld("fAr", T.catNameAr, inp("fAr", f.ar, { dir: "rtl", bad: e.ar, max: 60 }), e.ar)}</div>
@@ -481,7 +561,7 @@
   function closeModal() { modal = null; $("mdBack").hidden = true; $("mdBack").innerHTML = ""; document.body.style.overflow = ""; if (opener && document.contains(opener)) opener.focus(); }
   function readModal() {
     if (!modal) return; const f = modal.f;
-    const map = { fEn: "en", fAr: "ar", fCat: "cat", fSvc: "svc", fDescEn: "descEn", fDescAr: "descAr", fAboutEn: "aboutEn", fAboutAr: "aboutAr", fPrepEn: "prepEn", fPrepAr: "prepAr", fMins: "mins", fSes: "sessions", fPrice: "price" };
+    const map = { fArea: "area", fStepsEn: "stepsEn", fStepsAr: "stepsAr", fSets: "sets", fReps: "reps", fHold: "hold", fPerDay: "perDay", fVideo: "video", fEn: "en", fAr: "ar", fCat: "cat", fSvc: "svc", fDescEn: "descEn", fDescAr: "descAr", fAboutEn: "aboutEn", fAboutAr: "aboutAr", fPrepEn: "prepEn", fPrepAr: "prepAr", fMins: "mins", fSes: "sessions", fPrice: "price" };
     Object.entries(map).forEach(([id, k]) => { if ($(id)) f[k] = $(id).value; });
     if ($("fRx")) f.rx = $("fRx").checked;
     if ($("fActive")) f.active = $("fActive").checked;
@@ -491,7 +571,11 @@
   function validate() {
     const m = modal, f = m.f, e = {}, T = t();
     if (!f.en.trim()) e.en = T.req; if (!f.ar.trim()) e.ar = T.req;
-    if (m.kind === "pkg") {
+    if (m.kind === "ex") {
+      const whole = (v, min) => { const s = String(v).trim(); if (s === "") return min === 0; const n = Number(s); return Number.isInteger(n) && n >= min; };
+      if (!whole(f.sets, 1)) e.sets = T.reqInt; if (!whole(f.reps, 1)) e.reps = T.reqInt; if (!whole(f.hold, 0)) e.hold = T.reqInt0; if (!whole(f.perDay, 1)) e.perDay = T.reqInt;
+      if (f.video.trim() && !/^https:\/\//i.test(f.video.trim())) e.video = T.videoBad;
+    } else if (m.kind === "pkg") {
       if (!f.svc) e.svc = T.req;
       const n = num(f.sessions); if (!Number.isInteger(n) || n < 2) e.sessions = T.reqMin2;
       if (!num(f.price)) e.price = T.reqNum;
@@ -517,6 +601,14 @@
     readModal(); const m = modal, f = m.f; m.err = validate();
     if (Object.keys(m.err).length) { drawModal(); const b = $("mdBack").querySelector("[aria-invalid]"); if (b) b.focus(); return; }
     const next = JSON.parse(JSON.stringify(d));
+    if (m.kind === "ex") {
+      const list = JSON.parse(JSON.stringify(ex)), code = m.isNew && list.some(x => x.code === f.code) ? MadaExercises.nextCode(list) : f.code;
+      const x = { ...(m.isNew ? {} : list.find(y => y.code === m.id)), code, area: f.area, name: { en: f.en.trim(), ar: f.ar.trim() }, steps: { en: f.stepsEn.trim(), ar: f.stepsAr.trim() },
+        sets: Number(f.sets), reps: Number(f.reps), hold: Number(f.hold || 0), perDay: Number(f.perDay), img: f.img || "", video: f.video.trim(), active: f.active };
+      if (m.isNew) list.push(x); else list[list.findIndex(y => y.code === m.id)] = x;
+      try { MadaExercises.save(list, me ? me.name : null); const s = MadaStore.getJSON(MadaExercises.KEY, null); if (!s || !s.updatedAt) throw 0; } catch (er) { return toast(t().photoBig); }
+      ex = list; closeModal(); render(); return toast(t().saved);
+    }
     if (m.kind === "pkg") {
       next.packages = next.packages || [];
       const code = m.isNew && next.packages.some(x => x.code === f.code) ? nextPkgCode() : f.code;
@@ -559,6 +651,11 @@
       return openModal({ kind: "pkg", isNew: true, autoName: true, f: { code: nextPkgCode(), svc: s1 ? s1.code : "", sessions: "3", price: "", en: tx("pkgNameEn", { n: 3 }), ar: tx("pkgNameAr", { n: 3 }), descEn: "", descAr: "", active: true } }); }
     if (b.dataset.editpkg) { const x = (d.packages || []).find(y => y.code === b.dataset.editpkg); return openModal({ kind: "pkg", id: x.code, f: { code: x.code, svc: x.svc, sessions: x.sessions, price: x.price,
       en: x.name.en, ar: x.name.ar, descEn: (x.desc || {}).en || "", descAr: (x.desc || {}).ar || "", active: x.active !== false } }); }
+    if (b.dataset.exarea) { exArea = b.dataset.exarea; render(); return; }
+    if (b.hasAttribute("data-addex")) return openModal({ kind: "ex", isNew: true, f: { code: MadaExercises.nextCode(ex), area: exArea !== "all" ? exArea : "knee", en: "", ar: "", stepsEn: "", stepsAr: "", sets: "2", reps: "10", hold: "0", perDay: "1", img: "", video: "", active: true } });
+    if (b.dataset.editex) { const x = exBy(b.dataset.editex); return openModal({ kind: "ex", id: x.code, f: { code: x.code, area: x.area, en: x.name.en, ar: x.name.ar, stepsEn: (x.steps || {}).en || "", stepsAr: (x.steps || {}).ar || "",
+      sets: x.sets, reps: x.reps, hold: x.hold || 0, perDay: x.perDay, img: x.img || "", video: x.video || "", active: x.active !== false } }); }
+    if (b.hasAttribute("data-noimg") && modal) { readModal(); modal.f.img = ""; return drawModal(); }
     if (b.hasAttribute("data-close")) return closeModal();
     if (b.id === "mdSave") return saveModal();
   });
@@ -567,17 +664,21 @@
   document.addEventListener("input", e => {
     if (modal && modal.kind === "pkg" && /^f(En|Ar)$/.test(e.target.id)) modal.autoName = false;
     if (modal && modal.kind === "pkg" && modal.autoName && e.target.id === "fSes") { const n = parseInt(e.target.value, 10); if (n > 0) { $("fEn").value = tx("pkgNameEn", { n }); $("fAr").value = tx("pkgNameAr", { n }); } }
+    // The video hint follows the link as it is typed (no redraw, so a click on Save right after still lands).
+    if (modal && modal.kind === "ex" && e.target.id === "fVideo") { const em = MadaExercises.embed(e.target.value), T = t(); $("fVideoH").textContent = em ? (em.kind === "link" ? T.videoLink : T.videoOk) : T.videoHint; return; }
     if (e.target.id === "q") { q = e.target.value; const pos = e.target.selectionStart; render(); const i = $("q"); i.focus(); i.setSelectionRange(pos, pos); return; }
   });
   // A new service takes its category's icon until an icon is picked by hand.
   document.addEventListener("change", e => {
+    if (modal && e.target.id === "fImg") { const file = e.target.files[0]; readModal(); return readPhoto(file, url => { modal.f.img = url; drawModal(); }); }
+    if (modal && modal.kind === "ex" && e.target.id === "fArea") { readModal(); return drawModal(); }
     if (!modal) return;
     if (e.target.name === "sicon") modal.iconSet = true;
     if (/^f(En|Ar)$/.test(e.target.id)) modal.autoName = false;
     if (e.target.id === "fCat" && modal.isNew && !modal.iconSet) { readModal(); const c = catOf(modal.f.cat); if (c && ICONS[c.icon]) { modal.f.icon = c.icon; drawModal(); $("fCat").focus(); } }
   });
   // Typing in or changing a field clears its error, also from the saved form errors so a redraw doesn't bring it back.
-  const ERRKEY = { fEn: "en", fAr: "ar", fCat: "cat", fMins: "mins", fSes: "sessions", fPrice: "price", fSvc: "svc" };
+  const ERRKEY = { fSets: "sets", fReps: "reps", fHold: "hold", fPerDay: "perDay", fVideo: "video", fEn: "en", fAr: "ar", fCat: "cat", fMins: "mins", fSes: "sessions", fPrice: "price", fSvc: "svc" };
   const clearErr = el => { if (!modal || !el.classList || !el.classList.contains("bad")) return; el.classList.remove("bad"); el.removeAttribute("aria-invalid"); const er = $(el.id + "-e"); if (er) er.remove(); if (ERRKEY[el.id]) delete modal.err[ERRKEY[el.id]]; };
   document.addEventListener("change", e => clearErr(e.target), true);
   document.addEventListener("input", e => clearErr(e.target), true);
@@ -605,6 +706,7 @@
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
   if (location.hash === "#services") tab = "svcs";
   if (location.hash === "#packages") tab = "pkgs";
+  if (location.hash === "#exercises") tab = "exs";
   setLang(saved);
 </script>
 </body>

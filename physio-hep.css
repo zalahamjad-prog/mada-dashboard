@@ -1,0 +1,50 @@
+/* Home Exercise Program step of a physio visit (physio-hep.js) */
+.hp-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
+.hp-lib, .hp-prog { padding: 14px; border: 1px solid #e3e8ea; border-radius: 14px; background: #fbfcfc; min-width: 0; }
+.hp-prog { background: #fff; position: sticky; top: 12px; }
+.hp-prog.bad { border-color: #f0b4b4; background: #fff7f7; }
+.hp-prog h3 { margin: 0 0 10px; font-size: 15px; color: #15304a; }
+.hp-bar { margin-bottom: 10px; }
+.hp-q { display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 12px; border: 1px solid #dfe6e8; border-radius: 10px; background: #fff; color: #6b7a80; }
+.hp-q svg { width: 18px; height: 18px; flex: none; }
+.hp-q input { flex: 1; min-width: 0; border: 0; outline: 0; font: inherit; font-size: 14px; background: none; color: #15304a; }
+.hp-areas { gap: 6px; margin-bottom: 8px; }
+.hp-areas .pt-chip { min-height: 34px; padding: 4px 12px; font-size: 13px; }
+.hp-areas .pt-chip small { font-size: 11px; color: #8a979c; font-weight: 600; }
+.hp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px; max-height: 520px; overflow-y: auto; padding: 2px; }
+.hp-card { position: relative; display: flex; flex-direction: column; padding: 0; border: 1px solid #dfe6e8; border-radius: 12px; background: #fff; font: inherit; text-align: start; cursor: pointer; overflow: hidden; color: #2c3d43; }
+.hp-card:hover { border-color: #9fb3b9; }
+.hp-card.on { border-color: #0f8f6f; box-shadow: 0 0 0 2px rgba(15, 143, 111, .18); }
+.hp-m { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; background: #eef5f3; color: #0f8f6f; overflow: hidden; }
+.hp-m img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hp-fig { display: grid; place-items: center; width: 100%; height: 100%; }
+.hp-fig svg { width: 62%; height: 62%; }
+.hp-m.sm { width: 46px; height: 46px; aspect-ratio: auto; flex: none; border-radius: 10px; }
+.hp-m.sm .hp-fig svg { width: 80%; height: 80%; }
+.hp-v { position: absolute; inset-inline-start: 6px; bottom: 6px; width: 24px; height: 24px; border-radius: 50%; background: rgba(11, 58, 83, .82); color: #fff; display: grid; place-items: center; font-style: normal; }
+.hp-v svg { width: 16px; height: 16px; }
+.hp-ct { display: block; padding: 8px 10px 10px; }
+.hp-ct b { display: block; font-size: 13.5px; color: #15304a; line-height: 1.35; }
+.hp-ct small { display: block; font-size: 11.5px; color: #6b7a80; margin-top: 3px; line-height: 1.4; }
+.hp-add { position: absolute; top: 6px; inset-inline-end: 6px; width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 1px solid #cfdcdf; display: grid; place-items: center; color: #0f8f6f; }
+.hp-add svg { width: 15px; height: 15px; }
+.hp-card.on .hp-add { background: #0f8f6f; border-color: #0f8f6f; color: #fff; }
+.hp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.hp-list > li { padding: 10px; border: 1px solid #e3e8ea; border-radius: 12px; background: #fff; }
+.hp-list .hx-in { margin-top: 8px; }
+.hp-lh { display: flex; align-items: center; gap: 10px; }
+.hp-lh > b, .hp-lh > span:not(.hp-m) { flex: 1; min-width: 0; }
+.hp-lh b { font-size: 14px; color: #15304a; }
+.hp-lh small { display: block; font-size: 12.5px; color: #6b7a80; margin-top: 2px; }
+.hp-lh .pt-del { width: 34px; height: 34px; }
+.hp-dose { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+.hp-n { display: block; min-width: 0; }
+.hp-n span { display: block; font-size: 11.5px; color: #6b7a80; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hp-n .hx-in { margin-top: 0 !important; height: 38px; padding: 0 8px; text-align: center; width: 100%; }
+.hp-list.ro > li { padding: 8px 10px; }
+.hp-prog .pt-f { margin-top: 14px; }
+@media (max-width: 900px) {
+  .hp-wrap { grid-template-columns: 1fr; }
+  .hp-prog { position: static; }
+  .hp-grid { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
