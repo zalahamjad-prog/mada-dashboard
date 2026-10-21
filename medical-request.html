@@ -452,7 +452,7 @@
       followTitle: "This request needs follow-up", followIdle: "{it} has had no update for more than a day.", followResult: "The result of {it} is in and waits for the doctor's review.",
       s0: "1. Booking Details", bkNo: "Booking No.", orderNo: "Order No.", nurseL: "Nurse", doctorL: "Doctor", noBooking: "This request is not linked to a booking.", openLab: "Open Lab Test Details", openLabSub: "Sample tracking, results, doctor approval and sharing", labLate: "No results 24 hours after the sample was taken", labEsc: "Escalated to the supervisor", visitDetails: "Visit Details", visitDetailsSub: "Show the 10 visit steps from the nurses app", vdHide: "Hide the visit steps", openBooking: "Open the full booking", vdProgress: "{n} of {t} steps done", vdDone: "Done", vdNow: "In progress", vdWait: "Not yet", vs_received: "Team received the booking", vs_ontheway: "Team on the way", vs_arrived: "Arrived at the location", vs_identity: "Patient identity checked", vs_consent: "Consent signed", vs_vitals: "Vital signs recorded", vs_assess: "Patient assessed", vs_service: "Service done / samples taken", vs_educate: "Patient instructions given", vs_report: "Report sent and visit closed", totalL: "Paid", sar: "SAR",
       s1: "2. Basic Information", patient: "Patient", mobile: "Mobile", mrn: "File No.", visit: "Visit", booking: "Booking", service: "Service", createdAt: "Received", source: "Source",
-      src_doctor: "Doctors system", src_staff: "Added by {n}", noVisitDate: "Not scheduled",
+      src_doctor: "Doctors system", src_staff: "Added by {n}", src_physio: "Physiotherapist {n}", noVisitDate: "Not scheduled",
       svc_doctor: "Doctor Visit with Nursing", svc_nursing: "Nursing Services", svc_blood: "Blood Tests", svc_iv: "IV Vitamin Therapy", svc_physio: "Physiotherapy",
       s2: "3. Additional Services", ordersTag: "{n} services", notReq: "Not requested", doneOf: "{n} of {t} done", allDoneT: "Done", pickSvc: "Choose a service to see its details.",
       noneOfType: "No {s} requested yet.", addSvc: "Add {s}", addTitle: "What is needed", addTitlePh: "Example: wound dressing, 5 sessions", addDet: "Details", addDetPh: "Instructions from the doctor", addSave: "Add service", added: "{s} added.", needTitle: "Write what is needed.", addedBy: "Added by {n}",
@@ -500,7 +500,7 @@
       followTitle: "هذا الطلب يحتاج متابعة", followIdle: "{it} ما عليه أي تحديث من أكثر من يوم.", followResult: "نتيجة {it} وصلت وتنتظر مراجعة الطبيب.",
       s0: "1. تفاصيل الحجز", bkNo: "رقم الحجز", orderNo: "رقم الطلب", nurseL: "الممرضة", doctorL: "الطبيب", noBooking: "هذا الطلب غير مربوط بحجز.", openLab: "فتح تفاصيل التحاليل", openLabSub: "تتبع العينة والنتائج واعتماد الطبيب والمشاركة", labLate: "ما طلعت النتائج بعد 24 ساعة من سحب العينة", labEsc: "تم التصعيد للمشرفة", visitDetails: "تفاصيل الزيارة", visitDetailsSub: "عرض خطوات الزيارة العشر من تطبيق التمريض", vdHide: "إخفاء خطوات الزيارة", openBooking: "فتح الحجز كامل", vdProgress: "تم {n} من {t} خطوات", vdDone: "تم", vdNow: "جاري", vdWait: "لم يتم", vs_received: "استلم الفريق الحجز", vs_ontheway: "الفريق في الطريق", vs_arrived: "الوصول للموقع", vs_identity: "التحقق من هوية المريض", vs_consent: "توقيع الموافقة", vs_vitals: "تسجيل العلامات الحيوية", vs_assess: "تقييم حالة المريض", vs_service: "تنفيذ الخدمة / سحب العينات", vs_educate: "إعطاء التعليمات للمريض", vs_report: "رفع التقرير وإغلاق الزيارة", totalL: "المدفوع", sar: "ريال",
       s1: "2. المعلومات الأساسية", patient: "المريض", mobile: "الجوال", mrn: "رقم الملف", visit: "الزيارة", booking: "الحجز", service: "الخدمة", createdAt: "وصل", source: "المصدر",
-      src_doctor: "نظام الأطباء", src_staff: "أضافه {n}", noVisitDate: "بدون موعد",
+      src_doctor: "نظام الأطباء", src_staff: "أضافه {n}", src_physio: "أخصائي العلاج الطبيعي {n}", noVisitDate: "بدون موعد",
       svc_doctor: "زيارة طبيب مع تمريض", svc_nursing: "خدمات التمريض", svc_blood: "تحاليل الدم", svc_iv: "المحاليل الوريدية", svc_physio: "العلاج الطبيعي",
       s2: "3. خدمات إضافية", ordersTag: "{n} خدمات", notReq: "غير مطلوبة", doneOf: "تم {n} من {t}", allDoneT: "مكتملة", pickSvc: "اختاري خدمة عشان تشوفين تفاصيلها.",
       noneOfType: "ما فيه طلب {s} بعد.", addSvc: "إضافة {s}", addTitle: "وش المطلوب", addTitlePh: "مثال: تغيير ضماد، 5 جلسات", addDet: "التفاصيل", addDetPh: "تعليمات الطبيب", addSave: "إضافة الخدمة", added: "تمت إضافة {s}.", needTitle: "اكتبي وش المطلوب.", addedBy: "أضافته {n}",
@@ -852,7 +852,7 @@
         <div><dt>${t().mrn}</dt><dd class="ltr">${esc(r.mrn || "—")}</dd></div>
         <div><dt>${t().sDoctor}</dt><dd>${esc(doc ? T(doc.name) : who(r.byDoctor) || "—")}</dd></div>
         <div><dt>${t().createdAt}</dt><dd>${stamp(r.createdAt)}</dd></div>
-        <div><dt>${t().source}</dt><dd>${esc(r.source === "doctor" ? t().src_doctor : tx("src_staff", { n: who(r.createdBy) || "—" }))}</dd></div>
+        <div><dt>${t().source}</dt><dd>${esc(r.source === "doctor" ? t().src_doctor : r.source === "physio" ? tx("src_physio", { n: who(r.byPhysio) || "—" }) : tx("src_staff", { n: who(r.createdBy) || "—" }))}</dd></div>
       </dl></section>
       <section class="card sec" id="svcSec"><h2>${t().s2}<span class="tag">${esc(tx("ordersTag", { n: r.items.length }))}</span></h2>${servicesHtml(r)}</section>
       <section class="card sec" id="notesSec"><h2>${t().s6}</h2>${notesHtml(r)}</section>

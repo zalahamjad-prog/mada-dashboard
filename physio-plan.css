@@ -1,0 +1,68 @@
+/* Treatment Plan step of a physio visit (physio-plan.js) */
+.pp-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pp-tile { display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px solid #dfe6e8; border-radius: 14px; background: #fff; font: inherit; text-align: start; cursor: pointer; color: #2c3d43; }
+.pp-tile:hover { border-color: #9fb3b9; }
+.pp-tile.on { border-color: #7cc4a4; background: #f3faf7; box-shadow: 0 0 0 3px rgba(15, 143, 111, .08); }
+.pp-tile b { display: block; font-size: 15px; color: #15304a; }
+.pp-tile small { display: block; font-size: 12.5px; color: #6b7a80; margin-top: 2px; line-height: 1.45; }
+.pp-tic { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; background: #e3f4ee; color: #0f8f6f; }
+.pp-tic svg { width: 24px; height: 24px; }
+.pp-tic.sm { width: 36px; height: 36px; border-radius: 10px; } .pp-tic.sm svg { width: 20px; height: 20px; }
+.pp-xr { margin-top: 14px; padding: 14px; border: 1px solid #dfe6e8; border-radius: 14px; background: #fbfcfc; }
+.pp-xr label { display: block; font-size: 14px; font-weight: 600; color: #15304a; }
+.pp-xr label .req { color: #dc2626; }
+.pp-xra { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+.pp-wz { margin-top: 14px; padding: 16px; border: 1px solid #dfe6e8; border-radius: 14px; background: #fbfcfc; }
+.pp-wz h4 { display: flex; align-items: center; gap: 8px; margin: 18px 0 10px; font-size: 14.5px; color: #15304a; }
+.pp-wz h4:first-child { margin-top: 0; }
+.pp-wz h4 svg { width: 18px; height: 18px; color: #0f8f6f; }
+.pp-pkgs { display: grid; gap: 8px; }
+.pp-pkg { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #dfe6e8; border-radius: 12px; background: #fff; font: inherit; text-align: start; cursor: pointer; }
+.pp-pkg.on { border-color: #7cc4a4; background: #ecf8f3; }
+.pp-rd { width: 20px; height: 20px; flex: none; border-radius: 50%; border: 1.5px solid #9aa7ab; display: grid; place-items: center; color: #fff; }
+.pp-pkg.on .pp-rd { background: #0f8f6f; border-color: #0f8f6f; } .pp-rd svg { width: 12px; height: 12px; }
+.pp-pt { flex: 1; min-width: 0; } .pp-pt b { display: block; font-size: 14.5px; color: #15304a; } .pp-pt small { display: block; font-size: 12.5px; color: #6b7a80; margin-top: 2px; }
+.pp code, .pp-bk code { font-family: inherit; font-size: 11.5px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 1px 6px; border-radius: 6px; direction: ltr; unicode-bidi: isolate; }
+.pp-pr { font-size: 14.5px; color: #15304a; white-space: nowrap; }
+.pp-days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.pp-day { flex: none; width: 64px; padding: 8px 4px; border: 1px solid #dfe6e8; border-radius: 12px; background: #fff; font: inherit; cursor: pointer; display: grid; gap: 2px; text-align: center; color: #2c3d43; }
+.pp-day small { font-size: 11.5px; color: #6b7a80; } .pp-day b { font-size: 18px; color: #15304a; }
+.pp-day.on { background: #0b3a53; border-color: #0b3a53; } .pp-day.on small, .pp-day.on b { color: #fff; }
+.pp-day:disabled { opacity: .5; cursor: not-allowed; background: #f3f5f6; }
+.pp-times { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; margin-top: 10px; }
+.pp-time { height: 40px; border: 1px solid #dfe6e8; border-radius: 9px; background: #fff; font: inherit; font-size: 13.5px; font-weight: 600; color: #2c3d43; cursor: pointer; }
+.pp-time.on { background: #0f8f6f; border-color: #0f8f6f; color: #fff; }
+.pp-time:disabled { opacity: .45; text-decoration: line-through; cursor: not-allowed; }
+.pp-cart { border: 1px solid #e3e8ea; border-radius: 12px; background: #fff; padding: 12px 14px; }
+.pp-line { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding-bottom: 10px; border-bottom: 1px dashed #e3e8ea; }
+.pp-line b { font-size: 14.5px; color: #15304a; } .pp-line small { display: block; font-size: 12.5px; color: #6b7a80; margin-top: 2px; }
+.pp-sum { display: flex; justify-content: space-between; font-size: 13.5px; color: #5d6d78; padding-top: 8px; }
+.pp-sum.tot { font-size: 15px; color: #15304a; font-weight: 700; padding-top: 10px; }
+.pp-go { width: 100%; justify-content: center; margin-top: 12px; }
+.pp-go:disabled { opacity: .5; cursor: not-allowed; }
+.pp-mt { margin: 0; font-size: 13px; color: #8a979c; }
+.pp-reqs { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 8px; }
+.pp-reqs li { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e3e8ea; border-radius: 12px; background: #fff; }
+.pp-reqs li > span:nth-child(2) { flex: 1; min-width: 0; } .pp-reqs b { display: block; font-size: 14px; color: #15304a; } .pp-reqs small { display: block; font-size: 12.5px; color: #6b7a80; overflow-wrap: anywhere; }
+.pp-ps { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; background: #fff4dc; color: #8a5a00; white-space: nowrap; }
+.pp-ps.ok { background: #e3f4ee; color: #0f6b52; }
+.pp-bk { margin-top: 14px; padding: 14px; border: 1px solid #b9e0cd; border-radius: 14px; background: #f6fcf9; }
+.pp-bkh { display: flex; align-items: center; gap: 8px; color: #0f8f6f; } .pp-bkh svg { width: 20px; height: 20px; } .pp-bkh b { flex: 1; font-size: 15px; color: #15304a; }
+.pp-kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 12px 0 0; }
+.pp-kv dt { font-size: 12px; color: #6b7a80; } .pp-kv dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; color: #15304a; }
+.pp-share { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.pp-share .hx-btn { text-decoration: none; }
+.pp-wa { background: #25d366; color: #fff; border-color: #25d366; }
+.pp-note { display: flex; gap: 8px; align-items: center; margin: 10px 0 0; font-size: 12.5px; color: #5d6d78; } .pp-note svg { width: 16px; height: 16px; flex: none; }
+.pp-cx { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 0; border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: #c0392b; cursor: pointer; }
+.pp-cx svg { width: 14px; height: 14px; }
+.pp-pre { white-space: pre-wrap; }
+@media (max-width: 720px) {
+  .pp-tiles, .pp-kv { grid-template-columns: 1fr; }
+  .pp-share .hx-btn { flex: 1 1 calc(50% - 8px); justify-content: center; }
+}
+@media (max-width: 720px) {
+  .pp-reqs li { flex-wrap: wrap; }
+  .pp-reqs li > span:nth-child(2) { flex-basis: calc(100% - 46px); }
+  .pp-reqs .pp-ps { margin-inline-start: 46px; }
+}
