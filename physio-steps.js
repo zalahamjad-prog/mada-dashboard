@@ -9,12 +9,14 @@
 //   ptExam    (Objective Examination):  { areas: ["neck" | "shoulder" | "back" | "knee" | "hip" | "other"], areaOther, side: "r" | "l" | "b" | "na",
 //                                        rom: "normal" | "limited" | "painful" | "nt", power: "normal" | "weak" | "nt",
 //                                        fn: "normal" | "mild" | "moderate" | "severe" | "nt", note }. The area is picked on a body figure or the chips.
+//   ptGoals   (Treatment Goals):        { short: { goal, measure, dur, durOther }, long: { .. }, expect, expectOther, review, reviewOther, note }
 // Everything is tap-first: chips and 0–10 buttons, with a free-text box only where "Other" is picked.
 const PtSteps = (() => {
   const I = {
     pain: '<path d="M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M9 10h.01M15 10h.01M9 16c1.5-1.3 4.5-1.3 6 0"/>',
     hist: '<path d="M12 8v4l3 2"/><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4"/>',
     func: '<circle cx="13" cy="4" r="2"/><path d="m9 20 3-6 3 3v4M6 12l3-4 4 1 3 3M12 14l-2-3"/>',
+    goals: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
     exam: '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v7M8 9.5h8M12 14l-3 7M12 14l3 7"/>',
     check: '<path d="m5 12 5 5 9-10"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>', pen: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
     plus: '<path d="M12 5v14M5 12h14"/>', back: '<path d="M19 12H5M11 6l-6 6 6 6"/>', arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
@@ -57,6 +59,14 @@ const PtSteps = (() => {
       fnEx: "Functional ability and movement", fx_normal: "Normal", fx_mild: "Mild difficulty", fx_moderate: "Moderate difficulty", fx_severe: "Severe difficulty", fx_nt: "Not assessed",
       note: "Physiotherapist notes", notePh: "Findings, tests done, anything to follow up",
       needArea: "Choose the affected area.", needSide: "Choose the side.", needRom: "Choose the range of motion result.", needPower: "Choose the muscle strength result.", needFnEx: "Choose the functional ability result.",
+      ptGoals: "Treatment Goals", ptGoalsS: "Set a short-term and a long-term goal, each with how it is measured and when.",
+      g_short: "Short-term goal", g_long: "Long-term goal", goal: "Goal", measure: "How it is measured", dur: "Duration",
+      goalPh_short: "e.g. Reduce back pain and improve movement during daily activities", goalPh_long: "e.g. Bend, walk and sit for a suitable time with less effect of pain on daily life",
+      measPh_short: "e.g. Pain from 7/10 to 4/10", measPh_long: "e.g. Walk 20 minutes with pain no more than 2/10",
+      d_1w: "1 week", d_2w: "2 weeks", d_3w: "3 weeks", d_4w: "4 weeks", d_6w: "6 weeks", d_8w: "8 weeks", d_12w: "12 weeks",
+      expect: "Expected time to improve", "ex_2-4": "2–4 weeks", "ex_4-6": "4–6 weeks", "ex_6-8": "6–8 weeks", "ex_8-12": "8–12 weeks", review: "Goal review", rv_s1: "Every session", rv_s2: "Every 2 sessions", rv_s4: "Every 4 sessions", rv_w1: "Every week",
+      gNote: "Notes", gNotePh: "Anything else about the goals",
+      needGoal: "Write the goal.", needMeasure: "Write how the goal is measured.", needDur: "Choose the goal's duration.", needExpect: "Choose the expected time to improve.", needReview: "Choose how often the goals are reviewed.",
       ptFunc: "Functional Limitations", ptFuncS: "Tap each affected activity, then how hard it is.",
       fnQ: "Which activities are affected?", fnNone: "No functional limitations",
       a_walk: "Walking", a_stairs: "Climbing stairs", a_sit: "Sitting", a_stand: "Standing", a_sleep: "Sleeping", a_dress: "Bathing and dressing",
@@ -100,6 +110,14 @@ const PtSteps = (() => {
       fnEx: "القدرة الوظيفية والحركة", fx_normal: "طبيعية", fx_mild: "صعوبة بسيطة", fx_moderate: "صعوبة متوسطة", fx_severe: "صعوبة شديدة", fx_nt: "لم تُقيّم",
       note: "ملاحظات الأخصائي", notePh: "النتائج، الاختبارات اللي سويتها، وأي شي يحتاج متابعة",
       needArea: "اختر المنطقة المتأثرة.", needSide: "اختر الجهة.", needRom: "اختر نتيجة مدى الحركة.", needPower: "اختر نتيجة القوة العضلية.", needFnEx: "اختر نتيجة القدرة الوظيفية.",
+      ptGoals: "الأهداف العلاجية", ptGoalsS: "حدد هدف قصير المدى وهدف طويل المدى، ولكل هدف طريقة قياسه ومدته.",
+      g_short: "الهدف قصير المدى", g_long: "الهدف طويل المدى", goal: "الهدف", measure: "مؤشر القياس", dur: "المدة",
+      goalPh_short: "مثال: تقليل ألم الظهر وتحسين القدرة على الحركة أثناء الأنشطة اليومية", goalPh_long: "مثال: استعادة القدرة على الانحناء والمشي والجلوس لفترة مناسبة مع تقليل تأثير الألم",
+      measPh_short: "مثال: مستوى الألم من 7/10 إلى 4/10", measPh_long: "مثال: المشي 20 دقيقة بألم لا يتجاوز 2/10",
+      d_1w: "أسبوع", d_2w: "أسبوعان", d_3w: "3 أسابيع", d_4w: "4 أسابيع", d_6w: "6 أسابيع", d_8w: "8 أسابيع", d_12w: "12 أسبوع",
+      expect: "المدة المتوقعة للتحسن", "ex_2-4": "2 إلى 4 أسابيع", "ex_4-6": "4 إلى 6 أسابيع", "ex_6-8": "6 إلى 8 أسابيع", "ex_8-12": "8 إلى 12 أسبوع", review: "مراجعة الأهداف", rv_s1: "كل جلسة", rv_s2: "كل جلستين", rv_s4: "كل 4 جلسات", rv_w1: "كل أسبوع",
+      gNote: "ملاحظات", gNotePh: "أي شي ثاني عن الأهداف",
+      needGoal: "اكتب الهدف.", needMeasure: "اكتب مؤشر القياس.", needDur: "اختر مدة الهدف.", needExpect: "اختر المدة المتوقعة للتحسن.", needReview: "اختر كل كم تتراجع الأهداف.",
       ptFunc: "القيود الوظيفية", ptFuncS: "اضغط كل نشاط متأثر، بعدها مستوى الصعوبة.",
       fnQ: "وش الأنشطة اللي تأثرت؟", fnNone: "ما فيه قيود وظيفية",
       a_walk: "المشي", a_stairs: "صعود الدرج", a_sit: "الجلوس", a_stand: "الوقوف", a_sleep: "النوم", a_dress: "الاستحمام وارتداء الملابس",
@@ -111,9 +129,10 @@ const PtSteps = (() => {
   const PERIODS = ["24h", "week", "month", "other"], NATURE = ["ache", "sharp", "burn", "rad"], PATTERN = ["constant", "intermittent", "activity"];
   const WORSE = ["walk", "sit", "stand", "bend", "sleep"], EASE = ["rest", "move", "meds", "pos"];
   const CHRONIC = ["dm", "htn", "heart", "lung", "osteo", "arth", "stroke", "kidney", "thyroid"], SYMPTOMS = ["numb", "ting", "weak", "swell", "stiff", "dizzy", "head"];
+  const DUR_S = ["1w", "2w", "3w", "4w", "other"], DUR_L = ["4w", "6w", "8w", "12w", "other"], EXPECT = ["2-4", "4-6", "6-8", "8-12", "other"], REVIEW = ["s1", "s2", "s4", "w1", "other"];
   const AREAS = ["neck", "shoulder", "back", "knee", "hip"], ROM = ["normal", "limited", "painful", "nt"], POWER = ["normal", "weak", "nt"], FN = ["normal", "mild", "moderate", "severe", "nt"];
   const SIDES = ["r", "l", "b", "na"], ACTS = ["walk", "stairs", "sit", "stand", "sleep", "dress", "work", "lift", "balance", "sport"], LVLS = ["mild", "moderate", "help", "unable"];
-  const HEAD = { ptPain: I.pain, ptHistory: I.hist, ptFunc: I.func, ptExam: I.exam };
+  const HEAD = { ptPain: I.pain, ptHistory: I.hist, ptFunc: I.func, ptExam: I.exam, ptGoals: I.goals };
   let ctx = null, lang = "en", st = null, forKey = null, editing = false, tried = false, fromLast = null;
   const t = () => L[lang];
   const tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n]);
@@ -141,6 +160,7 @@ const PtSteps = (() => {
       if (!sv) { st.medsOk = false; st.red = ""; st.redNote = ""; st.redAction = ""; }
     }
     if (k === "ptFunc") st = { none: false, acts: {}, ...clone(sv || {}) };
+    if (k === "ptGoals") st = { short: { goal: "", measure: "", dur: "", durOther: "" }, long: { goal: "", measure: "", dur: "", durOther: "" }, expect: "", expectOther: "", review: "", reviewOther: "", note: "", ...clone(sv || {}) };
     if (k === "ptExam") st = { areas: [], areaOther: "", side: "", rom: "", power: "", fn: "", note: "", ...clone(sv || {}) };
     delete st.at; delete st.by;
     forKey = o.id + k; editing = !sv;
@@ -163,6 +183,8 @@ const PtSteps = (() => {
     if (k === "ptHistory") return !st.chronic.length ? "needChronic" : st.surg.some(r => !r.type.trim()) ? "needSurg" : !st.medsNone && !st.meds.some(r => r.name.trim()) ? "needMeds"
       : !st.medsNone && !st.medsOk ? "needMedsOk" : !st.allergy ? "needAllergy" : st.allergy === "yes" && (!st.allergies.length || st.allergies.some(r => !r.sub.trim())) ? "needAlRows"
       : !st.red ? "needRed" : st.red === "yes" && (!st.redNote.trim() || !st.redAction) ? "needRedNote" : "";
+    if (k === "ptGoals") { const g = x => !x.goal.trim() ? "needGoal" : !x.measure.trim() ? "needMeasure" : !x.dur ? "needDur" : x.dur === "other" && !x.durOther.trim() ? "needOther" : "";
+      return g(st.short) || g(st.long) || (!st.expect ? "needExpect" : st.expect === "other" && !st.expectOther.trim() ? "needOther" : !st.review ? "needReview" : st.review === "other" && !st.reviewOther.trim() ? "needOther" : ""); }
     if (k === "ptExam") return !st.areas.length ? "needArea" : needOther(st.areas, st.areaOther) ? "needOther" : !st.side ? "needSide" : !st.rom ? "needRom" : !st.power ? "needPower" : !st.fn ? "needFnEx" : "";
     if (k === "ptFunc") { const keys = Object.keys(st.acts); return !st.none && !keys.length ? "needFn" : keys.some(a => !st.acts[a].lvl) ? "needLvl" : ""; }
     return "";
@@ -214,6 +236,17 @@ const PtSteps = (() => {
       ${fld(t().power, 1, one("power", st.power, POWER, "pw_", b(!st.power)))}
       ${fld(t().fnEx, 1, one("fn", st.fn, FN, "fx_", b(!st.fn)))}
       ${fld(t().note, 0, `<textarea class="hx-in pt-ta" data-in="note" rows="3" maxlength="800" dir="auto" placeholder="${E(t().notePh)}">${E(st.note)}</textarea>`)}`;
+    if (k === "ptGoals") {
+      const goal = (key, durs) => { const x = st[key];
+        return `<div class="pt-goal"><h3>${S(I.goals, 2)}${t()["g_" + key]}</h3>
+          ${fld(t().goal, 1, `<textarea class="hx-in pt-ta ${b(!x.goal.trim()) ? "bad" : ""}" data-in="${key}.goal" rows="2" maxlength="400" dir="auto" placeholder="${E(t()["goalPh_" + key])}">${E(x.goal)}</textarea>`)}
+          ${fld(t().measure, 1, inp(key + ".measure", x.measure, t()["measPh_" + key], b(!x.measure.trim())))}
+          ${fld(t().dur, 1, one(key + ".dur", x.dur, durs, "d_", b(!x.dur)) + (x.dur === "other" ? inp(key + ".durOther", x.durOther, t().otherPh, b(!x.durOther.trim())) : ""))}</div>`; };
+      return `${goal("short", DUR_S)}${goal("long", DUR_L)}
+        <div class="pt-two">${fld(t().expect, 1, one("expect", st.expect, EXPECT, "ex_", b(!st.expect)) + (st.expect === "other" ? inp("expectOther", st.expectOther, t().otherPh, b(!st.expectOther.trim())) : ""))}
+          ${fld(t().review, 1, one("review", st.review, REVIEW, "rv_", b(!st.review)) + (st.review === "other" ? inp("reviewOther", st.reviewOther, t().otherPh, b(!st.reviewOther.trim())) : ""))}</div>
+        ${fld(t().gNote, 0, `<textarea class="hx-in pt-ta" data-in="note" rows="3" maxlength="800" dir="auto" placeholder="${E(t().gNotePh)}">${E(st.note)}</textarea>`)}`;
+    }
     return "";
   }
   // A simple front-view body figure: tap a dot to pick that area (same as the chips).
@@ -237,6 +270,8 @@ const PtSteps = (() => {
       ${row(t().reports, sv.reports)}${row(t().symptoms, lst(sv.symptoms, "s_", sv.symptomsNote))}
       ${row(t().red, sv.red === "yes" ? `${sv.redNote} · ${t()["ra_" + sv.redAction]}` : t().redNone, sv.red === "yes")}
       ${row(t().level, sv.level && t()["lv_" + sv.level])}${row(t().work, sv.work)}${row(t().daily, sv.daily)}</div>`;
+    if (k === "ptGoals") { const oth = (v, o, pre) => v === "other" ? o : t()[pre + v], g = x => J([x.goal, x.measure, oth(x.dur, x.durOther, "d_")]).replace(/, /g, " · ");
+      return `<div class="np-sum">${row(t().g_short, g(sv.short), 1)}${row(t().g_long, g(sv.long), 1)}${row(t().expect, oth(sv.expect, sv.expectOther, "ex_"))}${row(t().review, oth(sv.review, sv.reviewOther, "rv_"))}${row(t().gNote, sv.note, 1)}</div>`; }
     if (k === "ptExam") return `<div class="np-sum">${row(t().area, lst(sv.areas, "ar_", sv.areaOther))}${row(t().side, t()["sd_" + sv.side])}${row(t().rom, t()["rom_" + sv.rom])}
       ${row(t().power, t()["pw_" + sv.power])}${row(t().fnEx, t()["fx_" + sv.fn])}${row(t().note, sv.note, 1)}</div>`;
     if (k === "ptFunc") return `<div class="np-sum">${sv.none ? row(t().fnQ, t().fnNone, 1) : ACTS.filter(a => sv.acts && sv.acts[a]).map(a => row(t()["a_" + a], t()["lvl_" + sv.acts[a].lvl] + (sv.acts[a].ex ? " · " + sv.acts[a].ex : ""))).join("")}</div>`;
@@ -265,7 +300,7 @@ const PtSteps = (() => {
     const $ = s => root.querySelector(s), all = (s, f) => root.querySelectorAll(s).forEach(f), re = () => ctx.rerender();
     all("[data-sc]", b => b.addEventListener("click", () => { const key = b.dataset.sc, v = +b.dataset.v; st[key] = st[key] === v && key !== "now" ? null : v; re(); }));
     all(".pt-hs", g => g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); g.dispatchEvent(new MouseEvent("click", { bubbles: true })); } }));
-    all("[data-one]", b => b.addEventListener("click", () => { st[b.dataset.one] = b.dataset.v; re(); }));
+    all("[data-one]", b => b.addEventListener("click", () => { setPath(b.dataset.one, b.dataset.v); re(); }));
     all("[data-many]", b => b.addEventListener("click", () => {
       const key = b.dataset.many, v = b.dataset.v;
       if (key === "medsNone") { st.medsNone = !st.medsNone; return re(); }
