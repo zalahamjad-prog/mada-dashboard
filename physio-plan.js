@@ -30,7 +30,7 @@ const PtPlan = (() => {
       ptPlan: "Treatment Plan", ptPlanS: "Write the plan, then create any request the patient needs.",
       planT: "Treatment plan", planPh: "e.g. Strengthening and mobility exercises for the knee, 2 sessions a week, home exercise program",
       reqT: "Create a request", reqS: "Optional. Pick what the patient needs next.",
-      xrT: "Imaging request", xrS: "Write the reason. Operations calls a doctor for the order.", ptT: "Physiotherapy treatment plan", ptS: "Pick a package, the next session and send the payment link.",
+      xrT: "Imaging request", xrS: "Write the reason. Operations calls a doctor for the order.", ptT: "Physiotherapy treatment plan", nsT: "Next session ({n} of {m})", nsS: "Set the day and time of the next session of the package.", ptS: "Pick a package, the next session and send the payment link.",
       xrReason: "Reason for the imaging", xrPh: "e.g. Knee pain not improving after 4 sessions, rule out a meniscus tear", xrSend: "Send to operations", xrNeed: "Write the reason for the imaging.",
       xrSent: "Sent to operations · {id}", xrOk: "The imaging request was sent to operations.", xrTitle: "Imaging request (needs a doctor's order)", xrTitleAr: "طلب أشعة (يحتاج أمر طبيب)",
       xrDetails: "From the physiotherapist: {r}. Call a doctor for the imaging order.", xrDetailsAr: "من أخصائي العلاج الطبيعي: {r}. تواصل مع طبيب لإصدار أمر الأشعة.",
@@ -50,7 +50,7 @@ const PtPlan = (() => {
       ptPlan: "الخطة العلاجية", ptPlanS: "اكتب الخطة، بعدها أنشئ أي طلب يحتاجه المريض.",
       planT: "الخطة العلاجية", planPh: "مثال: تمارين تقوية وتحسين حركة الركبة، جلستين في الأسبوع، وبرنامج تمارين منزلية",
       reqT: "إنشاء طلب", reqS: "اختياري. اختر اللي يحتاجه المريض بعدين.",
-      xrT: "طلب أشعة", xrS: "اكتب السبب. التشغيل يتواصل مع طبيب لإصدار الأمر.", ptT: "خطة علاج طبيعي", ptS: "اختر الباقة والجلسة الجاية، وأرسل رابط الدفع.",
+      xrT: "طلب أشعة", xrS: "اكتب السبب. التشغيل يتواصل مع طبيب لإصدار الأمر.", ptT: "خطة علاج طبيعي", nsT: "الجلسة الجاية ({n} من {m})", nsS: "حدد يوم ووقت الجلسة الجاية من الباقة.", ptS: "اختر الباقة والجلسة الجاية، وأرسل رابط الدفع.",
       xrReason: "سبب طلب الأشعة", xrPh: "مثال: ألم الركبة ما تحسن بعد 4 جلسات، للتأكد من عدم وجود تمزق في الغضروف", xrSend: "إرسال للتشغيل", xrNeed: "اكتب سبب طلب الأشعة.",
       xrSent: "انرسل للتشغيل · {id}", xrOk: "انرسل طلب الأشعة للتشغيل.", xrTitle: "Imaging request (needs a doctor's order)", xrTitleAr: "طلب أشعة (يحتاج أمر طبيب)",
       xrDetails: "From the physiotherapist: {r}. Call a doctor for the imaging order.", xrDetailsAr: "من أخصائي العلاج الطبيعي: {r}. تواصل مع طبيب لإصدار أمر الأشعة.",
@@ -91,6 +91,14 @@ const PtPlan = (() => {
     st = { plan: "", imaging: [], next: null, ...clone(dr || sv || (ctx && ctx.prevPlan ? { plan: ctx.prevPlan } : {})), open: "", xrReason: "", pick: { code: "", date: "", time: "" } };
     delete st.at; delete st.by;
     forKey = o.id; editing = !sv || !!dr;
+    // A session of a package: the next session is the first thing to set, so its day and time open straight away.
+    // When the team already booked it on the dashboard, that booking is shown instead.
+    const pn = ctx && ctx.pkgNext;
+    if (pn && !(st.next && MadaOrders.get(st.next.orderId))) {
+      const b = pn.booked, a = b && b.appointment;
+      if (b && a) st.next = { orderId: b.id, bookingId: b.bookingId, code: pn.code, date: a.date, time: `${String(Math.floor(a.minute / 60)).padStart(2, "0")}:${String(a.minute % 60).padStart(2, "0")}`, total: 0, pkgSes: pn.n + 1 };
+      else if (editing) { st.open = "pt"; st.pick.code = SES; }
+    }
   }
   // Keep requests and bookings in the draft straight away.
   function keep() { const { open, xrReason, pick, ...d } = st; try { ctx.saveDraft("ptPlan", d); } catch (e) { ctx.toast(e.message || t().storeErr); } }
@@ -142,7 +150,7 @@ const PtPlan = (() => {
     return `<div class="pt-f"><label>${t().planT} <span class="req">*</span></label>
         <textarea class="hx-in pt-ta ${b(!st.plan.trim()) ? "bad" : ""}" id="ppPlan" rows="4" maxlength="1500" dir="auto" placeholder="${E(t().planPh)}">${E(st.plan)}</textarea></div>
       <div class="pt-f"><label>${t().reqT}</label><small class="pt-sub">${t().reqS}</small>
-        <div class="pp-tiles">${tile("xr", I.xr, t().xrT, t().xrS)}${st.next && MadaOrders.get(st.next.orderId) ? "" : tile("pt", I.pt, t().ptT, t().ptS)}</div></div>
+        <div class="pp-tiles">${tile("xr", I.xr, t().xrT, t().xrS)}${st.next && MadaOrders.get(st.next.orderId) ? "" : (ctx.pkgNext ? tile("pt", I.pt, tx("nsT", { n: ctx.pkgNext.n + 1, m: ctx.pkgNext.m }), t().nsS) : tile("pt", I.pt, t().ptT, t().ptS))}</div></div>
       ${st.open === "xr" ? `<div class="pp-xr"><label for="ppXr">${t().xrReason} <span class="req">*</span></label>
           <textarea class="hx-in pt-ta" id="ppXr" rows="2" maxlength="500" dir="auto" placeholder="${E(t().xrPh)}">${E(st.xrReason)}</textarea>
           <div class="pp-xra"><button type="button" class="hx-btn out" data-open="">${t().cancel}</button><button type="button" class="hx-btn dark" id="ppXrSend">${S(I.send)}${t().xrSend}</button></div></div>` : ""}

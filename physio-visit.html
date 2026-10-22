@@ -1098,7 +1098,10 @@
     get prevHep() { const x = FU.follow && FU.latest("ptHep", h => !h.none && (h.items || []).length); return x ? x.v : null; },
     get prevPlan() { const x = FU.follow && FU.latest("ptPlan", p => p.plan); return x ? x.v.plan : ""; },
     // The package this visit belongs to, while it still has sessions left (the next one is booked with nothing to pay).
-    get pkgNext() { const p = PtFu.info(MadaOrders.get(id)).pkg; return p && p.n < p.m ? p : null; },
+    // The next session of the package; booked: that session when the team or an earlier visit already booked it.
+    get pkgNext() { const p = PtFu.info(MadaOrders.get(id)).pkg; if (!(p && p.n < p.m)) return null;
+      const b = MadaOrders.all().find(x => x.pkgSession && x.pkgSession.orderId === p.orderId && x.pkgSession.n === p.n + 1 && x.status !== "cancelled" && x.decision !== "rejected");
+      return { ...p, booked: b || null }; },
     link(meta) { putVisit({ follow: meta }); },
     get prevName() { return t()["s_" + this.prevKey]; },
     get lang() { return current; }, svg, esc, loc, toast: m => toast(m), rerender() { render(); },
