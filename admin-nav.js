@@ -149,10 +149,10 @@ body > main .table-wrap { max-width: 100%; overflow-x: auto; }
 (() => {
   const L = {
     en: { pre: "In 2 minutes: get back to the customer", due: "Time to get back to the customer", late: "Late: the customer is still waiting ({n} min)", go: "Continue the request", snooze: "Snooze 5 min", close: "Close",
-      r_noReply: "Customer stopped replying", r_callBack: "Customer will call back", r_waitingInfo: "Waiting for documents", r_thinking: "Customer is thinking about it", r_other: "Other",
+      r_noReply: "Customer stopped replying", r_callBack: "Customer will call back", r_waitingInfo: "Waiting for documents", r_thinking: "Customer is thinking about it", r_other: "Other", r_web: "Website request: call the customer",
       a_call: "Call the customer", a_whatsapp: "Message on WhatsApp", a_waitCall: "Wait for the customer's call", a_docs: "Check the documents", todo: "To do", why: "On hold because" },
     ar: { pre: "بعد دقيقتين: ارجعي للعميل", due: "جا وقت الرجوع للعميل", late: "متأخر: العميل للحين ينتظر ({n} د)", go: "أكملي الطلب", snooze: "تأجيل 5 دقايق", close: "إغلاق",
-      r_noReply: "العميل توقف عن الرد", r_callBack: "العميل بيتصل لاحقاً", r_waitingInfo: "بانتظار مستندات", r_thinking: "العميل يفكر", r_other: "سبب آخر",
+      r_noReply: "العميل توقف عن الرد", r_callBack: "العميل بيتصل لاحقاً", r_waitingInfo: "بانتظار مستندات", r_thinking: "العميل يفكر", r_other: "سبب آخر", r_web: "طلب من الموقع، اتصلي بالعميل",
       a_call: "أتصل على العميل", a_whatsapp: "أرسل له واتساب", a_waitCall: "أنتظر اتصال العميل", a_docs: "أراجع المستندات", todo: "المطلوب", why: "سبب التعليق" }
   };
   const PRE = 2 * 60000, EVERY = 5 * 60000, shown = new Set();

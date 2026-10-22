@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدى كير | الرعاية الصحية المنزلية</title>
+<meta name="description" content="مدى كير للرعاية الصحية المنزلية: زيارة طبيب، تمريض منزلي، مختبر منزلي، فيتامينات وريدية وعلاج طبيعي في منزلك.">
+<link rel="icon" type="image/png" href="../assets/mada-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip" href="#main">تخطي إلى المحتوى</a>
+
+<!-- Second Nav Header (DGA) -->
+<div class="snav">
+  <div class="snav-in">
+    <div class="snav-info">
+      <span class="sh-item"><img src="assets/ic-cloud.svg" alt="" width="24" height="24"><span id="shWeather">غائم</span></span>
+      <span class="sh-item"><img src="assets/ic-calendar.svg" alt="" width="24" height="24"><span id="shDate">3-مايو-2026</span></span>
+      <span class="sh-item"><img src="assets/ic-time.svg" alt="" width="24" height="24"><span id="shTime">2:30 مساءً</span></span>
+      <span class="sh-item"><img src="assets/ic-location.svg" alt="" width="24" height="24"><span id="shCity">الرياض</span></span>
+    </div>
+    <div class="snav-acts">
+      <button type="button" class="sh-btn" id="a11yView" aria-pressed="false" aria-label="تباين عالٍ"><img src="assets/ic-view.svg" alt="" width="20" height="20"></button>
+      <button type="button" class="sh-btn" id="a11yZoomIn" aria-label="تكبير الخط"><img src="assets/ic-zoomin.svg" alt="" width="20" height="20"></button>
+      <button type="button" class="sh-btn" id="a11yZoomOut" aria-label="تصغير الخط"><img src="assets/ic-zoomout.svg" alt="" width="20" height="20"></button>
+      <button type="button" class="sh-btn" id="a11yRead" aria-pressed="false" aria-label="قراءة الصفحة بصوت"><img src="assets/ic-mic.svg" alt="" width="20" height="20"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Nav Header -->
+<header class="nav">
+  <div class="nav-in">
+    <div class="nav-main">
+      <a class="logo" href="#top" aria-label="مدى كير"><img class="lg-m" src="../assets/mada-logo.png" alt=""><span class="lg-t"><b>مـدى كـير</b><small>نرعــاكم كأهــلنا</small></span></a>
+      <nav class="menu" id="menu" aria-label="القائمة الرئيسية">
+        <a href="#top" aria-current="page">الرئيسية</a>
+        <a href="#about">من نحن</a>
+        <a href="#services">خدماتنا</a>
+        <a href="#blog">المدونة</a>
+        <a href="#book" data-book>احجز موعدك</a>
+        <a class="btn btn-primary m-app" data-app href="#download">حمل التطبيق</a>
+      </nav>
+    </div>
+    <div class="nav-acts">
+      <button type="button" class="globe" aria-label="اللغة"><img src="assets/ic-globe.svg" alt="" width="32" height="32"></button>
+      <span class="nav-div" aria-hidden="true"></span>
+      <a class="btn btn-primary" data-app href="#download"><span>حمل التطبيق</span><img src="assets/ic-download.svg" alt="" width="24" height="24"></a>
+    </div>
+    <button type="button" class="burger" id="burger" aria-label="القائمة" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+<!-- Hero -->
+<section class="hero" id="top">
+  <div class="pat pat-10" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <div class="tags">
+        <span class="tag-oc"><span>مدى كير للرعاية الصحية المنزلية</span><img src="assets/ic-tag-mada.svg" alt="" width="18" height="18"></span>
+        <span class="tag-oc"><span>طواقم طبية مرخصة من وزارة الصحة</span><img src="assets/ic-usercheck.svg" alt="" width="18" height="18"></span>
+      </div>
+      <h1 class="display">رعاية طبية تمنحك شعور الأمان والراحة</h1>
+      <p class="lead">في مدى كير، نؤمن أن الرعاية الصحية لا تقتصر على العلاج الفردي، بل تمتد لتشمل توفير بيئة مريحة وآمنة تحافظ على كرامة المريض وتمنح عائلته الطمأنينة. من خلال نخبة من الأطباء والممرضين، ننقل جودة المستشفيات إلى دفء منازلكم.</p>
+      <div class="hero-acts">
+        <a class="btn btn-white" href="#book" data-book><span>احجز موعدك الآن</span><img src="assets/ic-whatsapp-btn.svg" alt="" width="32" height="32"></a>
+        <div class="stores">
+          <a class="store" data-gp href="#download" aria-label="Get it on Google Play"><img class="st-ic gp" src="assets/playstore.svg" alt=""><span class="st-tx"><small>GET IT ON</small><b>Google Play</b></span></a>
+          <a class="store" data-as href="#download" aria-label="Download on the App Store"><img class="st-ic ap" src="assets/apple.svg" alt=""><span class="st-tx as"><small>Download on the</small><b>App Store</b></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-vis" aria-hidden="true">
+      <!-- TEMPORARY: the phones are taken from a Figma screenshot until the real images can be downloaded. The design's layers were:
+           phone1.png, phone2.png and the "علاج طبيعي" card (ic-bone, ic-arrow-left). -->
+      <img class="hero-shot" src="assets/hero-phones.png" alt="">
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="feat" id="about">
+  <div class="wrap">
+    <div class="feat-head">
+      <div class="feat-text">
+        <p class="eyebrow">مميزاتنا</p>
+        <h2 class="h2 lh64">لأن المريض يحتاج أكثر من مجرد علاج</h2>
+        <p class="p20">لأن التفاصيل الصغيرة هي ما يصنع الفارق في رحلة الشفاء، فإننا في مدى كير نضع الراحة النفسية والدعم الإنساني للمريض في مقدمة أولوياتنا. كادرنا الطبي ليس مدرباً على تقديم العلاج فحسب، بل على الإصغاء، والتعاطف، ورعاية أحبائكم بكثير من الحب والمسؤولية، لتشعروا أنكم في أيدٍ أمينة منذ اللحظة الأولى.</p>
+      </div>
+      <img class="feat-thumb" src="assets/thumb.png" alt="مدى كير" width="478" height="274">
+    </div>
+    <div class="feat-grid">
+      <article class="fc fc-green"><span class="fc-bg" aria-hidden="true"></span><span class="fc-ic" style="background:#4eab59"><img src="assets/feat-ic2.svg" alt="" width="32" height="32"></span><h3>راحة المريض النفسية</h3><p>نؤمن أن الشفاء يبدأ من الطمأنينة، لذلك نوفر بيئة علاجية مريحة تحافظ على خصوصية المريض وتعفيه من عناء المستشفيات.</p></article>
+      <article class="fc fc-beige"><span class="fc-bg" aria-hidden="true"></span><span class="fc-ic" style="background:#937964"><img src="assets/feat-ic1.svg" alt="" width="32" height="32"></span><h3>أسلوب تعامل الفريق الطبي</h3><p>كوادرنا الطبية مدربة على أعلى مستويات الكفاءة والتعاطف الإنساني، ليتلقى أحباؤكم الرعاية الطبية بكثير من الود والمسؤولية.</p></article>
+      <article class="fc fc-orange"><span class="fc-bg" aria-hidden="true"></span><span class="fc-ic" style="background:#e56f51"><img src="assets/feat-ic4.svg" alt="" width="32" height="32"></span><h3>سرعة الاستجابة</h3><p>الوقت يصنع الفارق في الرعاية الصحية؛ فريقنا مستعد دائماً لتلبية طلباتكم والوصول إلى باب منزلكم بأسرع وقت ممكن.</p></article>
+      <article class="fc fc-navy"><span class="fc-bg" aria-hidden="true"></span><span class="fc-ic" style="background:#1a1a35"><img src="assets/feat-ic3.svg" alt="" width="32" height="32"></span><h3>متابعة الحالة بعد الزيارة</h3><p>رعايتنا لا تنتهي بمغادرة المنزل؛ نلتزم بالتواصل المستمر معكم لمتابعة تطورات الحالة الصحية وضمان استقرارها تماماً.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- Achievements -->
+<section class="tint">
+  <div class="pat pat-02" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap stack56">
+    <div class="sec-head">
+      <div class="eyebrow-row"><p class="eyebrow">أثرنا</p><a class="btn btn-outline" href="#help" data-help>تحتاج لمساعدة؟</a></div>
+      <h2 class="h2">إنجازات نفتخــــر بهــا</h2>
+      <p class="p20 w800">وراء كل رقم نصل إليه قصة نجاح، وحياة أصبحت أكثر راحة وأماناً. هذه الأرقام ليست مجرد إحصائيات، بل هي انعكاف لثقة عائلاتكم الغالية في جودة رعاية مدى كير، وحافزنا اليومي لتقديم الأفضل دائماً.</p>
+    </div>
+    <div class="cards4 ach">
+      <div class="sc sc-c"><span class="fi"><img src="assets/ach-ic4.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>زيارة منزلية</b><strong class="num-big">300+</strong></div></div>
+      <div class="sc sc-c"><span class="fi"><img src="assets/ach-ic3.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>رضا العملاء</b><strong class="num-big">97%</strong></div></div>
+      <div class="sc"><span class="fi"><img src="assets/ach-ic2.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>فريق طبي محترف ومعتمد</b></div></div>
+      <div class="sc"><span class="fi"><img src="assets/ach-ic1.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>استجابة سريعة داخل جدة</b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="svc" id="services">
+  <div class="wrap stack32">
+    <div class="sec-head">
+      <div class="eyebrow-row"><p class="eyebrow">رعايتنا</p><a class="btn btn-primary" data-app href="#download"><span>حمل التطبيق</span><img src="assets/ic-download.svg" alt="" width="24" height="24"></a></div>
+      <h2 class="h2">خدماتنا الطبية المنزلية</h2>
+      <p class="p16 w800">نوفر لكم منظومة متكاملة من الرعاية الصحية المتخصصة التي تنقل جودة المستشفيات وأحدث التجهيزات الطبية إلى دفء منازلكم، بأيدي كوادر محترفة تضمن راحتكم وسلامتكم على مدار الساعة.</p>
+    </div>
+    <div class="cards4 svc-cards">
+      <article class="vc" data-book data-svc="doctor" tabindex="0" role="button"><span class="vi" style="background:#eff8ff"><img src="assets/svc-ic4.svg" alt="" width="28" height="28"></span><div class="vt"><h3>زيارة طبيب منزلية</h3><p>رعاية طبية احترافية داخل منزلكم لتقييم الحالة وتشخيصها ومتابعتها.</p></div>
+        <div class="vtags"><span class="t-neu">كشف منزلي</span><span class="t-info">أطباء متخصصون</span><span class="t-ok">استجابة سريعة<img src="assets/svc-tag4.svg" alt="" width="14" height="14"></span></div></article>
+      <article class="vc" data-book data-svc="nursing" tabindex="0" role="button"><span class="vi" style="background:#f8edff"><img src="assets/svc-ic3.svg" alt="" width="28" height="28"></span><div class="vt"><h3>خدمات التمريض المنزلي</h3><p>تمريض منزلي متكامل إعطاء الأدوية، غيار الجروح، متابعة ورعاية يومية شاملة.</p></div>
+        <div class="vtags"><span class="t-neu">غيار جروح</span><span class="t-info">ممرضون مرخصون</span><span class="t-ok">رعاية يومية<img src="assets/svc-tag3.svg" alt="" width="14" height="14"></span></div></article>
+      <article class="vc" data-book data-svc="iv" tabindex="0" role="button"><span class="vi" style="background:#fef3f2"><img src="assets/svc-ic2.svg" alt="" width="28" height="28"></span><div class="vt"><h3>الفيتامينات الوريدية (IV Therapy)</h3><p>جلسات فيتامينات وريدية لتعزيز النشاط والطاقة ودعم الصحة العامة.</p></div>
+        <div class="vtags"><span class="t-neu">تقوية المناعة</span><span class="t-info">جلسات آمنة</span><span class="t-ok">تعزيز الطاقة<img src="assets/svc-tag2.svg" alt="" width="14" height="14"></span></div></article>
+      <article class="vc" data-book data-svc="blood" tabindex="0" role="button"><span class="vi" style="background:#fffaeb"><img src="assets/svc-ic1.svg" alt="" width="28" height="28"></span><div class="vt"><h3>المختبر المنزلي</h3><p>سحب العينات والتحاليل المخبرية داخل المنزل بسهولة وخصوصية واستلام النتائج اون لاين.</p></div>
+        <div class="vtags"><span class="t-neu">نتائج أونلاين</span><span class="t-info">سحب عينات</span><span class="t-ok">دقة عالية<img src="assets/svc-tag1.svg" alt="" width="14" height="14"></span></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- Response banner -->
+<section class="grad">
+  <div class="grad-bg" aria-hidden="true"><i class="glass"></i><i class="glow"></i></div>
+  <div class="grad-in">
+    <span class="logo logo-w" aria-label="مدى كير"><img class="lg-m" src="../assets/mada-logo.png" alt=""><span class="lg-t"><b>مـدى كـير</b><small>نرعــاكم كأهــلنا</small></span></span>
+    <div>
+      <h2 class="display">سرعة الاستجابة هي أولويتنا</h2>
+      <p class="lead">ندرك أن في الرعاية الصحية، كل ثانية تفرق ، لذلك فريقنا التقني والطبي يعمل بتناغم لضمان رد فوري واستجابة طبية لا تضاهى ، جميع طواقمنا الطبية مرخصة ومعتمدة من وزارة الصحة مما يضمن أعلى مستويات الطمأنينة والأمان لكل أسرة من أهالينا.</p>
+    </div>
+    <div class="tags tags-c">
+      <span class="tag-oc"><span>أرقام تبني الثقة</span><img src="assets/grad-tag2.svg" alt="" width="18" height="18"></span>
+      <span class="tag-oc"><span>متوسط الرد <em>دقيقة واحدة</em></span><img src="assets/grad-tag1.svg" alt="" width="18" height="18"></span>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="tst">
+  <div class="wrap stack32">
+    <div class="sec-head">
+      <p class="eyebrow">سُمعتنا</p>
+      <h2 class="h2">أصوات من أهلُنا بـ جدة</h2>
+      <p class="p16 w800">فخورون بثقة عائلات جدة الغالية. إليكم بعض القصص والتجارب الواقعية التي عشناها مع أحبتكم، والذين لمسوا معنا مفهوم الرعاية الصحية الحقيقية في منازلهم.</p>
+    </div>
+  </div>
+  <div class="tst-track" id="tst" tabindex="0" aria-label="آراء العملاء">
+    <figure class="qc"><div class="qc-in"><div class="qc-top"><span class="av" style="--av:rgba(7,148,85,.1);--ac:rgb(7,148,85)"><i></i></span><b>سارة الحربي</b><img class="flag" src="assets/flag-sa.png" alt="السعودية" width="24" height="18"></div>
+      <blockquote><span class="qm">”</span><p>أكثر شيء أعجبني إنهم يهتمون براحة المريض نفسيًا قبل أي شيء. الخدمة إنسانية جدًا وتحس فعلًا إنهم يهتمون.</p></blockquote></div></figure>
+    <figure class="qc"><div class="qc-in"><div class="qc-top"><span class="av" style="--av:rgba(128,81,159,.1);--ac:rgb(128,81,159)"><i></i></span><b>نوف العتيبي</b><img class="flag" src="assets/flag-sa.png" alt="السعودية" width="24" height="18"></div>
+      <blockquote><span class="qm">”</span><p>كنت متخوفة بالبداية بالتعامل مع شركات رعاية منزلية مرة ثانية ، لكن بعد أول زيارة عرفت الفرق فعلًا. مستوى الخدمة ممتاز.</p></blockquote></div></figure>
+    <figure class="qc"><div class="qc-in"><div class="qc-top"><span class="av" style="--av:rgba(220,104,3,.1);--ac:rgb(220,104,3)"><i></i></span><b>أبو عبدالله</b><img class="flag" src="assets/flag-sa.png" alt="السعودية" width="24" height="18"></div>
+      <blockquote><span class="qm">”</span><p>بدل تعب المشاوير والانتظار بالمستشفى، الطبيب زارنا في البيت باحترافية والخدمة مريحة خصوصًا لكبار السن. شكرًا مدى كير.</p></blockquote></div></figure>
+    <figure class="qc"><div class="qc-in"><div class="qc-top"><span class="av" style="--av:rgba(21,112,239,.1);--ac:rgb(21,112,239)"><i></i></span><b>Khalid</b><img class="flag" src="assets/flag-eg.svg" alt="Egypt" width="24" height="18"></div>
+      <blockquote class="en"><p dir="ltr">Very fast response and professional medical team. The home visit experience was smooth.</p><span class="qm">”</span></blockquote></div></figure>
+    <figure class="qc"><div class="qc-in"><div class="qc-top"><span class="av" style="--av:rgba(217,45,32,.1);--ac:rgb(217,45,32)"><i></i></span><b>Maria</b><img class="flag" src="assets/flag-ph.svg" alt="Philippines" width="24" height="18"></div>
+      <blockquote class="en"><p dir="ltr">The nurse was very kind and professional. My mother felt comfortable during the entire visit.</p><span class="qm">”</span></blockquote></div></figure>
+  </div>
+  <div class="pager">
+    <button type="button" class="pg" data-dir="next" aria-label="التالي"><img src="assets/ic-next.svg" alt="" width="24" height="24"></button>
+    <span class="dots" id="dots" aria-hidden="true"></span>
+    <button type="button" class="pg" data-dir="prev" aria-label="السابق"><img src="assets/ic-prev.svg" alt="" width="24" height="24"></button>
+  </div>
+</section>
+
+<!-- Why us -->
+<section class="tint">
+  <div class="pat pat-02" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap stack56">
+    <div class="sec-head center"><p class="eyebrow">تأثيرنا</p><h2 class="h2">لماذا يختارنا أهــل جدة</h2></div>
+    <div class="cards4">
+      <div class="sc why"><span class="fi"><img src="assets/why-ic4.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>الثقة المطلقة</b><p>طاقم طبي مرخص ومعتمد وفق أعلى المعايير الصحية المحلية والعالمية</p></div></div>
+      <div class="sc why"><span class="fi"><img src="assets/why-ic3.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>السرعة الذكية</b><p>نظام استجابة سريع يضمن وصول الفريق الطبي في وقت قياسي إلى منزلك</p></div></div>
+      <div class="sc why"><span class="fi"><img src="assets/why-ic2.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>الخصوصية التامة</b><p>نحترم خصوصية المنزل ونقدم خدماتنا في بيئة آمنة وهادئة للمريض</p></div></div>
+      <div class="sc why"><span class="fi"><img src="assets/why-ic1.svg" alt="" width="32" height="32"></span><div class="sc-t"><b>التعامل الإنساني</b><p>شعارنا "نرعاكم كأهلُنا" ليس مجرد كلمات، بل منهج عمل يومي</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Steps -->
+<section class="steps">
+  <div class="wrap stack32">
+    <div class="sec-head center"><p class="eyebrow">تجربتنا</p><h2 class="h2">تجربة حجز أسهل من طلب قهوة</h2></div>
+    <div class="st-scroll">
+      <div class="st-board">
+        <div class="st-bar"><img src="assets/step-arrow.svg" alt="" width="24" height="24"></div>
+        <div class="st up" style="--x:1044px"><div class="st-card"><span class="av g"><img src="assets/step-ic1.svg" alt="" width="24" height="24"></span><b>تحميل التطبيق</b><small>التسجيل برقم الجوال فقط</small></div><img class="st-dot" src="assets/step-dot.svg" alt=""></div>
+        <div class="st dn" style="--x:799px"><img class="st-dot" src="assets/step-dot.svg" alt=""><div class="st-card w168"><span class="av g"><img src="assets/step-ic2.svg" alt="" width="24" height="24"></span><b>طلب الخدمة</b><small>تحديد نوع الرعاية المطلوب</small></div></div>
+        <div class="st up" style="--x:554px"><div class="st-card"><span class="av g"><img src="assets/step-ic3.svg" alt="" width="24" height="24"></span><b>الدفع الذكي</b><small>كاش باك فوري في محفظتك</small></div><img class="st-dot" src="assets/step-dot.svg" alt=""></div>
+        <div class="st dn" style="--x:309px"><img class="st-dot" src="assets/step-dot.svg" alt=""><div class="st-card"><span class="av g"><img src="assets/step-ic4.svg" alt="" width="24" height="24"></span><b>تتبع مباشر</b><small>متابعة الفريق على الخريطة</small></div></div>
+        <div class="st up" style="--x:64px"><div class="st-card"><span class="av g"><img src="assets/step-ic5.svg" alt="" width="24" height="24"></span><b>الرعاية المستمرة</b><small>إشعارات الأدوية والمتابعة</small></div><img class="st-dot" src="assets/step-dot.svg" alt=""></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="help">
+  <div class="faq-in">
+    <div class="faq-text">
+      <h2 class="h2">أسئلة تراودكم .. وإجابات نعتز بها</h2>
+      <p class="p16">لأن وعيكم واطمئنانكم هو أساس خدمتنا، جمعنا لكم أكثر الأسئلة الشائعة حول خدمات مدى كير الطبية، مع إجابات واضحة وشفافة تساعدكم على اتخاذ القرار الأفضل لرعاية أحبائكم.</p>
+      <div class="faq-btns"><a class="btn btn-primary" data-app href="#download"><span>حمل التطبيق</span><img src="assets/ic-download.svg" alt="" width="24" height="24"></a><a class="btn btn-neutral" href="#help" data-help>تحتاج لمساعدة؟</a></div>
+    </div>
+    <div class="faq-list" id="faq">
+      <div class="qa open"><button type="button" class="qa-h" aria-expanded="true"><span>كيف أضمن كفاءة الفريق الطبي القادم لمنزلي؟</span><img class="i-minus" src="assets/ic-minus.svg" alt="" width="24" height="24"><img class="i-plus" src="assets/ic-plus.svg" alt="" width="24" height="24"></button>
+        <div class="qa-b"><p>في مدى كير، لا نختار إلا الأفضل. جميع كوادرنا الطبية (أطباء، ممرضين، وفنيين) مرخصين ومعتمدين من الهيئة السعودية للتخصصات الصحية ، ويخضعون لتدريب مستمر ليس فقط على الجانب الطبي ، بل على "فن التعامل الإنساني" لضمان أن تكون الزيارة تجربة مريحة وآمنة لأحبتكم.</p></div></div>
+      <!-- The design has no answers for the next three questions yet: add them in a .qa-b like the first one. -->
+      <div class="qa"><button type="button" class="qa-h" aria-expanded="false"><span>ما هي سرعة الاستجابة عند طلب الخدمة؟</span><img class="i-minus" src="assets/ic-minus.svg" alt="" width="24" height="24"><img class="i-plus" src="assets/ic-plus.svg" alt="" width="24" height="24"></button></div>
+      <div class="qa"><button type="button" class="qa-h" aria-expanded="false"><span>هل تتوفر لديكم خدمات طارئة؟</span><img class="i-minus" src="assets/ic-minus.svg" alt="" width="24" height="24"><img class="i-plus" src="assets/ic-plus.svg" alt="" width="24" height="24"></button></div>
+      <div class="qa"><button type="button" class="qa-h" aria-expanded="false"><span>هل يمكنني متابعة موقع الطبيب وهو في طريقه إليّ؟</span><img class="i-minus" src="assets/ic-minus.svg" alt="" width="24" height="24"><img class="i-plus" src="assets/ic-plus.svg" alt="" width="24" height="24"></button></div>
+    </div>
+  </div>
+</section>
+
+<div class="modified"><p id="lastMod">تاريخ آخر تعديل: 04/12/2026 - 4:13 م بتوقيت السعودية</p></div>
+</main>
+
+<!-- Footer -->
+<footer class="foot" id="blog">
+  <span class="foot-deco" aria-hidden="true"></span>
+  <div class="foot-in">
+    <div class="foot-cols">
+      <div class="fg-brand">
+        <span class="logo logo-f" aria-label="مدى كير"><img class="lg-m" src="../assets/mada-logo.png" alt=""><span class="lg-t"><b>مـدى كـير</b><small>نرعــاكم كأهــلنا</small></span></span>
+        <div class="fg-text">
+          <h2>نرعاكُم كأهلُنا .. و نصلكم بضغطة زر</h2>
+          <p>نجمع بين أمان الرعاية العائلية وسرعة الخدمات الرقمية، لننقل أفضل الخدمات الطبية إلى باب منزلك بكل سهولة وراحة.</p>
+          <div class="social">
+            <a class="so" data-so="whatsapp" href="#" aria-label="واتساب"><img src="assets/so-whatsapp.svg" alt="" width="20" height="20"></a>
+            <a class="so" data-so="email" href="#" aria-label="البريد الإلكتروني"><img src="assets/so-5.svg" alt="" width="20" height="20"></a>
+            <a class="so" data-so="x" href="#" aria-label="X"><img src="assets/so-x.svg" alt="" width="20" height="20"></a>
+            <a class="so" data-so="linkedin" href="#" aria-label="LinkedIn"><img src="assets/so-3.svg" alt="" width="20" height="20"></a>
+            <a class="so" data-so="instagram" href="#" aria-label="Instagram"><img src="assets/so-2.svg" alt="" width="20" height="20"></a>
+            <a class="so" data-so="tiktok" href="#" aria-label="TikTok"><img src="assets/so-tiktok.svg" alt="" width="20" height="20"></a>
+          </div>
+        </div>
+        <div class="legal-ids"><p>السجل التجاري : <span id="crNo">0000000</span></p><p>الرقم الضريبي : <span id="vatNo">000000</span></p></div>
+      </div>
+      <div class="fg-links">
+        <p class="fg-label">روابط مهمة</p>
+        <a href="#about">من نحن</a><a href="#services">خدماتنا</a><a href="#contact" data-help>اتصل بنا</a><a href="#blog">المدونة</a>
+      </div>
+      <form class="sub" id="subForm" novalidate>
+        <label for="subEmail">اشترك ليصلك آخر التحديثات حول خدمات مدى كير</label>
+        <div class="sub-row"><input type="email" id="subEmail" placeholder="البريد الالكتروني" autocomplete="email"><button type="submit">اشترك</button></div>
+        <p class="sub-msg" id="subMsg" role="status" hidden></p>
+      </form>
+    </div>
+    <div class="legal">
+      <p>جميع الحقوق محفوظة مدى كير للرعاية الصحية المنزلية @ 2026</p>
+      <nav class="legal-links" aria-label="السياسات"><a href="#">السياسات</a><a href="#">سياسة الخصوصية</a><a href="#">سياسة الإلغاء و إعادة الجدولة و عدم التواجد في المنزل</a><a href="#">حقوق وواجبات المرضى</a></nav>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="waFloat" href="#" aria-label="تواصل معنا على واتساب"><img src="assets/wa-float.svg" alt="" width="80" height="80"></a>
+
+<!-- Booking request (sent to the dashboard) -->
+<div class="ov" id="bookOv" hidden>
+  <div class="dlg" role="dialog" aria-modal="true" aria-labelledby="bkT">
+    <button type="button" class="dlg-x" data-close aria-label="إغلاق">×</button>
+    <div id="bkForm">
+      <h2 id="bkT">احجز موعدك</h2>
+      <p class="dlg-sub">اترك بياناتك، وسيتواصل معك فريقنا لتأكيد الموعد.</p>
+      <form id="bookForm" novalidate>
+        <label><span>الاسم</span><input id="bkName" autocomplete="name" maxlength="80" required></label>
+        <label><span>رقم الجوال</span><input id="bkMobile" inputmode="numeric" autocomplete="tel" placeholder="05XXXXXXXX" maxlength="10" dir="ltr" required></label>
+        <label><span>الخدمة</span><select id="bkSvc" required>
+          <option value="">اختر الخدمة</option>
+          <option value="doctor">زيارة طبيب منزلية</option>
+          <option value="nursing">خدمات التمريض المنزلي</option>
+          <option value="iv">الفيتامينات الوريدية (IV Therapy)</option>
+          <option value="blood">المختبر المنزلي</option>
+          <option value="physio">علاج طبيعي</option>
+        </select></label>
+        <label><span>ملاحظات (اختياري)</span><textarea id="bkNote" maxlength="400" rows="3"></textarea></label>
+        <p class="err" id="bkErr" role="alert" hidden></p>
+        <button type="submit" class="btn btn-primary full" id="bkSend">إرسال الطلب</button>
+      </form>
+    </div>
+    <div id="bkDone" hidden>
+      <h2>وصلنا طلبك</h2>
+      <p class="dlg-sub">رقم طلبك <b id="bkRef" dir="ltr"></b>. سيتواصل معك فريقنا قريباً لتأكيد الموعد.</p>
+      <button type="button" class="btn btn-primary full" data-close>تم</button>
+    </div>
+  </div>
+</div>
+
+<script src="site-config.js"></script>
+<script src="site.js"></script>
+</body>
+</html>
