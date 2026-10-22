@@ -577,7 +577,7 @@
       visit: "Visit", nurse: "Nurse", noVisit: "No visit booked.", patient: "Patient name", mrn: "Medical record", createdBy: "Created by", unknown: "Not recorded",
       payment: "Payment", paid: "Paid", notPaid: "Not Paid", decision: "Customer decision", status: "Status",
       approved: "Approved", rejected: "Rejected", pending: "Pending", on_hold: "On Hold",
-      st_booked: "Booked", st_awaiting_doctor: "Waiting for the doctor", st_declined: "Customer declined", st_completed: "Visit completed", st_on_hold: "On hold",
+      st_booked: "Booked", st_awaiting_doctor: "Waiting for the doctor", st_pt_assigned: "With the physiotherapist", ptBanner: "Assigned to {n} by {b} · {t}. The physiotherapist calls the patient, confirms the details and books the time from the Physiotherapist Portal.", ptNoteL: "Note for the physiotherapist", ptCalls: "Physiotherapist's calls", ptNoCalls: "No calls written yet.", st_declined: "Customer declined", st_completed: "Visit completed", st_on_hold: "On hold",
       patientStatus: "Patient Status", svcRequested: "Service Type Requested", notApproved: "Not Approved", rejReason: "Reason for Not Approval",
       lockedAgentRej: "This request is locked because the customer did not approve. You can't edit it. Only a supervisor can close it.",
       closeReqBtn: "Close Request", stCancelled: "Status: Cancelled", stRejOpen: "Not approved, open", st_cancelled: "Cancelled", st_emergency_closed: "Emergency closed",
@@ -606,7 +606,7 @@
       visit: "الزيارة", nurse: "الممرض/ة", noVisit: "لا يوجد موعد.", patient: "اسم المريض", mrn: "الملف الطبي", createdBy: "أنشأ الطلب", unknown: "غير مسجل",
       payment: "الدفع", paid: "مدفوع", notPaid: "غير مدفوع", decision: "قرار العميل", status: "الحالة",
       approved: "موافق", rejected: "مرفوض", pending: "بانتظار الرد", on_hold: "معلّق",
-      st_booked: "تم الحجز", st_awaiting_doctor: "بانتظار الطبيب", st_declined: "اعتذر العميل", st_completed: "اكتملت الزيارة", st_on_hold: "معلّق",
+      st_booked: "تم الحجز", st_awaiting_doctor: "بانتظار الطبيب", st_pt_assigned: "عند الأخصائي", ptBanner: "انسند إلى {n} من {b} · {t}. الأخصائي يتصل بالمريض، يتأكد من البيانات ويحدد الموعد من بوابة العلاج الطبيعي.", ptNoteL: "ملاحظة للأخصائي", ptCalls: "اتصالات الأخصائي", ptNoCalls: "ما كتب الأخصائي أي اتصال للحين.", st_declined: "اعتذر العميل", st_completed: "اكتملت الزيارة", st_on_hold: "معلّق",
       patientStatus: "الحالة الطبية", svcRequested: "نوع الخدمة المطلوبة", notApproved: "غير موافق", rejReason: "سبب عدم الموافقة",
       lockedAgentRej: "هذا الطلب مقفل لأن العميل ما وافق، وما تقدرين تعدلين عليه. المشرفة فقط تقفل الطلب.",
       closeReqBtn: "إقفال الطلب", stCancelled: "الحالة: ملغي", stRejOpen: "غير موافق، مفتوح", st_cancelled: "ملغي", st_emergency_closed: "أُقفلت الحالة الطارئة",
@@ -1007,6 +1007,15 @@
   // Doctor visits: the doctor's own visit steps from the Doctor Portal (doctor-visit.html), read only.
   // Each step shows when the doctor first opened it (doctorVisit.stepLog), when it was saved (steps[k].at) and the time between.
   const DR_STEPS = ["arrival", "history", "vitals", "exam", "allergy", "assess", "plan", "orders", "nurse", "edu", "idform", "consent"];
+  // A physiotherapy request handed to a physiotherapist on New Request (order.ptAssign): who has it, the note, and their calls.
+  const PT_RES = { en: { reached: "Reached the patient", noanswer: "No answer", callback: "Call back later", confirmed: "Confirmed the request", declined: "Patient declined" },
+    ar: { reached: "تواصل مع المريض", noanswer: "ما رد", callback: "يتصل بعدين", confirmed: "أكد الطلب", declined: "المريض اعتذر" } };
+  function ptAssignHtml(o) {
+    const a = o.ptAssign, notes = a.notes || [];
+    return `<div class="banner info" style="display:block">${svg(I.info, 2)} <span>${esc(tx("ptBanner", { n: T(a.toName) || a.to, b: T(a.by) || "—", t: stamp(new Date(a.at)) }))}</span>
+      ${a.note ? `<div style="margin-top:8px"><b>${t().ptNoteL}:</b> <span dir="auto">${esc(a.note)}</span></div>` : ""}
+      <div style="margin-top:8px"><b>${t().ptCalls}:</b> ${notes.length ? `<ul style="margin:4px 0 0;padding-inline-start:18px">${notes.map(n => `<li>${esc(PT_RES[current][n.res] || n.res || "")}${n.text ? ` · <span dir="auto">${esc(n.text)}</span>` : ""} <small style="color:var(--muted)">(${esc(stamp(new Date(n.at)))})</small></li>`).join("")}</ul>` : `<span>${t().ptNoCalls}</span>`}</div></div>`;
+  }
   // Physiotherapy visits use the same timeline with the physiotherapist's steps (physio-flow.js), read from order.physioVisit.
   const isPt = o => o.service === "physio" && typeof PtFlow !== "undefined";
   const vOf = o => (isPt(o) ? o.physioVisit : o.doctorVisit) || {};
@@ -1349,8 +1358,9 @@
       : `<span class="status-chip wait">${svg(o.decision === "on_hold" ? I.pause : I.clock, 2)}${o.decision === "on_hold" ? t().holdChip : t().pendingChip}</span>`;
     const banner = held ? `<div class="banner">${svg(I.pause, 2)}<span>${t().holdBanner}</span><a class="btn btn-primary btn-sm" href="new-request.html?hold=${encodeURIComponent(o.id)}">${t().holdGo}</a></div>`
       : st === "awaiting_doctor" ? `<div class="banner info">${svg(I.info, 2)}<span>${t().docBanner}</span></div>`
+      : st === "pt_assigned" && o.ptAssign ? ptAssignHtml(o)
       : done ? `<div class="banner gray">${svg(I.info, 2)}<span>${st === "completed" ? t().doneBanner : t().st_cancelled}</span></div>` : "";
-    const stPill = { booked: "p-blue", awaiting_doctor: "p-orange", on_hold: "p-orange", completed: "p-green", cancelled: "p-red" }[st] || "p-gray";
+    const stPill = { booked: "p-blue", awaiting_doctor: "p-orange", pt_assigned: "p-orange", on_hold: "p-orange", completed: "p-green", cancelled: "p-red" }[st] || "p-gray";
 
     let top = (o.bookingId ? heroHtml(o) : "") + alertsTop(o);
 

@@ -150,6 +150,7 @@
   .p-blue { background: var(--blue-soft); color: var(--blue); }
   .p-gray { background: #f0f3f4; color: #5b6b70; }
   .p-amber { background: #fdf0d9; color: #9a5b00; }
+  .p-purple { background: #f1eafe; color: #6d28d9; }
   .sub.late { color: #b45309; font-weight: 600; }
   .s-amber { background: #fdf0d9; color: #b45309; }
   .chip.c-amber[aria-pressed="true"] { border-color: #d9a54a; background: #fdf0d9; color: #9a5b00; }
@@ -531,7 +532,7 @@
       noMatch: "No requests match these filters", noMatchHint: "Try another search or reset the filters.",
       filtered: "{n} filters applied", filtered1: "1 filter applied",
       view: "View request {id}", send: "Send SMS for {id}", prev: "Previous page", next: "Next page", close: "Close",
-      st_booked: "Booked", st_awaiting_doctor: "Waiting for the doctor", st_ready_to_confirm: "Doctor replied, call the customer", st_referred: "Referred to emergency",
+      st_booked: "Booked", st_awaiting_doctor: "Waiting for the doctor", st_pt_assigned: "With the physiotherapist", ptWith: "With {n} · {c} calls", st_ready_to_confirm: "Doctor replied, call the customer", st_referred: "Referred to emergency",
       st_declined: "Customer declined", st_completed: "Visit completed",
       dPatient: "Patient", dMrn: "Medical record", dMobile: "Mobile number", dService: "Service", dCreated: "Created", dStaff: "Created by",
       dVisit: "Visit", dNurse: "Nurse", dStatus: "Status", dSource: "How they reached us", dItems: "Requested items", dTotal: "Total", dReason: "Reason",
@@ -570,7 +571,7 @@
       noMatch: "لا توجد طلبات مطابقة", noMatchHint: "جرّب بحثاً آخر أو امسح التصفية.",
       filtered: "{n} عوامل تصفية مطبقة", filtered1: "تصفية واحدة مطبقة",
       view: "عرض الطلب {id}", send: "إرسال رسالة للطلب {id}", prev: "الصفحة السابقة", next: "الصفحة التالية", close: "إغلاق",
-      st_booked: "تم الحجز", st_awaiting_doctor: "بانتظار الطبيب", st_ready_to_confirm: "رد الطبيب، اتصل بالعميل", st_referred: "حُوّل للطوارئ",
+      st_booked: "تم الحجز", st_awaiting_doctor: "بانتظار الطبيب", st_pt_assigned: "عند الأخصائي", ptWith: "عند {n} · {c} اتصالات", st_ready_to_confirm: "رد الطبيب، اتصل بالعميل", st_referred: "حُوّل للطوارئ",
       st_declined: "اعتذر العميل", st_completed: "اكتملت الزيارة",
       dPatient: "المريض", dMrn: "الملف الطبي", dMobile: "رقم الجوال", dService: "الخدمة", dCreated: "تاريخ الإنشاء", dStaff: "أنشأه",
       dVisit: "الزيارة", dNurse: "الممرض/ة", dStatus: "الحالة", dSource: "طريقة التواصل", dItems: "الخدمات المطلوبة", dTotal: "الإجمالي", dReason: "السبب",
@@ -632,7 +633,7 @@
   const medicalPill = o => o.medical === "emergency" ? `<span class="pill p-red"><span class="dot"></span>${t().emergency}</span>` : `<span class="pill p-green"><span class="dot"></span>${t().nonEmergency}</span>`;
   const paymentPill = o => o.payment === "paid" ? `<span class="pill p-green">${t().paid}</span>` : o.payment === "unpaid" ? `<span class="pill p-red">${t().notPaid}</span>` : `<span class="dash">—</span>`;
   const statusPill = s => {
-    const cls = { on_hold: "p-amber", booked: "p-blue", awaiting_doctor: "p-orange", ready_to_confirm: "p-orange", referred: "p-red", emergency_closed: "p-gray", cancelled: "p-gray", declined: "p-gray", completed: "p-green" }[s] || "p-gray";
+    const cls = { on_hold: "p-amber", booked: "p-blue", awaiting_doctor: "p-orange", pt_assigned: "p-purple", ready_to_confirm: "p-orange", referred: "p-red", emergency_closed: "p-gray", cancelled: "p-gray", declined: "p-gray", completed: "p-green" }[s] || "p-gray";
     return `<span class="pill ${cls}">${t()["st_" + s]}</span>`;
   };
 
@@ -788,7 +789,8 @@
     $("rows").innerHTML = slice.length ? slice.map(o => {
       const d = new Date(o.createdAt), svc = o.service || "none", [cls, path] = ICONS[svc] || ICONS.none, st = statusOf(o);
       const svcName = o.service ? t()["sv_" + o.service] : o.medical === "emergency" ? t().st_referred : t().sv_none;
-      const stLine = st === "awaiting_doctor" || st === "ready_to_confirm" ? `<span class="sub">${t()["st_" + st]}</span>`
+      const stLine = st === "pt_assigned" && o.ptAssign ? `<span class="sub">${esc(tx("ptWith", { n: T(o.ptAssign.toName) || o.ptAssign.to, c: (o.ptAssign.notes || []).length }))}</span>`
+        : st === "awaiting_doctor" || st === "ready_to_confirm" ? `<span class="sub">${t()["st_" + st]}</span>`
         : o.decision === "rejected" ? `<span class="sub ${st === "declined" ? "late" : ""}">${st === "declined" ? t().rejOpen : t().rejClosed}</span>`
         : st === "on_hold" && o.hold ? `<span class="sub ${holdLate(o) ? "late" : ""}">${esc(tx(holdLate(o) ? "holdLate" : "holdAgo", { m: agoText(o.hold.at) }))} · ${esc(t()["hr_" + o.hold.reason] || "")}</span>` : "";
       const canSend = o.medical !== "emergency" && o.decision !== "rejected";

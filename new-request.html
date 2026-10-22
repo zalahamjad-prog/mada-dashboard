@@ -194,6 +194,10 @@
   .decision-opt.no strong { color: var(--danger); } .decision-opt.no input { accent-color: var(--danger); }
   .decision-opt.yes:has(input:checked) { background: #ecf8f1; border-color: #9fd5b6; }
   .decision-opt.no:has(input:checked) { background: #fdf0f0; border-color: #f0b9b9; }
+  .decision-opt.assign strong { color: #6d28d9; } .decision-opt.assign input { accent-color: #6d28d9; }
+  .decision-opt.assign:has(input:checked) { background: #f5f0ff; border-color: #cdb8f6; }
+  .assign-box select, .assign-box textarea { display: block; width: 100%; margin-top: 8px; border: 1px solid #d9e1e3; border-radius: 8px; padding: 9px 10px; font: inherit; font-size: 13.5px; background: #fff; }
+  .assign-box textarea { min-height: 70px; resize: vertical; }
   .reasons { margin-top: 14px; }
   .reasons > strong { font-size: 13px; font-weight: 600; }
   .reasons > strong em { color: var(--danger); font-style: normal; }
@@ -1504,6 +1508,13 @@
             <span><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span data-i18n="agree">Yes, I agree</span></strong><small data-i18n="agreeHint">Customer agreed to the appointment.</small></span></label>
           <label class="decision-opt no"><input type="radio" name="decision" value="no" id="decNo">
             <span><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg><span data-i18n="disagree">No, I do not agree</span></strong><small data-i18n="disagreeHint">Customer did not agree.</small></span></label>
+          <label class="decision-opt assign" id="decAssignWrap" hidden><input type="radio" name="decision" value="assign" id="decAssign">
+            <span><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a6.5 6.5 0 0 1 13 0v1"/><path d="M17 8h5M19.5 5.5 22 8l-2.5 2.5"/></svg><span data-i18n="assignPt">Assign to a physiotherapist</span></strong><small data-i18n="assignPtHint">The physiotherapist calls the patient, confirms the details and books the time.</small></span></label>
+          <div class="reasons assign-box" id="assignBox" hidden>
+            <strong><span data-i18n="assignTo">Physiotherapist</span> <em>*</em></strong>
+            <select id="assignPt"></select>
+            <textarea id="assignNote" maxlength="600" dir="auto" data-i18n-ph="assignNotePh" placeholder="Note for the physiotherapist (what the patient said, best time to call...)"></textarea>
+          </div>
           <div class="reasons" id="reasons" hidden>
             <strong><span data-i18n="reasonTitle">Reason</span> <em>*</em></strong>
             <label class="reason"><input type="radio" name="reason" value="time_not_suitable"><span data-i18n="r1">The time is not suitable</span></label>
@@ -1959,6 +1970,9 @@
       apptDate: "Date", apptTime: "Time", apptNurse: "Nurse", noSlot: "Choose a time slot",
       agree: "Yes, I agree", agreeHint: "Customer agreed to the appointment.",
       disagree: "No, I do not agree", disagreeHint: "Customer did not agree.",
+      assignPt: "Assign to a physiotherapist", assignPtHint: "The physiotherapist calls the patient, confirms the details and books the time.", assignTo: "Physiotherapist",
+      assignNotePh: "Note for the physiotherapist (what the patient said, best time to call...)", errAssign: "Choose the physiotherapist.", assignNone: "No active physiotherapists. Add one on the Staff page.",
+      selPt: "Choose a physiotherapist", successAssign: "Request assigned to the physiotherapist", successAssignText: "{n} will call the patient, confirm the details and book the time. You can follow it on the Requests page.",
       reasonTitle: "Reason", r1: "The time is not suitable", r2: "Prefers a different date", r3: "Found another provider", r4: "Changed their mind", r5: "Other (please specify)",
       reasonOtherPh: "Enter other reason...", stepCount3: "Step 3 of 4", closeReq: "Close Request",
       errSlot: "Choose an available time slot.", errDecision: "Record the customer's decision.", errReason: "Choose the reason the customer did not agree.", errReasonOther: "Write the reason.",
@@ -2139,6 +2153,9 @@
       apptDate: "التاريخ", apptTime: "الوقت", apptNurse: "الممرضة", noSlot: "اختر وقتاً",
       agree: "نعم، موافق", agreeHint: "وافق العميل على الموعد.",
       disagree: "لا، غير موافق", disagreeHint: "لم يوافق العميل.",
+      assignPt: "إسناد الطلب لأخصائي العلاج الطبيعي", assignPtHint: "الأخصائي يتصل بالمريض، يتأكد من البيانات ويحدد الموعد.", assignTo: "الأخصائي",
+      assignNotePh: "ملاحظة للأخصائي (وش قال المريض، أفضل وقت للاتصال...)", errAssign: "اختر الأخصائي.", assignNone: "ما فيه أخصائيين نشطين. أضف واحد من صفحة الموظفين.",
+      selPt: "اختر الأخصائي", successAssign: "انسند الطلب للأخصائي", successAssignText: "{n} بيتصل بالمريض، يتأكد من البيانات ويحدد الموعد. تقدر تتابعه من صفحة الطلبات.",
       reasonTitle: "السبب", r1: "الوقت غير مناسب", r2: "يفضّل تاريخاً آخر", r3: "وجد مقدم خدمة آخر", r4: "غيّر رأيه", r5: "أخرى (يرجى التوضيح)",
       reasonOtherPh: "اكتب السبب...", stepCount3: "الخطوة 3 من 4", closeReq: "إغلاق الطلب",
       errSlot: "اختر وقتاً متاحاً.", errDecision: "سجّل قرار العميل.", errReason: "اختر سبب عدم موافقة العميل.", errReasonOther: "اكتب السبب.",
@@ -2298,6 +2315,7 @@
     if (typeof renderIV === "function" && !$("stepIV").hidden) { renderIV(); renderIVDialog(); }
     if (typeof fillDistricts === "function") { fillDistricts(); updateDobNote(); }
     if (typeof renderSuccess === "function") renderSuccess();
+    if ($("assignBox") && !$("assignBox").hidden && typeof fillAssign === "function") fillAssign();
     try { renderHeld(); } catch (e) {}
     document.title = lang === "ar" ? "مدى كير | طلب جديد" : "Mada Care | New Request";
     try { localStorage.setItem("mada-lang", lang); } catch (e) {}
@@ -3159,6 +3177,8 @@
   }
   function initStep3() {
     N.use(state.service === "physio" ? "physio" : "nurse");
+    $("decAssignWrap").hidden = state.service !== "physio";
+    if (state.service !== "physio" && $("decAssign").checked) { $("decAssign").checked = false; $("assignBox").hidden = true; }
     s3.earliest = earliestFor();
     if (!s3.date && s3.earliest) selectSlot(s3.earliest.date, s3.earliest.minute);
     else if (!s3.date) { s3.date = N.ymd(new Date()); }
@@ -3277,9 +3297,19 @@
   $("editService").addEventListener("click", goService);
   $("backTo2").addEventListener("click", goService);
 
+  // A physiotherapy request can be handed to a physiotherapist (Staff role physio) instead of booking a time here: they call the patient,
+  // write their notes, change the request if needed and confirm it from their portal (physio-assigned.html). Saved as status "pt_assigned"
+  // with order.ptAssign { to, toName, by, at, note, notes: [{ at, by, res, text }] }.
+  function fillAssign() {
+    const sel = $("assignPt"), v = sel.value, list = MadaNurses.NURSES.filter(n => n.role === "physio"), t = i18n[current];
+    sel.innerHTML = `<option value="">${list.length ? t.selPt : t.assignNone}</option>` + list.map(n => `<option value="${n.id}">${n.name[current] || n.name.en}</option>`).join("");
+    sel.value = v || (s3.nurseId && list.some(n => n.id === s3.nurseId) ? s3.nurseId : "");
+  }
   document.querySelectorAll("input[name=decision]").forEach(r => r.addEventListener("change", () => {
-    const no = r.value === "no" && r.checked;
+    const no = r.value === "no" && r.checked, as = r.value === "assign" && r.checked;
     $("reasons").hidden = !no;
+    $("assignBox").hidden = !as;
+    if (as) fillAssign();
     $("next3Label").textContent = i18n[current][no ? "closeReq" : "saveNext"];
     $("next3Label").dataset.i18n = no ? "closeReq" : "saveNext";
     $("next3").classList.toggle("danger", no);
@@ -3293,8 +3323,17 @@
 
   function s3Error(key) { const el = $("s3Err"); el.textContent = i18n[current][key]; el.classList.add("show"); el.scrollIntoView({ behavior: "smooth", block: "center" }); }
   $("next3").addEventListener("click", () => {
-    if (s3.minute == null) return s3Error("errSlot");
     const decision = document.querySelector("input[name=decision]:checked");
+    if (decision && decision.value === "assign" && state.service === "physio") {
+      const to = $("assignPt").value; if (!to) return s3Error("errAssign");
+      const n = MadaNurses.NURSES.find(x => x.id === to);
+      state.assign = { to, toName: n ? n.name : null, note: $("assignNote").value.trim() };
+      // A time picked here is kept as the suggested time; the physiotherapist confirms or changes it.
+      state.appt = s3.minute != null ? { date: s3.date, minute: s3.minute, nurse: n ? n.name : null, nurseId: to } : null;
+      return goStep(4);
+    }
+    state.assign = null;
+    if (s3.minute == null) return s3Error("errSlot");
     if (!decision) return s3Error("errDecision");
     const appt = { date: s3.date, time: fmtTime(s3.minute), nurseId: s3.nurseId };
     if (decision.value === "yes") {
@@ -3534,6 +3573,12 @@
     try { sessionStorage.setItem("mada-request-draft", JSON.stringify(request)); } catch (e) {}
     try { sessionStorage.setItem("mada-created", JSON.stringify({ patient: patient.fullName, service: state.service, appt: state.appt, mrn })); } catch (e) {}
     try { sessionStorage.setItem("mada-notice", "created"); } catch (e) {}
+    if (state.assign && state.service === "physio") {
+      const now = new Date().toISOString(), a = state.assign;
+      saveOrder({ status: "pt_assigned", decision: "pending", payment: null, patient: patient.fullName, mrn, appointment: state.appt ? apptOf(state.appt) : null, address: patient.address,
+        booking: null, ptAssign: { to: a.to, toName: a.toName, by: me ? me.name : null, at: now, note: a.note || "", notes: [] } });
+      successData = null; showSuccess(mrn, existing, patient.fullName, a.toName); return;
+    }
     saveOrder({ status: "booked", decision: "approved", payment: "unpaid", patient: patient.fullName, mrn, appointment: apptOf(state.appt), address: patient.address });
     showSuccess(mrn, existing, patient.fullName);
   });
@@ -3544,8 +3589,8 @@
     return MadaPatients.nextFileNo();
   }
   let successData = null;
-  function showSuccess(mrn, existing, patientName) {
-    successData = { mrn, existing, patientName, at: new Date() };
+  function showSuccess(mrn, existing, patientName, assignedTo) {
+    successData = { mrn, existing, patientName, at: new Date(), assignedTo: assignedTo || null };
     renderSuccess();
     $("successOverlay").hidden = false;
     $("toDashboard").focus();
@@ -3553,8 +3598,8 @@
   function renderSuccess() {
     if (!successData) return;
     const t = i18n[current], d = successData;
-    $("successTitle").textContent = state.doctorFlow ? t.successDoctor : d.existing ? t.successExisting : t.successNew;
-    $("successText").textContent = state.doctorFlow ? t.successDoctorText : d.existing ? t.successExistingText : t.successNewText;
+    $("successTitle").textContent = d.assignedTo ? t.successAssign : state.doctorFlow ? t.successDoctor : d.existing ? t.successExisting : t.successNew;
+    $("successText").textContent = d.assignedTo ? t.successAssignText.replace("{n}", d.assignedTo[current] || d.assignedTo.en) : state.doctorFlow ? t.successDoctorText : d.existing ? t.successExistingText : t.successNewText;
     $("mrnNum").textContent = d.mrn;
     const when = `${d.at.toLocaleDateString(loc(), { day: "numeric", month: "long", year: "numeric" })} ${t.at} ${fmtTime(d.at.getHours() * 60 + d.at.getMinutes())}`;
     $("createdOn").textContent = t.createdOn.replace("{d}", when);
