@@ -7,6 +7,7 @@
   if (!header || !nav) return;
   const KEY = "mada-admin-nav", SMALL = 1200;
   const IC = {
+    "ops.html": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/><path d="M3 12h2M19 12h2M12 3v2"/>',
     "sales.html": '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
     "dashboard.html": '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
     "requests.html": '<path d="M4 6h16M4 12h16M4 18h10"/>',
@@ -32,7 +33,7 @@
   const svg = p => `<svg class="mn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 
   // Links added here so every page gets them without its own translation; named by the page language in paint().
-  const EXTRA = [{ href: "sales.html", en: "Sales & Calls", ar: "المبيعات والمكالمات", after: "dashboard.html" }, { href: "followup-orders.html", en: "Doctor Orders", ar: "طلبات الطبيب", after: "patients.html" }, { href: "lab-results.html", en: "Lab Results", ar: "نتائج التحاليل", after: "medical-requests.html" }, { href: "xray-results.html", en: "X-ray Results", ar: "نتائج الأشعة", after: "lab-results.html" }, { href: "physio-requests.html", en: "Physiotherapy Requests", ar: "طلبات العلاج الطبيعي", after: "xray-results.html" }, { href: "providers.html", en: "Service Providers", ar: "مقدمو الخدمة", after: "services.html" }, { href: "diagnoses.html", en: "Diagnoses", ar: "التشخيصات", after: "providers.html" }, { href: "medications.html", en: "Medications", ar: "الأدوية", after: "diagnoses.html" }, { href: "coupons.html", en: "Coupons", ar: "الكوبونات" }, { href: "coverage.html", en: "Coverage", ar: "التغطية" }];
+  const EXTRA = [{ href: "sales.html", en: "Sales & Calls", ar: "المبيعات والمكالمات", after: "dashboard.html" }, { href: "ops.html", en: "Operations Room", ar: "غرفة التشغيل", after: "dashboard.html" }, { href: "followup-orders.html", en: "Doctor Orders", ar: "طلبات الطبيب", after: "patients.html" }, { href: "lab-results.html", en: "Lab Results", ar: "نتائج التحاليل", after: "medical-requests.html" }, { href: "xray-results.html", en: "X-ray Results", ar: "نتائج الأشعة", after: "lab-results.html" }, { href: "physio-requests.html", en: "Physiotherapy Requests", ar: "طلبات العلاج الطبيعي", after: "xray-results.html" }, { href: "providers.html", en: "Service Providers", ar: "مقدمو الخدمة", after: "services.html" }, { href: "diagnoses.html", en: "Diagnoses", ar: "التشخيصات", after: "providers.html" }, { href: "medications.html", en: "Medications", ar: "الأدوية", after: "diagnoses.html" }, { href: "coupons.html", en: "Coupons", ar: "الكوبونات" }, { href: "coverage.html", en: "Coverage", ar: "التغطية" }];
   EXTRA.forEach(x => {
     let a = nav.querySelector(`a[href="${x.href}"]`);
     if (!a) {

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Operations Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Lab Results ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 14px; text-align: start; cursor: pointer; font: inherit; color: inherit; }
+  .stat:hover { border-color: #c9d4d8; }
+  .stat[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary) inset; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .stat-icon svg { width: 21px; height: 21px; }
+  .stat b { display: block; font-size: 22px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; line-height: 1.3; }
+  .s-green { background: var(--primary-soft); color: var(--primary); } .s-orange { background: var(--orange-soft); color: var(--orange); } .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); } .s-purple { background: var(--purple-soft); color: var(--purple); } .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; }
+  .search { flex: 1 1 280px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px; border: 1px solid var(--border); border-radius: 9px; background: #fff; }
+  .search svg { width: 18px; height: 18px; color: #5b6b70; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; }
+  .search:focus-within, .sel:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); outline: 0; }
+  .sel { height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13.5px; min-width: 180px; }
+  .table-wrap { overflow-x: auto; border-top: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { background: #f5f8f9; text-align: start; font-weight: 600; font-size: 12.5px; color: #44545a; padding: 12px 12px; white-space: nowrap; }
+  tbody td { padding: 12px; border-top: 1px solid #eef2f3; vertical-align: top; }
+  tbody tr:hover td { background: #fbfdfc; }
+  td b.pn, td a.pl { display: block; color: #15304a; font-weight: 600; text-decoration: none; }
+  td a.pl:hover { color: #0f766e; text-decoration: underline; }
+  a.fl { color: #0f766e; font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.fl:hover { border-bottom-style: solid; }
+  td.c-who small { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 3px; }
+  td.c-who a.fl { display: inline-block; background: #e6f4f1; border: 1px solid #b7e0d6; border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+  td.c-who a.fl:hover { background: #0f766e; color: #fff; border-color: #0f766e; }
+  td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+  td .num { white-space: nowrap; }
+  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; } .pv-logo { display: block; height: 24px; max-width: 90px; object-fit: contain; margin-bottom: 4px; }
+  .dr small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .tests { display: flex; flex-wrap: wrap; gap: 4px; max-width: 260px; }
+  .exam { font-weight: 600; color: #15304a; min-width: 110px; max-width: 180px; display: block; }
+  td small { max-width: 180px; }
+  .dr .q { max-width: 190px !important; }
+  .tc { font-size: 11px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 2px 7px; border-radius: 6px; direction: ltr; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-orange { background: var(--orange-soft); color: #b45309; } .p-red { background: var(--red-soft); color: #b91c1c; } .p-blue { background: var(--blue-soft); color: #1d4ed8; }
+  .p-green { background: var(--green-soft); color: var(--green); } .p-purple { background: var(--purple-soft); color: var(--purple); } .p-gray { background: #f0f3f4; color: #5b6b70; }
+  .p-crit { background: #b42318; color: #fff; }
+  .due { font-weight: 600; color: #b45309; white-space: nowrap; } .due.late { color: #b91c1c; } .due.ok { color: var(--green); }
+  .dr { min-width: 150px; }
+  .dr b { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+  .dr b svg { width: 15px; height: 15px; }
+  .dr .tl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .dr .tl li { display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .dr .tl b { font-size: 11.5px; font-weight: 600; color: #15304a; display: inline; }
+  .dr .tl em { font-style: normal; color: #6b7a80; }
+  .dr .took { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .dr .took svg { width: 13px; height: 13px; }
+  .dr .took.ok { background: #e7f6ec; color: #15803d; } .dr .took.wait { background: #fff4e5; color: #b45309; }
+  .stat small.avg { color: #15803d; font-weight: 700; margin-top: 3px; }
+  .dr .q { margin-top: 4px; font-size: 12px; color: #44545a; font-style: italic; max-width: 240px; }
+  .d-no { color: #b91c1c; } .d-seen { color: #b45309; } .d-ok { color: var(--green); } .d-na { color: var(--muted); }
+  .acts { display: flex; gap: 6px; justify-content: flex-end; }
+  .ib { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #d9e1e3; background: #fff; display: grid; place-items: center; cursor: pointer; color: #15304a; text-decoration: none; }
+  .ib:hover { background: #f5f8f8; }
+  .ib svg { width: 17px; height: 17px; }
+  .ib[disabled] { opacity: .35; cursor: default; }
+  .none { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+  .ov { position: fixed; inset: 0; z-index: 60; background: rgba(16,35,43,.42); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .dlg { position: relative; width: 100%; max-width: 760px; background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.18); margin: auto; padding: 22px 22px 18px; }
+  .x { position: absolute; top: 14px; inset-inline-end: 14px; width: 34px; height: 34px; border: 0; background: none; border-radius: 8px; cursor: pointer; display: grid; place-items: center; color: #44545a; }
+  .x:hover { background: #f1f4f5; } .x svg { width: 20px; height: 20px; }
+  .dlg h3 { font-size: 19px; color: #15304a; padding-inline-end: 36px; }
+  .dlg .sub { font-size: 13px; color: var(--muted); margin: 4px 0 14px; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-size: 13px; }
+  .kv span { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 3px; }
+  .rt { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .rt h4 { display: flex; gap: 8px; align-items: center; padding: 9px 12px; background: #f5f8f9; font-size: 13.5px; color: #15304a; }
+  .rt td, .rt th { padding: 8px 12px; }
+  .rt th { font-size: 11.5px; color: var(--muted); font-weight: 600; text-align: start; }
+  .fl { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #e3f4ee; color: #0f6b52; }
+  .fl.low, .fl.high { background: #fff1e0; color: #a4520a; } .fl.critical { background: #b42318; color: #fff; }
+  .df { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .df a { text-decoration: none; }
+  @media (max-width: 1180px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .user-meta { display: none; } }
+  @media (max-width: 980px) {
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-who, .table-wrap td.c-tests, .table-wrap td.c-dr { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { grid-column: 1 / -1; }
+    .acts { justify-content: stretch; } .acts .ib { flex: 1; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .ph-icon { width: 40px; height: 40px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .sel { flex: 1 1 100%; }
+    .kv { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .dlg { padding: 18px 14px 14px; }
+    .rt .hm { display: none; }
+  }
+
+  /* ---------- Sales & Calls ---------- */
+  .ph-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .seg { display: inline-flex; padding: 3px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+  .seg button { height: 34px; padding: 0 14px; border: 0; border-radius: 8px; background: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #44545a; }
+  .seg button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+  .ph-tools .sel { height: 40px; min-width: 170px; }
+  .stats.s8 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stat small.sub2 { font-weight: 500; margin-top: 3px; }
+  .stat small.sub2.bad { color: #b91c1c; font-weight: 700; } .stat small.sub2.good { color: var(--green); font-weight: 700; }
+  .goal { display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr)); gap: 18px; padding: 16px 18px; align-items: center; }
+  .goal h2 { font-size: 16px; color: #15304a; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .goal .gsub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .goal .gact { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .gm { cursor: pointer; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: #fff; text-align: start; font: inherit; color: inherit; }
+  .gm:hover { border-color: #c9d4d8; }
+  .gm span { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .gm b { display: block; font-size: 22px; margin-top: 4px; color: #15304a; font-variant-numeric: tabular-nums; }
+  .gm b em { font-style: normal; font-size: 14px; color: var(--muted); font-weight: 600; }
+  .gm .meter { height: 9px; border-radius: 5px; background: #e8eef0; margin-top: 8px; overflow: hidden; }
+  .gm .meter i { display: block; height: 100%; border-radius: 5px; background: #f2b45c; }
+  .gm.hit .meter i { background: var(--primary); }
+  .gm small { display: block; font-size: 12px; margin-top: 6px; color: #b45309; font-weight: 600; } .gm.hit small { color: var(--green); }
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px 10px; flex-wrap: wrap; }
+  .ch h2 { font-size: 15px; color: #15304a; } .ch p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .tm td, .tm th { white-space: nowrap; }
+  .tm tbody tr { cursor: pointer; }
+  .tm tbody tr[aria-selected="true"] td { background: var(--primary-soft) !important; }
+  .tm .nb { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: #15304a; cursor: pointer; font-variant-numeric: tabular-nums; border-bottom: 1px dashed #b8c4c8; }
+  .tm .nb:hover { color: var(--primary); border-bottom-color: currentColor; }
+  .tm .nb.bad { color: #b91c1c; }
+  .tm .who b { display: block; color: #15304a; } .tm .who small { margin: 2px 0 0; }
+  .mini { display: flex; align-items: center; gap: 6px; } .mini i { display: block; width: 54px; height: 6px; border-radius: 3px; background: #e8eef0; overflow: hidden; } .mini i u { display: block; height: 100%; background: #f2b45c; } .mini.hit i u { background: var(--primary); }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 16px 10px; }
+  .tab { height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid #d9e1e3; background: #fff; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #44545a; display: inline-flex; align-items: center; gap: 6px; }
+  .tab b { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tab[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; } .tab[aria-pressed="true"] b { background: rgba(255,255,255,.22); }
+  .tab.hot b { background: var(--red); color: #fff; }
+  .acts-list { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 8px; max-height: 470px; overflow-y: auto; }
+  .acts-list li { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .acts-list li.late { border-color: #f3c4c4; background: #fffafa; }
+  .acts-list .ai b { display: block; color: #15304a; font-size: 13.5px; }
+  .acts-list .ai small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .acts-list .ai .why { color: #b45309; font-weight: 600; } .acts-list li.late .why { color: #b91c1c; }
+  .acts-list .aa { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .empty { padding: 26px 16px; text-align: center; color: var(--muted); font-size: 13px; }
+  .chart { padding: 6px 16px 14px; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 190px; position: relative; border-bottom: 1px solid var(--border); }
+  .bars .tg { position: absolute; inset-inline: 0; border-top: 2px dashed #e08a1e; pointer-events: none; }
+  .bars .tg span { position: absolute; inset-inline-end: 0; top: -20px; font-size: 11px; font-weight: 700; color: #b45309; background: #fff; padding: 0 4px; }
+  .bars button { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; border: 0; background: none; cursor: pointer; padding: 0; font: inherit; }
+  .bars button i { display: block; width: 100%; max-width: 38px; border-radius: 6px 6px 0 0; background: #8fd0bd; min-height: 2px; }
+  .bars button.hit i { background: var(--primary); } .bars button.today i { box-shadow: 0 0 0 2px #15304a inset; }
+  .bars button:hover i { filter: brightness(.92); }
+  .bars button em { font-style: normal; font-size: 11px; font-weight: 700; color: #15304a; font-variant-numeric: tabular-nums; }
+  .xl { display: flex; gap: 6px; margin-top: 6px; } .xl span { flex: 1; min-width: 0; text-align: center; font-size: 10.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+  .lg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+  .lg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: -1px; margin-inline-end: 5px; }
+  .hb { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; gap: 6px; }
+  .hb li button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 10px; background: none; cursor: pointer; text-align: start; font: inherit; color: inherit; }
+  .hb li button:hover { background: #f6f8f9; border-color: var(--border); }
+  .hb span { font-size: 13px; font-weight: 600; color: #15304a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hb b { font-size: 13px; font-variant-numeric: tabular-nums; color: #15304a; }
+  .hb i { grid-column: 1 / -1; display: block; height: 7px; border-radius: 4px; background: #e8eef0; overflow: hidden; } .hb i u { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
+  .hb.red i u { background: #e26d6d; } .hb.blue i u { background: #6f9ff0; }
+  .dlg.xw { max-width: 1040px; }
+  .dl td, .dl th { white-space: nowrap; } .dl td.c-who { white-space: normal; }
+  .dl a.oid { color: #0f766e; font-weight: 700; text-decoration: none; } .dl a.oid:hover { text-decoration: underline; }
+  .dsum { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .dsum span { padding: 6px 12px; border-radius: 10px; background: #f5f8f9; font-size: 12.5px; color: #44545a; } .dsum b { color: #15304a; }
+  .fg { display: grid; gap: 12px; }
+  .fg label > span { display: block; font-size: 12.5px; font-weight: 600; color: #44545a; margin-bottom: 5px; }
+  .fg input, .fg select { width: 100%; height: 42px; border: 1px solid #d9e1e3; border-radius: 9px; padding: 0 12px; font: inherit; font-size: 14px; background: #fff; }
+  .fg .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .fg h4 { font-size: 13.5px; color: #15304a; margin-top: 4px; }
+  .fg .per { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+  .fg .per label { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 10px; align-items: center; }
+  .fg .per label > span { margin: 0; font-weight: 500; color: #15304a; font-size: 13px; }
+  .fg .per input { height: 36px; }
+  .fg .hint { font-size: 12px; color: var(--muted); } .fg .err { color: #b91c1c; font-size: 12.5px; font-weight: 600; }
+  .mv-o { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; } .mv-o b { color: #15304a; } .mv-o small { display: block; color: var(--muted); margin-top: 3px; }
+  .tr-log { list-style: none; padding: 0; margin: 6px 0 0; font-size: 12px; color: var(--muted); display: grid; gap: 3px; }
+  @media (max-width: 1180px) { .stats.s8 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid2 { grid-template-columns: minmax(0, 1fr); } .grid3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  @media (max-width: 980px) { .goal { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .goal > div:first-child { grid-column: 1 / -1; } .tm tbody tr { cursor: default; } .tm td, .dl td { white-space: normal; } }
+  @media (max-width: 760px) {
+    .stats.s8 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid3 { grid-template-columns: minmax(0, 1fr); }
+    .ph-tools { width: 100%; } .ph-tools .seg { flex: 1 1 100%; } .seg button { flex: 1; } .ph-tools .sel { flex: 1 1 100%; } .ph-tools .btn { flex: 1 1 100%; }
+    .goal { padding: 14px; gap: 10px; }
+    .acts-list li { grid-template-columns: minmax(0, 1fr); } .acts-list .aa { justify-content: stretch; } .acts-list .aa .btn { flex: 1; }
+    .bars { height: 150px; gap: 3px; } .bars button em { font-size: 10px; }
+    .fg .row2 { grid-template-columns: minmax(0, 1fr); }
+  }
+  /* ---------- Operations Room ---------- */
+  .live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--green); }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(21,128,61,.5); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(21,128,61,.45); } 70% { box-shadow: 0 0 0 8px rgba(21,128,61,0); } 100% { box-shadow: 0 0 0 0 rgba(21,128,61,0); } }
+  @media (prefers-reduced-motion: reduce) { .live i { animation: none; } }
+  .qa { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn-sm { height: 34px; padding: 0 12px; font-size: 12.5px; }
+  .board { display: grid; grid-template-columns: repeat(6, minmax(150px, 1fr)); gap: 10px; padding: 0 16px 16px; overflow-x: auto; }
+  .col { background: #f6f8f9; border-radius: 12px; padding: 8px; display: grid; gap: 8px; align-content: start; min-height: 120px; }
+  .col-h { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 4px 6px 2px; font-size: 12.5px; font-weight: 700; color: #15304a; }
+  .col-h button { border: 0; background: #fff; border-radius: 10px; min-width: 26px; height: 22px; padding: 0 7px; font-size: 12px; font-weight: 700; cursor: pointer; color: inherit; font-variant-numeric: tabular-nums; }
+  .col-h button:hover { background: var(--primary-soft); color: var(--primary); }
+  .col-h .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-inline-end: 6px; }
+  .vcard { display: block; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 9px 10px; text-decoration: none; color: inherit; font-size: 12.5px; }
+  .vcard:hover { border-color: #c9d4d8; box-shadow: 0 4px 12px rgba(16,35,43,.06); }
+  .vcard.late { border-color: #f3c4c4; background: #fffafa; }
+  .vcard .vt { display: flex; justify-content: space-between; gap: 6px; font-weight: 700; color: #15304a; }
+  .vcard .vt .num { color: #44545a; font-weight: 600; }
+  .vcard small { display: block; color: var(--muted); margin-top: 3px; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vcard .lt { color: #b91c1c; font-weight: 700; white-space: normal; }
+  .col .more { border: 1px dashed #c9d4d8; background: none; border-radius: 10px; padding: 7px; font-size: 12px; color: #44545a; cursor: pointer; font-weight: 600; }
+  .col .none2 { font-size: 12px; color: var(--muted); text-align: center; padding: 14px 4px; }
+  .tm .st { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+  .tm .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .st.busy { color: #b45309; } .st.free { color: var(--green); } .st.off { color: #8a979b; }
+  .money { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 0 16px 6px; }
+  .money .gm b { font-size: 20px; }
+  .tabs .tab.hot b { background: var(--red); color: #fff; }
+  @media (max-width: 1180px) { .money { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 760px) { .board { grid-template-columns: repeat(6, minmax(78%, 1fr)); scroll-snap-type: x mandatory; } .col { scroll-snap-align: start; } .qa { width: 100%; } .qa .btn { flex: 1 1 calc(50% - 8px); } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 14l3-3 3 2 4-5M8 21h8"/></svg></span>
+      <div><h1 data-i18n="title">Operations Room</h1><p><span id="sub"></span> <span class="live"><i></i><span id="upd"></span></span></p></div>
+    </div>
+    <div class="ph-tools">
+      <div class="seg" id="range" role="group"></div>
+    </div>
+  </div>
+  <div class="qa" id="qa"></div>
+  <div class="stats s8" id="stats"></div>
+  <section class="card">
+    <div class="ch"><div><h2 data-i18n="boardT">Today's visits</h2><p data-i18n="boardS">Every visit of today and where it is now. Click a visit to open it.</p></div></div>
+    <div class="board" id="board"></div>
+  </section>
+  <div class="grid2 ops2">
+    <section class="card" id="actCard">
+      <div class="ch"><div><h2 data-i18n="actT">Needs action</h2><p data-i18n="actS">What is late or stuck and needs a decision now.</p></div></div>
+      <div class="tabs" id="aTabs"></div>
+      <ul class="acts-list" id="aList"></ul>
+    </section>
+    <section class="card">
+      <div class="ch"><div><h2 data-i18n="teamT">The teams today</h2><p data-i18n="teamS">Nurses, doctors, physiotherapists and drivers: who is busy, who is free, and their visits today.</p></div></div>
+      <div class="table-wrap tm"><table><thead><tr id="tHead"></tr></thead><tbody id="tRows"></tbody></table></div>
+    </section>
+  </div>
+  <section class="card">
+    <div class="ch"><div><h2 id="mnT"></h2><p data-i18n="mnS">Bookings and payments in this period, before VAT. Click any number to see its bookings.</p></div></div>
+    <div class="money" id="money"></div>
+    <div class="chart"><div class="bars" id="bars"></div><div class="xl" id="xl"></div></div>
+  </section>
+  <div class="grid3">
+    <section class="card"><div class="ch"><div><h2 data-i18n="svcT">Sales by service</h2><p data-i18n="svcS">Bookings and sales in this period.</p></div></div><ul class="hb" id="svc"></ul></section>
+    <section class="card"><div class="ch"><div><h2 data-i18n="cxT">Cancellations</h2><p data-i18n="cxS">Cancelled bookings in this period, by reason.</p></div></div><ul class="hb red" id="cx"></ul></section>
+    <section class="card"><div class="ch"><div><h2 data-i18n="punT">Arrival on time</h2><p data-i18n="punS">Visits in this period that started on time, early or late.</p></div></div><ul class="hb blue" id="pun"></ul></section>
+  </div>
+</main>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="dT"><div class="dlg" id="dlg"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="nurses.js"></script>
+<script src="staff.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Operations Room: the operations manager's home. One screen for the day: today's visits and where each one is,
+  // what is late or stuck, the teams (busy / free), and the money. Every number opens its bookings.
+  // A visit = a booking (order.bookingId) with an appointment. Where it is comes from the team's apps:
+  // nurseVisit / physioVisit { status: ontheway | arrived | ongoing | paused | done }, doctorVisit { startedAt, status }, order.arrival, order.status completed.
+  // Money = bookings booked in the period (order.bookedAt), order.total before VAT; collected = payment "paid".
+  const i18n = {
+    en: { tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Operations Room", sub: "The whole day in one place. Click any number to see its details.", upd: "Live · updated {t}",
+      r_today: "Today", r_week: "Last 7 days", r_month: "This month",
+      q_new: "New request", q_bookings: "Bookings", q_move: "Move requests", q_staff: "Add staff", q_coverage: "Coverage", q_quality: "Quality",
+      k_today: "Visits today", k_done: "Done today", k_live: "In progress now", k_late: "Late now", k_noteam: "Without a team", k_emg: "Emergencies open", k_sales: "Sales (SAR)", k_cx: "Cancelled",
+      s_today: "{n} still to go", s_done: "{p} of today's visits", s_live: "On the way, arrived or in the visit", s_late: "Past the visit time, team not there", s_noteam: "Today and the next 2 days", s_emg: "Waiting for a supervisor", s_sales: "{p} collected", s_cx: "In this period",
+      boardT: "Today's visits", boardS: "Every visit of today and where it is now. Click a visit to open it.",
+      ph_noteam: "No team", ph_sched: "Scheduled", ph_onway: "On the way", ph_arrived: "Arrived", ph_started: "In the visit", ph_done: "Done", ph_cancelled: "Cancelled", ph_unsched: "No time yet",
+      lateBy: "Late {d}", inT: "in {d}", startedAt: "Started {t}", noTeamYet: "No team assigned", more: "+{n} more", emptyCol: "None",
+      actT: "Needs action", actS: "What is late or stuck and needs a decision now.",
+      a_late: "Late visits", a_noteam: "No team", a_emg: "Emergencies", a_doc: "Waiting for the doctor", a_hold: "Customers waiting", a_quality: "Quality issues", a_cx: "Cancelled today",
+      e_late: "No visit is late.", e_noteam: "Every visit has a team.", e_emg: "No open emergencies.", e_doc: "No requests waiting for the doctor.", e_hold: "No customer is waiting past the call back time.", e_quality: "No open quality issues.", e_cx: "No cancellations today.",
+      w_late: "Visit {t} · late {d} · {p}", w_noteam: "Visit {t} · no team assigned", w_unsched: "Paid, no visit time yet", w_emg: "Referred {d} ago", w_doc: "Sent {d} ago", w_hold: "Call back late {d} · by {n}", w_quality: "{s} · {a}", w_cx: "{r}",
+      open: "Open", call: "Call", assign: "Assign team", moveA: "Move",
+      teamT: "The teams today", teamS: "Nurses, doctors, physiotherapists and drivers: who is busy, who is free, and their visits today.",
+      cName: "Name", cRole: "Role", cToday: "Visits today", cDone: "Done", cNow: "Now", cNext: "Next visit",
+      busy: "In a visit", free: "Free", off: "Off today", noNext: "—", noTeamList: "No teams yet. Add nurses, doctors and drivers on the Staff page.",
+      role_nurse: "Nurse", role_physio: "Physiotherapist", role_doctor: "Doctor", role_driver: "Driver",
+      mnT_today: "Money today", mnT_week: "Money · last 7 days", mnT_month: "Money · this month", mnS: "Bookings and payments in this period, before VAT. Click any number to see its bookings.",
+      m_sales: "Sales", m_paid: "Collected", m_unpaid: "Not collected yet", m_avg: "Average per booking", m_bk: "{n} bookings", m_pp: "{n} paid", m_up: "{n} bookings", m_avgS: "Before VAT",
+      svcT: "Sales by service", svcS: "Bookings and sales in this period.", cxT: "Cancellations", cxS: "Cancelled bookings in this period, by reason.", punT: "Arrival on time", punS: "Visits in this period that started on time, early or late.",
+      pun_ontime: "On time", pun_late: "Late", pun_early: "Early", pun_none: "Not recorded",
+      noData: "Nothing in this period yet.", nBk: "{n} bookings · {s} SAR", nVis: "{n} visits", noReason: "No reason written",
+      svc_blood: "Blood Tests", svc_nursing: "Nursing Services", svc_physio: "Physiotherapy", svc_iv: "IV Vitamin Therapy", svc_doctor: "Doctor Visit with Nursing", svc_rad: "X-ray", svc_other: "Other",
+      dList: "{n} bookings", dTotal: "Total {s} SAR", dEmpty: "Nothing here.", close: "Close",
+      cId: "Request", cPatient: "Patient", cService: "Service", cTeam: "Team", cTime: "Time", cStatus: "Where it is", cAmount: "Amount (SAR)",
+      pay_paid: "Paid", pay_after: "Pays at the visit", pay_no: "Not paid",
+      d_today: "Today's visits", d_done: "Visits done today", d_live: "Visits in progress", d_late: "Late visits", d_noteam: "Visits without a team", d_emg: "Open emergencies", d_sales: "Bookings and sales", d_paid: "Paid bookings", d_unpaid: "Bookings not collected yet", d_avg: "Bookings and sales", d_cx: "Cancelled bookings",
+      d_ph: "Today: {p}", d_prov: "Visits today · {n}", d_provDone: "Done today · {n}", d_svc: "Bookings: {s}", d_cxr: "Cancelled: {r}", d_pun: "Visits: {p}", d_day: "Bookings on {d}",
+      d: "{n}d", h: "{n}h", m: "{n}m", sar: "SAR", noPatient: "Not entered yet", unknown: "—" },
+    ar: { tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "غرفة التشغيل", sub: "يومك كامل في مكان واحد. اضغط على أي رقم تشوف تفاصيله.", upd: "مباشر · آخر تحديث {t}",
+      r_today: "اليوم", r_week: "آخر ٧ أيام", r_month: "هذا الشهر",
+      q_new: "طلب جديد", q_bookings: "الحجوزات", q_move: "تحويل الطلبات", q_staff: "إضافة موظف", q_coverage: "التغطية", q_quality: "الجودة",
+      k_today: "زيارات اليوم", k_done: "خلصت اليوم", k_live: "شغالة الحين", k_late: "متأخرة الحين", k_noteam: "بدون فريق", k_emg: "طوارئ مفتوحة", k_sales: "المبيعات (ريال)", k_cx: "ملغية",
+      s_today: "باقي {n}", s_done: "{p} من زيارات اليوم", s_live: "بالطريق أو وصلوا أو بالزيارة", s_late: "عدى وقت الزيارة والفريق ما وصل", s_noteam: "اليوم واليومين الجايين", s_emg: "بانتظار المشرفة", s_sales: "المحصّل {p}", s_cx: "في هذي الفترة",
+      boardT: "زيارات اليوم", boardS: "كل زيارات اليوم ووين وصلت كل وحدة. اضغط على الزيارة تفتحها.",
+      ph_noteam: "بدون فريق", ph_sched: "مجدولة", ph_onway: "بالطريق", ph_arrived: "وصلوا", ph_started: "بالزيارة", ph_done: "خلصت", ph_cancelled: "ملغية", ph_unsched: "بدون وقت",
+      lateBy: "متأخرة {d}", inT: "بعد {d}", startedAt: "بدأت {t}", noTeamYet: "ما انحدد فريق", more: "+{n} زيادة", emptyCol: "ما فيه",
+      actT: "يحتاج إجراء", actS: "اللي متأخر أو واقف ويحتاج قرار الحين.",
+      a_late: "زيارات متأخرة", a_noteam: "بدون فريق", a_emg: "طوارئ", a_doc: "بانتظار الطبيب", a_hold: "عملاء ينتظرون", a_quality: "ملاحظات الجودة", a_cx: "ألغيت اليوم",
+      e_late: "ما فيه زيارة متأخرة.", e_noteam: "كل الزيارات لها فريق.", e_emg: "ما فيه طوارئ مفتوحة.", e_doc: "ما فيه طلبات بانتظار الطبيب.", e_hold: "ما فيه عميل ينتظر بعد وقت الاتصال.", e_quality: "ما فيه ملاحظات جودة مفتوحة.", e_cx: "ما فيه إلغاءات اليوم.",
+      w_late: "الزيارة {t} · متأخرة {d} · {p}", w_noteam: "الزيارة {t} · ما انحدد فريق", w_unsched: "مدفوع وما انحدد وقت الزيارة", w_emg: "انحولت قبل {d}", w_doc: "انرسل قبل {d}", w_hold: "متأخر الاتصال {d} · عند {n}", w_quality: "{s} · {a}", w_cx: "{r}",
+      open: "فتح", call: "اتصال", assign: "تحديد الفريق", moveA: "تحويل",
+      teamT: "الفرق اليوم", teamS: "الممرضين والأطباء وأخصائيي العلاج الطبيعي والسواقين: مين مشغول ومين فاضي، وزياراتهم اليوم.",
+      cName: "الاسم", cRole: "الوظيفة", cToday: "زيارات اليوم", cDone: "خلصت", cNow: "الحين", cNext: "الزيارة الجاية",
+      busy: "بزيارة", free: "فاضي", off: "إجازة اليوم", noNext: "—", noTeamList: "ما فيه فرق للحين. أضف الممرضين والأطباء والسواقين من صفحة الموظفين.",
+      role_nurse: "ممرض/ة", role_physio: "أخصائي علاج طبيعي", role_doctor: "طبيب", role_driver: "سواق",
+      mnT_today: "الفلوس اليوم", mnT_week: "الفلوس · آخر ٧ أيام", mnT_month: "الفلوس · هذا الشهر", mnS: "الحجوزات والمدفوعات في هذي الفترة، قبل الضريبة. اضغط على أي رقم تشوف حجوزاته.",
+      m_sales: "المبيعات", m_paid: "المحصّل", m_unpaid: "ما تحصّل للحين", m_avg: "متوسط الحجز", m_bk: "{n} حجز", m_pp: "{n} مدفوع", m_up: "{n} حجز", m_avgS: "قبل الضريبة",
+      svcT: "المبيعات حسب الخدمة", svcS: "الحجوزات والمبيعات في هذي الفترة.", cxT: "الإلغاءات", cxS: "الحجوزات الملغية في هذي الفترة حسب السبب.", punT: "الوصول بالوقت", punS: "الزيارات في هذي الفترة: بدأت بوقتها أو بدري أو متأخرة.",
+      pun_ontime: "بالوقت", pun_late: "متأخرة", pun_early: "بدري", pun_none: "ما انسجل",
+      noData: "ما فيه شي في هذي الفترة للحين.", nBk: "{n} حجز · {s} ريال", nVis: "{n} زيارة", noReason: "ما انكتب سبب",
+      svc_blood: "تحاليل الدم", svc_nursing: "خدمات التمريض", svc_physio: "العلاج الطبيعي", svc_iv: "المحاليل والفيتامينات الوريدية", svc_doctor: "زيارة طبيب مع تمريض", svc_rad: "الأشعة", svc_other: "أخرى",
+      dList: "{n} حجز", dTotal: "الإجمالي {s} ريال", dEmpty: "ما فيه شي هنا.", close: "إغلاق",
+      cId: "الطلب", cPatient: "المريض", cService: "الخدمة", cTeam: "الفريق", cTime: "الوقت", cStatus: "وين وصلت", cAmount: "المبلغ (ريال)",
+      pay_paid: "مدفوع", pay_after: "الدفع عند الزيارة", pay_no: "ما اندفع",
+      d_today: "زيارات اليوم", d_done: "الزيارات اللي خلصت اليوم", d_live: "الزيارات الشغالة الحين", d_late: "الزيارات المتأخرة", d_noteam: "زيارات بدون فريق", d_emg: "الطوارئ المفتوحة", d_sales: "الحجوزات والمبيعات", d_paid: "الحجوزات المدفوعة", d_unpaid: "حجوزات ما تحصّلت للحين", d_avg: "الحجوزات والمبيعات", d_cx: "الحجوزات الملغية",
+      d_ph: "اليوم: {p}", d_prov: "زيارات اليوم · {n}", d_provDone: "خلصت اليوم · {n}", d_svc: "الحجوزات: {s}", d_cxr: "الملغية: {r}", d_pun: "الزيارات: {p}", d_day: "حجوزات {d}",
+      d: "{n} يوم", h: "{n} س", m: "{n} د", sar: "ريال", noPatient: "ما انكتب للحين", unknown: "—" }
+  };
+  let current = "en", range = "today", tab = null, view = null;
+  const t = () => i18n[current], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n] != null ? v[n] : "");
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const S = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { today: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>', done: '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+    live: '<path d="M3 12h4l2-5 4 10 2-5h6"/>', late: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>', noteam: '<circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0M17 8l4 4M21 8l-4 4"/>',
+    emg: '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17h.01"/>', sales: '<path d="M12 3v18M17 7.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.8 5 3.4 5 1.6 5 3.6-2.2 3-5 3-5-1.1-5-3"/>', cx: '<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', go: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    move: '<path d="M4 8h13l-3-3M20 16H7l3 3"/>', plus: '<path d="M12 5v14M5 12h14"/>', user: '<circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0 1 14 0M19 8v6M16 11h6"/>', map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>', star: '<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>' };
+  const KS = [["today", "s-blue"], ["done", "s-green"], ["live", "s-purple"], ["late", "s-red"], ["noteam", "s-orange"], ["emg", "s-red"], ["sales", "s-green"], ["cx", "s-gray"]];
+  const PH = ["noteam", "sched", "onway", "arrived", "started", "done"];
+  const PHC = { noteam: "#d97706", sched: "#3b82f6", onway: "#7c3aed", arrived: "#0891b2", started: "#0b6b5c", done: "#15803d", cancelled: "#8a979b" };
+  const PILL = { noteam: "p-orange", sched: "p-blue", onway: "p-purple", arrived: "p-blue", started: "p-green", done: "p-green", cancelled: "p-gray" };
+  const LATE_MIN = 10;
+  const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const tm = d => new Date(d).toLocaleTimeString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { hour: "numeric", minute: "2-digit" });
+  const stamp = iso => { const d = new Date(iso); return d.toLocaleDateString(loc(), { day: "numeric", month: "short" }) + " " + tm(d); };
+  const money = a => Math.round(Number(a || 0)).toLocaleString("en-US");
+  const pct = (a, b) => b ? Math.round(a / b * 100) + "%" : "—";
+  const ymd = d => { const x = new Date(d); return x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0"); };
+  const day0 = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+  function dur(ms) {
+    const m = Math.max(1, Math.round(Math.abs(ms) / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+    return d ? [tx("d", { n: d }), h ? tx("h", { n: h }) : ""].filter(Boolean).join(" ") : h ? [tx("h", { n: h }), mm ? tx("m", { n: mm }) : ""].filter(Boolean).join(" ") : tx("m", { n: mm });
+  }
+  const svcName = s => t()["svc_" + s] || (s ? s : t().svc_other);
+  const patientOf = o => T(o.patient) || "";
+  const payName = o => o.payment === "paid" ? t().pay_paid : o.payWhen === "after" ? t().pay_after : t().pay_no;
+
+  // ---------- Visits ----------
+  const all = () => MadaOrders.all().filter(o => !o.drDemo || o.bookingId);
+  const bookings = () => all().filter(o => o.bookingId);
+  const visitAt = o => { if (!o.appointment || !o.appointment.date) return null; const [y, m, d] = o.appointment.date.split("-").map(Number); return new Date(y, m - 1, d, 0, o.appointment.minute || 0); };
+  const provIds = o => [o.booking && o.booking.nurseId, o.booking && o.booking.doctorId, o.appointment && o.appointment.nurseId, o.driver && o.driver.id].filter(Boolean);
+  const hasTeam = o => !!((o.booking && (o.booking.nurseId || o.booking.doctorId)) || (o.appointment && (o.appointment.nurseId || o.appointment.nurse)));
+  function phase(o) {
+    if (o.status === "cancelled") return "cancelled";
+    const dv = o.doctorVisit || {}, nv = o.nurseVisit || {}, pv = o.physioVisit || {};
+    if (o.status === "completed" || dv.status === "done") return "done";
+    if ((dv.startedAt && dv.status !== "done") || ["ongoing", "paused"].includes(nv.status) || ["ongoing", "paused"].includes(pv.status)) return "started";
+    if (o.arrival || nv.status === "arrived" || pv.status === "arrived") return "arrived";
+    if (nv.status === "ontheway" || pv.status === "ontheway" || ((o.visit || {}).steps || {}).ontheway) return "onway";
+    return hasTeam(o) && o.appointment ? "sched" : "noteam";
+  }
+  const isLate = o => { const at = visitAt(o); return !!at && ["noteam", "sched", "onway"].includes(phase(o)) && Date.now() - at > LATE_MIN * 60000; };
+  const onDay = (o, day) => o.appointment && o.appointment.date === day;
+  const todays = () => bookings().filter(o => onDay(o, ymd(new Date())) && o.status !== "cancelled").sort((a, b) => (a.appointment.minute || 0) - (b.appointment.minute || 0));
+  function noTeam() {
+    const days = [0, 1, 2].map(n => { const d = new Date(); d.setDate(d.getDate() + n); return ymd(d); });
+    return bookings().filter(o => o.status !== "cancelled" && o.status !== "completed" && (!o.appointment || (days.includes(o.appointment.date) && phase(o) === "noteam")));
+  }
+  // ---------- People ----------
+  function people() {
+    const out = [], seen = {};
+    const put = (id, name, role, shifts) => { if (!id || seen[id]) return; seen[id] = 1; out.push({ id, name, role, shifts }); };
+    (MadaNurses.NURSES || []).forEach(n => put(n.id, n.name, n.role === "physio" ? "physio" : "nurse", n.shifts));
+    (MadaOrders.DOCTORS || []).filter(d => d.active !== false).forEach(d => put(d.id, d.name, "doctor"));
+    (MadaOrders.DRIVERS || []).forEach(d => put(d.id, d.name, "driver"));
+    return out;
+  }
+  const personName = id => { const p = people().find(x => x.id === id); return p ? T(p.name) : ""; };
+  const teamText = o => { const n = []; const b = o.booking || {};
+    if (b.doctorId) n.push(personName(b.doctorId)); if (b.nurseId) n.push(personName(b.nurseId)); else if (o.appointment && o.appointment.nurse) n.push(T(o.appointment.nurse));
+    if (o.driver && o.driver.id) n.push(personName(o.driver.id));
+    return n.filter(Boolean).join(" · "); };
+  // ---------- Money ----------
+  function startOf(r) { const now = new Date(); if (r === "today") return day0(now); if (r === "week") { const d = day0(now); d.setDate(d.getDate() - 6); return d; } return new Date(now.getFullYear(), now.getMonth(), 1); }
+  const inR = (iso, from, to) => { if (!iso) return false; const d = new Date(iso); return d >= from && (!to || d < to); };
+  function M(from, to) {
+    const bk = bookings().filter(o => o.status !== "cancelled" && inR(o.bookedAt, from, to));
+    const sum = l => l.reduce((a, o) => a + Number(o.total || 0), 0), paid = bk.filter(o => o.payment === "paid");
+    const cx = bookings().filter(o => o.status === "cancelled" && inR(o.cancel && o.cancel.at || o.updatedAt || o.bookedAt, from, to));
+    const vis = bookings().filter(o => { const at = visitAt(o); return at && at >= from && (!to || at < to) && o.status !== "cancelled"; });
+    return { bk, sales: sum(bk), paid, paidSum: sum(paid), unpaid: bk.filter(o => o.payment !== "paid"), unpaidSum: sum(bk) - sum(paid), cx, vis };
+  }
+  const cxReason = o => T(o.cancel && (o.cancel.reasonText || o.cancel.reason)) || T(o.reason) || t().noReason;
+  function punct(o) {
+    const st = (o.doctorVisit && o.doctorVisit.startedAt) || (o.arrival && o.arrival.at), at = visitAt(o);
+    if (!st || !at) return "none";
+    const diff = (new Date(st) - at) / 60000;
+    return diff > 5 ? "late" : diff < -5 ? "early" : "ontime";
+  }
+  // ---------- Needs action ----------
+  const lateHold = o => o.status === "on_hold" && o.hold && o.hold.dueAt && new Date(o.hold.dueAt) < Date.now();
+  function acts() {
+    const now = Date.now(), today = ymd(new Date());
+    return {
+      late: todays().filter(isLate).map(o => ({ o, late: true, why: tx("w_late", { t: tm(visitAt(o)), d: dur(now - visitAt(o)), p: t()["ph_" + phase(o)] }) })),
+      noteam: noTeam().sort((a, b) => (visitAt(a) || 9e15) - (visitAt(b) || 9e15)).map(o => ({ o, late: !!visitAt(o) && visitAt(o) - now < 2 * 3600000, assign: true,
+        why: o.appointment ? tx("w_noteam", { t: (onDay(o, today) ? "" : new Date(visitAt(o)).toLocaleDateString(loc(), { weekday: "short", day: "numeric" }) + " ") + tm(visitAt(o)) }) : t().w_unsched })),
+      emg: all().filter(o => o.status === "referred").map(o => ({ o, late: true, why: tx("w_emg", { d: dur(now - new Date(o.updatedAt || o.createdAt)) }) })),
+      doc: all().filter(o => o.status === "awaiting_doctor").map(o => ({ o, why: tx("w_doc", { d: dur(now - new Date(o.updatedAt || o.createdAt)) }) })),
+      hold: all().filter(lateHold).map(o => ({ o, late: true, move: true, why: tx("w_hold", { d: dur(now - new Date(o.hold.dueAt)), n: T(o.hold.by || o.staff) || t().unknown }) })),
+      quality: all().filter(o => o.quality && ((o.quality.outcome === "action" && !o.quality.resolved) || (o.quality.score && o.quality.score <= 2 && !o.quality.resolved)))
+        .map(o => ({ o, why: tx("w_quality", { s: o.quality.score ? "★".repeat(o.quality.score) : "", a: T(o.quality.action) || T(o.quality.note) || "" }) })),
+      cx: bookings().filter(o => o.status === "cancelled" && ymd(o.cancel && o.cancel.at || o.updatedAt || o.bookedAt) === today).map(o => ({ o, why: tx("w_cx", { r: cxReason(o) }) }))
+    };
+  }
+
+  function render() {
+    const now = new Date(), today = ymd(now), from = startOf(range), m = M(from), list = todays();
+    $("sub").textContent = t().sub; $("upd").textContent = tx("upd", { t: tm(now) });
+    $("range").innerHTML = ["today", "week", "month"].map(r => `<button type="button" data-r="${r}" aria-pressed="${range === r}">${t()["r_" + r]}</button>`).join("");
+    const can = p => typeof MadaPerms === "undefined" || MadaPerms.canPage(me, p);
+    $("qa").innerHTML = [["new-request.html", "q_new", "plus", "btn-primary"], ["bookings.html", "q_bookings", "today"], ["sales.html", "q_move", "move"], ["staff-add.html", "q_staff", "user"], ["coverage.html", "q_coverage", "map"], ["quality.html", "q_quality", "star"]]
+      .filter(([p]) => can(p)).map(([p, k, ic, cls]) => `<a class="btn ${cls || "btn-ghost"} btn-sm" href="${p}">${S(I[ic])}${t()[k]}</a>`).join("");
+    const by = p => list.filter(o => phase(o) === p), done = by("done"), live = list.filter(o => ["onway", "arrived", "started"].includes(phase(o))), late = list.filter(isLate), nt = noTeam();
+    const emg = all().filter(o => o.status === "referred");
+    const val = { today: list.length, done: done.length, live: live.length, late: late.length, noteam: nt.length, emg: emg.length, sales: money(m.sales), cx: m.cx.length };
+    const sub = { today: tx("s_today", { n: list.length - done.length }), done: tx("s_done", { p: pct(done.length, list.length) }), live: t().s_live, late: t().s_late, noteam: t().s_noteam, emg: t().s_emg, sales: tx("s_sales", { p: money(m.paidSum) }), cx: t().s_cx };
+    const bad = { late: late.length > 0, noteam: nt.length > 0, emg: emg.length > 0 };
+    $("stats").innerHTML = KS.map(([x, cls]) => `<button type="button" class="card stat" data-d="${x}"><span class="stat-icon ${cls}">${S(I[x])}</span><span><b>${esc(val[x])}</b><small>${t()["k_" + x]}</small><small class="sub2 ${bad[x] ? "bad" : ""}">${esc(sub[x])}</small></span></button>`).join("");
+    // Board
+    const MAX = 6;
+    $("board").innerHTML = PH.map(p => { const l = by(p);
+      return `<div class="col"><div class="col-h"><span><i class="dot" style="background:${PHC[p]}"></i>${t()["ph_" + p]}</span><button type="button" data-d="ph" data-v="${p}" aria-label="${esc(t()["ph_" + p])}">${l.length}</button></div>
+        ${l.length ? l.slice(0, MAX).map(vcard).join("") + (l.length > MAX ? `<button type="button" class="more" data-d="ph" data-v="${p}">${esc(tx("more", { n: l.length - MAX }))}</button>` : "") : `<div class="none2">${t().emptyCol}</div>`}</div>`; }).join("");
+    renderActs();
+    renderTeam(list);
+    renderMoney(m, from);
+  }
+  function vcard(o) {
+    const at = visitAt(o), p = phase(o), late = isLate(o), team = teamText(o);
+    const note = late ? `<small class="lt">${esc(tx("lateBy", { d: dur(Date.now() - at) }))}</small>` : p === "started" && o.doctorVisit && o.doctorVisit.startedAt ? `<small>${esc(tx("startedAt", { t: tm(o.doctorVisit.startedAt) }))}</small>` : p === "sched" && at > Date.now() ? `<small>${esc(tx("inT", { d: dur(at - Date.now()) }))}</small>` : "";
+    return `<a class="vcard ${late ? "late" : ""}" href="request-details.html?id=${encodeURIComponent(o.id)}"><span class="vt"><span>${esc(patientOf(o) || o.mobile || o.id)}</span><span class="num">${at ? esc(tm(at)) : ""}</span></span>
+      <small>${esc(svcName(o.service))}</small><small>${esc(team || t().noTeamYet)}</small>${note}</a>`;
+  }
+  function renderActs() {
+    const A = acts(), keys = ["late", "noteam", "emg", "doc", "hold", "quality", "cx"], hot = ["late", "noteam", "emg", "hold"];
+    if (!tab || !A[tab]) tab = keys.find(x => A[x].length) || "late";
+    $("aTabs").innerHTML = keys.map(x => `<button type="button" class="tab ${hot.includes(x) && A[x].length ? "hot" : ""}" data-tab="${x}" aria-pressed="${tab === x}">${t()["a_" + x]} <b>${A[x].length}</b></button>`).join("");
+    $("aList").innerHTML = A[tab].length ? A[tab].map(({ o, why, late, assign, move }) => `<li class="${late ? "late" : ""}"><div class="ai"><b>${esc(patientOf(o) || o.mobile || o.id)}</b>
+        <small><span class="num">${esc(o.id)}</span>${o.bookingId ? ` · <span class="num">${esc(o.bookingId)}</span>` : ""} · ${esc(svcName(o.service))}${teamText(o) ? " · " + esc(teamText(o)) : ""}</small><small class="why">${esc(why)}</small></div>
+      <div class="aa"><a class="btn ${assign ? "btn-primary" : "btn-ghost"} btn-sm" href="request-details.html?id=${encodeURIComponent(o.id)}">${assign ? t().assign : t().open}</a>
+        ${move ? `<a class="btn btn-primary btn-sm" href="sales.html">${S(I.move)}${t().moveA}</a>` : ""}${o.mobile ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(o.mobile)}">${S(I.phone)}${t().call}</a>` : ""}</div></li>`).join("")
+      : `<li style="display:block;border-style:dashed" class="empty">${t()["e_" + tab]}</li>`;
+  }
+  function renderTeam(list) {
+    $("tHead").innerHTML = ["cName", "cRole", "cToday", "cDone", "cNow", "cNext"].map(c => `<th>${t()[c]}</th>`).join("");
+    const ps = people(), wd = new Date().getDay(), now = Date.now();
+    if (!ps.length) { $("tRows").innerHTML = `<tr><td colspan="6" class="empty">${t().noTeamList}</td></tr>`; return; }
+    const rows = ps.map(p => { const mine = list.filter(o => provIds(o).includes(p.id)), dn = mine.filter(o => phase(o) === "done");
+      const busy = mine.some(o => ["onway", "arrived", "started"].includes(phase(o)));
+      const next = mine.filter(o => !["done", "cancelled"].includes(phase(o)) && visitAt(o) && visitAt(o) > now - LATE_MIN * 60000).sort((a, b) => visitAt(a) - visitAt(b))[0];
+      const off = p.shifts && !p.shifts[wd] && !mine.length;
+      return { p, mine, dn, st: busy ? "busy" : off ? "off" : "free", next }; })
+      .sort((a, b) => ({ busy: 0, free: 1, off: 2 }[a.st] - { busy: 0, free: 1, off: 2 }[b.st]) || b.mine.length - a.mine.length);
+    const nb = (d, v, n) => `<button type="button" class="nb num" data-d="${d}" data-v="${esc(v)}">${n}</button>`;
+    $("tRows").innerHTML = rows.map(({ p, mine, dn, st, next }) => `<tr>
+      <td class="who c-who" data-l="${t().cName}"><b>${esc(T(p.name))}</b></td><td data-l="${t().cRole}">${esc(t()["role_" + p.role])}</td>
+      <td data-l="${t().cToday}">${nb("prov", p.id, mine.length)}</td><td data-l="${t().cDone}">${nb("provDone", p.id, dn.length)}</td>
+      <td data-l="${t().cNow}"><span class="st ${st}">${t()[st]}</span></td>
+      <td data-l="${t().cNext}">${next ? `<a class="pl" href="request-details.html?id=${encodeURIComponent(next.id)}"><span class="num">${esc(tm(visitAt(next)))}</span></a><small>${esc(patientOf(next) || next.id)}</small>` : t().noNext}</td></tr>`).join("");
+  }
+  function days() {
+    const out = [], now = new Date();
+    if (range === "month") { for (let d = new Date(now.getFullYear(), now.getMonth(), 1); d <= now; d.setDate(d.getDate() + 1)) out.push(new Date(d)); }
+    else for (let i = 6; i >= 0; i--) { const d = day0(now); d.setDate(d.getDate() - i); out.push(d); }
+    return out;
+  }
+  function group(list, keyFn) { const g = {}; list.forEach(o => { const k = keyFn(o); (g[k] = g[k] || []).push(o); }); return Object.entries(g); }
+  function hbList(el, entries, d, label, sub, w) {
+    const top = Math.max(1, ...entries.map(([, l]) => w(l)));
+    $(el).innerHTML = entries.length ? entries.map(([v, l]) => `<li><button type="button" data-d="${d}" data-v="${esc(v)}"><span>${esc(label(v, l))}</span><b>${esc(sub(l))}</b><i><u style="width:${w(l) / top * 100}%"></u></i></button></li>`).join("") : `<li class="empty">${t().noData}</li>`;
+  }
+  function renderMoney(m) {
+    $("mnT").textContent = t()["mnT_" + range];
+    const card = (d, lbl, v, s) => `<button type="button" class="gm" data-d="${d}"><span>${lbl}</span><b class="num">${v}</b><small style="color:var(--muted)">${esc(s)}</small></button>`;
+    $("money").innerHTML = card("sales", t().m_sales, money(m.sales), tx("m_bk", { n: m.bk.length })) + card("paid", t().m_paid, money(m.paidSum), tx("m_pp", { n: m.paid.length }))
+      + card("unpaid", t().m_unpaid, money(m.unpaidSum), tx("m_up", { n: m.unpaid.length })) + card("avg", t().m_avg, m.bk.length ? money(m.sales / m.bk.length) : "—", t().m_avgS);
+    const ds = range === "today" ? [] : days();
+    $("bars").parentElement.hidden = !ds.length;
+    if (ds.length) {
+      const today = ymd(new Date()), pts = ds.map(d => { const to = new Date(d); to.setDate(to.getDate() + 1); return { d, key: ymd(d), v: M(d, to).sales }; }), max = Math.max(1, ...pts.map(p => p.v)) * 1.12;
+      $("bars").innerHTML = pts.map(p => `<button type="button" class="hit ${p.key === today ? "today" : ""}" data-d="day" data-v="${p.key}" title="${esc(p.d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "short" }))}"><em>${p.v ? money(p.v) : "0"}</em><i style="height:${p.v / max * 100}%"></i></button>`).join("");
+      $("xl").innerHTML = pts.map(p => `<span>${esc(range === "month" ? String(p.d.getDate()) : p.d.toLocaleDateString(loc(), { weekday: "short", day: "numeric" }))}</span>`).join("");
+    }
+    const sum = l => l.reduce((a, o) => a + Number(o.total || 0), 0);
+    hbList("svc", group(m.bk, o => o.service || "other").sort((a, b) => sum(b[1]) - sum(a[1]) || b[1].length - a[1].length), "svc", v => svcName(v), l => tx("nBk", { n: l.length, s: money(sum(l)) }), l => sum(l) || l.length);
+    hbList("cx", group(m.cx, cxReason).sort((a, b) => b[1].length - a[1].length), "cxr", v => v, l => tx("nVis", { n: l.length }), l => l.length);
+    hbList("pun", group(m.vis.filter(o => phase(o) === "done" || punct(o) !== "none"), punct).sort((a, b) => ["ontime", "early", "late", "none"].indexOf(a[0]) - ["ontime", "early", "late", "none"].indexOf(b[0])), "pun", v => t()["pun_" + v], l => tx("nVis", { n: l.length }), l => l.length);
+  }
+
+  // ---------- Details: every number opens its bookings ----------
+  function detail(d, v) {
+    const today = ymd(new Date()), list0 = todays(), m = M(startOf(range));
+    let list, title;
+    if (d === "ph") { list = list0.filter(o => phase(o) === v); title = tx("d_ph", { p: t()["ph_" + v] }); }
+    else if (d === "prov") { list = list0.filter(o => provIds(o).includes(v)); title = tx("d_prov", { n: personName(v) }); }
+    else if (d === "provDone") { list = list0.filter(o => provIds(o).includes(v) && phase(o) === "done"); title = tx("d_provDone", { n: personName(v) }); }
+    else if (d === "svc") { list = m.bk.filter(o => (o.service || "other") === v); title = tx("d_svc", { s: svcName(v) }); }
+    else if (d === "cxr") { list = m.cx.filter(o => cxReason(o) === v); title = tx("d_cxr", { r: v }); }
+    else if (d === "pun") { list = m.vis.filter(o => punct(o) === v && (phase(o) === "done" || v !== "none")); title = tx("d_pun", { p: t()["pun_" + v] }); }
+    else if (d === "day") { const from = new Date(v + "T00:00:00"), to = new Date(from); to.setDate(to.getDate() + 1); list = M(from, to).bk; title = tx("d_day", { d: from.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }) }); }
+    else {
+      list = { today: list0, done: list0.filter(o => phase(o) === "done"), live: list0.filter(o => ["onway", "arrived", "started"].includes(phase(o))), late: list0.filter(isLate), noteam: noTeam(),
+        emg: all().filter(o => o.status === "referred"), sales: m.bk, avg: m.bk, paid: m.paid, unpaid: m.unpaid, cx: m.cx }[d] || [];
+      title = t()["d_" + d] || "";
+    }
+    view = { d, v };
+    list = list.slice().sort((a, b) => (visitAt(a) || new Date(a.bookedAt || a.createdAt)) - (visitAt(b) || new Date(b.bookedAt || b.createdAt)));
+    const total = list.reduce((s, o) => s + Number(o.total || 0), 0), cols = ["cId", "cPatient", "cService", "cTeam", "cTime", "cStatus", "cAmount", "cActs"];
+    $("dlg").className = "dlg xw";
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x)}</button><h3 id="dT">${esc(title)}</h3>
+      <div class="dsum" style="margin-top:12px"><span><b>${esc(tx("dList", { n: list.length }))}</b></span>${list.some(o => o.total) ? `<span><b>${esc(tx("dTotal", { s: money(total) }))}</b></span>` : ""}</div>
+      ${list.length ? `<div class="table-wrap dl" style="border:1px solid var(--border);border-radius:12px"><table><thead><tr>${cols.map(c => `<th>${t()[c] || ""}</th>`).join("")}</tr></thead><tbody>${list.map(o => { const at = visitAt(o), p = phase(o);
+        return `<tr><td data-l="${t().cId}"><a class="oid num" href="request-details.html?id=${encodeURIComponent(o.id)}">${esc(o.id)}</a>${o.bookingId ? `<small class="num">${esc(o.bookingId)}</small>` : ""}</td>
+        <td class="c-who" data-l="${t().cPatient}"><b class="pn">${esc(patientOf(o) || t().noPatient)}</b>${o.mobile ? `<small><span class="num">${esc(o.mobile)}</span></small>` : ""}</td>
+        <td data-l="${t().cService}">${esc(svcName(o.service))}</td><td data-l="${t().cTeam}">${esc(teamText(o) || t().noTeamYet)}</td>
+        <td data-l="${t().cTime}"><span class="num">${esc(at ? stamp(at) : o.bookedAt ? stamp(o.bookedAt) : "")}</span>${isLate(o) ? `<small style="color:#b91c1c;font-weight:700">${esc(tx("lateBy", { d: dur(Date.now() - at) }))}</small>` : ""}</td>
+        <td data-l="${t().cStatus}"><span class="pill ${o.status === "referred" ? "p-red" : PILL[p] || "p-blue"}">${esc(o.status === "referred" ? t().a_emg : t()["ph_" + p])}</span></td>
+        <td data-l="${t().cAmount}"><b class="num">${o.total != null ? money(o.total) : "—"}</b><small>${esc(payName(o))}</small></td>
+        <td class="c-acts"><div class="acts"><a class="ib" href="request-details.html?id=${encodeURIComponent(o.id)}" title="${t().open}" aria-label="${t().open}">${S(I.go)}</a>${o.mobile ? `<a class="ib" href="tel:${esc(o.mobile)}" title="${t().call}" aria-label="${t().call}">${S(I.phone)}</a>` : ""}</div></td></tr>`; }).join("")}</tbody></table></div>` : `<div class="empty">${t().dEmpty}</div>`}
+      <div class="df"><button type="button" class="btn btn-ghost" data-close>${t().close}</button></div>`;
+    $("ov").hidden = false;
+  }
+
+  // ---------- Events ----------
+  document.addEventListener("click", e => {
+    const d = e.target.closest("[data-d]"); if (d) { e.preventDefault(); return detail(d.dataset.d, d.dataset.v); }
+    const r = e.target.closest("[data-r]"); if (r) { range = r.dataset.r; return render(); }
+    const tb = e.target.closest("[data-tab]"); if (tb) { tab = tb.dataset.tab; return render(); }
+  });
+  $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) { $("ov").hidden = true; view = null; } });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { $("ov").hidden = true; view = null; } });
+  const refresh = () => { render(); if (!$("ov").hidden && view) detail(view.d, view.v); };
+  window.addEventListener("storage", e => { if (!e.key || ["mada-orders", "mada-staff"].includes(e.key)) refresh(); });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    document.title = lang === "ar" ? "مدى كير | غرفة التشغيل" : "Mada Care | Operations Room";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    refresh();
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  if (me) {
+    try { MadaOrders.sweepHolds(); } catch (e) {}
+    let saved = "en";
+    try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+    setLang(saved);
+    setInterval(refresh, 30000);
+  }
+</script>
+</body>
+</html>
