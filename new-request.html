@@ -3301,7 +3301,7 @@
       try { sessionStorage.setItem("mada-request-draft", JSON.stringify(draft({ service: state.service, appointment: appt, customerAgreed: true }))); } catch (e) {}
       const slot = N.slotsFor(s3.date).find(x => x.minute === s3.minute);
       const nurse = slot && (slot.nurses.find(n => n.id === s3.nurseId) || slot.nurses[0]);
-      state.appt = { date: s3.date, minute: s3.minute, nurse: nurse ? nurse.name : null };
+      state.appt = { date: s3.date, minute: s3.minute, nurse: nurse ? nurse.name : null, nurseId: nurse ? nurse.id : null };
       if (state.resume) {
         // The patient file was opened with the doctor request, so the visit is booked straight away.
         const rq = state.resume, name = MadaRequests.text(rq.patient.fullName, current);
@@ -3491,7 +3491,7 @@
       openedFor: patient.for, relationship: patient.relationship, requesterName: patient.requesterName, address: patient.address, source: "manual", createdBy: me ? me.name : null });
     window.location.href = "patients.html?new=" + encodeURIComponent(mrn);
   }
-  function apptOf(a) { return a ? { date: a.date, minute: a.minute, nurse: a.nurse } : null; }
+  function apptOf(a) { return a ? { date: a.date, minute: a.minute, nurse: a.nurse, nurseId: a.nurseId || null } : null; }
   $("finish").addEventListener("click", () => {
     if (!validate4()) return;
     const ageMode = $("modeAge").checked, age = parseInt($("pAge").value, 10);
