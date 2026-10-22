@@ -13,11 +13,14 @@ const PtReport = (() => {
       visitT: "Session Information", visitDate: "Session Date", visitNo: "Visit No.", type: "Session Type", initial: "Initial assessment", follow: "Follow-up session {n}", followOf: "Follow-up session {n} of {m}",
       by: "Physiotherapist", specialty: "Specialty", pkg: "Package", place: "Place of Visit", home: "Home visit",
       s_pain: "Pain Assessment", s_history: "Medical History & Risk Factors", s_func: "Functional Limitations", s_exam: "Objective Examination", s_goals: "Treatment Goals",
-      s_today: "Today's Assessment", s_tx: "Treatment Given", s_next: "Next Plan", s_plan: "Treatment Plan", s_hep: "Home Exercise Program", s_patient: "Patient Information",
+      s_today: "Today's Assessment", s_tx: "Treatment Given", s_next: "Next Plan", s_plan: "Treatment Plan", s_hep: "Home Exercise Program", s_patient: "Patient Information", s_glance: "Assessment at a Glance",
       planT: "Plan", imaging: "Imaging requested", nextS: "Next session", nextAt: "{d} at {t} · Booking {b}", inPkg: "covered by the package",
       days: "{n} days a week", exNote: "Note", hepNone: "No home program for this patient.", hepNote: "Notes for the patient",
       draftTag: "Draft · not approved yet", apprBy: "Approved by {n} on {d}", none: "Not recorded", sign: "Physiotherapist",
-      signNote: "Generated from the Mada Care record on {d}.", page: "Mada Care · Home healthcare", ed: "Edited"
+      signNote: "Generated from the Mada Care record on {d}.", page: "Mada Care · Home healthcare", ed: "Edited",
+      glance: "Assessment at a Glance", glanceS: "Key findings of the first physiotherapy visit", curPain: "Current pain", range: "Lowest {a} · Highest {b}",
+      b0: "No pain", b1: "Mild", b2: "Moderate", b3: "Severe", areaT: "Affected area", fnT: "Functional ability", expT: "Expected improvement",
+      goalsT: "Treatment Goals", gShort: "Short-term", gLong: "Long-term", measT: "Measured by", within: "Within {d}", subInit: "Initial Physiotherapy Assessment", signLine: "Signature"
     },
     ar: {
       title: "تقرير العلاج الطبيعي", reportNo: "رقم التقرير", issued: "تاريخ الإصدار", patientT: "بيانات المريض", name: "اسم المريض", fileNo: "رقم الملف الطبي", idNo: "رقم الهوية",
@@ -25,11 +28,14 @@ const PtReport = (() => {
       visitT: "معلومات الجلسة", visitDate: "تاريخ الجلسة", visitNo: "رقم الزيارة", type: "نوع الجلسة", initial: "جلسة تقييم (كشف)", follow: "جلسة متابعة {n}", followOf: "جلسة متابعة {n} من {m}",
       by: "أخصائي العلاج الطبيعي", specialty: "التخصص", pkg: "الباقة", place: "مكان الزيارة", home: "زيارة منزلية",
       s_pain: "تقييم الألم", s_history: "التاريخ المرضي وعوامل الخطورة", s_func: "القيود الوظيفية", s_exam: "الفحص السريري", s_goals: "الأهداف العلاجية",
-      s_today: "تقييم اليوم", s_tx: "العلاج المنفذ", s_next: "الخطة القادمة", s_plan: "الخطة العلاجية", s_hep: "البرنامج المنزلي", s_patient: "بيانات المريض",
+      s_today: "تقييم اليوم", s_tx: "العلاج المنفذ", s_next: "الخطة القادمة", s_plan: "الخطة العلاجية", s_hep: "البرنامج المنزلي", s_patient: "بيانات المريض", s_glance: "ملخص التقييم",
       planT: "الخطة", imaging: "طلب أشعة", nextS: "الجلسة الجاية", nextAt: "{d} الساعة {t} · حجز {b}", inPkg: "ضمن الباقة",
       days: "{n} أيام في الأسبوع", exNote: "ملاحظة", hepNone: "ما فيه برنامج منزلي لهذا المريض.", hepNote: "ملاحظات للمريض",
       draftTag: "مسودة · ما انعتمد للحين", apprBy: "اعتمده {n} بتاريخ {d}", none: "ما انسجل", sign: "أخصائي العلاج الطبيعي",
-      signNote: "صادر من سجل مدى كير بتاريخ {d}.", page: "مدى كير · رعاية صحية منزلية", ed: "معدّل"
+      signNote: "صادر من سجل مدى كير بتاريخ {d}.", page: "مدى كير · رعاية صحية منزلية", ed: "معدّل",
+      glance: "ملخص التقييم", glanceS: "أهم نتائج الزيارة الأولى للعلاج الطبيعي", curPain: "الألم الحالي", range: "الأدنى {a} · الأعلى {b}",
+      b0: "بدون ألم", b1: "خفيف", b2: "متوسط", b3: "شديد", areaT: "المنطقة المصابة", fnT: "القدرة الوظيفية", expT: "مدة التحسن المتوقعة",
+      goalsT: "الأهداف العلاجية", gShort: "قصيرة المدى", gLong: "طويلة المدى", measT: "طريقة القياس", within: "خلال {d}", subInit: "تقييم العلاج الطبيعي الأولي", signLine: "التوقيع"
     }
   };
   const G = "#0b6b5c", GD = "#07463d", INK = "#10232b", MU = "#6b7a80", LINE = "#e3e8ea", SOFT = "#f4f8f7", GOLD = "#c8a45a";
@@ -44,9 +50,9 @@ const PtReport = (() => {
   const INITIAL = [["pain", "ptPain"], ["history", "ptHistory"], ["func", "ptFunc"], ["exam", "ptExam"], ["goals", "ptGoals"], ["plan", "ptPlan"], ["hep", "ptHep"]];
   const FOLLOW = [["today", "fuToday"], ["exam", "ptExam"], ["tx", "fuTx"], ["hep", "ptHep"], ["next", "fuNext"], ["plan", "ptPlan"]];
   const isFollow = o => !!(stepsOf(o).fuInfo || stepsOf(o).fuToday);
-  const secsOf = o => ["patient", ...(isFollow(o) ? FOLLOW : INITIAL).map(x => x[0])];
+  const secsOf = o => ["patient", ...(isFollow(o) ? [] : ["glance"]), ...(isFollow(o) ? FOLLOW : INITIAL).map(x => x[0])];
   const stepOf = (o, k) => ((isFollow(o) ? FOLLOW : INITIAL).find(x => x[0] === k) || [])[1];
-  const secHas = (o, k) => k === "patient" || !!stepsOf(o)[stepOf(o, k)];
+  const secHas = (o, k) => k === "patient" || (k === "glance" ? !isFollow(o) && !!(stepsOf(o).ptPain || stepsOf(o).ptExam || stepsOf(o).ptGoals) : !!stepsOf(o)[stepOf(o, k)]);
   const SEC_IC = {
     patient: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', visit: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
     pain: '<path d="M12 21a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M9 10h.01M15 10h.01M9 16c1.5-1.3 4.5-1.3 6 0"/>', history: '<path d="M12 8v4l3 2"/><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 4v4h4"/>',
@@ -125,17 +131,47 @@ const PtReport = (() => {
       }
       return sumOf(k2, sv);
     }
+    // Initial assessment: a summary band at the top (pain gauge, area, function, expected improvement, the two goals).
+    function glance() {
+      if (isFollow(o) || hid.has("glance")) return "";
+      const PL = typeof PtSteps !== "undefined" ? PtSteps.L[lang] : {}, pn = d.st.ptPain, ex = d.st.ptExam, gl = d.st.ptGoals;
+      if (!pn && !ex && !gl) return "";
+      const band = v => v == null ? null : v === 0 ? 0 : v <= 3 ? 1 : v <= 6 ? 2 : 3;
+      const BC = [["#e3f4ee", "#0f6b52"], ["#eef7e3", "#3f6b17"], ["#fff4dc", "#8a5a00"], ["#fdecec", "#a3201b"]];
+      const SEG = ["#2fb380", "#7cc36a", "#b9d25a", "#e3d14f", "#f2c04a", "#f4a23d", "#f2853a", "#ee6a37", "#e24f33", "#d0372f", "#b3222a"];
+      const now = pn && pn.now, b = band(now);
+      const gauge = now == null ? "" : `<div style="display:flex;gap:2px;margin-top:8px;direction:ltr">${SEG.map((c, i) => `<span style="flex:1;height:${i === now ? 14 : 8}px;border-radius:3px;background:${c};opacity:${i === now ? 1 : .35};align-self:flex-end"></span>`).join("")}</div>
+        <div style="display:flex;justify-content:space-between;font-size:9.5px;color:${MU};margin-top:2px;direction:ltr"><span>0</span><span>5</span><span>10</span></div>`;
+      const tile = (label, val, sub, extra) => `<div style="flex:1 1 22%;min-width:130px;box-sizing:border-box;background:#fff;border:1px solid ${LINE};border-radius:12px;padding:10px 12px">
+        <div style="font-size:10.5px;color:${MU}">${label}</div><div style="font-size:14px;font-weight:700;color:${INK};margin-top:3px;line-height:1.4">${val || `<span style="color:${MU};font-weight:400">—</span>`}</div>${sub ? `<div style="font-size:11px;color:${MU};margin-top:2px">${sub}</div>` : ""}${extra || ""}</div>`;
+      const painV = now == null ? "" : `<span dir="ltr" style="unicode-bidi:isolate"><span style="font-size:22px;font-weight:800;color:${BC[b][1]}">${now}</span><span style="font-size:12px;color:${MU}">/10</span></span> <span style="display:inline-block;padding:1px 8px;border-radius:10px;background:${BC[b][0]};color:${BC[b][1]};font-size:11px;font-weight:700;vertical-align:middle">${t["b" + b]}</span>`;
+      const painS = pn && pn.low != null && pn.high != null ? esc(tx(t.range, { a: pn.low + "/10", b: pn.high + "/10" })) : "";
+      const areas = ex ? (ex.areas || []).map(a => a === "other" ? ex.areaOther : PL["ar_" + a]).filter(Boolean).join(rtl ? "، " : ", ") : "";
+      const side = ex && ex.side && ex.side !== "na" ? PL["sd_" + ex.side] : "";
+      const fnV = ex && ex.fn ? PL["fx_" + ex.fn] : "", expV = gl ? (gl.expect === "other" ? gl.expectOther : PL["ex_" + gl.expect]) : "";
+      const durOf = g => g.dur === "other" ? g.durOther : PL["d_" + g.dur];
+      const goal = (lbl, g, c) => !g || !has(g.goal) ? "" : `<div style="flex:1 1 45%;min-width:220px;box-sizing:border-box;border-radius:12px;padding:10px 14px;background:#fff;border:1px solid ${LINE};border-${al}:4px solid ${c}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span style="font-size:11px;font-weight:700;color:${c};text-transform:uppercase;letter-spacing:.3px">${lbl}</span>${durOf(g) ? `<span style="font-size:10.5px;padding:1px 8px;border-radius:10px;background:${SOFT};color:${GD};font-weight:600">${esc(tx(t.within, { d: durOf(g) }))}</span>` : ""}</div>
+        <div style="font-size:13px;font-weight:600;color:${INK};margin-top:4px;line-height:1.6">${txt(g.goal)}</div>${has(g.measure) ? `<div style="font-size:11.5px;color:${MU};margin-top:3px">${t.measT}: <span style="color:#2c3d43">${txt(g.measure)}</span></div>` : ""}</div>`;
+      const goals = gl ? goal(t.gShort, gl.short, G) + goal(t.gLong, gl.long, GOLD) : "";
+      return `<div class="pdf-avoid" style="break-inside:avoid;page-break-inside:avoid;margin-top:12px;border-radius:14px;padding:14px 16px;background:linear-gradient(135deg, ${SOFT}, #fbf7ee);border:1px solid #dbe9e4">
+        <div style="display:flex;align-items:center;gap:10px"><span style="width:32px;height:32px;border-radius:10px;background:${G};display:inline-flex;align-items:center;justify-content:center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${SEC_IC.exam}</svg></span>
+          <div><div style="font-size:15px;font-weight:800;color:${GD}">${t.glance}</div><div style="font-size:11px;color:${MU}">${t.glanceS}</div></div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">${tile(t.curPain, painV, painS, gauge)}${tile(t.areaT, esc(areas), esc(side))}${tile(t.fnT, esc(fnV))}${tile(t.expT, esc(expV))}</div>
+        ${goals ? `<div style="font-size:12px;font-weight:700;color:${GD};margin:12px 0 6px">${t.goalsT}</div><div style="display:flex;flex-wrap:wrap;gap:8px">${goals}</div>` : ""}
+      </div>`;
+    }
     const pt = d.p, staffName = nm((o.appointment || {}).nurse || (d.staff && d.staff.name)), spec = d.staff && d.staff.specialty;
     const pkg = d.fol && d.fol.pkg && typeof MadaPhysio !== "undefined" ? MadaPhysio.item(d.fol.pkg.code) : null;
     let n = 0;
-    const secs = secsOf(o).filter(k => k !== "patient" && !hid.has(k) && secHas(o, k)).map(k => card(k, `${++n}. ${t["s_" + k]}`, body(k), k)).join("")
+    const secs = secsOf(o).filter(k => k !== "patient" && k !== "glance" && !hid.has(k) && secHas(o, k)).map(k => card(k, `${++n}. ${t["s_" + k]}`, body(k), k)).join("")
       + (rp.custom || []).filter(c => has(c.title) || has(c.text)).map(c => card("cu", `${++n}. ${txt(c.title)}`, `<div style="font-size:12px;line-height:1.7;white-space:pre-line">${txt(c.text)}</div>`)).join("");
     const LOGO = typeof MadaReport !== "undefined" && MadaReport.LOGO ? MadaReport.LOGO : "assets/mada-logo.png";
     return `<div class="mr-doc" dir="${rtl ? "rtl" : "ltr"}" lang="${lang}" style="width:794px;max-width:100%;margin:0 auto;background:#fff;color:${INK};font-family:${rtl ? "Tajawal, Inter" : "Inter, Tajawal"}, Arial, sans-serif;text-align:${al};box-sizing:border-box">
       <div style="background:linear-gradient(120deg, ${GD}, ${G});color:#fff;padding:18px 24px;display:flex;align-items:center;gap:14px;border-radius:0 0 18px 18px">
         <span style="width:58px;height:58px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none"><img src="${LOGO}" style="height:40px;width:auto" alt=""></span>
         <div style="flex:1"><div style="font-size:20px;font-weight:700">Mada Care <span style="font-weight:500">| مدى كير</span></div><div style="font-size:11.5px;opacity:.85">${rtl ? "رعاية كالعائلة" : "Caring Like Family"}</div></div>
-        <div style="text-align:${rtl ? "left" : "right"}"><div style="font-size:18px;font-weight:700">${t.title}</div><div style="font-size:11px;opacity:.85">${t.reportNo}: ${ltr("PR-" + o.id.replace(/^ORD-/, ""))}</div><div style="font-size:11px;opacity:.85">${t.issued}: ${esc(fmtD(approved ? rp.approvedAt : now))}</div></div>
+        <div style="text-align:${rtl ? "left" : "right"}"><div style="font-size:18px;font-weight:700">${t.title}</div>${isFollow(o) ? "" : `<div style="font-size:11.5px;font-weight:600;color:#f3e3b8">${t.subInit}</div>`}<div style="font-size:11px;opacity:.85">${t.reportNo}: ${ltr("PR-" + o.id.replace(/^ORD-/, ""))}</div><div style="font-size:11px;opacity:.85">${t.issued}: ${esc(fmtD(approved ? rp.approvedAt : now))}</div></div>
       </div>
       <div style="height:3px;background:${GOLD};margin:0 40px;border-radius:2px"></div>
       ${approved ? "" : `<div style="margin:10px 20px 0;padding:6px 12px;border-radius:8px;background:#fef3e2;color:#b45309;font-size:11.5px;font-weight:700;text-align:center">${t.draftTag}</div>`}
@@ -143,9 +179,10 @@ const PtReport = (() => {
         ${hid.has("patient") ? "" : card("patient", t.patientT, `<div style="display:flex;flex-wrap:wrap;column-gap:16px">${kv(t.name, txt(pt.name[lang] || pt.name.en))}${kv(t.fileNo, pt.fileNo && ltr(pt.fileNo))}${kv(t.idNo, pt.idNumber && ltr(pt.idNumber))}
           ${kv(t.dob, pt.dob && esc(fmtD(pt.dob)))}${kv(t.age, has(pt.age) ? esc(tx(t.years, { n: pt.age })) : "")}${kv(t.gender, pt.gender ? t["g_" + pt.gender] : "")}${kv(t.mobile, pt.mobile && ltr(pt.mobile))}</div>`)}
         ${card("visit", t.visitT, `<div style="display:flex;flex-wrap:wrap;column-gap:16px">${kv(t.visitDate, esc(fmtD(d.date)))}${kv(t.visitNo, ltr(o.id))}${kv(t.type, esc(typeOf(o, lang)))}${kv(t.by, esc(staffName[lang] || staffName.en))}${kv(t.specialty, spec ? esc(nm(spec)[lang] || nm(spec).en) : "")}${kv(t.place, t.home)}${pkg ? kv(t.pkg, esc(nm(pkg.name)[lang] + " · " + pkg.code)) : ""}</div>`)}
+        ${glance()}
         ${secs}
         <div class="pdf-avoid" style="break-inside:avoid;page-break-inside:avoid;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:16px;padding-top:12px;border-top:1px solid ${LINE}">
-          <div><div style="color:${MU};font-size:10.5px">${t.sign}</div><div style="font-weight:700;font-size:13px">${esc(staffName[lang] || staffName.en)}</div><div style="color:${MU};font-size:11px">${spec ? esc(nm(spec)[lang] || nm(spec).en) : ""}</div>
+          <div><div style="width:180px;height:34px;border-bottom:1px dashed #b8c4c8;margin-bottom:4px"></div><div style="color:${MU};font-size:10.5px">${t.sign} · ${t.signLine}</div><div style="font-weight:700;font-size:13px">${esc(staffName[lang] || staffName.en)}</div><div style="color:${MU};font-size:11px">${spec ? esc(nm(spec)[lang] || nm(spec).en) : ""}</div>
             ${approved ? `<div style="color:${G};font-size:11px;font-weight:600;margin-top:4px">${esc(tx(t.apprBy, { n: nm(rp.approvedBy)[lang] || nm(rp.approvedBy).en || staffName[lang], d: fmtD(rp.approvedAt) }))}</div>` : ""}</div>
           <div style="color:${MU};font-size:10.5px;text-align:${rtl ? "left" : "right"}">${esc(tx(t.signNote, { d: fmtD(approved ? rp.approvedAt : now) }))}<br>${t.page}</div>
         </div>
