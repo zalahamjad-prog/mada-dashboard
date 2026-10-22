@@ -409,6 +409,13 @@
   .hold-reasons label { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #d9e1e3; border-radius: 10px; cursor: pointer; font-size: 13.5px; }
   .hold-reasons label:has(input:checked) { border-color: #d9a54a; background: #fffaf1; }
   .hold-reasons input { accent-color: var(--primary); width: 16px; height: 16px; }
+  .hold-sec { margin-top: 14px; display: grid; gap: 8px; }
+  .hold-sec > b { font-size: 13.5px; color: var(--ink); }
+  .hold-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .hold-chips button { height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #d9e1e3; background: #fff; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: #44545a; }
+  .hold-chips button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .hold-chips input[type=time] { height: 34px; border: 1px solid #d9e1e3; border-radius: 17px; padding: 0 10px; font: inherit; font-size: 13px; }
+  .hold-due { font-size: 12.5px; color: #b45309; font-weight: 600; }
   .hold-rules { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: #f6f8f9; font-size: 12.5px; color: #44545a; line-height: 1.7; }
   .hold-rules li { margin-inline-start: 18px; }
   #holdOverlay .td-icon { background: #fdf0d9; color: #b45309; }
@@ -1798,8 +1805,14 @@
       <label><input type="radio" name="holdReason" value="other"><span data-i18n="hr_other">Other</span></label>
     </div>
     <textarea class="field-in" id="holdNote" rows="2" maxlength="300" data-i18n-ph="holdNotePh" placeholder="Note for whoever continues this request (optional)"></textarea>
+    <div class="hold-sec"><b data-i18n="holdWhenT">When will you get back to the customer?</b>
+      <div class="hold-chips" id="holdWhen"><button type="button" data-hmin="5">5</button><button type="button" data-hmin="10">10</button><button type="button" data-hmin="15">15</button><button type="button" data-hmin="30">30</button><button type="button" data-hmin="60">60</button>
+        <button type="button" data-hmin="at" data-i18n="holdAtBtn">At a time</button><input type="time" id="holdAt" hidden></div>
+      <span class="hold-due" id="holdDue"></span></div>
+    <div class="hold-sec"><b data-i18n="holdActT">What will you do then?</b>
+      <div class="hold-chips" id="holdAct"><button type="button" data-hact="call" data-i18n="ha_call">Call the customer</button><button type="button" data-hact="whatsapp" data-i18n="ha_whatsapp">Message on WhatsApp</button><button type="button" data-hact="waitCall" data-i18n="ha_waitCall">Wait for the customer's call</button><button type="button" data-hact="docs" data-i18n="ha_docs">Check the documents</button></div></div>
     <ul class="hold-rules">
-      <li data-i18n="holdRule1">After 15 minutes you get a reminder to try the customer again.</li>
+      <li data-i18n="holdRule1">You get a reminder 2 minutes before the time and again when it is due, on any dashboard page.</li>
       <li data-i18n="holdRule2">After 30 minutes a follow-up SMS is sent to the customer automatically.</li>
       <li data-i18n="holdRule3">After 24 hours with no reply the request closes as "Customer did not reply".</li>
     </ul>
@@ -1925,7 +1938,7 @@
       holdBtn: "Hold Request", holdTitle: "Put this request on hold", holdSub: "Everything entered so far is saved. You can take the next call and continue this one later from the same step.",
       hr_noReply: "Customer stopped replying", hr_callBack: "Customer will call back", hr_waitingInfo: "Waiting for documents (ID, prescription, results)", hr_thinking: "Customer is thinking about it", hr_other: "Other",
       holdNotePh: "Note for whoever continues this request (optional)", holdOtherErr: "Write the reason in the note.",
-      holdRule1: "After 15 minutes you get a reminder to try the customer again.", holdRule2: "After 30 minutes a follow-up SMS is sent to the customer automatically.",
+      holdRule1: "You get a reminder 2 minutes before the time and again when it is due, on any dashboard page.", holdWhenT: "When will you get back to the customer? (minutes)", holdAtBtn: "At a time", holdActT: "What will you do then?", ha_call: "Call the customer", ha_whatsapp: "Message on WhatsApp", ha_waitCall: "Wait for the customer's call", ha_docs: "Check the documents", holdDueAt: "Reminder at {t}", holdAtErr: "Choose a time later than now.", heldIn: "in {n} min", heldOver: "late {n} min", holdRule2: "After 30 minutes a follow-up SMS is sent to the customer automatically.",
       holdRule3: "After 24 hours with no reply the request closes as \"Customer did not reply\".", holdGo: "Hold & take next call",
       holdNeedMobile: "Enter the customer's mobile number before putting the request on hold.",
       heldDone: "{id} is on hold. You can take the next call.", heldResumed: "Continuing {id}, on hold for {m}.", heldTitle: "On-hold requests",
@@ -2108,7 +2121,7 @@
       holdBtn: "تعليق الطلب", holdTitle: "تعليق هذا الطلب", holdSub: "كل البيانات اللي دخلتها محفوظة. تقدرين تستقبلين الاتصال التالي وترجعين تكملين هذا الطلب من نفس الخطوة.",
       hr_noReply: "العميل توقف عن الرد", hr_callBack: "العميل بيتصل لاحقاً", hr_waitingInfo: "بانتظار مستندات (هوية، وصفة، نتائج)", hr_thinking: "العميل يفكر", hr_other: "سبب آخر",
       holdNotePh: "ملاحظة لمن يكمل الطلب (اختياري)", holdOtherErr: "اكتبي السبب في الملاحظة.",
-      holdRule1: "بعد 15 دقيقة يطلع لك تذكير تتواصلين مع العميل مرة ثانية.", holdRule2: "بعد 30 دقيقة تنرسل للعميل رسالة متابعة تلقائياً.",
+      holdRule1: "يطلع لك تذكير قبل الوقت بدقيقتين، ومرة ثانية لما يجي الوقت، في أي صفحة من لوحة التحكم.", holdWhenT: "متى بترجعين للعميل؟ (بالدقائق)", holdAtBtn: "وقت محدد", holdActT: "وش بتسوين وقتها؟", ha_call: "أتصل على العميل", ha_whatsapp: "أرسل له واتساب", ha_waitCall: "أنتظر اتصال العميل", ha_docs: "أراجع المستندات", holdDueAt: "التذكير الساعة {t}", holdAtErr: "اختاري وقت بعد الحين.", heldIn: "بعد {n} د", heldOver: "متأخر {n} د", holdRule2: "بعد 30 دقيقة تنرسل للعميل رسالة متابعة تلقائياً.",
       holdRule3: "بعد 24 ساعة بدون رد يتقفل الطلب بسبب \"العميل لم يرد\".", holdGo: "تعليق واستقبال الاتصال التالي",
       holdNeedMobile: "اكتبي رقم جوال العميل قبل تعليق الطلب.",
       heldDone: "تم تعليق {id}. تقدرين تستقبلين الاتصال التالي.", heldResumed: "تكملة الطلب {id}، كان معلّق من {m}.", heldTitle: "طلبات معلّقة",
@@ -3697,11 +3710,32 @@
       appt: state.appt || null, rel: state.rel || null, fields: s4Init ? fields : null
     };
   }
+  // When the agent gets back to the customer (minutes or a clock time) and what they will do then.
+  const ACT_OF = { noReply: "call", callBack: "waitCall", waitingInfo: "docs", thinking: "call", other: "call" };
+  const hs = { min: 15, at: "", act: "call", actSet: false };
+  function holdDueAt() {
+    if (hs.min !== "at") return new Date(Date.now() + hs.min * 60000);
+    if (!hs.at) return null;
+    const [h, m] = hs.at.split(":").map(Number), d = new Date(); d.setHours(h, m, 0, 0); return d;
+  }
+  function paintHold() {
+    document.querySelectorAll("[data-hmin]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.hmin === String(hs.min))));
+    document.querySelectorAll("[data-hact]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.hact === hs.act)));
+    $("holdAt").hidden = hs.min !== "at";
+    const d = holdDueAt();
+    $("holdDue").textContent = d && d > new Date() ? i18n[current].holdDueAt.replace("{t}", d.toLocaleTimeString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { hour: "numeric", minute: "2-digit" })) : "";
+  }
+  $("holdWhen").addEventListener("click", e => { const b = e.target.closest("[data-hmin]"); if (!b) return; hs.min = b.dataset.hmin === "at" ? "at" : Number(b.dataset.hmin); paintHold(); if (hs.min === "at") $("holdAt").focus(); });
+  $("holdAt").addEventListener("input", () => { hs.at = $("holdAt").value; paintHold(); });
+  $("holdAct").addEventListener("click", e => { const b = e.target.closest("[data-hact]"); if (!b) return; hs.act = b.dataset.hact; hs.actSet = true; paintHold(); });
+  $("holdReasons").addEventListener("change", () => { if (!hs.actSet) { hs.act = ACT_OF[document.querySelector("input[name=holdReason]:checked").value] || "call"; paintHold(); } });
   function openHold() {
     if (!/^05\d{8}$/.test($("mobile").value)) {
       goStep(1); validate(); toast(i18n[current].holdNeedMobile); return;
     }
     $("holdOverlay").hidden = false;
+    if (!hs.actSet) hs.act = ACT_OF[document.querySelector("input[name=holdReason]:checked").value] || "call";
+    paintHold();
     document.querySelector("input[name=holdReason]:checked").focus();
   }
   const closeHold = () => { $("holdOverlay").hidden = true; };
@@ -3712,13 +3746,15 @@
   $("holdGo").addEventListener("click", () => {
     const reason = document.querySelector("input[name=holdReason]:checked").value, note = $("holdNote").value.trim();
     if (reason === "other" && !note) { $("holdNote").focus(); toast(i18n[current].holdOtherErr); return; }
+    const due = holdDueAt();
+    if (!due || due <= new Date()) { $("holdAt").hidden = false; $("holdAt").focus(); toast(i18n[current].holdAtErr); return; }
     const name = s4Init && $("pName").value.trim();
     const f = state.fileNo && state.fileNo !== "new" ? MadaPatients.findByMobile($("mobile").value).find(x => x.fileNo === state.fileNo) : null;
     const data = {
       service: state.service, mobile: $("mobile").value, medical: "non", source: state.source,
       patient: name || (f ? f.name : null), mrn: f ? f.fileNo : null, staff: me ? me.name : null,
       status: "on_hold", decision: "on_hold", payment: null, ...orderItems(),
-      hold: { reason, note, at: new Date().toISOString(), by: me ? me.name : null, view: currentView(), snap: snapshot() }
+      hold: { reason, note, at: new Date().toISOString(), by: me ? me.name : null, view: currentView(), snap: snapshot(), dueAt: due.toISOString(), action: hs.act, warned: null }
     };
     // TODO: save on the backend so another agent can continue it.
     const order = state.holdId ? MadaOrders.update(state.holdId, data) : MadaOrders.add(data);
@@ -3731,9 +3767,9 @@
     const list = heldList();
     $("heldBar").hidden = !list.length;
     $("heldChips").innerHTML = list.map(o => {
-      const late = Date.now() - new Date(o.hold.at) > 15 * 60000, cur = o.id === state.holdId;
+      const due = new Date(o.hold.dueAt || +new Date(o.hold.at) + 15 * 60000), left = Math.round((due - Date.now()) / 60000), late = left < 0, cur = o.id === state.holdId;
       return `<a class="held-chip ${late ? "late" : ""} ${cur ? "is-current" : ""}" ${cur ? "" : `href="new-request.html?hold=${encodeURIComponent(o.id)}"`}>
-        <b>${esc(o.id)}</b><span dir="ltr">${esc(o.mobile)}</span><span class="mins">${esc(agoText(o.hold.at))}</span></a>`;
+        <b>${esc(o.id)}</b><span dir="ltr">${esc(o.mobile)}</span><span class="mins">${esc((late ? i18n[current].heldOver : i18n[current].heldIn).replace("{n}", Math.abs(left)))}</span></a>`;
     }).join("");
     renderHeldMatch();
   }
@@ -3747,16 +3783,9 @@
     box.innerHTML = `<span>${esc(t.heldMatch.replace("{id}", o.id).replace("{m}", agoText(o.hold.at)).replace("{r}", t["hr_" + o.hold.reason]))}</span><a href="new-request.html?hold=${encodeURIComponent(o.id)}">${esc(t.heldMatchGo)}</a>`;
   }
   $("mobile").addEventListener("input", renderHeldMatch);
-  // Reminder once a held request passes 15 minutes.
-  const reminded = new Set();
+  // The reminders themselves come from admin-nav.js (every dashboard page); this keeps the on-hold bar current.
   function holdTick() {
     MadaOrders.sweepHolds();
-    heldList().forEach(o => {
-      if (Date.now() - new Date(o.hold.at) > 15 * 60000 && !reminded.has(o.id) && o.id !== state.holdId) {
-        reminded.add(o.id);
-        if (!o.hold.reminded) { MadaOrders.update(o.id, { hold: { ...o.hold, reminded: true } }); toast(i18n[current].heldLate.replace("{id}", o.id).replace("{m}", agoText(o.hold.at))); }
-      }
-    });
     renderHeld();
   }
 
@@ -3845,6 +3874,7 @@
     toast(i18n[current].heldResumed.replace("{id}", heldOrder.id).replace("{m}", agoText(heldOrder.hold.at)));
     if (heldOrder.hold.note) $("holdNote").value = heldOrder.hold.note;
     const r = document.querySelector(`input[name=holdReason][value="${heldOrder.hold.reason}"]`); if (r) r.checked = true;
+    if (heldOrder.hold.action) { hs.act = heldOrder.hold.action; hs.actSet = true; }
   }
   if (qs.get("held")) toast(i18n[current].heldDone.replace("{id}", qs.get("held")));
   holdTick();

@@ -140,3 +140,75 @@ body > main .table-wrap { max-width: 100%; overflow-x: auto; }
   document.head.appendChild(st);
   paint();
 })();
+
+// On-hold reminders on every dashboard page: a request put on hold (new-request.html) has hold.dueAt and hold.action.
+// The agent who held it gets a card 2 minutes before the time, again when it is due, and every 5 minutes after that
+// until the request is continued: continue it, call the customer, snooze 5 minutes, or close the card.
+// hold.warned: "pre" | "due" and hold.lastWarn keep the reminders from repeating across pages and tabs.
+(() => {
+  const L = {
+    en: { pre: "In 2 minutes: get back to the customer", due: "Time to get back to the customer", late: "Late: the customer is still waiting ({n} min)", go: "Continue the request", snooze: "Snooze 5 min", close: "Close",
+      r_noReply: "Customer stopped replying", r_callBack: "Customer will call back", r_waitingInfo: "Waiting for documents", r_thinking: "Customer is thinking about it", r_other: "Other",
+      a_call: "Call the customer", a_whatsapp: "Message on WhatsApp", a_waitCall: "Wait for the customer's call", a_docs: "Check the documents", todo: "To do", why: "On hold because" },
+    ar: { pre: "بعد دقيقتين: ارجعي للعميل", due: "جا وقت الرجوع للعميل", late: "متأخر: العميل للحين ينتظر ({n} د)", go: "أكملي الطلب", snooze: "تأجيل 5 دقايق", close: "إغلاق",
+      r_noReply: "العميل توقف عن الرد", r_callBack: "العميل بيتصل لاحقاً", r_waitingInfo: "بانتظار مستندات", r_thinking: "العميل يفكر", r_other: "سبب آخر",
+      a_call: "أتصل على العميل", a_whatsapp: "أرسل له واتساب", a_waitCall: "أنتظر اتصال العميل", a_docs: "أراجع المستندات", todo: "المطلوب", why: "سبب التعليق" }
+  };
+  const PRE = 2 * 60000, EVERY = 5 * 60000, shown = new Set();
+  const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const lang = () => (document.documentElement.lang === "ar" ? "ar" : "en"), t = () => L[lang()];
+  const nm = v => v && typeof v === "object" ? (v.en || "") : (v || "");
+  function css() {
+    if (document.getElementById("hrm-css")) return;
+    const st = document.createElement("style"); st.id = "hrm-css";
+    st.textContent = `.hrm{position:fixed;bottom:18px;inset-inline-end:18px;z-index:90;display:grid;gap:10px;width:min(360px,calc(100% - 32px))}
+.hrm-c{background:#fff;border:1px solid #f1d3a1;border-inline-start:4px solid #d97706;border-radius:14px;box-shadow:0 14px 40px rgba(16,35,43,.22);padding:14px 16px;display:grid;gap:8px;font-size:13px;color:#10232b}
+.hrm-c.late{border-color:#f3b4b4;border-inline-start-color:#dc2626}
+.hrm-h{display:flex;align-items:flex-start;gap:8px}.hrm-h b{flex:1;font-size:14px;line-height:1.4}.hrm-x{border:0;background:none;cursor:pointer;color:#6b7a80;font-size:18px;line-height:1;padding:2px}
+.hrm-k{display:flex;flex-wrap:wrap;gap:8px;color:#44545a}.hrm-k a{color:#0b6b5c;font-weight:600;text-decoration:none}
+.hrm-n{color:#44545a;line-height:1.6}.hrm-n span{color:#6b7a80}.hrm-a{display:flex;gap:8px;flex-wrap:wrap}
+.hrm-a a,.hrm-a button{flex:1;display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 12px;border-radius:9px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.hrm-go{background:#0b6b5c;color:#fff;border:1px solid #0b6b5c}.hrm-sz{background:#fff;color:#15304a;border:1px solid #cfd9dc}`;
+    document.head.appendChild(st);
+  }
+  function box() { let b = document.getElementById("hrm"); if (!b) { b = document.createElement("div"); b.id = "hrm"; b.className = "hrm"; b.setAttribute("role", "alert"); document.body.appendChild(b); } return b; }
+  function mine(o) {
+    const me = typeof MadaAuth !== "undefined" && MadaAuth.currentUser ? MadaAuth.currentUser() : null;
+    return !me || !o.hold.by || nm(o.hold.by) === nm(me.name);
+  }
+  function beep() { try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain(); o.frequency.value = 880; g.gain.value = .08; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .25); } catch (e) {} }
+  function card(o, kind) {
+    const h = o.hold, late = Math.max(1, Math.round((Date.now() - new Date(h.dueAt)) / 60000));
+    return `<div class="hrm-c ${kind === "late" ? "late" : ""}" data-hrm="${esc(o.id)}">
+      <div class="hrm-h"><b>${esc(kind === "late" ? t().late.replace("{n}", late) : t()[kind])}</b><button type="button" class="hrm-x" data-hrm-x="${esc(o.id)}" aria-label="${t().close}">×</button></div>
+      <div class="hrm-k"><b>${esc(o.id)}</b>${o.mobile ? `<a href="tel:${esc(o.mobile)}" dir="ltr">${esc(o.mobile)}</a>` : ""}</div>
+      <div class="hrm-n"><span>${t().todo}:</span> <b>${esc(t()["a_" + (h.action || "call")] || "")}</b><br><span>${t().why}:</span> ${esc(t()["r_" + h.reason] || "")}${h.note ? `<br><span dir="auto">${esc(h.note)}</span>` : ""}</div>
+      <div class="hrm-a"><a class="hrm-go" href="new-request.html?hold=${encodeURIComponent(o.id)}">${t().go}</a><button type="button" class="hrm-sz" data-hrm-sz="${esc(o.id)}">${t().snooze}</button></div></div>`;
+  }
+  function tick() {
+    if (typeof MadaOrders === "undefined") return;
+    const cur = new URLSearchParams(location.search).get("hold"), now = Date.now(), cards = [];
+    MadaOrders.all().filter(o => o.status === "on_hold" && o.hold && o.hold.dueAt && o.id !== cur && mine(o)).forEach(o => {
+      const h = o.hold, due = +new Date(h.dueAt);
+      let kind = null;
+      if (now >= due) kind = !h.warned || h.warned === "pre" ? "due" : now - +new Date(h.lastWarn || 0) >= EVERY ? "late" : null;
+      else if (now >= due - PRE && !h.warned) kind = "pre";
+      if (kind) { MadaOrders.update(o.id, { hold: { ...h, warned: kind === "pre" ? "pre" : "due", lastWarn: new Date().toISOString() } }); shown.add(o.id); cards.push([o, kind]); }
+    });
+    if (!cards.length) return;
+    css(); const b = box();
+    cards.forEach(([o, kind]) => { const old = b.querySelector(`[data-hrm="${CSS.escape(o.id)}"]`); if (old) old.remove(); b.insertAdjacentHTML("beforeend", card(o, kind)); });
+    beep();
+  }
+  document.addEventListener("click", e => {
+    const x = e.target.closest("[data-hrm-x]"), sz = e.target.closest("[data-hrm-sz]");
+    if (x) { const c = x.closest(".hrm-c"); if (c) c.remove(); return; }
+    if (sz && typeof MadaOrders !== "undefined") {
+      const o = MadaOrders.get(sz.dataset.hrmSz);
+      if (o && o.hold) MadaOrders.update(o.id, { hold: { ...o.hold, dueAt: new Date(Date.now() + 5 * 60000).toISOString(), warned: null, lastWarn: null, snoozed: (o.hold.snoozed || 0) + 1 } });
+      const c = sz.closest(".hrm-c"); if (c) c.remove();
+    }
+  });
+  const start = () => { tick(); setInterval(tick, 15000); };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
