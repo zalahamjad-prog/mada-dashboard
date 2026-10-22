@@ -258,6 +258,28 @@
   .btn-danger:hover { background: #fdecec; }
   .ds-meta { font-size: 11.5px; color: var(--muted); margin-top: 4px; text-align: center; }
   .ds-l .empty { padding: 28px 16px; }
+  .ds-meta.gen { color: var(--primary); font-weight: 600; }
+  /* stamp maker */
+  .sm-ov { position: fixed; inset: 0; z-index: 60; background: rgba(16,35,43,.55); display: grid; place-items: center; padding: 16px; overflow: auto; }
+  .sm-dlg { background: #fff; border-radius: 18px; width: min(820px, 100%); padding: 22px; display: grid; gap: 16px; position: relative; }
+  .sm-dlg h3 { font-size: 19px; color: #15304a; } .sm-dlg .sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .sm-g { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .sm-g label > span { display: block; font-size: 12.5px; color: #44545a; font-weight: 600; margin-bottom: 4px; }
+  .sm-g label > span i { color: #dc2626; font-style: normal; }
+  .sm-g input { width: 100%; height: 42px; border: 1px solid #d9e1e3; border-radius: 10px; padding: 0 12px; font: inherit; font-size: 14px; }
+  .sm-g input.bad { border-color: #dc2626; background: #fff7f7; }
+  .sm-g input[readonly] { background: #f6f8f9; color: #44545a; }
+  .sm-pv { display: grid; grid-template-columns: minmax(0, 1fr) 190px; gap: 16px; align-items: center; padding: 14px; border: 1px solid var(--border); border-radius: 14px; background: #fbfcfc; }
+  .sm-pv canvas { width: 100%; height: auto; display: block; }
+  .sm-rp { display: grid; gap: 6px; justify-items: center; font-size: 12px; color: var(--muted); text-align: center; }
+  .sm-rp .bx { width: 170px; height: 96px; border: 1px dashed #cfd9dc; border-radius: 12px; display: grid; place-items: center; background: #fff; }
+  .sm-rp img { max-width: 170px; max-height: 92px; }
+  .sm-err { color: #b91c1c; font-size: 13px; font-weight: 600; }
+  .sm-chk { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #44545a; line-height: 1.55; }
+  .sm-chk input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--primary); flex: none; }
+  .sm-acts { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .sm-x { position: absolute; top: 14px; inset-inline-end: 14px; width: 34px; height: 34px; border-radius: 50%; border: 0; background: #f0f3f4; cursor: pointer; font-size: 18px; color: #44545a; }
+  @media (max-width: 760px) { .sm-g, .sm-pv { grid-template-columns: minmax(0, 1fr); } .sm-acts .btn { flex: 1; } }
   @media (max-width: 760px) {
     .ds-r { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 14px; }
     .ds-a { justify-content: stretch; }
@@ -317,10 +339,11 @@
     </div>
     <div class="ph-acts"><a class="btn btn-ghost" href="staff.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span data-i18n="back">Back to Staff</span></a></div>
   </div>
-  <section class="card st-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-i18n="note">Upload a clear image of the stamp (PNG with a transparent background is best). A new or changed stamp shows on that doctor's reports straight away.</span></section>
+  <section class="card st-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-i18n="note"></span></section>
   <section class="card ds-l" id="list"></section>
 </main>
 <input type="file" id="file" accept="image/png,image/jpeg" hidden>
+<div class="sm-ov" id="smOv" hidden><div class="sm-dlg" role="dialog" aria-modal="true" aria-labelledby="smT" id="smDlg"></div></div>
 <div class="toast" id="toast" role="status" hidden></div>
 <script src="auth.js"></script>
 <script src="orders.js"></script>
@@ -337,19 +360,29 @@
       tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       title: "Doctor Stamps", subtitle: "The stamp of each doctor, shown on the medical reports they approve.", back: "Back to Staff",
-      note: "Upload a clear image of the stamp (PNG with a transparent background is best). A new or changed stamp shows on that doctor's reports straight away.",
+      note: "Create Stamp makes the stamp from the doctor's details (name, specialty, Mada Care, employee ID, registration number); check it and approve it. You can still upload a stamp image instead (PNG with a transparent background is best). An approved or changed stamp shows on that doctor's reports straight away.",
       none: "No stamp yet", upload: "Upload Stamp", replace: "Replace", remove: "Remove", added: "Added {d}", saved: "Stamp saved for {n}.", removed: "Stamp removed.",
       confirm: "Remove the stamp of {n}? It will no longer show on their reports.", badType: "Choose a PNG or JPG image.", tooBig: "The image is larger than {n} MB.",
-      readErr: "Couldn't read this image. Try another file.", storeErr: "Couldn't save the stamp. Try a smaller image.", noDocs: "No doctors yet."
+      readErr: "Couldn't read this image. Try another file.", storeErr: "Couldn't save the stamp. Try a smaller image.", noDocs: "No doctors yet.",
+      make: "Create Stamp", editStamp: "Edit Stamp", smT: "Stamp of {n}", smS: "Made from the doctor's details on the Staff page. Check every line, change what is wrong, then approve. Only an approved stamp shows on reports.",
+      fNameEn: "Full name (English)", fNameAr: "Full name (Arabic)", fSpecEn: "Medical specialty (English)", fSpecAr: "Medical specialty (Arabic)", fFacility: "Facility name", fEmp: "Employee ID", fReg: "Professional registration number",
+      pvT: "On the report", sEmp: "Emp. ID", sReg: "Reg. No", sEmpAr: "الرقم الوظيفي", sRegAr: "رقم التسجيل المهني",
+      chk: "I checked the stamp details and they match the doctor's professional registration.", need: "Fill in every field marked *.", needChk: "Tick the box to confirm you checked the details.",
+      approve: "Approve Stamp", cancel: "Cancel", approved: "Stamp of {n} approved. It now shows on their reports.", genMeta: "Made by the system · approved by {b} · {d}", upMeta: "Uploaded {d}"
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
       title: "أختام الأطباء", subtitle: "ختم كل طبيب، يظهر في التقارير الطبية اللي يعتمدها.", back: "رجوع للموظفين",
-      note: "ارفع صورة واضحة للختم (الأفضل PNG بخلفية شفافة). الختم الجديد أو المعدّل يظهر في تقارير الطبيب على طول.",
+      note: "«إنشاء الختم» يسوي الختم من بيانات الطبيب (الاسم، التخصص، مدى كير، الرقم الوظيفي، رقم التسجيل المهني)، راجعه واعتمده. وتقدر بدال كذا ترفع صورة ختم (الأفضل PNG بخلفية شفافة). الختم المعتمد أو المعدّل يظهر في تقارير الطبيب على طول.",
       none: "ما فيه ختم للحين", upload: "رفع الختم", replace: "تغيير", remove: "حذف", added: "أضيف {d}", saved: "انحفظ ختم {n}.", removed: "انحذف الختم.",
       confirm: "تحذف ختم {n}؟ ما راح يظهر في تقاريره بعدها.", badType: "اختر صورة PNG أو JPG.", tooBig: "حجم الصورة أكبر من {n} ميجا.",
-      readErr: "ما قدرنا نقرأ الصورة. جرب ملف ثاني.", storeErr: "ما قدرنا نحفظ الختم. جرب صورة أصغر.", noDocs: "ما فيه أطباء للحين."
+      readErr: "ما قدرنا نقرأ الصورة. جرب ملف ثاني.", storeErr: "ما قدرنا نحفظ الختم. جرب صورة أصغر.", noDocs: "ما فيه أطباء للحين.",
+      make: "إنشاء الختم", editStamp: "تعديل الختم", smT: "ختم {n}", smS: "يتسوى من بيانات الطبيب في صفحة الموظفين. راجع كل سطر وعدّل اللي غلط، بعدها اعتمده. الختم ما يظهر في التقارير إلا بعد الاعتماد.",
+      fNameEn: "الاسم الكامل (إنجليزي)", fNameAr: "الاسم الكامل (عربي)", fSpecEn: "التخصص الطبي (إنجليزي)", fSpecAr: "التخصص الطبي (عربي)", fFacility: "اسم المنشأة", fEmp: "الرقم الوظيفي", fReg: "رقم التسجيل المهني",
+      pvT: "شكله في التقرير", sEmp: "Emp. ID", sReg: "Reg. No", sEmpAr: "الرقم الوظيفي", sRegAr: "رقم التسجيل المهني",
+      chk: "راجعت بيانات الختم وهي مطابقة للتسجيل المهني للطبيب.", need: "عبّ كل الحقول اللي عليها *.", needChk: "أشّر على المربع إنك راجعت البيانات.",
+      approve: "اعتماد الختم", cancel: "إلغاء", approved: "اعتمدنا ختم {n}. صار يظهر في تقاريره.", genMeta: "مسوّى من النظام · اعتمده {b} · {d}", upMeta: "مرفوع {d}"
     }
   };
   let current = "en", target = null;
@@ -365,8 +398,9 @@
     const docs = MadaStamps.doctors();
     $("list").innerHTML = docs.length ? docs.map(d => { const s = MadaStamps.get(d.id);
       return `<div class="ds-r"><div class="ds-w"><span class="av">${esc(initials(T(d.name)))}</span><span><b>${esc(T(d.name))}</b><small>${esc(T(d.spec))}${T(d.spec) ? " · " : ""}<span class="idn">${esc(d.id)}</span></small></span></div>
-        <div><div class="ds-p ${s ? "has" : ""}">${s ? `<img src="${esc(s.data)}" alt="${esc(T(d.name))}">` : `<span>${svg(IC.stamp, 1.8)}${t().none}</span>`}</div>${s ? `<div class="ds-meta">${esc(tx("added", { d: fmtD(s.at) }))}</div>` : ""}</div>
-        <div class="ds-a"><button type="button" class="btn ${s ? "btn-ghost" : "btn-primary"}" data-up="${esc(d.id)}">${svg(IC.up)}${s ? t().replace : t().upload}</button>
+        <div><div class="ds-p ${s ? "has" : ""}">${s ? `<img src="${esc(s.data)}" alt="${esc(T(d.name))}">` : `<span>${svg(IC.stamp, 1.8)}${t().none}</span>`}</div>${s ? (s.generated ? `<div class="ds-meta gen">${esc(tx("genMeta", { b: T(s.approvedBy) || "—", d: fmtD(s.at) }))}</div>` : `<div class="ds-meta">${esc(tx("upMeta", { d: fmtD(s.at) }))}</div>`) : ""}</div>
+        <div class="ds-a"><button type="button" class="btn ${s ? "btn-ghost" : "btn-primary"}" data-make="${esc(d.id)}">${svg(IC.stamp)}${s && s.generated ? t().editStamp : t().make}</button>
+          <button type="button" class="btn btn-ghost" data-up="${esc(d.id)}">${svg(IC.up)}${s && !s.generated ? t().replace : t().upload}</button>
           ${s ? `<button type="button" class="btn btn-danger" data-del="${esc(d.id)}">${svg(IC.del)}${t().remove}</button>` : ""}</div></div>`; }).join("")
       : `<div class="empty">${t().noDocs}</div>`;
   }
@@ -382,8 +416,69 @@
       r.readAsDataURL(file);
     });
   }
+  // ---------- Stamp made by the system ----------
+  // Lines: facility (Mada Care), full name in English and Arabic, medical specialty, employee ID and professional registration number.
+  // The fields start from the Staff page (mada-staff) and the admin checks them before approving; only the approved image is saved (stamps.js).
+  const INK = "#0b4f6c", FONT = '"Tajawal", "Inter", Arial, sans-serif';
+  let sm = null;
+  function fieldsOf(id) {
+    const s = MadaStamps.get(id), st = MadaStore.getJSON("mada-staff", []).find(x => x.id === id) || {}, d = MadaStamps.doctors().find(x => x.id === id) || {};
+    if (s && s.fields) return { ...s.fields };
+    const nm = st.name || d.name || {}, sp = st.specialty || (d.spec && (d.spec.en || d.spec.ar)) || "";
+    const ar = /[\u0600-\u06FF]/.test(sp);
+    return { nameEn: (nm.en || "").trim(), nameAr: (nm.ar && nm.ar !== nm.en ? nm.ar : "").trim(), specEn: ar ? "" : sp, specAr: ar ? sp : "", facility: "Mada Care · مدى كير", emp: id, reg: st.license || "" };
+  }
+  function drawStamp(f) {
+    const c = document.createElement("canvas"), W = 760, H = 420; c.width = W; c.height = H;
+    const g = c.getContext("2d"); g.fillStyle = INK; g.strokeStyle = INK; g.textBaseline = "middle";
+    const rr = (x, y, w, h, r) => { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); };
+    g.lineWidth = 7; rr(8, 8, W - 16, H - 16, 26); g.stroke(); g.lineWidth = 2.5; rr(22, 22, W - 44, H - 44, 18); g.stroke();
+    const fit = (txt, size, weight, max) => { let s2 = size; do { g.font = `${weight} ${s2}px ${FONT}`; s2 -= 1; } while (g.measureText(txt).width > max && s2 > 12); };
+    const line = (txt, y, size, weight, rtl) => { if (!txt) return; g.direction = rtl ? "rtl" : "ltr"; g.textAlign = "center"; fit(txt, size, weight, W - 90); g.fillText(txt, W / 2, y); };
+    const rule = y => { g.lineWidth = 2; g.beginPath(); g.moveTo(70, y); g.lineTo(W - 70, y); g.stroke(); };
+    // Two parts on one line: English label and value, then the Arabic label.
+    const pair = (en, ar, y) => { const sep = "  ·  "; g.direction = "ltr"; fit(en + sep + ar, 27, 600, W - 90);
+      const w1 = g.measureText(en + sep).width, w2 = g.measureText(ar).width, x0 = (W - w1 - w2) / 2; g.textAlign = "left"; g.fillText(en + sep, x0, y); g.direction = "rtl"; g.fillText(ar, x0 + w1, y); };
+    line(f.facility, 62, 34, 700, /[\u0600-\u06FF]/.test(f.facility) && !/[A-Za-z]/.test(f.facility)); rule(92);
+    line(f.nameEn, 140, 44, 700, false); line(f.nameAr, 192, 42, 700, true);
+    line([f.specEn, f.specAr].filter(Boolean).join("  ·  "), 240, 29, 500, false); rule(270);
+    pair(`${t().sEmp}  ${f.emp}`, t().sEmpAr, 312); pair(`${t().sReg}  ${f.reg}`, t().sRegAr, 358);
+    return c;
+  }
+  const FL = [["nameEn", "fNameEn", 1], ["nameAr", "fNameAr", 1], ["specEn", "fSpecEn", 1], ["specAr", "fSpecAr", 0], ["facility", "fFacility", 1], ["emp", "fEmp", 1], ["reg", "fReg", 1]];
+  function openMaker(id) {
+    const d = MadaStamps.doctors().find(x => x.id === id); sm = { id, d, f: fieldsOf(id), err: "", chk: false };
+    drawMaker(); $("smOv").hidden = false; const first = $("smDlg").querySelector("input"); if (first) first.focus();
+  }
+  function drawMaker() {
+    const f = sm.f, bad = k => sm.err && FL.find(x => x[0] === k)[2] && !String(f[k] || "").trim();
+    $("smDlg").innerHTML = `<button type="button" class="sm-x" data-smx aria-label="${t().cancel}">×</button>
+      <div><h3 id="smT">${esc(tx("smT", { n: T(sm.d && sm.d.name) }))}</h3><p class="sub">${t().smS}</p></div>
+      <div class="sm-pv"><div id="smCv"></div><div class="sm-rp"><span>${t().pvT}</span><div class="bx"><img id="smImg" alt=""></div></div></div>
+      <div class="sm-g">${FL.map(([k, l, req]) => `<label><span>${t()[l]}${req ? " <i>*</i>" : ""}</span><input data-sm="${k}" value="${esc(f[k] || "")}" ${k === "emp" ? "readonly" : ""} dir="${k === "nameAr" || k === "specAr" ? "rtl" : "ltr"}" maxlength="70" class="${bad(k) ? "bad" : ""}"></label>`).join("")}</div>
+      <label class="sm-chk"><input type="checkbox" id="smChk" ${sm.chk ? "checked" : ""}><span>${t().chk}</span></label>
+      ${sm.err ? `<div class="sm-err">${esc(sm.err)}</div>` : ""}
+      <div class="sm-acts"><button type="button" class="btn btn-ghost" data-smx>${t().cancel}</button><button type="button" class="btn btn-primary" id="smOk">${svg(IC.stamp)}${t().approve}</button></div>`;
+    paintStamp();
+  }
+  function paintStamp() { const c = drawStamp(sm.f), box = $("smCv"); box.innerHTML = ""; box.appendChild(c); $("smImg").src = c.toDataURL("image/png"); }
+  $("smDlg").addEventListener("input", e => { const i = e.target.closest("[data-sm]"); if (!i) return; sm.f[i.dataset.sm] = i.value; i.classList.remove("bad"); paintStamp(); });
+  $("smDlg").addEventListener("change", e => { if (e.target.id !== "smChk") return; sm.chk = e.target.checked; sm.err = ""; const er = $("smDlg").querySelector(".sm-err"); if (er) er.remove(); });
+  $("smDlg").addEventListener("click", e => {
+    if (e.target.closest("[data-smx]")) { $("smOv").hidden = true; sm = null; return; }
+    if (!e.target.closest("#smOk")) return;
+    const miss = FL.some(([k, , req]) => req && !String(sm.f[k] || "").trim());
+    if (miss) { sm.err = t().need; return drawMaker(); }
+    if (!sm.chk) { sm.err = t().needChk; return drawMaker(); }
+    const f = Object.fromEntries(Object.entries(sm.f).map(([k, v]) => [k, String(v || "").trim()]));
+    const data = drawStamp(f).toDataURL("image/png");
+    try { MadaStamps.set(sm.id, { data, name: "generated", generated: true, fields: f, by: me ? me.name : null, approvedBy: me ? me.name : null }); } catch (x) { return toast(t().storeErr); }
+    const n = T(sm.d && sm.d.name); $("smOv").hidden = true; sm = null; render(); toast(tx("approved", { n }));
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("smOv").hidden) { $("smOv").hidden = true; sm = null; } });
   $("list").addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.make) return openMaker(b.dataset.make);
     if (b.dataset.up) { target = b.dataset.up; $("file").value = ""; $("file").click(); }
     if (b.dataset.del) { const d = MadaStamps.doctors().find(x => x.id === b.dataset.del);
       if (!confirm(tx("confirm", { n: T(d && d.name) }))) return; MadaStamps.remove(b.dataset.del); render(); toast(t().removed); }
