@@ -58,6 +58,22 @@
 
   main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  /* permissions */
+  .pm { padding: 20px; display: grid; gap: 16px; }
+  .pm-h b { display: block; font-size: 15.5px; color: #15304a; } .pm-h small { display: block; font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.6; }
+  .pm-mode { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pm-mode button { height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid #d9e1e3; background: #fff; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; color: #44545a; }
+  .pm-mode button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .pm-g { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pm-i { display: flex; gap: 10px; align-items: flex-start; padding: 11px 12px; border: 1px solid #e3e8ea; border-radius: 10px; cursor: pointer; background: #fff; }
+  .pm-i:has(input:checked) { border-color: #9ed3c3; background: #f3faf7; }
+  .pm-i input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--primary); flex: none; }
+  .pm-i b { display: block; font-size: 13.5px; color: #15304a; } .pm-i small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+  .pm-g.ro .pm-i { cursor: default; opacity: .85; }
+  .pm-warn { display: flex; gap: 8px; padding: 10px 12px; border-radius: 10px; background: #fff8eb; color: #8a5a00; font-size: 12.5px; line-height: 1.6; }
+  .pm-warn svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+  .pm-acts { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  @media (max-width: 760px) { .pm-g { grid-template-columns: minmax(0, 1fr); } .pm-acts .btn { flex: 1; } }
   .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .page-head h1 { font-size: 24px; font-weight: 600; }
   .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
@@ -405,8 +421,20 @@
       tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       back: "Staff", notFound: "This staff member wasn't found.", backList: "Back to staff",
-      tabInfo: "Details", tabDocs: "Documents", tabSched: "Work Schedule",
-      role_admin: "Administrator", role_supervisor: "Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_physio: "Physiotherapist", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
+      tabInfo: "Details", tabDocs: "Documents", tabSched: "Work Schedule", tabPerm: "Permissions",
+      pmT: "What {n} can open", pmS: "Sections of the operating system this person sees in the menu and can open. They start from the role; you can change them for this person.",
+      pmRole: "Role defaults ({r})", pmCustom: "Custom for this person", pmSave: "Save Permissions", pmSaved: "Permissions saved. They apply the next time {n} opens a page.", pmNone: "Choose at least one section.",
+      pmSelf: "You can't change your own permissions. Ask another manager.", pmPortal: "This role uses its own portal, so it has no permissions in the operating system.",
+      pmWarn: "These permissions hide pages in the browser only. Real protection needs the secure login on the server (Supabase Auth), planned before real patient data.",
+      ps_dashboard: "Dashboard", psd_dashboard: "Home page with the numbers of the day.", ps_newRequest: "New Request", psd_newRequest: "Take a call and create a request.",
+      ps_requests: "Requests", psd_requests: "Requests list and request details.", ps_bookings: "Bookings", psd_bookings: "Bookings and the booking schedule.",
+      ps_patients: "Patients", psd_patients: "Patient files.", ps_medical: "Medical & Doctor Orders", psd_medical: "Medical requests and doctor orders.",
+      ps_results: "Lab & X-ray Results", psd_results: "Lab results, lab tests and X-ray results.", ps_physio: "Physiotherapy Requests", psd_physio: "Physio courses, sessions and payments.",
+      ps_invoices: "Invoices", psd_invoices: "Invoices and payments.", ps_coupons: "Coupons", psd_coupons: "Discount coupons.",
+      ps_services: "Services & Prices", psd_services: "Services catalog and prices.", ps_providers: "Providers & Coverage", psd_providers: "Service providers and coverage areas.",
+      ps_clinical: "Diagnoses & Medications", psd_clinical: "Clinical lists.", ps_quality: "Quality", psd_quality: "Quality page.",
+      ps_staff: "Staff", psd_staff: "Staff, accounts, permissions and doctor stamps.", ps_policies: "Policies", psd_policies: "Terms and policies.",
+      role_gm: "General Manager", role_admin: "Administrator", role_ops: "Operations Manager", role_supervisor: "Sales & Call Center Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_physio: "Physiotherapist", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
       st_active: "Active", st_disabled: "Inactive",
       fId: "Employee ID", fRole: "Role", fMobile: "Mobile", fEmail: "Email", fIdType: "ID type", id_national: "National ID", id_iqama: "Iqama", fIdNo: "ID number", fGender: "Gender", g_m: "Male", g_f: "Female",
       fSpec: "Specialty", fLic: "SCFHS license number", fCity: "City", city_jeddah: "Jeddah", city_riyadh: "Riyadh", fStart: "Start date",
@@ -434,8 +462,20 @@
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
       back: "الموظفين", notFound: "ما لقينا هذا الموظف.", backList: "رجوع للموظفين",
-      tabInfo: "البيانات", tabDocs: "الوثائق", tabSched: "جدول الدوام",
-      role_admin: "مدير النظام", role_supervisor: "مشرف", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_physio: "أخصائي علاج طبيعي", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
+      tabInfo: "البيانات", tabDocs: "الوثائق", tabSched: "جدول الدوام", tabPerm: "الصلاحيات",
+      pmT: "وش يقدر يفتح {n}", pmS: "أقسام نظام التشغيل اللي تظهر له في القائمة ويقدر يفتحها. تبدأ من الدور، وتقدر تغيّرها لهذا الشخص.",
+      pmRole: "صلاحيات الدور ({r})", pmCustom: "مخصصة لهذا الشخص", pmSave: "حفظ الصلاحيات", pmSaved: "انحفظت الصلاحيات. تطبق على {n} من أول صفحة يفتحها.", pmNone: "اختر قسم واحد على الأقل.",
+      pmSelf: "ما تقدر تغيّر صلاحياتك بنفسك. اطلبها من مدير ثاني.", pmPortal: "هذا الدور له بوابته الخاصة، فما له صلاحيات في نظام التشغيل.",
+      pmWarn: "هذه الصلاحيات تخفي الصفحات في المتصفح بس. الحماية الحقيقية تحتاج تسجيل الدخول الآمن على السيرفر (Supabase Auth)، وهو مخطط قبل إدخال بيانات مرضى حقيقية.",
+      ps_dashboard: "الرئيسية", psd_dashboard: "الصفحة الرئيسية وأرقام اليوم.", ps_newRequest: "طلب جديد", psd_newRequest: "استقبال مكالمة وإنشاء طلب.",
+      ps_requests: "الطلبات", psd_requests: "قائمة الطلبات وتفاصيل الطلب.", ps_bookings: "الحجوزات", psd_bookings: "الحجوزات وجدول الحجوزات.",
+      ps_patients: "المرضى", psd_patients: "ملفات المرضى.", ps_medical: "الطلبات الطبية وطلبات الطبيب", psd_medical: "الطلبات الطبية وأوامر الأطباء.",
+      ps_results: "نتائج التحاليل والأشعة", psd_results: "نتائج التحاليل وتفاصيلها ونتائج الأشعة.", ps_physio: "طلبات العلاج الطبيعي", psd_physio: "خطط العلاج والجلسات والدفع.",
+      ps_invoices: "الفواتير", psd_invoices: "الفواتير والمدفوعات.", ps_coupons: "الكوبونات", psd_coupons: "كوبونات الخصم.",
+      ps_services: "الخدمات والأسعار", psd_services: "قائمة الخدمات وأسعارها.", ps_providers: "مقدمو الخدمة والتغطية", psd_providers: "مقدمو الخدمة ومناطق التغطية.",
+      ps_clinical: "التشخيصات والأدوية", psd_clinical: "القوائم الطبية.", ps_quality: "الجودة", psd_quality: "صفحة الجودة.",
+      ps_staff: "الموظفين", psd_staff: "الموظفين والحسابات والصلاحيات وأختام الأطباء.", ps_policies: "السياسات", psd_policies: "الشروط والسياسات.",
+      role_gm: "مدير عام", role_admin: "مدير النظام", role_ops: "مدير تشغيل", role_supervisor: "مشرف مبيعات وكول سنتر", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_physio: "أخصائي علاج طبيعي", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
       st_active: "نشط", st_disabled: "غير نشط",
       fId: "الرقم الوظيفي", fRole: "الدور", fMobile: "الجوال", fEmail: "البريد الإلكتروني", fIdType: "نوع الهوية", id_national: "هوية وطنية", id_iqama: "إقامة", fIdNo: "رقم الهوية", fGender: "الجنس", g_m: "ذكر", g_f: "أنثى",
       fSpec: "التخصص", fLic: "رقم ترخيص الهيئة", fCity: "المدينة", city_jeddah: "جدة", city_riyadh: "الرياض", fStart: "تاريخ المباشرة",
@@ -489,10 +529,40 @@
       <div class="sp-who"><h1>${esc(name)}</h1><p><span class="code">${esc(s.id)}</span> · ${esc(t()["role_" + s.role] || s.role)}${s.specialty ? ` · ${esc(s.specialty)}` : ""}</p>
         <div class="sp-meta"><span>${svg(IC.phone, 1.8)}<bdi dir="ltr">${esc(s.mobile || "—")}</bdi></span><span class="st ${s.status === "disabled" ? "off" : "on"}">${s.status === "disabled" ? t().st_disabled : t().st_active}</span></div></div>
       ${canReset && s.status !== "disabled" ? `<button type="button" class="btn btn-ghost sp-pw" id="pwReset">${svg(IC.key, 1.9)}${t().pwReset}</button>` : ""}`;
-    const n = { info: "", docs: dl.length, sched: "" };
-    $("tabs").innerHTML = [["info", "tabInfo", IC.user], ["docs", "tabDocs", IC.doc], ["sched", "tabSched", IC.cal]].map(([k, l, ic]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${svg(ic, 1.8)}${t()[l]}${n[k] !== "" ? `<small class="${k === "docs" && alerts ? "alert" : ""}">${n[k]}</small>` : ""}</button>`).join("");
-    $("view").innerHTML = tab === "docs" ? docsView() : tab === "sched" ? schedView() : infoView();
+    const n = { info: "", docs: dl.length, sched: "", perm: "" };
+    const TABS = [["info", "tabInfo", IC.user], ["docs", "tabDocs", IC.doc], ["sched", "tabSched", IC.cal]];
+    if (canPerm) TABS.push(["perm", "tabPerm", IC.key]);
+    if (tab === "perm" && !canPerm) tab = "info";
+    $("tabs").innerHTML = TABS.map(([k, l, ic]) => `<button type="button" role="tab" aria-selected="${tab === k}" data-tab="${k}">${svg(ic, 1.8)}${t()[l]}${n[k] !== "" ? `<small class="${k === "docs" && alerts ? "alert" : ""}">${n[k]}</small>` : ""}</button>`).join("");
+    $("view").innerHTML = tab === "docs" ? docsView() : tab === "sched" ? schedView() : tab === "perm" ? permView() : infoView();
   }
+  // ---------- Permissions (MadaPerms in auth.js) ----------
+  // Shown to those who can open the Staff section; portal roles (doctor, nurse, physio) have none in the operating system.
+  const PORTAL_ROLES = ["doctor", "nurse", "physio"];
+  const canPerm = !!me && MadaPerms.canSection(me, "staff");
+  let pm = null;
+  function permView() {
+    if (PORTAL_ROLES.includes(s.role)) return `<section class="card pm"><div class="pm-h"><b>${esc(tx("pmT", { n: T(s.name) }))}</b><small>${t().pmPortal}</small></div></section>`;
+    const self = me && me.staffId === s.id, roleSet = MadaPerms.DEFAULTS[s.role] || MadaPerms.DEFAULTS.agent;
+    if (!pm || pm.id !== s.id) pm = { id: s.id, custom: Array.isArray(s.perms), list: Array.isArray(s.perms) ? s.perms.slice() : roleSet.slice(), err: "" };
+    const shown = pm.custom ? pm.list : roleSet, ro = self || !pm.custom;
+    return `<section class="card pm">
+      <div class="pm-h"><b>${esc(tx("pmT", { n: T(s.name) }))}</b><small>${t().pmS}</small></div>
+      ${self ? `<div class="pm-warn">${svg(IC.alert, 2)}<span>${t().pmSelf}</span></div>` : `<div class="pm-mode"><button type="button" data-pmmode="role" aria-pressed="${!pm.custom}">${esc(tx("pmRole", { r: t()["role_" + s.role] || s.role }))}</button><button type="button" data-pmmode="custom" aria-pressed="${pm.custom}">${t().pmCustom}</button></div>`}
+      <div class="pm-g ${ro ? "ro" : ""}">${MadaPerms.SECTIONS.map(x => `<label class="pm-i"><input type="checkbox" data-pm="${x.k}" ${shown.includes(x.k) ? "checked" : ""} ${ro ? "disabled" : ""}><span><b>${t()["ps_" + x.k]}</b><small>${t()["psd_" + x.k]}</small></span></label>`).join("")}</div>
+      <div class="pm-warn">${svg(IC.alert, 2)}<span>${t().pmWarn}</span></div>
+      ${pm.err ? `<div class="pm-warn" style="background:#fdecec;color:#b91c1c">${esc(pm.err)}</div>` : ""}
+      ${self ? "" : `<div class="pm-acts"><button type="button" class="btn btn-primary" data-pmsave>${svg(IC.check, 2)}${t().pmSave}</button></div>`}</section>`;
+  }
+  document.addEventListener("change", e => { const c = e.target.closest("[data-pm]"); if (!c || !pm || !pm.custom) return;
+    pm.list = c.checked ? [...new Set([...pm.list, c.dataset.pm])] : pm.list.filter(k => k !== c.dataset.pm); });
+  document.addEventListener("click", e => {
+    const m = e.target.closest("[data-pmmode]"), sv = e.target.closest("[data-pmsave]"); if (!m && !sv) return;
+    if (m) { pm.custom = m.dataset.pmmode === "custom"; if (pm.custom && !Array.isArray(s.perms)) pm.list = (MadaPerms.DEFAULTS[s.role] || MadaPerms.DEFAULTS.agent).slice(); pm.err = ""; return render(); }
+    if (pm.custom && !pm.list.length) { pm.err = t().pmNone; return render(); }
+    const keep = MadaPerms.SECTIONS.map(x => x.k).filter(k => pm.list.includes(k));
+    if (persist({ perms: pm.custom ? keep : null, permsBy: me ? me.name : null, permsAt: new Date().toISOString() })) { pm = null; render(); toast(tx("pmSaved", { n: T(s.name) })); }
+  });
   function infoView() {
     const rows = [["fId", `<span class="code">${esc(s.id)}</span>`], ["fRole", esc(t()["role_" + s.role] || s.role)], ["fMobile", `<bdi dir="ltr">${esc(s.mobile || "—")}</bdi>`], ["fEmail", `<bdi dir="ltr">${esc(s.email || "—")}</bdi>`],
       ["fIdType", esc(t()["id_" + s.idType] || "—")], ["fIdNo", `<bdi dir="ltr">${esc(s.idNumber || "—")}</bdi>`], ["fGender", esc(t()["g_" + s.gender] || "—")], ["fCity", esc(t()["city_" + s.city] || s.city || "—")], ["fStart", esc(fmtDate(s.startDate))]];
@@ -700,7 +770,7 @@
 
   let saved = "en";
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
-  if (["#docs", "#sched"].includes(location.hash)) tab = location.hash.slice(1);
+  if (["#docs", "#sched", "#perm"].includes(location.hash)) tab = location.hash.slice(1);
   setLang(saved);
 </script>
 </body>

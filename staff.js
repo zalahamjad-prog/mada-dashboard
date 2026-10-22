@@ -9,7 +9,7 @@
 // Replace with the real staff API; the backend must create the account and never store plain passwords.
 const MadaStaff = (() => {
   const KEY = "mada-staff";
-  const ROLES = ["admin", "supervisor", "agent", "doctor", "nurse", "physio", "lab", "driver", "quality"];
+  const ROLES = ["gm", "admin", "ops", "supervisor", "agent", "doctor", "nurse", "physio", "lab", "driver", "quality"];
   const MEDICAL = ["doctor", "nurse", "physio", "lab"];
 
   const all = () => MadaStore.getJSON(KEY, []);

@@ -476,6 +476,8 @@
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
   const ICONS = {
+    gm: '<path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M10 20v-5h4v5"/>',
+    ops: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/>',
     admin: '<path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="m9 12 2 2 4-4"/>',
     supervisor: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/><path d="m12 12 1.2 2.5L12 18l-1.2-3.5z"/>',
     agent: '<path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/><path d="M19 19c0 1.5-2 2.5-5 2.5"/>',
@@ -500,7 +502,7 @@
       idType: "ID type", id_national: "National ID", id_iqama: "Iqama", idNo: "ID number", idErrNat: "Enter the 10-digit National ID starting with 1.", idErrIq: "Enter the 10-digit Iqama number starting with 2.",
       gender: "Gender", g_m: "Male", g_f: "Female", genderErr: "Choose the gender.",
       s2: "Job", s2p: "The role decides what this person sees in the system.", role: "Role", roleErr: "Choose the role.",
-      role_admin: "Administrator", role_supervisor: "Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_physio: "Physiotherapist", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
+      role_gm: "General Manager", role_admin: "Administrator", role_ops: "Operations Manager", role_supervisor: "Sales & Call Center Supervisor", role_agent: "Call Center Agent", role_doctor: "Doctor", role_nurse: "Nurse", role_physio: "Physiotherapist", role_lab: "Laboratory", role_driver: "Driver", role_quality: "Quality",
       spec: "Specialty", specErr: "Enter the specialty.", specPh_doctor: "e.g. Family Medicine", specPh_nurse: "e.g. Home Care Nursing", specPh_physio: "e.g. Orthopedic Physiotherapy", specPh_lab: "e.g. Phlebotomy",
       lic: "SCFHS license number", licHint: "Saudi Commission for Health Specialties.", licErr: "Enter the license number.",
       city: "City", cityPh: "Select city", city_jeddah: "Jeddah", city_riyadh: "Riyadh", cityErr: "Choose the city.", start: "Start date", startErr: "Choose the start date.",
@@ -523,7 +525,7 @@
       idType: "نوع الهوية", id_national: "هوية وطنية", id_iqama: "إقامة", idNo: "رقم الهوية", idErrNat: "اكتب رقم الهوية الوطنية من 10 أرقام يبدأ بـ 1.", idErrIq: "اكتب رقم الإقامة من 10 أرقام يبدأ بـ 2.",
       gender: "الجنس", g_m: "ذكر", g_f: "أنثى", genderErr: "اختر الجنس.",
       s2: "الوظيفة", s2p: "الدور يحدد وش يشوف الموظف في النظام.", role: "الدور", roleErr: "اختر الدور.",
-      role_admin: "مدير النظام", role_supervisor: "مشرف", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_physio: "أخصائي علاج طبيعي", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
+      role_gm: "مدير عام", role_admin: "مدير النظام", role_ops: "مدير تشغيل", role_supervisor: "مشرف مبيعات وكول سنتر", role_agent: "موظف كول سنتر", role_doctor: "طبيب", role_nurse: "ممرضة", role_physio: "أخصائي علاج طبيعي", role_lab: "مختبر", role_driver: "سائق", role_quality: "جودة",
       spec: "التخصص", specErr: "اكتب التخصص.", specPh_doctor: "مثال: طب الأسرة", specPh_nurse: "مثال: تمريض منزلي", specPh_physio: "مثال: علاج طبيعي عظام", specPh_lab: "مثال: سحب دم",
       lic: "رقم ترخيص الهيئة", licHint: "الهيئة السعودية للتخصصات الصحية.", licErr: "اكتب رقم الترخيص.",
       city: "المدينة", cityPh: "اختر المدينة", city_jeddah: "جدة", city_riyadh: "الرياض", cityErr: "اختر المدينة.", start: "تاريخ المباشرة", startErr: "اختر تاريخ المباشرة.",

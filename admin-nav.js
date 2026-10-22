@@ -212,3 +212,31 @@ body > main .table-wrap { max-width: 100%; overflow-x: auto; }
   const start = () => { tick(); setInterval(tick, 15000); };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
 })();
+
+// Permissions (MadaPerms, auth.js): hide the menu links and buttons to sections this person can't open,
+// and cover a page they can't open with a short message (the page itself stays hidden behind it).
+// Browser only: the real check belongs on the server.
+(() => {
+  const L = { en: { t: "You don't have access to this page", s: "Ask your manager to add it to your permissions on the Staff page.", go: "Go to my home page" },
+    ar: { t: "ما عندك صلاحية لهذه الصفحة", s: "اطلب من مديرك يضيفها لصلاحياتك من صفحة الموظفين.", go: "روح لصفحتي الرئيسية" } };
+  function run() {
+    if (typeof MadaPerms === "undefined" || typeof MadaAuth === "undefined") return;
+    const u = MadaAuth.currentUser(); if (!u || u.kind !== "agent") return;
+    const page = location.pathname.split("/").pop() || "dashboard.html", off = h => h && /\.html(\?|#|$)/.test(h) && !MadaPerms.canPage(u, h.split(/[?#]/)[0]);
+    document.querySelectorAll(".mn-side .nav a[href], header .nav a[href], a.btn[href], a[href^='new-request.html']").forEach(a => { if (off(a.getAttribute("href"))) a.style.display = "none"; });
+    if (!MadaPerms.canSection(u, "quality")) document.querySelectorAll(".nav a.nav-soon").forEach(a => { if (/quality/i.test(a.textContent) || a.querySelector('[data-i18n="navQuality"]')) a.style.display = "none"; });
+    if (MadaPerms.canPage(u, page)) return;
+    const home = MadaPerms.homeOf(u);
+    if (page === "dashboard.html" && home !== "dashboard.html") return location.replace(home);
+    const main = document.querySelector("main"); if (main) main.style.display = "none";
+    const lang = document.documentElement.lang === "ar" ? "ar" : "en", t = L[lang];
+    const box = document.createElement("section");
+    box.setAttribute("role", "alert");
+    box.style.cssText = "max-width:520px;margin:60px auto;padding:32px 24px;text-align:center;background:#fff;border:1px solid #e3e8ea;border-radius:16px;font-family:inherit";
+    box.innerHTML = `<div style="width:56px;height:56px;margin:0 auto 14px;border-radius:50%;background:#fef3e2;color:#b45309;display:grid;place-items:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+      <h1 style="font-size:20px;color:#15304a;margin:0 0 6px">${t.t}</h1><p style="font-size:14px;color:#6b7a80;margin:0 0 18px;line-height:1.6">${t.s}</p>
+      ${home !== page ? `<a href="${home}" style="display:inline-flex;align-items:center;height:42px;padding:0 18px;border-radius:10px;background:#0b6b5c;color:#fff;font-weight:600;text-decoration:none">${t.go}</a>` : ""}`;
+    if (main) main.before(box); else document.body.appendChild(box);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
+})();
