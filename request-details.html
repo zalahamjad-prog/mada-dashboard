@@ -535,6 +535,7 @@
 <script src="labs.js"></script>
 <script src="nursing.js"></script>
 <script src="physio.js"></script>
+<script src="physio-flow.js"></script>
 <script src="ivtherapy.js"></script>
 <script src="requests.js"></script>
 <script src="patients.js"></script>
@@ -619,7 +620,7 @@
     bkTitle: "Booking Details", bkSub: "Everything about this visit in one place", bkBack: "Back to bookings",
     hUntil: "Time left until the visit", hNow: "The visit should be happening now", hLate: "The team has not arrived yet", hArrived: "The team arrived", hDone: "Visit completed", hCancel: "Booking cancelled", hNone: "No visit time yet",
     inT: "{t}", lateBy: "Late by {t}", bookingNo: "Booking", orderNo2: "Order",
-    dvT: "4. Visit Data · Doctor Portal", dvRo: "Read only: filled in by the doctor in the Doctor Portal.", dvNotStarted: "The doctor has not started the visit yet.",
+    dvT: "4. Visit Data · Doctor Portal", ptT: "4. Visit Data · Physiotherapist Portal", ptRo: "Read only: filled in by the physiotherapist in the Physiotherapist Portal. The steps follow the session type.", ptNotStarted: "The physiotherapist has not started the visit yet.", ptPdfT: "Physiotherapy Visit Timeline", ptWho: "Physiotherapist", ptSes: "Session type", dvRo: "Read only: filled in by the doctor in the Doctor Portal.", dvNotStarted: "The doctor has not started the visit yet.",
     dvSt_wait: "Not opened", dvSt_open: "Opened, not saved", dvSt_done: "Done", dvOpened: "Opened", dvClosed: "Saved", dvDur: "Time taken",
     dvStart: "Visit started", dvEnd: "Visit finished", dvTotal: "Total time", dvOngoing: "In progress", dvDl: "Download PDF", dvMaking: "Preparing the PDF...", dvDlDone: "Downloaded {f}.", dvDlFail: "Couldn't make the PDF. A print view opened: choose Save as PDF.",
     dvPdfT: "Doctor Visit Timeline", dvPatient: "Patient", dvDoctor: "Doctor", dvBooked: "Booked for", dvMade: "Printed {t}", dvStep: "Step", dvStatus: "Status",
@@ -691,7 +692,7 @@
     bkTitle: "تفاصيل الحجز", bkSub: "كل تفاصيل الزيارة في مكان واحد", bkBack: "العودة للحجوزات",
     hUntil: "الوقت المتبقي على الزيارة", hNow: "المفروض الزيارة جارية الآن", hLate: "الفريق لم يصل بعد", hArrived: "وصل الفريق", hDone: "تمت الزيارة", hCancel: "الحجز ملغى", hNone: "لم يحدد موعد الزيارة بعد",
     inT: "{t}", lateBy: "متأخر {t}", bookingNo: "الحجز", orderNo2: "الطلب",
-    dvT: "4. بيانات الزيارة · نظام الأطباء", dvRo: "للعرض فقط: يعبيها الطبيب من نظام الأطباء.", dvNotStarted: "الطبيب ما بدأ الزيارة للحين.",
+    dvT: "4. بيانات الزيارة · نظام الأطباء", ptT: "4. بيانات الزيارة · بوابة أخصائي العلاج الطبيعي", ptRo: "للعرض فقط: يعبيها الأخصائي من بوابة العلاج الطبيعي. الخطوات حسب نوع الجلسة.", ptNotStarted: "الأخصائي ما بدأ الزيارة للحين.", ptPdfT: "سجل خطوات زيارة العلاج الطبيعي", ptWho: "الأخصائي", ptSes: "نوع الجلسة", dvRo: "للعرض فقط: يعبيها الطبيب من نظام الأطباء.", dvNotStarted: "الطبيب ما بدأ الزيارة للحين.",
     dvSt_wait: "ما انفتحت", dvSt_open: "انفتحت وما انحفظت", dvSt_done: "تمت", dvOpened: "فتحها", dvClosed: "حفظها", dvDur: "المدة",
     dvStart: "بداية الزيارة", dvEnd: "نهاية الزيارة", dvTotal: "المدة الكاملة", dvOngoing: "جارية", dvDl: "تحميل PDF", dvMaking: "جاري تجهيز الملف...", dvDlDone: "تم تحميل {f}.", dvDlFail: "ما قدرنا نسوي الملف. انفتحت صفحة الطباعة: اختر حفظ PDF.",
     dvPdfT: "سجل خطوات زيارة الطبيب", dvPatient: "المريض", dvDoctor: "الطبيب", dvBooked: "موعد الحجز", dvMade: "طُبع {t}", dvStep: "الخطوة", dvStatus: "الحالة",
@@ -1006,24 +1007,28 @@
   // Doctor visits: the doctor's own visit steps from the Doctor Portal (doctor-visit.html), read only.
   // Each step shows when the doctor first opened it (doctorVisit.stepLog), when it was saved (steps[k].at) and the time between.
   const DR_STEPS = ["arrival", "history", "vitals", "exam", "allergy", "assess", "plan", "orders", "nurse", "edu", "idform", "consent"];
+  // Physiotherapy visits use the same timeline with the physiotherapist's steps (physio-flow.js), read from order.physioVisit.
+  const isPt = o => o.service === "physio" && typeof PtFlow !== "undefined";
+  const vOf = o => (isPt(o) ? o.physioVisit : o.doctorVisit) || {};
+  const stepName = (o, k) => isPt(o) ? PtFlow.L[current][k] : t()["ds_" + k];
   function drRows(o) {
-    const dv = o.doctorVisit || {}, st = dv.steps || {}, log = dv.stepLog || {};
-    return DR_STEPS.map(k => { const op = log[k] && log[k].openedAt, cl = st[k] && st[k].at;
+    const dv = vOf(o), st = dv.steps || {}, log = dv.stepLog || {};
+    return (isPt(o) ? PtFlow.keys(o) : DR_STEPS).map(k => { const op = log[k] && log[k].openedAt, cl = st[k] && st[k].at;
       return { k, op, cl, s: cl ? "done" : op ? "open" : "wait", dur: op && cl && new Date(cl) >= new Date(op) ? new Date(cl) - new Date(op) : null }; });
   }
   const stampTxt = v => v ? stamp(new Date(v)).replace(/[⁦⁩]/g, "") : "—";
   function drVisitHtml(o) {
-    const dv = o.doctorVisit || {}, rows = drRows(o), done = rows.filter(r => r.s === "done").length, end = dv.status === "done" ? dv.completedAt : null;
+    const dv = vOf(o), rows = drRows(o), done = rows.filter(r => r.s === "done").length, end = dv.status === "done" ? dv.completedAt : null, pt = isPt(o);
     const total = dv.startedAt ? (end ? new Date(end) : new Date()) - new Date(dv.startedAt) : null;
     return `
     <section class="card sec" id="secVisit">
-      <div class="dv-head"><h2>${t().dvT}</h2>${dv.startedAt ? `<button type="button" class="btn btn-ghost btn-sm" id="dvDl">${svg(I.download || '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', 2)}${t().dvDl}</button>` : ""}</div>
-      <div class="dv-ro">${svg(I.info, 2)}<span>${dv.startedAt ? t().dvRo : t().dvNotStarted}</span></div>
+      <div class="dv-head"><h2>${pt ? t().ptT : t().dvT}</h2>${dv.startedAt ? `<button type="button" class="btn btn-ghost btn-sm" id="dvDl">${svg(I.download || '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', 2)}${t().dvDl}</button>` : ""}</div>
+      <div class="dv-ro">${svg(I.info, 2)}<span>${dv.startedAt ? (pt ? t().ptRo : t().dvRo) : (pt ? t().ptNotStarted : t().dvNotStarted)}${pt ? ` · <b>${esc(PtFlow.L[current][PtFlow.isFollow(o) ? "follow" : "initial"])}</b>` : ""}</span></div>
       ${dv.startedAt ? `<div class="dv-sum"><div><span>${t().dvStart}</span><b>${esc(stampTxt(dv.startedAt))}</b></div><div><span>${t().dvEnd}</span><b>${end ? esc(stampTxt(end)) : t().dvOngoing}</b></div>
         <div><span>${t().dvTotal}</span><b>${total != null ? esc(dur(total)) : "—"}</b></div></div>` : ""}
-      <div class="steps-bar"><span class="bar"><i style="width:${done / DR_STEPS.length * 100}%"></i></span><b>${tx("vdProgress", { n: done, t: DR_STEPS.length })}</b></div>
+      <div class="steps-bar"><span class="bar"><i style="width:${done / rows.length * 100}%"></i></span><b>${tx("vdProgress", { n: done, t: rows.length })}</b></div>
       <ol class="vsteps dvsteps">${rows.map((r, i) => `<li class="${r.s === "done" ? "done" : r.s === "open" ? "now" : ""}"><span class="n">${r.s === "done" ? svg('<path d="m6 12 4 4 8-8"/>', 2.6) : i + 1}</span>
-        <div><b>${t()["ds_" + r.k]}</b>${r.op || r.cl ? `<span class="tm">${r.op ? `<span>${t().dvOpened} <i>${esc(fmtTime(new Date(r.op)))}</i></span>` : ""}${r.cl ? `<span>${t().dvClosed} <i>${esc(fmtTime(new Date(r.cl)))}</i></span>` : ""}${r.dur != null ? `<span>${t().dvDur} <i>${esc(dur(r.dur))}</i></span>` : ""}</span>` : ""}</div>
+        <div><b>${esc(stepName(o, r.k))}</b>${r.op || r.cl ? `<span class="tm">${r.op ? `<span>${t().dvOpened} <i>${esc(fmtTime(new Date(r.op)))}</i></span>` : ""}${r.cl ? `<span>${t().dvClosed} <i>${esc(fmtTime(new Date(r.cl)))}</i></span>` : ""}${r.dur != null ? `<span>${t().dvDur} <i>${esc(dur(r.dur))}</i></span>` : ""}</span>` : ""}</div>
         <span class="st">${t()["dvSt_" + r.s]}</span></li>`).join("")}</ol>
     </section>`;
   }
@@ -1043,21 +1048,22 @@
     });
   }
   async function drVisitPdf(o) {
-    const dv = o.doctorVisit || {}, rows = drRows(o), rtl = current === "ar", file = `Mada-Care-Visit-Steps-${o.id}.pdf`, d = MadaOrders.DOCTORS.find(x => x.id === (o.booking && o.booking.doctorId));
+    const dv = vOf(o), rows = drRows(o), rtl = current === "ar", file = `Mada-Care-Visit-Steps-${o.id}.pdf`, pt = isPt(o);
+    const dd = MadaOrders.DOCTORS.find(x => x.id === (o.booking && o.booking.doctorId)), pn = pt && o.booking && MadaNurses.NURSES.find(x => x.id === o.booking.nurseId), d = pt ? (pn || null) : dd;
     const end = dv.status === "done" ? dv.completedAt : null, total = dv.startedAt ? (end ? new Date(end) : new Date()) - new Date(dv.startedAt) : null;
     const cell = "padding:7px 9px;border-bottom:1px solid #e6ecee;text-align:" + (rtl ? "right" : "left");
     const L2R = v => `<span dir="ltr" style="unicode-bidi:isolate">${esc(String(v).replace(/[⁦⁩]/g, ""))}</span>`, tm = v => v ? L2R(fmtTime(new Date(v))) : "—";
     const wrap = document.createElement("div");
     wrap.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1;width:794px";
     wrap.innerHTML = `<div dir="${rtl ? "rtl" : "ltr"}" style="width:794px;padding:34px 38px;box-sizing:border-box;font-family:Inter,Tajawal,Arial,sans-serif;color:#15304a;background:#fff;font-size:12.5px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0b6b5c;padding-bottom:12px"><div><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:15px;font-weight:700;margin-top:6px">${t().dvPdfT}</div></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #0b6b5c;padding-bottom:12px"><div><div style="font-size:20px;font-weight:700;color:#0b6b5c">${rtl ? "مدى كير" : "Mada Care"}</div><div style="font-size:15px;font-weight:700;margin-top:6px">${pt ? t().ptPdfT : t().dvPdfT}</div></div></div>
       <table style="width:100%;border-collapse:collapse;margin:14px 0"><tr>
         <td style="${cell}"><b>${esc(t().bookingNo)}:</b> ${L2R(o.bookingId)}</td><td style="${cell}"><b>${esc(t().orderNo2)}:</b> ${L2R(o.id)}</td></tr><tr>
-        <td style="${cell}"><b>${t().dvPatient}:</b> ${esc(T(o.patient))} ${o.mrn ? `· ${L2R(o.mrn)}` : ""}</td><td style="${cell}"><b>${t().dvDoctor}:</b> ${d ? esc(T(d.name)) : "—"}</td></tr><tr>
+        <td style="${cell}"><b>${t().dvPatient}:</b> ${esc(T(o.patient))} ${o.mrn ? `· ${L2R(o.mrn)}` : ""}</td><td style="${cell}"><b>${pt ? t().ptWho : t().dvDoctor}:</b> ${d ? esc(T(d.name)) : "—"}</td></tr><tr>
         <td style="${cell}"><b>${t().dvBooked}:</b> ${o.appointment ? L2R(apptTxt(o.appointment)) : "—"}</td><td style="${cell}"><b>${t().dvTotal}:</b> ${total != null ? esc(dur(total)) : "—"}</td></tr><tr>
         <td style="${cell}"><b>${t().dvStart}:</b> ${dv.startedAt ? L2R(stampTxt(dv.startedAt)) : "—"}</td><td style="${cell}"><b>${t().dvEnd}:</b> ${end ? L2R(stampTxt(end)) : t().dvOngoing}</td></tr></table>
       <table style="width:100%;border-collapse:collapse"><thead><tr style="background:#eef5f3">${["#", t().dvStep, t().dvStatus, t().dvOpened, t().dvClosed, t().dvDur].map(h => `<th style="${cell};font-size:11.5px">${h}</th>`).join("")}</tr></thead>
-        <tbody>${rows.map((r, i) => `<tr><td style="${cell}">${i + 1}</td><td style="${cell}">${t()["ds_" + r.k]}</td><td style="${cell};color:${r.s === "done" ? "#15803d" : r.s === "open" ? "#b45309" : "#8a979c"}">${t()["dvSt_" + r.s]}</td>
+        <tbody>${rows.map((r, i) => `<tr><td style="${cell}">${i + 1}</td><td style="${cell}">${esc(stepName(o, r.k))}</td><td style="${cell};color:${r.s === "done" ? "#15803d" : r.s === "open" ? "#b45309" : "#8a979c"}">${t()["dvSt_" + r.s]}</td>
           <td style="${cell}">${tm(r.op)}</td><td style="${cell}">${tm(r.cl)}</td><td style="${cell}">${r.dur != null ? esc(dur(r.dur)) : "—"}</td></tr>`).join("")}</tbody></table>
       <div style="margin-top:16px;font-size:11px;color:#8a979c">${esc(tx("dvMade", { t: "" }))}${L2R(stampTxt(new Date().toISOString()))} · ${esc(T(me.name))}</div></div>`;
     document.body.appendChild(wrap); fixArabic(wrap); toast(t().dvMaking);
@@ -1073,7 +1079,7 @@
     } finally { wrap.remove(); window.scrollTo(0, sy); }
   }
   function visitHtml(o) {
-    if (o.service === "doctor") return drVisitHtml(o);
+    if (o.service === "doctor" || isPt(o)) return drVisitHtml(o);
     const steps = (o.visit && o.visit.steps) || {}, done = VISIT_STEPS.filter(k => steps[k]).length, next = VISIT_STEPS.find(k => !steps[k]);
     return `
     <section class="card sec" id="secVisit">

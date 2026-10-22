@@ -295,6 +295,20 @@
     .tabs { padding: 0 6px; }
     .table-wrap td.c-svc { grid-column: 1 / -1; }
   }
+  /* ---------- Physiotherapy sessions ---------- */
+  .ptc { border: 1px solid var(--border); border-radius: 12px; margin: 0 20px 14px; overflow: hidden; }
+  .ptc-h { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; padding: 12px 14px; background: #f6faf9; border-bottom: 1px solid var(--border); }
+  .ptc-h b { display: block; font-size: 15px; color: #15304a; } .ptc-h small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .ptc-n { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ptc-n span { min-width: 78px; padding: 6px 10px; border-radius: 10px; background: #fff; border: 1px solid var(--border); font-size: 11.5px; color: var(--muted); }
+  .ptc-n span b { display: block; font-size: 17px; color: #15304a; } .ptc-n span.w b { color: #b45309; }
+  .ptc table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .ptc td, .ptc th { padding: 9px 14px; border-top: 1px solid #eef2f3; text-align: start; vertical-align: middle; }
+  .ptc th { font-size: 12px; color: var(--muted); font-weight: 600; border-top: 0; }
+  .ptc tr.todo td { color: var(--muted); font-style: italic; }
+  .p-gray { background: #f0f3f4; color: #5b6b70; } .p-purple { background: #f1eafe; color: #7c3aed; }
+  .btn-xs { height: 32px; padding: 0 12px; font-size: 12.5px; }
+  @media (max-width: 760px) { .ptc { margin: 0 0 12px; } .ptc thead { display: none; } .ptc tr { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; padding: 10px 12px; border-top: 1px solid #eef2f3; } .ptc td { padding: 0; border: 0; } }
 </style>
 </head>
 <body>
@@ -367,6 +381,13 @@
 <script src="stamps.js"></script>
 <script src="medical-report.js"></script>
 <script src="patient-docs.js"></script>
+<script src="physio.js"></script>
+<script src="exercises.js"></script>
+<script src="physio-steps.js"></script>
+<script src="physio-follow.js"></script>
+<script src="physio-flow.js"></script>
+<script src="physio-report.js"></script>
+<script src="physio-courses.js"></script>
 <script>
   const me = MadaAuth.requireAuth("agent");
   const $ = id => document.getElementById(id);
@@ -379,7 +400,7 @@
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       back: "Back to patients", missing: "This patient file was not found.",
       st_active: "Active", st_idle: "Inactive",
-      tab_info: "Patient Information", tab_bookings: "Bookings", tab_health: "Health File", soon: "Soon",
+      tab_info: "Patient Information", tab_bookings: "Bookings", tab_physio: "Physiotherapy Sessions", ptT: "Physiotherapy Sessions", ptS: "Every physiotherapy course of this patient: the sessions in the package, what is booked and done, and the report of each session.", ptSingle: "Single sessions", ptWith: "With {n}", ptPlanned: "Planned", ptBooked: "Booked", ptDone: "Done", ptLeft: "Remaining", ptOf: "{n} of {m}", ptSes: "Session", ptType: "Type", ptWhen: "Date", ptSt: "Status", ptPay: "Payment", ptRep: "Report", ptAssess: "Assessment", ptFollow: "Follow-up", ptTodo: "Not booked yet", ptRepDl: "Download", ptRepDraft: "Not approved yet", ptOpen: "Open in Physiotherapy Requests", ptEmpty: "No physiotherapy sessions", ptEmptyText: "Physiotherapy visits of this patient show here.", pst_done: "Done", pst_booked: "Booked", pst_missed: "Missed", pst_pending: "Not confirmed", pst_cancelled: "Cancelled", ppy_paid: "Paid", ppy_pkg: "In the package", ppy_after: "Pays at the visit", ppy_link: "Link sent", ppy_unpaid: "Not paid", ppy_none: "Nothing to pay", pcs_active: "In treatment", pcs_unpaid: "Waiting for payment", pcs_done: "Finished", pcs_stopped: "Treatment ended", tab_health: "Health File", soon: "Soon",
       s1: "Patient Information", s1Sub: "The patient's main details.", s2: "Relationship to Patient", s2Sub: "Who opened the file or asked for the service for the patient.",
       f_file: "Patient File No.", f_name: "Patient Name", f_mobile: "Mobile Number", f_dob: "Date of Birth / Age", f_gender: "Gender", f_city: "City & District",
       f_rel: "Relationship", f_caller: "Name", f_opened: "File opened", notSet: "Not recorded", male: "Male", female: "Female", yrs: "{n} years", approx: "About {n} years",
@@ -409,7 +430,7 @@
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
       back: "رجوع للمرضى", missing: "ما لقينا ملف هذا المريض.",
       st_active: "نشط", st_idle: "غير نشط",
-      tab_info: "بيانات المريض", tab_bookings: "الحجوزات", tab_health: "الملف الصحي", soon: "قريباً",
+      tab_info: "بيانات المريض", tab_bookings: "الحجوزات", tab_physio: "جلسات العلاج الطبيعي", ptT: "جلسات العلاج الطبيعي", ptS: "كل خطط العلاج الطبيعي للمريض: جلسات الباقة، والمحجوز واللي تم، وتقرير كل جلسة.", ptSingle: "جلسات مفردة", ptWith: "مع {n}", ptPlanned: "المحددة", ptBooked: "المحجوزة", ptDone: "تمت", ptLeft: "الباقي", ptOf: "{n} من {m}", ptSes: "الجلسة", ptType: "النوع", ptWhen: "الموعد", ptSt: "الحالة", ptPay: "الدفع", ptRep: "التقرير", ptAssess: "كشف", ptFollow: "متابعة", ptTodo: "ما انحجزت للحين", ptRepDl: "تحميل", ptRepDraft: "ما انعتمد للحين", ptOpen: "فتح في طلبات العلاج الطبيعي", ptEmpty: "ما فيه جلسات علاج طبيعي", ptEmptyText: "زيارات العلاج الطبيعي للمريض تطلع هنا.", pst_done: "تمت", pst_booked: "محجوزة", pst_missed: "فاتت", pst_pending: "ما تأكدت", pst_cancelled: "ملغية", ppy_paid: "مدفوعة", ppy_pkg: "ضمن الباقة", ppy_after: "يدفع وقت الزيارة", ppy_link: "انرسل الرابط", ppy_unpaid: "غير مدفوعة", ppy_none: "ما عليها شي", pcs_active: "تحت العلاج", pcs_unpaid: "بانتظار الدفع", pcs_done: "خلصت", pcs_stopped: "انتهى العلاج", tab_health: "الملف الصحي", soon: "قريباً",
       s1: "البيانات الرئيسية للمريض", s1Sub: "بيانات المريض الأساسية.", s2: "علاقة مقدم الطلب بالمريض", s2Sub: "الشخص اللي فتح الملف أو طلب الخدمة عن المريض.",
       f_file: "رقم ملف المريض", f_name: "اسم المريض", f_mobile: "رقم الجوال", f_dob: "تاريخ الميلاد / العمر", f_gender: "الجنس", f_city: "المدينة والحي",
       f_rel: "صلة القرابة", f_caller: "الاسم", f_opened: "فتح الملف", notSet: "غير مسجل", male: "ذكر", female: "أنثى", yrs: "{n} سنة", approx: "تقريباً {n} سنة",
@@ -488,6 +509,27 @@
         <td data-l="${esc(t().cWhen)}">${o.appointment ? `<span class="nowrap">${fmtYmd(o.appointment.date)}</span><span class="sub">${fmtMin(o.appointment.minute)}</span>` : `<span class="muted">${t().noTime}</span>`}</td>
         <td data-l="${esc(t().cStatus)}"><span class="pill ${BS_PILL[o.status] || "p-gray"}"><span class="dot"></span>${t()["bs_" + o.status] || esc(o.status)}</span>${MadaVoid.tag(o, current)}</td></tr>`; }).join("")}
       </tbody></table></div>`;
+  }
+  // Physiotherapy sessions (physio-courses.js): each course with its sessions, what is left, and the approved report of each session.
+  const PST = { done: "p-green", booked: "p-blue", missed: "p-red", pending: "p-orange", cancelled: "p-gray" }, PPY = { paid: "p-green", pkg: "p-green", after: "p-purple", link: "p-orange", unpaid: "p-red", none: "p-gray" };
+  const PCS = { active: "p-blue", unpaid: "p-orange", done: "p-green", stopped: "p-gray" };
+  function physioHtml(list) {
+    if (!list.length) return `<div class="soon-box">${svg('<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>', 1.5)}<h3>${t().ptEmpty}</h3><p>${t().ptEmptyText}</p></div>`;
+    const pn = id => { const n = id && MadaNurses.NURSES.find(x => x.id === id); return n ? T(n.name) : ""; };
+    return `<section class="sec"><h2>${t().ptT}</h2><p>${t().ptS}</p></section>` + list.map(c => {
+      const todo = c.m ? Math.max(0, c.m - c.sessions.filter(s => s.state !== "cancelled").length) : 0;
+      const row = s => `<tr><td data-l="${esc(t().ptSes)}"><b>${c.m && s.n ? esc(tx("ptOf", { n: s.n, m: c.m })) : s.n || "—"}</b></td>
+        <td data-l="${esc(t().ptType)}">${PtFlow.isFollow(s.o) ? t().ptFollow : t().ptAssess}</td>
+        <td data-l="${esc(t().ptWhen)}">${s.o.appointment ? `<span class="nowrap">${fmtYmd(s.o.appointment.date)}</span><span class="sub">${fmtMin(s.o.appointment.minute)}</span>` : "—"}<a class="oid sub" href="request-details.html?id=${encodeURIComponent(s.o.id)}">${esc(s.o.bookingId || s.o.id)}</a></td>
+        <td data-l="${esc(t().ptSt)}"><span class="pill ${PST[s.state]}"><span class="dot"></span>${t()["pst_" + s.state]}</span></td>
+        <td data-l="${esc(t().ptPay)}"><span class="pill ${PPY[s.pay]}"><span class="dot"></span>${t()["ppy_" + s.pay]}</span></td>
+        <td data-l="${esc(t().ptRep)}">${s.report === "approved" ? `<button type="button" class="btn btn-ghost btn-xs" data-ptrep="${esc(s.o.id)}">${svg('<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>')}${t().ptRepDl}</button>` : s.report === "draft" ? `<span class="muted">${t().ptRepDraft}</span>` : `<span class="muted">—</span>`}</td></tr>`;
+      return `<div class="ptc"><div class="ptc-h"><div><b>${esc(c.pkg ? T(c.pkg.name) : t().ptSingle)}</b><small>${c.providerId ? esc(tx("ptWith", { n: pn(c.providerId) })) + " · " : ""}<span class="pill ${PCS[c.state]}"><span class="dot"></span>${t()["pcs_" + c.state]}</span></small></div>
+        <div class="ptc-n"><span>${t().ptPlanned}<b>${c.m || "—"}</b></span><span>${t().ptBooked}<b>${c.booked}</b></span><span>${t().ptDone}<b>${c.done}</b></span><span class="${c.remaining ? "w" : ""}">${t().ptLeft}<b>${c.remaining != null ? c.remaining : "—"}</b></span></div></div>
+        <table><thead><tr><th>${t().ptSes}</th><th>${t().ptType}</th><th>${t().ptWhen}</th><th>${t().ptSt}</th><th>${t().ptPay}</th><th>${t().ptRep}</th></tr></thead><tbody>
+        ${c.sessions.map(row).join("")}${Array.from({ length: todo }, (_, i) => `<tr class="todo"><td><b>${esc(tx("ptOf", { n: c.booked + i + 1, m: c.m }))}</b></td><td colspan="5">${t().ptTodo}</td></tr>`).join("")}</tbody></table>
+        <div style="padding:10px 14px;text-align:end"><a class="btn btn-ghost btn-xs" href="physio-requests.html">${t().ptOpen}</a></div></div>`;
+    }).join("");
   }
   // Lab results kept on the file once approved (lab-samples.js): a doctor's order after the doctor approves it,
   // a patient booking after the nurse approves and sends it. Each one opens its PDF for the patient and the lab report.
@@ -579,7 +621,8 @@
     const active = orders.some(o => OPEN.includes(o.status)) || meds.some(r => r.status === "open");
     const name = T(p.name);
     document.title = `${name} | Mada Care`;
-    if (!["info", "bookings", "labs", "share", "health"].includes(tab)) tab = "info";
+    const pts = typeof PtCourses !== "undefined" ? PtCourses.ofPatient(p.fileNo) : [];
+    if (!["info", "bookings", "physio", "labs", "share", "health"].includes(tab) || (tab === "physio" && !pts.length)) tab = "info";
     const labs = labCards(p.fileNo);
     const tabBtn = (k, icon, extra) => `<button type="button" class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${svg(icon)}${t()["tab_" + k]}${extra || ""}</button>`;
     $("content").innerHTML = `<section class="card">
@@ -589,11 +632,12 @@
       <div class="tabs" role="tablist">
         ${tabBtn("info", '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>')}
         ${tabBtn("bookings", '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', `<b>${orders.length}</b>`)}
+        ${pts.length ? tabBtn("physio", '<circle cx="12" cy="4.5" r="2"/><path d="M12 7v6l-3 8M12 13l3 8M7 10l5-1 5 1"/>', `<b>${pts.reduce((a, c) => a + c.sessions.filter(x => x.state !== "cancelled").length, 0)}</b>`) : ""}
         ${tabBtn("labs", '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 14h9"/>', `<b>${labs.ok.length}</b>`)}
         ${tabBtn("share", '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', `<b>${MadaPatientDocs.count(MadaPatientDocs.shown(p.fileNo, MadaPatientDocs.linkOf(p)))}</b>`)}
         ${tabBtn("health", '<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M7 12h2.5l1.5-2.5 2 5 1.5-2.5H17"/>', `<span class="soon-tag">${t().soon}</span>`)}
       </div>
-      <div class="panel" role="tabpanel">${tab === "info" ? infoHtml(p) : tab === "bookings" ? bookingsHtml(orders) : tab === "labs" ? labsHtml(labs) : tab === "share" ? shareHtml(p)
+      <div class="panel" role="tabpanel">${tab === "info" ? infoHtml(p) : tab === "bookings" ? bookingsHtml(orders) : tab === "physio" ? physioHtml(pts) : tab === "labs" ? labsHtml(labs) : tab === "share" ? shareHtml(p)
         : `<div class="soon-box">${svg('<path d="M12 21s-7-4.4-9.2-9A5 5 0 0 1 12 6.3 5 5 0 0 1 21.2 12C19 16.6 12 21 12 21z"/><path d="M7 12h2.5l1.5-2.5 2 5 1.5-2.5H17"/>', 1.5)}<h3>${t().hTitle}</h3><p>${t().hText}</p></div>`}</div>
     </section>`;
     if (tab === "share") bindShare(p);
@@ -602,6 +646,7 @@
   $("content").addEventListener("click", e => {
     const d = e.target.closest("[data-shdl]"); if (d) { const [g, k, lg] = d.dataset.shdl.split("|"); shDownload(g, k, lg, d); return; }
     const sl = e.target.closest("[data-shl]"); if (sl) { shLang = sl.dataset.shl; render(); }
+    const pr = e.target.closest("[data-ptrep]"); if (pr) { const o = MadaOrders.get(pr.dataset.ptrep); if (o) PtReport.download(o, current, toast); }
   });
   $("content").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; history.replaceState(null, "", "#" + tab); render(); });
   window.addEventListener("storage", e => { if (!e.key || ["mada-patients", "mada-orders", "mada-medical"].includes(e.key)) { if (document.activeElement && document.activeElement.id === "shPh") return; render(); } });
