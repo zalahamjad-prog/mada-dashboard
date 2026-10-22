@@ -679,7 +679,7 @@
     paidAt: "Paid at {t}", expiredAt: "Expired at {t}", payUntil: "Open until the end of {t}",
     payNotYet: "The payment link opens after the customer approves and the price is known.", timeline: "Payment Timeline",
     ev_created: "Request created", ev_sent: "Payment link sent to {m}", ev_expired: "Payment link expired", ev_paid: "Payment received",
-    noteType: "Note Type", nt_general: "General Note", nt_alert: "Important Alert", nt_followup: "Follow-up Required", nf_all: "All", fromReq: "from request {id}", markDone: "Mark as Done", doneBy: "Followed up by {n} · {t}", fuOpen: "Follow-up still open", fuDoneToast: "Follow-up marked as done.", added_general: "Note added.", added_alert: "Important alert added. It now shows at the top of the request.", added_followup: "Follow-up added. It stays at the top until marked as done.", earlierNotes: "Notes from this patient’s other requests ({n})", noteLbl: "Add a Note", notePh: "Write a note for the team, e.g. the customer wants a call before the visit", addNote: "Add Note", history: "Notes History", noNotesYet: "No notes yet.", noteAdded: "Note added.",
+    noteType: "Note Type", nt_general: "General Note", nt_alert: "Important Alert", nt_followup: "Follow-up Required", nf_all: "All", fromReq: "from request {id}", markDone: "Mark as Done", doneBy: "Followed up by {n} · {t}", fuOpen: "Follow-up still open", fuDoneToast: "Follow-up marked as done.", added_general: "Note added.", added_alert: "Important alert added. It now shows at the top of the request.", added_followup: "Follow-up added. It stays at the top until marked as done.", earlierNotes: "Notes from this patient’s other requests ({n})", showEarlier: "Show notes from previous requests ({n})", hideEarlier: "Hide notes from previous requests", noteLbl: "Add a Note", notePh: "Write a note for the team, e.g. the customer wants a call before the visit", addNote: "Add Note", history: "Notes History", noNotesYet: "No notes yet.", noteAdded: "Note added.",
     cancelTitle: "Cancel Request", cancelTextSup: "Cancelling frees the nurse's time and stops the payment link.", cancelTextAgent: "The request will be locked and sent to the supervisor to close.",
     cancelPaid: " This request is paid, so the supervisor will arrange the refund.",
     cancelDlgText: "Choose why the request is cancelled and add a short note.",
@@ -751,7 +751,7 @@
     paidAt: "دُفع الساعة {t}", expiredAt: "انتهى الساعة {t}", payUntil: "مفتوح لين نهاية يوم {t}",
     payNotYet: "رابط الدفع يفتح بعد موافقة العميل وتحديد السعر.", timeline: "سجل الدفع",
     ev_created: "تم إنشاء الطلب", ev_sent: "تم إرسال رابط الدفع إلى {m}", ev_expired: "انتهت صلاحية رابط الدفع", ev_paid: "تم استلام الدفع",
-    noteType: "نوع الملاحظة", nt_general: "ملاحظة عامة", nt_alert: "تنبيه مهم", nt_followup: "متابعة مطلوبة", nf_all: "الكل", fromReq: "من الطلب {id}", markDone: "تمت المتابعة", doneBy: "تابعتها {n} · {t}", fuOpen: "المتابعة ما زالت مفتوحة", fuDoneToast: "تم تسجيل المتابعة.", added_general: "تمت إضافة الملاحظة.", added_alert: "تمت إضافة التنبيه، ويظهر الحين أعلى الطلب.", added_followup: "تمت إضافة المتابعة، وتبقى أعلى الطلب لين تنتهي.", earlierNotes: "ملاحظات من طلبات سابقة لنفس المريض ({n})", noteLbl: "إضافة ملاحظة", notePh: "اكتبي ملاحظة للفريق، مثلاً: العميل يبي اتصال قبل الزيارة", addNote: "إضافة الملاحظة", history: "سجل الملاحظات", noNotesYet: "لا توجد ملاحظات بعد.", noteAdded: "تمت إضافة الملاحظة.",
+    noteType: "نوع الملاحظة", nt_general: "ملاحظة عامة", nt_alert: "تنبيه مهم", nt_followup: "متابعة مطلوبة", nf_all: "الكل", fromReq: "من الطلب {id}", markDone: "تمت المتابعة", doneBy: "تابعتها {n} · {t}", fuOpen: "المتابعة ما زالت مفتوحة", fuDoneToast: "تم تسجيل المتابعة.", added_general: "تمت إضافة الملاحظة.", added_alert: "تمت إضافة التنبيه، ويظهر الحين أعلى الطلب.", added_followup: "تمت إضافة المتابعة، وتبقى أعلى الطلب لين تنتهي.", earlierNotes: "ملاحظات من طلبات سابقة لنفس المريض ({n})", showEarlier: "عرض ملاحظات الطلبات السابقة ({n})", hideEarlier: "إخفاء ملاحظات الطلبات السابقة", noteLbl: "إضافة ملاحظة", notePh: "اكتبي ملاحظة للفريق، مثلاً: العميل يبي اتصال قبل الزيارة", addNote: "إضافة الملاحظة", history: "سجل الملاحظات", noNotesYet: "لا توجد ملاحظات بعد.", noteAdded: "تمت إضافة الملاحظة.",
     cancelTitle: "إلغاء الطلب", cancelTextSup: "الإلغاء يفرّغ وقت الممرضة ويوقف رابط الدفع.", cancelTextAgent: "بيتقفل الطلب ويروح للمشرفة عشان تقفله.",
     cancelPaid: " الطلب مدفوع، فالمشرفة بترتب استرجاع المبلغ.",
     cancelDlgText: "اختاري سبب الإلغاء واكتبي ملاحظة قصيرة.",
@@ -1577,13 +1577,16 @@
       <div class="block"><div class="n-bar"><span class="lbl">${t().history} (${all.length})</span>
         ${all.length ? `<div class="n-filters">${["all"].concat(NOTE_TYPES).map(k => `<button type="button" class="chip-f ${noteFilter === k ? "on" : ""}" data-nf="${k}">${k === "all" ? t().nf_all : t()["nt_" + k]} <span>${k === "all" ? all.length : cnt(k)}</span></button>`).join("")}</div>` : ""}</div>
         ${shown.length ? `<ul class="notes">${shown.map(noteItem).join("")}</ul>` : `<span class="muted">${t().noNotesYet}</span>`}</div>
-      ${earlier.length ? `<div class="block"><span class="lbl">${tx("earlierNotes", { n: earlier.length })}</span><ul class="notes earlier">${earlier.map(n => noteItem({ ...n, ro: true })).join("")}</ul></div>` : ""}
+      ${earlier.length ? `<div class="block"><button type="button" class="btn btn-ghost btn-sm" id="earlierBtn" aria-expanded="${showEarlier}">${svg(I.note)}${showEarlier ? t().hideEarlier : tx("showEarlier", { n: earlier.length })}</button>
+        ${showEarlier ? `<span class="lbl" style="display:block;margin-top:12px">${tx("earlierNotes", { n: earlier.length })}</span><ul class="notes earlier">${earlier.map(n => noteItem({ ...n, ro: true })).join("")}</ul>` : ""}</div>` : ""}
     </section>`;
   }
   function bindNotes() {
     const note = $("noteIn");
     const count = () => { $("noteCount").textContent = `${note.value.length}/500`; $("noteAdd").disabled = !note.value.trim(); };
     document.querySelectorAll("[data-nf]").forEach(b => b.addEventListener("click", () => { noteFilter = b.dataset.nf; render(); }));
+    // Notes from the patient's previous requests stay hidden until asked for, so the new request starts clean.
+    if ($("earlierBtn")) $("earlierBtn").addEventListener("click", () => { showEarlier = !showEarlier; render(); });
     document.querySelectorAll("[data-done]").forEach(b => b.addEventListener("click", () => {
       const cur = MadaOrders.get(id), list = (cur.notes || []).slice(), i = +b.dataset.done;
       if (!list[i]) return;
@@ -1600,7 +1603,7 @@
     });
   }
   const NOTE_TYPES = ["general", "alert", "followup"];
-  let noteFilter = "all";
+  let noteFilter = "all", showEarlier = false;
   const NT_ICON = { general: I.note, alert: I.warn, followup: I.clock };
   function noteItem(n) {
     const ty = n.type || "general";
