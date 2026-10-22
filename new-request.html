@@ -3525,7 +3525,7 @@
     const f = state.fileNo && state.fileNo !== "new" ? MadaPatients.findByMobile($("mobile").value).find(x => x.fileNo === state.fileNo) : null;
     const data = Object.assign({
       service: state.service, mobile: $("mobile").value, medical: state.cond === "emergency" ? "emergency" : "non",
-      patient: f ? f.name : null, mrn: f ? f.fileNo : null, staff: me ? me.name : null, source: state.source,
+      patient: f ? f.name : null, mrn: f ? f.fileNo : null, staff: me ? me.name : null, staffId: me ? (me.staffId || me.username) : null, source: state.source,
       sourceOther: state.source === "other" ? $("otherSource").value.trim() : null
     }, orderItems(), extra);
     // A request that was on hold keeps its order number.
@@ -3754,7 +3754,7 @@
       service: state.service, mobile: $("mobile").value, medical: "non", source: state.source,
       patient: name || (f ? f.name : null), mrn: f ? f.fileNo : null, staff: me ? me.name : null,
       status: "on_hold", decision: "on_hold", payment: null, ...orderItems(),
-      hold: { reason, note, at: new Date().toISOString(), by: me ? me.name : null, view: currentView(), snap: snapshot(), dueAt: due.toISOString(), action: hs.act, warned: null }
+      hold: { reason, note, at: new Date().toISOString(), by: me ? me.name : null, byId: me ? (me.staffId || me.username) : null, view: currentView(), snap: snapshot(), dueAt: due.toISOString(), action: hs.act, warned: null }
     };
     // TODO: save on the backend so another agent can continue it.
     const order = state.holdId ? MadaOrders.update(state.holdId, data) : MadaOrders.add(data);

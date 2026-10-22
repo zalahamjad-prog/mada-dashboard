@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="assets/mada-logo.png">
+<title>Mada Care | Sales &amp; Calls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0b6b5c;
+    --primary-dark: #08584b;
+    --primary-soft: #e6f3ef;
+    --ink: #10232b;
+    --muted: #6b7a80;
+    --border: #e3e8ea;
+    --page: #f5f7f8;
+    --card: #ffffff;
+    --red: #dc2626; --red-soft: #fdecec;
+    --orange: #d97706; --orange-soft: #fef3e2;
+    --blue: #3b82f6; --blue-soft: #e8f0fe;
+    --purple: #7c3aed; --purple-soft: #f1eafe;
+    --green: #15803d; --green-soft: #e7f6ec;
+    --font: "Inter", "Tajawal", system-ui, sans-serif;
+  }
+  [dir="rtl"] { --font: "Tajawal", "Inter", system-ui, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--page); color: var(--ink); min-height: 100vh; }
+  button, input, select { font: inherit; color: inherit; }
+  svg { flex-shrink: 0; }
+  [hidden] { display: none !important; }
+
+  /* ---------- Top bar ---------- */
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 20px; height: 68px; padding: 0 28px; background: #fff; border-bottom: 1px solid var(--border); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+  .logo img { width: auto; height: 40px; }
+  .logo-name { font-size: 17px; font-weight: 600; line-height: 1.1; }
+  .logo-tag { font-size: 10.5px; color: var(--primary); }
+  .nav { display: flex; gap: 4px; margin-inline-start: 18px; }
+  .nav a { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: #44545a; text-decoration: none; }
+  .nav a:hover { background: #f1f4f5; }
+  .nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); }
+  .nav-count { min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--red); color: #fff; font-size: 10.5px; font-weight: 600; line-height: 18px; text-align: center; }
+  .top-actions { margin-inline-start: auto; display: flex; align-items: center; gap: 10px; }
+  .lang-btn { display: flex; align-items: center; gap: 6px; background: none; border: 0; cursor: pointer; font-size: 13px; color: #44545a; padding: 8px; border-radius: 8px; }
+  .lang-btn:hover { background: #f1f4f5; }
+  .user { position: relative; }
+  .user-btn { display: flex; align-items: center; gap: 10px; background: none; border: 0; cursor: pointer; padding: 4px 6px; border-radius: 10px; text-align: start; }
+  .user-btn:hover { background: #f1f4f5; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 600; font-size: 14px; }
+  .user-name { display: block; font-size: 13px; font-weight: 600; }
+  .user-role { display: block; font-size: 11px; color: var(--muted); }
+  .user-menu { position: absolute; top: 110%; inset-inline-end: 0; min-width: 170px; background: #fff; border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,35,43,.08); padding: 6px; display: none; }
+  .user.open .user-menu { display: block; }
+  .user-menu a { display: block; padding: 9px 10px; border-radius: 6px; font-size: 13px; color: var(--ink); text-decoration: none; }
+  .user-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 24px 28px 40px; display: grid; gap: 18px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 24px; font-weight: 600; }
+  .page-head p { margin-top: 4px; font-size: 13.5px; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; font-size: 13.5px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .btn svg { width: 17px; height: 17px; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
+  .btn-ghost:hover { background: #f5f8f8; }
+  /* ---------- Lab Results ---------- */
+  .ph-title { display: flex; align-items: center; gap: 14px; }
+  .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
+  .ph-icon svg { width: 25px; height: 25px; }
+  .nav a.nav-soon { cursor: default; color: #9aa7ab; }
+  .nav a.nav-soon:hover { background: none; }
+  .soon-tag { height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 10.5px; font-weight: 600; line-height: 18px; }
+  .nav { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: none; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 60; background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: calc(100% - 32px); }
+  .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .stat { display: flex; align-items: center; gap: 12px; padding: 14px; text-align: start; cursor: pointer; font: inherit; color: inherit; }
+  .stat:hover { border-color: #c9d4d8; }
+  .stat[aria-pressed="true"] { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary) inset; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+  .stat-icon svg { width: 21px; height: 21px; }
+  .stat b { display: block; font-size: 22px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat small { display: block; font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; line-height: 1.3; }
+  .s-green { background: var(--primary-soft); color: var(--primary); } .s-orange { background: var(--orange-soft); color: var(--orange); } .s-red { background: var(--red-soft); color: var(--red); }
+  .s-blue { background: var(--blue-soft); color: var(--blue); } .s-purple { background: var(--purple-soft); color: var(--purple); } .s-gray { background: #f0f3f4; color: #5b6b70; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; padding: 14px; }
+  .search { flex: 1 1 280px; display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px; border: 1px solid var(--border); border-radius: 9px; background: #fff; }
+  .search svg { width: 18px; height: 18px; color: #5b6b70; }
+  .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font-size: 13.5px; }
+  .search:focus-within, .sel:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(11,107,92,.12); outline: 0; }
+  .sel { height: 42px; padding: 0 12px; border: 1px solid var(--border); border-radius: 9px; background: #fff; font-size: 13.5px; min-width: 180px; }
+  .table-wrap { overflow-x: auto; border-top: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead th { background: #f5f8f9; text-align: start; font-weight: 600; font-size: 12.5px; color: #44545a; padding: 12px 12px; white-space: nowrap; }
+  tbody td { padding: 12px; border-top: 1px solid #eef2f3; vertical-align: top; }
+  tbody tr:hover td { background: #fbfdfc; }
+  td b.pn, td a.pl { display: block; color: #15304a; font-weight: 600; text-decoration: none; }
+  td a.pl:hover { color: #0f766e; text-decoration: underline; }
+  a.fl { color: #0f766e; font-weight: 600; text-decoration: none; border-bottom: 1px dashed currentColor; }
+  a.fl:hover { border-bottom-style: solid; }
+  td.c-who small { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; margin-top: 3px; }
+  td.c-who a.fl { display: inline-block; background: #e6f4f1; border: 1px solid #b7e0d6; border-radius: 6px; padding: 1px 7px; font-size: 12px; }
+  td.c-who a.fl:hover { background: #0f766e; color: #fff; border-color: #0f766e; }
+  td small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .num { direction: ltr; unicode-bidi: isolate; font-variant-numeric: tabular-nums; }
+  td .num { white-space: nowrap; }
+  td.c-who { min-width: 140px; } td.c-taken { white-space: nowrap; } .pv-logo { display: block; height: 24px; max-width: 90px; object-fit: contain; margin-bottom: 4px; }
+  .dr small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .tests { display: flex; flex-wrap: wrap; gap: 4px; max-width: 260px; }
+  .exam { font-weight: 600; color: #15304a; min-width: 110px; max-width: 180px; display: block; }
+  td small { max-width: 180px; }
+  .dr .q { max-width: 190px !important; }
+  .tc { font-size: 11px; font-weight: 700; color: #0b6b5c; background: #e3f4ee; padding: 2px 7px; border-radius: 6px; direction: ltr; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+  .p-orange { background: var(--orange-soft); color: #b45309; } .p-red { background: var(--red-soft); color: #b91c1c; } .p-blue { background: var(--blue-soft); color: #1d4ed8; }
+  .p-green { background: var(--green-soft); color: var(--green); } .p-purple { background: var(--purple-soft); color: var(--purple); } .p-gray { background: #f0f3f4; color: #5b6b70; }
+  .p-crit { background: #b42318; color: #fff; }
+  .due { font-weight: 600; color: #b45309; white-space: nowrap; } .due.late { color: #b91c1c; } .due.ok { color: var(--green); }
+  .dr { min-width: 150px; }
+  .dr b { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+  .dr b svg { width: 15px; height: 15px; }
+  .dr .tl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; font-size: 11.5px; color: var(--muted); }
+  .dr .tl li { display: flex; flex-wrap: wrap; gap: 0 5px; align-items: baseline; }
+  .dr .tl b { font-size: 11.5px; font-weight: 600; color: #15304a; display: inline; }
+  .dr .tl em { font-style: normal; color: #6b7a80; }
+  .dr .took { display: inline-flex; align-items: center; gap: 4px; margin-top: 5px; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .dr .took svg { width: 13px; height: 13px; }
+  .dr .took.ok { background: #e7f6ec; color: #15803d; } .dr .took.wait { background: #fff4e5; color: #b45309; }
+  .stat small.avg { color: #15803d; font-weight: 700; margin-top: 3px; }
+  .dr .q { margin-top: 4px; font-size: 12px; color: #44545a; font-style: italic; max-width: 240px; }
+  .d-no { color: #b91c1c; } .d-seen { color: #b45309; } .d-ok { color: var(--green); } .d-na { color: var(--muted); }
+  .acts { display: flex; gap: 6px; justify-content: flex-end; }
+  .ib { width: 36px; height: 36px; border-radius: 8px; border: 1px solid #d9e1e3; background: #fff; display: grid; place-items: center; cursor: pointer; color: #15304a; text-decoration: none; }
+  .ib:hover { background: #f5f8f8; }
+  .ib svg { width: 17px; height: 17px; }
+  .ib[disabled] { opacity: .35; cursor: default; }
+  .none { padding: 48px 20px; text-align: center; color: var(--muted); }
+  .none b { display: block; font-size: 16px; color: var(--ink); margin-bottom: 6px; }
+  .ov { position: fixed; inset: 0; z-index: 60; background: rgba(16,35,43,.42); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
+  .dlg { position: relative; width: 100%; max-width: 760px; background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.18); margin: auto; padding: 22px 22px 18px; }
+  .x { position: absolute; top: 14px; inset-inline-end: 14px; width: 34px; height: 34px; border: 0; background: none; border-radius: 8px; cursor: pointer; display: grid; place-items: center; color: #44545a; }
+  .x:hover { background: #f1f4f5; } .x svg { width: 20px; height: 20px; }
+  .dlg h3 { font-size: 19px; color: #15304a; padding-inline-end: 36px; }
+  .dlg .sub { font-size: 13px; color: var(--muted); margin: 4px 0 14px; }
+  .kv { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-size: 13px; }
+  .kv span { display: block; font-size: 11.5px; color: var(--muted); margin-bottom: 3px; }
+  .rt { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
+  .rt h4 { display: flex; gap: 8px; align-items: center; padding: 9px 12px; background: #f5f8f9; font-size: 13.5px; color: #15304a; }
+  .rt td, .rt th { padding: 8px 12px; }
+  .rt th { font-size: 11.5px; color: var(--muted); font-weight: 600; text-align: start; }
+  .fl { display: inline-block; padding: 2px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 700; background: #e3f4ee; color: #0f6b52; }
+  .fl.low, .fl.high { background: #fff1e0; color: #a4520a; } .fl.critical { background: #b42318; color: #fff; }
+  .df { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .df a { text-decoration: none; }
+  @media (max-width: 1180px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } .user-meta { display: none; } }
+  @media (max-width: 980px) {
+    .table-wrap thead { display: none; }
+    .table-wrap table, .table-wrap tbody { display: block; }
+    .table-wrap tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px 14px; padding: 14px 16px; border-top: 1px solid var(--border); }
+    .table-wrap td { display: block; padding: 0; border: 0; min-width: 0; background: none !important; }
+    .table-wrap td[data-l]::before { content: attr(data-l); display: block; font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .table-wrap td.c-who, .table-wrap td.c-tests, .table-wrap td.c-dr { grid-column: 1 / -1; }
+    .table-wrap td.c-acts { grid-column: 1 / -1; }
+    .acts { justify-content: stretch; } .acts .ib { flex: 1; }
+  }
+  @media (max-width: 760px) {
+    .topbar { padding: 10px 16px; gap: 8px; height: auto; flex-wrap: wrap; }
+    .nav { order: 3; flex-basis: 100%; margin-inline-start: 0; }
+    .lang-label { display: none; }
+    main { padding: 16px 16px 32px; gap: 14px; }
+    .page-head h1 { font-size: 21px; }
+    .ph-icon { width: 40px; height: 40px; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .sel { flex: 1 1 100%; }
+    .kv { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .dlg { padding: 18px 14px 14px; }
+    .rt .hm { display: none; }
+  }
+
+  /* ---------- Sales & Calls ---------- */
+  .ph-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .seg { display: inline-flex; padding: 3px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+  .seg button { height: 34px; padding: 0 14px; border: 0; border-radius: 8px; background: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #44545a; }
+  .seg button[aria-pressed="true"] { background: var(--primary); color: #fff; }
+  .ph-tools .sel { height: 40px; min-width: 170px; }
+  .stats.s8 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stat small.sub2 { font-weight: 500; margin-top: 3px; }
+  .stat small.sub2.bad { color: #b91c1c; font-weight: 700; } .stat small.sub2.good { color: var(--green); font-weight: 700; }
+  .goal { display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(2, minmax(0, 1fr)); gap: 18px; padding: 16px 18px; align-items: center; }
+  .goal h2 { font-size: 16px; color: #15304a; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .goal .gsub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .goal .gact { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .gm { cursor: pointer; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: #fff; text-align: start; font: inherit; color: inherit; }
+  .gm:hover { border-color: #c9d4d8; }
+  .gm span { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .gm b { display: block; font-size: 22px; margin-top: 4px; color: #15304a; font-variant-numeric: tabular-nums; }
+  .gm b em { font-style: normal; font-size: 14px; color: var(--muted); font-weight: 600; }
+  .gm .meter { height: 9px; border-radius: 5px; background: #e8eef0; margin-top: 8px; overflow: hidden; }
+  .gm .meter i { display: block; height: 100%; border-radius: 5px; background: #f2b45c; }
+  .gm.hit .meter i { background: var(--primary); }
+  .gm small { display: block; font-size: 12px; margin-top: 6px; color: #b45309; font-weight: 600; } .gm.hit small { color: var(--green); }
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 16px 10px; flex-wrap: wrap; }
+  .ch h2 { font-size: 15px; color: #15304a; } .ch p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .tm td, .tm th { white-space: nowrap; }
+  .tm tbody tr { cursor: pointer; }
+  .tm tbody tr[aria-selected="true"] td { background: var(--primary-soft) !important; }
+  .tm .nb { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: #15304a; cursor: pointer; font-variant-numeric: tabular-nums; border-bottom: 1px dashed #b8c4c8; }
+  .tm .nb:hover { color: var(--primary); border-bottom-color: currentColor; }
+  .tm .nb.bad { color: #b91c1c; }
+  .tm .who b { display: block; color: #15304a; } .tm .who small { margin: 2px 0 0; }
+  .mini { display: flex; align-items: center; gap: 6px; } .mini i { display: block; width: 54px; height: 6px; border-radius: 3px; background: #e8eef0; overflow: hidden; } .mini i u { display: block; height: 100%; background: #f2b45c; } .mini.hit i u { background: var(--primary); }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 16px 10px; }
+  .tab { height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid #d9e1e3; background: #fff; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #44545a; display: inline-flex; align-items: center; gap: 6px; }
+  .tab b { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #eef2f3; font-size: 11.5px; line-height: 20px; text-align: center; }
+  .tab[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; } .tab[aria-pressed="true"] b { background: rgba(255,255,255,.22); }
+  .tab.hot b { background: var(--red); color: #fff; }
+  .acts-list { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 8px; max-height: 470px; overflow-y: auto; }
+  .acts-list li { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+  .acts-list li.late { border-color: #f3c4c4; background: #fffafa; }
+  .acts-list .ai b { display: block; color: #15304a; font-size: 13.5px; }
+  .acts-list .ai small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.45; }
+  .acts-list .ai .why { color: #b45309; font-weight: 600; } .acts-list li.late .why { color: #b91c1c; }
+  .acts-list .aa { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .empty { padding: 26px 16px; text-align: center; color: var(--muted); font-size: 13px; }
+  .chart { padding: 6px 16px 14px; }
+  .bars { display: flex; align-items: flex-end; gap: 6px; height: 190px; position: relative; border-bottom: 1px solid var(--border); }
+  .bars .tg { position: absolute; inset-inline: 0; border-top: 2px dashed #e08a1e; pointer-events: none; }
+  .bars .tg span { position: absolute; inset-inline-end: 0; top: -20px; font-size: 11px; font-weight: 700; color: #b45309; background: #fff; padding: 0 4px; }
+  .bars button { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; border: 0; background: none; cursor: pointer; padding: 0; font: inherit; }
+  .bars button i { display: block; width: 100%; max-width: 38px; border-radius: 6px 6px 0 0; background: #8fd0bd; min-height: 2px; }
+  .bars button.hit i { background: var(--primary); } .bars button.today i { box-shadow: 0 0 0 2px #15304a inset; }
+  .bars button:hover i { filter: brightness(.92); }
+  .bars button em { font-style: normal; font-size: 11px; font-weight: 700; color: #15304a; font-variant-numeric: tabular-nums; }
+  .xl { display: flex; gap: 6px; margin-top: 6px; } .xl span { flex: 1; min-width: 0; text-align: center; font-size: 10.5px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+  .lg { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+  .lg i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; vertical-align: -1px; margin-inline-end: 5px; }
+  .hb { list-style: none; margin: 0; padding: 0 16px 16px; display: grid; gap: 6px; }
+  .hb li button { width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 8px 10px; border: 1px solid transparent; border-radius: 10px; background: none; cursor: pointer; text-align: start; font: inherit; color: inherit; }
+  .hb li button:hover { background: #f6f8f9; border-color: var(--border); }
+  .hb span { font-size: 13px; font-weight: 600; color: #15304a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hb b { font-size: 13px; font-variant-numeric: tabular-nums; color: #15304a; }
+  .hb i { grid-column: 1 / -1; display: block; height: 7px; border-radius: 4px; background: #e8eef0; overflow: hidden; } .hb i u { display: block; height: 100%; background: var(--primary); border-radius: 4px; }
+  .hb.red i u { background: #e26d6d; } .hb.blue i u { background: #6f9ff0; }
+  .dlg.xw { max-width: 1040px; }
+  .dl td, .dl th { white-space: nowrap; } .dl td.c-who { white-space: normal; }
+  .dl a.oid { color: #0f766e; font-weight: 700; text-decoration: none; } .dl a.oid:hover { text-decoration: underline; }
+  .dsum { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .dsum span { padding: 6px 12px; border-radius: 10px; background: #f5f8f9; font-size: 12.5px; color: #44545a; } .dsum b { color: #15304a; }
+  .fg { display: grid; gap: 12px; }
+  .fg label > span { display: block; font-size: 12.5px; font-weight: 600; color: #44545a; margin-bottom: 5px; }
+  .fg input, .fg select { width: 100%; height: 42px; border: 1px solid #d9e1e3; border-radius: 9px; padding: 0 12px; font: inherit; font-size: 14px; background: #fff; }
+  .fg .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .fg h4 { font-size: 13.5px; color: #15304a; margin-top: 4px; }
+  .fg .per { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+  .fg .per label { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 10px; align-items: center; }
+  .fg .per label > span { margin: 0; font-weight: 500; color: #15304a; font-size: 13px; }
+  .fg .per input { height: 36px; }
+  .fg .hint { font-size: 12px; color: var(--muted); } .fg .err { color: #b91c1c; font-size: 12.5px; font-weight: 600; }
+  .mv-o { border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; } .mv-o b { color: #15304a; } .mv-o small { display: block; color: var(--muted); margin-top: 3px; }
+  .tr-log { list-style: none; padding: 0; margin: 6px 0 0; font-size: 12px; color: var(--muted); display: grid; gap: 3px; }
+  @media (max-width: 1180px) { .stats.s8 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .grid2 { grid-template-columns: minmax(0, 1fr); } .grid3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  @media (max-width: 980px) { .goal { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .goal > div:first-child { grid-column: 1 / -1; } .tm tbody tr { cursor: default; } .tm td, .dl td { white-space: normal; } }
+  @media (max-width: 760px) {
+    .stats.s8 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid3 { grid-template-columns: minmax(0, 1fr); }
+    .ph-tools { width: 100%; } .ph-tools .seg { flex: 1 1 100%; } .seg button { flex: 1; } .ph-tools .sel { flex: 1 1 100%; } .ph-tools .btn { flex: 1 1 100%; }
+    .goal { padding: 14px; gap: 10px; }
+    .acts-list li { grid-template-columns: minmax(0, 1fr); } .acts-list .aa { justify-content: stretch; } .acts-list .aa .btn { flex: 1; }
+    .bars { height: 150px; gap: 3px; } .bars button em { font-size: 10px; }
+    .fg .row2 { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="logo" href="dashboard.html" aria-label="Mada care">
+    <img src="assets/mada-logo.png" alt="" width="301" height="320">
+    <div>
+      <div class="logo-name">Mada Care</div>
+      <div class="logo-tag" data-i18n="tagline">Caring Like Family</div>
+    </div>
+  </a>
+  <nav class="nav">
+    <a href="dashboard.html" data-i18n="navDashboard">Dashboard</a>
+    <a href="requests.html"><span data-i18n="navRequests">Requests</span><span class="nav-count" id="navCount" hidden>0</span></a>
+    <a href="bookings.html" data-i18n="navBookings">Bookings</a>
+    <a href="patients.html" data-i18n="navPatients">Patients</a>
+    <a href="medical-requests.html" data-i18n="navMedical">Medical Requests</a>
+    <a href="invoices.html" data-i18n="navInvoices">Invoices</a>
+    <a href="services.html" data-i18n="navServices">Services</a>
+    <a href="#" class="nav-soon" aria-disabled="true" onclick="event.preventDefault()"><span data-i18n="navQuality">Quality</span><span class="soon-tag" data-i18n="navSoon">Soon</span></a>
+    <a href="staff.html" data-i18n="navStaff">Staff</a>
+    <a href="policies.html" data-i18n="navPolicies">Policies</a>
+  </nav>
+  <div class="top-actions">
+    <button class="lang-btn" id="langToggle" type="button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+      <span class="lang-label" data-i18n="otherLang">العربية</span>
+    </button>
+    <div class="user" id="user">
+      <button class="user-btn" id="userBtn" type="button" aria-haspopup="menu" aria-expanded="false">
+        <span class="avatar" id="avatar">SA</span>
+        <span class="user-meta"><span class="user-name" id="userName">Sarah Ahmed</span><span class="user-role" id="userRole">Administrator</span></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#44545a" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="user-menu" role="menu">
+        <a href="#" role="menuitem" data-i18n="profile">My Profile</a>
+        <a href="#" role="menuitem" data-i18n="settings">Settings</a>
+        <a href="index.html" role="menuitem" id="logout" data-i18n="logout">Log out</a>
+      </div>
+    </div>
+  </div>
+</header>
+<script src="admin-nav.js"></script>
+
+<main>
+  <div class="page-head">
+    <div class="ph-title">
+      <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
+      <div><h1 data-i18n="title">Sales &amp; Calls</h1><p id="sub"></p></div>
+    </div>
+    <div class="ph-tools">
+      <div class="seg" id="range" role="group"></div>
+      <select class="sel" id="who" data-i18n-aria="whoLbl" hidden></select>
+      <button type="button" class="btn btn-primary" id="setGoal" hidden></button>
+    </div>
+  </div>
+  <section class="card goal" id="goal"></section>
+  <div class="stats s8" id="stats"></div>
+  <div class="grid2">
+    <section class="card" id="teamCard">
+      <div class="ch"><div><h2 id="teamT"></h2><p id="teamS"></p></div></div>
+      <div class="table-wrap tm"><table><thead><tr id="tHead"></tr></thead><tbody id="tRows"></tbody></table></div>
+    </section>
+    <section class="card" id="actCard">
+      <div class="ch"><div><h2 data-i18n="actT">Needs action</h2><p data-i18n="actS">Customers waiting for a call back, links not paid and requests to follow.</p></div></div>
+      <div class="tabs" id="aTabs"></div>
+      <ul class="acts-list" id="aList"></ul>
+    </section>
+  </div>
+  <section class="card">
+    <div class="ch"><div><h2 id="chT"></h2><p id="chS"></p></div><div class="seg" id="chM" role="group"></div></div>
+    <div class="chart"><div class="bars" id="bars"></div><div class="xl" id="xl"></div><div class="lg" id="lg"></div></div>
+  </section>
+  <div class="grid3">
+    <section class="card"><div class="ch"><div><h2 data-i18n="svcT">Top services</h2><p data-i18n="svcS">Bookings and sales by service.</p></div></div><ul class="hb" id="svc"></ul></section>
+    <section class="card"><div class="ch"><div><h2 data-i18n="whyT">Why customers declined</h2><p data-i18n="whyS">Declined requests by reason.</p></div></div><ul class="hb red" id="why"></ul></section>
+    <section class="card"><div class="ch"><div><h2 data-i18n="srcT">Where requests come from</h2><p data-i18n="srcS">Requests by source.</p></div></div><ul class="hb blue" id="src"></ul></section>
+  </div>
+</main>
+<div class="ov" id="ov" hidden role="dialog" aria-modal="true" aria-labelledby="dT"><div class="dlg" id="dlg"></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="auth.js"></script>
+<script src="orders.js"></script>
+<script src="nurses.js"></script>
+<script src="staff.js"></script>
+<script src="physio.js"></script>
+<script src="physio-courses.js"></script>
+<script>
+  const me = MadaAuth.requireAuth("agent");
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Sales & Calls: the numbers of the call center from the requests (MadaOrders).
+  // A call center agent sees only her own requests. The supervisor (and general, operations and system managers) sees the team,
+  // can pick one agent, sets the daily target and moves a request from one agent to another.
+  // A request belongs to the agent who created it (order.staffId, or order.staff by name for requests saved before staffId).
+  // Requests = created in the period. Bookings = got a booking number in the period (paid or pay at the visit), not cancelled.
+  // Sales = the total of those bookings before VAT. Package sessions booked later and doctor-ordered visits are not new sales.
+  // Daily target (MadaStore "mada-sales-targets"): { cur: { bookings, sales, per: { agentKey: bookings } }, hist: { "YYYY-MM-DD": cur }, by, at }.
+  // A day is measured against the target that was set on or before that day.
+  const i18n = {
+    en: { tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
+      navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
+      title: "Sales & Calls", subTeam: "The call center team: requests, bookings, sales and the daily target. Click any number to see its requests.", subMine: "Your requests, bookings and sales, and your daily target. Click any number to see its requests.",
+      r_today: "Today", r_week: "Last 7 days", r_month: "This month", whoLbl: "Agent", whoAll: "All the team",
+      setGoal: "Set daily target", goalT: "Today's target", goalMine: "My target today", goalNone: "No daily target set yet.", goalNoneMine: "Your supervisor hasn't set a target for you yet.", goalBy: "Set by {n} · {t}",
+      gBk: "Bookings today", gSales: "Sales today (SAR)", gHit: "Target reached", gLeft: "{n} left to reach the target", gNoT: "No target", gOf: "of {n}",
+      reached: "Reached", notYet: "Not reached yet",
+      k_req: "Requests", k_bk: "Bookings", k_conv: "Conversion", k_sales: "Sales (SAR)", k_hold: "On hold now", k_late: "Late to call back", k_links: "Links not paid", k_dec: "Declined",
+      s_conv: "{b} of {r} requests", s_sales: "Before VAT · {p} collected", s_hold: "{n} late", s_late: "Customers waiting past the time", s_links: "{n} expire within 10 min", s_dec: "In this period", s_req: "New requests created", s_bk: "Paid or pay at the visit",
+      teamT: "The team", teamS: "One row per agent. Click a row to see only her numbers.", mineT: "My numbers", mineS: "Your numbers in this period.",
+      cAgent: "Agent", cReq: "Requests", cBk: "Bookings", cConv: "Conversion", cSales: "Sales", cHold: "On hold", cLate: "Late", cGoal: "Today vs target",
+      noTeam: "No call center agents yet. Add them on the Staff page with the role Call Center Agent.",
+      actT: "Needs action", actS: "Customers waiting for a call back, links not paid and requests to follow.",
+      a_late: "Late call backs", a_hold: "On hold", a_links: "Links not paid", a_dec: "Declined", a_pt: "Physio to book",
+      e_late: "Nobody is late. Every customer on hold has been called back on time.", e_hold: "No requests on hold.", e_links: "No payment links waiting.", e_dec: "No declined requests in this period.", e_pt: "Every physiotherapy package is booked.",
+      why_late: "Late {d} · was going to: {a}", why_hold: "Call back {d} · {a}", why_links: "Link expires {d}", why_exp: "Link expired {d} ago", why_dec: "Reason: {r}", why_pt: "{n} sessions not booked · {p}",
+      inD: "in {d}", agoD: "{d} ago", by: "By {n}",
+      ha_call: "call the customer", ha_whatsapp: "message on WhatsApp", ha_waitCall: "wait for the customer's call", ha_docs: "check the documents",
+      open: "Open", cont: "Continue", call: "Call", move: "Move", course: "Open course",
+      chT_bk: "Bookings per day", chT_sales: "Sales per day (SAR)", chS: "Click a day to see its bookings. The dashed line is the daily target.", m_bk: "Bookings", m_sales: "Sales",
+      lgHit: "Target reached", lgMiss: "Below target", lgToday: "Today", lgNo: "No target",
+      svcT: "Top services", svcS: "Bookings and sales by service.", whyT: "Why customers declined", whyS: "Declined requests by reason.", srcT: "Where requests come from", srcS: "Requests by source.",
+      noData: "Nothing in this period yet.", nBk: "Booked {n} · {s} SAR", nReq: "Requests: {n}",
+      svc_blood: "Blood Tests", svc_nursing: "Nursing Services", svc_physio: "Physiotherapy", svc_iv: "IV Vitamin Therapy", svc_doctor: "Doctor Visit with Nursing", svc_other: "Other",
+      src_phone: "Phone Call", src_whatsapp: "WhatsApp", src_website: "Website", src_other: "Other", src_none: "Not chosen", noReason: "No reason written",
+      st_pending: "New", st_booked: "Booked", st_completed: "Completed", st_declined: "Declined", st_on_hold: "On hold", st_cancelled: "Cancelled", st_pt_assigned: "Sent to the physiotherapist", st_awaiting_doctor: "Waiting for the doctor", st_referred: "Referred",
+      pay_paid: "Paid", pay_after: "Pays at the visit", pay_link: "Link sent", pay_no: "Not paid",
+      dReq: "Requests", dBk: "Bookings", dConv: "Conversion: requests and which became bookings", dSales: "Sales: bookings and their totals", dHold: "Requests on hold", dLate: "Late call backs", dLinks: "Payment links not paid", dDec: "Declined requests",
+      dDay: "Bookings on {d}", dSvc: "Bookings: {s}", dWhy: "Declined: {r}", dSrc: "Requests from: {s}", dOf: " · {n}",
+      cId: "Request", cPatient: "Customer", cService: "Service", cAmount: "Amount (SAR)", cStatus: "Status", cTime: "Time", cActs: "",
+      dCount: "{n} requests", dTotal: "Total {s} SAR", dEmpty: "No requests here.", converted: "Booked", noPatient: "Not entered yet", close: "Close",
+      tgT: "Daily target", tgS: "The target for every day from today. The page shows each day whether it was reached.", tgBk: "Team bookings per day", tgSales: "Team sales per day (SAR, before VAT)", tgPer: "Bookings per agent per day", tgPerHint: "Leave empty for no personal target.", tgSave: "Save target", tgSaved: "Daily target saved.", tgErr: "Enter numbers of 0 or more.",
+      mvT: "Move the request to another agent", mvS: "The new agent gets the request, its reminders and its numbers from now.", mvTo: "Move to", mvPick: "Choose the agent", mvNote: "Note (optional)", mvSave: "Move request", mvErr: "Choose the agent.", mvOk: "{id} moved to {n}.", mvLog: "Moved from {f} to {t} by {b} · {d}",
+      role_agent: "Call Center Agent", role_supervisor: "Sales & Call Center Supervisor", me: "(me)", d: "{n}d", h: "{n}h", m: "{n}m", sar: "SAR" },
+    ar: { tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
+      navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
+      title: "المبيعات والمكالمات", subTeam: "فريق الكول سنتر: الطلبات والحجوزات والمبيعات والهدف اليومي. اضغط على أي رقم تشوف طلباته.", subMine: "طلباتك وحجوزاتك ومبيعاتك وهدفك اليومي. اضغطي على أي رقم تشوفين طلباته.",
+      r_today: "اليوم", r_week: "آخر ٧ أيام", r_month: "هذا الشهر", whoLbl: "الموظفة", whoAll: "كل الفريق",
+      setGoal: "حدد الهدف اليومي", goalT: "هدف اليوم", goalMine: "هدفي اليوم", goalNone: "ما فيه هدف يومي محدد للحين.", goalNoneMine: "المشرف ما حدد لك هدف للحين.", goalBy: "حدده {n} · {t}",
+      gBk: "حجوزات اليوم", gSales: "مبيعات اليوم (ريال)", gHit: "تحقق الهدف", gLeft: "باقي {n} عشان يتحقق الهدف", gNoT: "بدون هدف", gOf: "من {n}",
+      reached: "تحقق", notYet: "ما تحقق للحين",
+      k_req: "الطلبات", k_bk: "الحجوزات", k_conv: "نسبة التحويل", k_sales: "المبيعات (ريال)", k_hold: "معلقة الحين", k_late: "متأخر الرد عليهم", k_links: "روابط ما اندفعت", k_dec: "مرفوضة",
+      s_conv: "{b} من {r} طلب", s_sales: "قبل الضريبة · المحصّل {p}", s_hold: "{n} متأخر", s_late: "عملاء ينتظرون بعد الوقت", s_links: "{n} تنتهي خلال ١٠ د", s_dec: "في هذي الفترة", s_req: "طلبات جديدة انضافت", s_bk: "مدفوعة أو الدفع عند الزيارة",
+      teamT: "الفريق", teamS: "صف لكل موظفة. اضغط على الصف تشوف أرقامها بس.", mineT: "أرقامي", mineS: "أرقامك في هذي الفترة.",
+      cAgent: "الموظفة", cReq: "الطلبات", cBk: "الحجوزات", cConv: "التحويل", cSales: "المبيعات", cHold: "معلقة", cLate: "متأخر", cGoal: "اليوم مقابل الهدف",
+      noTeam: "ما فيه موظفات كول سنتر للحين. أضفهم من صفحة الموظفين بوظيفة موظفة كول سنتر.",
+      actT: "يحتاج إجراء", actS: "عملاء ينتظرون اتصال، وروابط ما اندفعت، وطلبات تحتاج متابعة.",
+      a_late: "متأخر الرد", a_hold: "معلقة", a_links: "روابط ما اندفعت", a_dec: "مرفوضة", a_pt: "علاج طبيعي ينحجز",
+      e_late: "ما فيه أحد متأخر. كل العملاء المعلقين انرد عليهم بوقتهم.", e_hold: "ما فيه طلبات معلقة.", e_links: "ما فيه روابط دفع تنتظر.", e_dec: "ما فيه طلبات مرفوضة في هذي الفترة.", e_pt: "كل باقات العلاج الطبيعي محجوزة.",
+      why_late: "متأخر {d} · كان المفروض: {a}", why_hold: "الرد {d} · {a}", why_links: "الرابط ينتهي {d}", why_exp: "الرابط انتهى من {d}", why_dec: "السبب: {r}", why_pt: "{n} جلسات ما انحجزت · {p}",
+      inD: "بعد {d}", agoD: "قبل {d}", by: "بواسطة {n}",
+      ha_call: "الاتصال على العميل", ha_whatsapp: "رسالة واتساب", ha_waitCall: "انتظار اتصال العميل", ha_docs: "مراجعة المستندات",
+      open: "فتح", cont: "كمّلي", call: "اتصال", move: "تحويل", course: "فتح الخطة",
+      chT_bk: "الحجوزات باليوم", chT_sales: "المبيعات باليوم (ريال)", chS: "اضغط على اليوم تشوف حجوزاته. الخط المتقطع هو الهدف اليومي.", m_bk: "الحجوزات", m_sales: "المبيعات",
+      lgHit: "تحقق الهدف", lgMiss: "أقل من الهدف", lgToday: "اليوم", lgNo: "بدون هدف",
+      svcT: "أكثر الخدمات", svcS: "الحجوزات والمبيعات حسب الخدمة.", whyT: "ليش رفض العملاء", whyS: "الطلبات المرفوضة حسب السبب.", srcT: "من وين تجي الطلبات", srcS: "الطلبات حسب المصدر.",
+      noData: "ما فيه شي في هذي الفترة للحين.", nBk: "{n} حجز · {s} ريال", nReq: "{n} طلب",
+      svc_blood: "تحاليل الدم", svc_nursing: "خدمات التمريض", svc_physio: "العلاج الطبيعي", svc_iv: "المحاليل والفيتامينات الوريدية", svc_doctor: "زيارة طبيب مع تمريض", svc_other: "أخرى",
+      src_phone: "مكالمة هاتفية", src_whatsapp: "واتساب", src_website: "الموقع الإلكتروني", src_other: "أخرى", src_none: "ما انحدد", noReason: "ما انكتب سبب",
+      st_pending: "جديد", st_booked: "محجوز", st_completed: "مكتمل", st_declined: "مرفوض", st_on_hold: "معلق", st_cancelled: "ملغي", st_pt_assigned: "انرسل للأخصائي", st_awaiting_doctor: "بانتظار الطبيب", st_referred: "محوّل",
+      pay_paid: "مدفوع", pay_after: "الدفع عند الزيارة", pay_link: "انرسل الرابط", pay_no: "ما اندفع",
+      dReq: "الطلبات", dBk: "الحجوزات", dConv: "التحويل: الطلبات واللي صار منها حجز", dSales: "المبيعات: الحجوزات ومبالغها", dHold: "الطلبات المعلقة", dLate: "متأخر الرد عليهم", dLinks: "روابط دفع ما اندفعت", dDec: "الطلبات المرفوضة",
+      dDay: "حجوزات {d}", dSvc: "الحجوزات: {s}", dWhy: "المرفوضة: {r}", dSrc: "الطلبات من: {s}", dOf: " · {n}",
+      cId: "الطلب", cPatient: "العميل", cService: "الخدمة", cAmount: "المبلغ (ريال)", cStatus: "الحالة", cTime: "الوقت", cActs: "",
+      dCount: "{n} طلب", dTotal: "الإجمالي {s} ريال", dEmpty: "ما فيه طلبات هنا.", converted: "انحجز", noPatient: "ما انكتب للحين", close: "إغلاق",
+      tgT: "الهدف اليومي", tgS: "الهدف لكل يوم من اليوم وطالع. الصفحة توضح كل يوم هل تحقق أو لا.", tgBk: "حجوزات الفريق باليوم", tgSales: "مبيعات الفريق باليوم (ريال، قبل الضريبة)", tgPer: "الحجوزات لكل موظفة باليوم", tgPerHint: "خله فاضي إذا ما تبي لها هدف خاص.", tgSave: "حفظ الهدف", tgSaved: "انحفظ الهدف اليومي.", tgErr: "اكتب أرقام صفر أو أكثر.",
+      mvT: "تحويل الطلب لموظفة ثانية", mvS: "الموظفة الجديدة ياخذ لها الطلب وتذكيراته وأرقامه من الحين.", mvTo: "تحويل إلى", mvPick: "اختر الموظفة", mvNote: "ملاحظة (اختياري)", mvSave: "تحويل الطلب", mvErr: "اختر الموظفة.", mvOk: "انحول {id} إلى {n}.", mvLog: "انحول من {f} إلى {t} بواسطة {b} · {d}",
+      role_agent: "موظفة كول سنتر", role_supervisor: "مشرف مبيعات وكول سنتر", me: "(أنا)", d: "{n} يوم", h: "{n} س", m: "{n} د", sar: "ريال" }
+  };
+  let current = "en", range = "today", metric = "bk", tab = null, mvId = null, view = null;
+  const t = () => i18n[current], tx = (k, v) => t()[k].replace(/\{(\w+)\}/g, (_, n) => v[n] != null ? v[n] : "");
+  const T = v => v && typeof v === "object" ? v[current] || v.en : v || "";
+  const S = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+  const I = { req: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>', bk: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/>',
+    conv: '<path d="M4 17 10 11l4 4 6-7"/><path d="M15 8h5v5"/>', sales: '<path d="M12 3v18M17 7.5c0-1.9-2.2-3-5-3s-5 1.1-5 3 2.2 2.8 5 3.4 5 1.6 5 3.6-2.2 3-5 3-5-1.1-5-3"/>',
+    hold: '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>', late: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/>',
+    links: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', dec: '<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>', go: '<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>', phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+    move: '<path d="M4 8h13l-3-3M20 16H7l3 3"/>', goal: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>' };
+  const KS = [["req", "s-blue"], ["bk", "s-green"], ["conv", "s-purple"], ["sales", "s-green"], ["hold", "s-orange"], ["late", "s-red"], ["links", "s-orange"], ["dec", "s-gray"]];
+  const TGT = "mada-sales-targets";
+  const roleKey = me ? ((MadaStore.getJSON("mada-staff", []).find(x => x.id === me.staffId) || {}).role || me.roleKey) : null;
+  const isSup = !!(me && (me.supervisor || ["gm", "admin", "ops", "supervisor"].includes(roleKey)));
+  const myKey = me ? me.staffId || me.username : null;
+  const loc = () => current === "ar" ? "ar-SA-u-nu-latn-ca-gregory" : "en-GB";
+  const tm = d => new Date(d).toLocaleTimeString(current === "ar" ? "ar-SA-u-nu-latn" : "en-US", { hour: "numeric", minute: "2-digit" });
+  const stamp = iso => { const d = new Date(iso); return d.toLocaleDateString(loc(), { day: "numeric", month: "short" }) + " " + tm(d); };
+  const money = a => Math.round(Number(a || 0)).toLocaleString("en-US");
+  const pct = (a, b) => b ? Math.round(a / b * 100) + "%" : "—";
+  const ymd = d => { const x = new Date(d); return x.getFullYear() + "-" + String(x.getMonth() + 1).padStart(2, "0") + "-" + String(x.getDate()).padStart(2, "0"); };
+  const day0 = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+  function dur(ms) {
+    const m = Math.max(1, Math.round(Math.abs(ms) / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mm = m % 60;
+    return d ? [tx("d", { n: d }), h ? tx("h", { n: h }) : ""].filter(Boolean).join(" ") : h ? [tx("h", { n: h }), mm ? tx("m", { n: mm }) : ""].filter(Boolean).join(" ") : tx("m", { n: mm });
+  }
+
+  // ---------- Who did what ----------
+  const staff = () => MadaStore.getJSON("mada-staff", []);
+  function nameMap() {
+    const m = {}; staff().forEach(s => { if (s.name && s.name.en) m[s.name.en] = s.id; });
+    if (me && me.name) m[me.name.en] = myKey;
+    return m;
+  }
+  let NM = {};
+  const keyOf = o => o.staffId || (o.staff && (NM[o.staff.en] || "n:" + o.staff.en)) || null;
+  // Every agent: call center staff, plus anyone who created a request.
+  function agents() {
+    const list = [], seen = {};
+    const put = (key, name, role) => { if (!key || seen[key]) return; seen[key] = 1; list.push({ key, name, role }); };
+    staff().filter(s => ["agent", "supervisor"].includes(s.role) && s.status !== "disabled").forEach(s => put(s.id, s.name, s.role));
+    sales().forEach(o => { const k = keyOf(o); if (k) { const s = staff().find(x => x.id === k); put(k, s ? s.name : k === myKey ? me.name : o.staff, s ? s.role : null); } });
+    return list;
+  }
+  const agentName = k => { const a = agents().find(x => x.key === k); return a ? T(a.name) : ""; };
+  // The requests the call center made (not doctor-ordered visits, not package sessions booked later).
+  const sales = () => MadaOrders.all().filter(o => !o.drDemo && (o.staff || o.staffId) && !o.fromMr && !o.pkgSession);
+  const who = () => isSup ? $("who").value : myKey;
+  const mine = (list, k) => k ? list.filter(o => keyOf(o) === k) : list;
+
+  // ---------- Numbers ----------
+  function startOf(r) { const now = new Date(); if (r === "today") return day0(now); if (r === "week") { const d = day0(now); d.setDate(d.getDate() - 6); return d; } return new Date(now.getFullYear(), now.getMonth(), 1); }
+  const isBk = o => !!o.bookingId && o.status !== "cancelled";
+  const isLink = o => o.payLink && !o.payLink.paidAt && o.payment !== "paid" && !["declined", "cancelled", "completed"].includes(o.status);
+  const lateOf = o => o.status === "on_hold" && o.hold && o.hold.dueAt && new Date(o.hold.dueAt) < Date.now();
+  function M(list, from, to) {
+    const inR = iso => { if (!iso) return false; const d = new Date(iso); return d >= from && (!to || d < to); };
+    const req = list.filter(o => inR(o.createdAt)), bk = list.filter(o => isBk(o) && inR(o.bookedAt));
+    const hold = list.filter(o => o.status === "on_hold");
+    return { req, bk, conv: req.filter(isBk), sales: bk.reduce((a, o) => a + Number(o.total || 0), 0), paid: bk.filter(o => o.payment === "paid").reduce((a, o) => a + Number(o.total || 0), 0),
+      hold, late: hold.filter(lateOf), links: list.filter(isLink), dec: list.filter(o => o.status === "declined" && inR(o.updatedAt || o.createdAt)) };
+  }
+  // ---------- Daily target ----------
+  const goals = () => MadaStore.getJSON(TGT, null);
+  function goalOn(day) {
+    const g = goals(); if (!g) return null;
+    const keys = Object.keys(g.hist || {}).filter(k => k <= day).sort();
+    return keys.length ? g.hist[keys[keys.length - 1]] : null;
+  }
+  // The bookings target for the team or one agent on that day (null = none).
+  function bkGoal(day, k) { const g = goalOn(day); if (!g) return null; if (k) { const v = (g.per || {})[k]; return v == null || v === "" ? null : Number(v); } return g.bookings == null ? null : Number(g.bookings); }
+  function salesGoal(day, k) { const g = goalOn(day); return !g || k || g.sales == null ? null : Number(g.sales); }
+
+  // ---------- Labels ----------
+  const svcName = s => t()["svc_" + s] || (s ? s : t().svc_other);
+  const srcName = s => s ? t()["src_" + s] || s : t().src_none;
+  const stName = o => t()["st_" + o.status] || o.status || t().st_pending;
+  const ST = { booked: "p-blue", completed: "p-green", declined: "p-red", on_hold: "p-orange", cancelled: "p-gray", pt_assigned: "p-purple", awaiting_doctor: "p-orange", referred: "p-gray" };
+  const payName = o => o.payment === "paid" ? t().pay_paid : o.payWhen === "after" ? t().pay_after : o.payLink ? t().pay_link : t().pay_no;
+  const patientOf = o => T(o.patient) || "";
+  const canMove = o => isSup && !["completed", "cancelled"].includes(o.status) && o.payment !== "paid";
+
+  function render() {
+    NM = nameMap();
+    const k = who(), all = mine(sales(), k), from = startOf(range), m = M(all, from), today = ymd(new Date()), t0 = M(all, day0(new Date()));
+    $("sub").textContent = isSup ? t().subTeam : t().subMine;
+    $("range").innerHTML = ["today", "week", "month"].map(r => `<button type="button" data-r="${r}" aria-pressed="${range === r}">${t()["r_" + r]}</button>`).join("");
+    // Target of today
+    const bg = bkGoal(today, isSup ? k || null : myKey), sg = salesGoal(today, isSup ? k || null : myKey), g = goals();
+    const hasG = bg != null || sg != null;
+    const meter = (lbl, val, goal, d, money_) => { const hit = goal != null && val >= goal, w = goal ? Math.min(100, val / goal * 100) : 0;
+      return `<button type="button" class="gm ${hit ? "hit" : ""}" data-d="${d}" data-a="${esc(k || "")}" data-v="${today}"><span>${lbl}</span><b>${money_ ? money(val) : val}${goal != null ? ` <em>${esc(tx("gOf", { n: money_ ? money(goal) : goal }))}</em>` : ""}</b>${goal != null ? `<div class="meter"><i style="width:${w}%"></i></div><small>${hit ? "✓ " + t().gHit : esc(tx("gLeft", { n: money_ ? money(goal - val) : goal - val }))}</small>` : `<small style="color:var(--muted)">${t().gNoT}</small>`}</button>`; };
+    const reachedAll = hasG && (bg == null || t0.bk.length >= bg) && (sg == null || t0.sales >= sg);
+    $("goal").innerHTML = `<div><h2>${S(I.goal).replace("<svg", '<svg width="20" height="20" style="color:var(--primary)"')}${isSup && !k ? t().goalT : isSup ? esc(t().goalT + " · " + agentName(k)) : t().goalMine}${hasG ? `<span class="pill ${reachedAll ? "p-green" : "p-orange"}">${reachedAll ? t().reached : t().notYet}</span>` : ""}</h2>
+      <p class="gsub">${hasG ? (g && g.by ? esc(tx("goalBy", { n: T(g.by), t: stamp(g.at) })) : "") : isSup ? t().goalNone : t().goalNoneMine}</p>
+      ${isSup ? `<div class="gact"><button type="button" class="btn btn-ghost btn-sm" data-goal>${S(I.goal)}${t().setGoal}</button></div>` : ""}</div>
+      ${meter(t().gBk, t0.bk.length, bg, "day", false)}${meter(t().gSales, t0.sales, sg, "dsales", true)}`;
+    // KPIs
+    const soon = m.links.filter(o => new Date(o.payLink.expiresAt) - Date.now() < 10 * 60000 && new Date(o.payLink.expiresAt) > Date.now()).length;
+    const val = { req: m.req.length, bk: m.bk.length, conv: pct(m.conv.length, m.req.length), sales: money(m.sales), hold: m.hold.length, late: m.late.length, links: m.links.length, dec: m.dec.length };
+    const sub = { req: t().s_req, bk: t().s_bk, conv: tx("s_conv", { b: m.conv.length, r: m.req.length }), sales: tx("s_sales", { p: money(m.paid) }), hold: tx("s_hold", { n: m.late.length }), late: t().s_late, links: tx("s_links", { n: soon }), dec: t().s_dec };
+    const bad = { hold: m.late.length > 0, late: m.late.length > 0, links: soon > 0 };
+    $("stats").innerHTML = KS.map(([x, cls]) => `<button type="button" class="card stat" data-d="${x}" data-a="${esc(k || "")}"><span class="stat-icon ${cls}">${S(I[x])}</span><span><b>${esc(val[x])}</b><small>${t()["k_" + x]}</small><small class="sub2 ${bad[x] ? "bad" : ""}">${esc(sub[x])}</small></span></button>`).join("");
+    renderTeam(from, today);
+    renderActs(all, m);
+    renderChart(all, k);
+    renderBreak(m, k);
+  }
+
+  function renderTeam(from, today) {
+    const sel = $("who").value;
+    $("teamT").textContent = isSup ? t().teamT : t().mineT; $("teamS").textContent = isSup ? t().teamS : t().mineS;
+    const cols = ["cAgent", "cReq", "cBk", "cConv", "cSales", "cHold", "cLate", "cGoal"];
+    $("tHead").innerHTML = cols.map(c => `<th>${t()[c]}</th>`).join("");
+    const list = isSup ? agents() : [{ key: myKey, name: me.name }];
+    if (!list.length) { $("tRows").innerHTML = `<tr><td colspan="8" class="empty">${t().noTeam}</td></tr>`; return; }
+    const rows = list.map(a => { const o = mine(sales(), a.key), m = M(o, from), d = M(o, day0(new Date())); return { a, m, d, goal: bkGoal(today, a.key) }; })
+      .sort((x, y) => y.m.bk.length - x.m.bk.length || y.m.sales - x.m.sales || y.m.req.length - x.m.req.length);
+    const nb = (d, a, n, cls) => `<button type="button" class="nb num ${cls || ""}" data-d="${d}" data-a="${esc(a)}">${esc(n)}</button>`;
+    $("tRows").innerHTML = rows.map(({ a, m, d, goal }) => `<tr data-row="${esc(a.key)}" aria-selected="${isSup && sel === a.key}">
+      <td class="who c-who" data-l="${t().cAgent}"><b>${esc(T(a.name))}${a.key === myKey ? ` <small style="display:inline">${t().me}</small>` : ""}</b>${a.role && t()["role_" + a.role] ? `<small>${t()["role_" + a.role]}</small>` : ""}</td>
+      <td data-l="${t().cReq}">${nb("req", a.key, m.req.length)}</td><td data-l="${t().cBk}">${nb("bk", a.key, m.bk.length)}</td>
+      <td data-l="${t().cConv}">${nb("conv", a.key, pct(m.conv.length, m.req.length))}</td><td data-l="${t().cSales}">${nb("sales", a.key, money(m.sales))}</td>
+      <td data-l="${t().cHold}">${nb("hold", a.key, m.hold.length)}</td><td data-l="${t().cLate}">${nb("late", a.key, m.late.length, m.late.length ? "bad" : "")}</td>
+      <td data-l="${t().cGoal}">${goal == null ? `<small>${t().gNoT}</small>` : `<span class="mini ${d.bk.length >= goal ? "hit" : ""}">${nb("day", a.key, d.bk.length + " / " + goal)}<i><u style="width:${Math.min(100, d.bk.length / goal * 100)}%"></u></i></span>`}</td></tr>`).join("");
+  }
+
+  function actItems(all, m) {
+    const now = Date.now(), act = o => t()["ha_" + ((o.hold || {}).action || "call")] || t().ha_call;
+    const pt = PtCourses.all().filter(c => (c.state === "active" || c.state === "unpaid") && (c.remaining || 0) > 0 && (!who() || keyOf(c.root) === who()));
+    return {
+      late: m.late.slice().sort((a, b) => new Date(a.hold.dueAt) - new Date(b.hold.dueAt)).map(o => ({ o, late: true, why: tx("why_late", { d: dur(now - new Date(o.hold.dueAt)), a: act(o) }) })),
+      hold: m.hold.filter(o => !lateOf(o)).sort((a, b) => new Date((a.hold || {}).dueAt || 0) - new Date((b.hold || {}).dueAt || 0)).map(o => ({ o, why: tx("why_hold", { d: o.hold && o.hold.dueAt ? tx("inD", { d: dur(new Date(o.hold.dueAt) - now) }) : "", a: act(o) }) })),
+      links: m.links.slice().sort((a, b) => new Date(a.payLink.expiresAt) - new Date(b.payLink.expiresAt)).map(o => { const ms = new Date(o.payLink.expiresAt) - now;
+        return { o, late: ms < 10 * 60000, why: ms > 0 ? tx("why_links", { d: tx("inD", { d: dur(ms) }) }) : tx("why_exp", { d: dur(ms) }) }; }),
+      dec: m.dec.slice().sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt)).map(o => ({ o, why: tx("why_dec", { r: T(o.reason) || t().noReason }) })),
+      pt: pt.map(c => ({ o: c.root, c, why: tx("why_pt", { n: c.remaining, p: c.pkg ? T(c.pkg.name) : "" }) }))
+    };
+  }
+  function renderActs(all, m) {
+    const A = actItems(all, m), keys = ["late", "hold", "links", "dec", "pt"];
+    if (!tab || !A[tab]) tab = keys.find(x => A[x].length) || "late";
+    $("aTabs").innerHTML = keys.map(x => `<button type="button" class="tab ${x === "late" && A.late.length ? "hot" : ""}" data-tab="${x}" aria-pressed="${tab === x}">${t()["a_" + x]} <b>${A[x].length}</b></button>`).join("");
+    const canPt = typeof MadaPerms === "undefined" || MadaPerms.canPage(me, "physio-requests.html");
+    $("aList").innerHTML = A[tab].length ? A[tab].map(({ o, c, why, late }) => `<li class="${late ? "late" : ""}"><div class="ai"><b>${esc(patientOf(o) || o.mobile || o.id)}</b>
+        <small><span class="num">${esc(o.id)}</span>${o.mobile ? ` · <span class="num">${esc(o.mobile)}</span>` : ""} · ${esc(svcName(o.service))}${isSup ? ` · ${esc(tx("by", { n: agentName(keyOf(o)) || T(o.staff) }))}` : ""}</small><small class="why">${esc(why)}</small></div>
+      <div class="aa">${tab === "late" || tab === "hold" ? `<a class="btn btn-primary btn-sm" href="new-request.html?hold=${encodeURIComponent(o.id)}">${t().cont}</a>` : tab === "pt" ? (canPt ? `<a class="btn btn-primary btn-sm" href="physio-requests.html">${t().course}</a>` : "") : `<a class="btn btn-ghost btn-sm" href="request-details.html?id=${encodeURIComponent(o.id)}">${t().open}</a>`}
+        ${o.mobile ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(o.mobile)}">${S(I.phone)}${t().call}</a>` : ""}${tab !== "pt" && canMove(o) ? `<button type="button" class="btn btn-ghost btn-sm" data-mv="${esc(o.id)}">${S(I.move)}${t().move}</button>` : ""}</div></li>`).join("")
+      : `<li style="display:block;border-style:dashed" class="empty">${t()["e_" + tab]}</li>`;
+  }
+
+  function days() {
+    const out = [], now = new Date();
+    if (range === "month") { for (let d = new Date(now.getFullYear(), now.getMonth(), 1); d <= now; d.setDate(d.getDate() + 1)) out.push(new Date(d)); }
+    else for (let i = 6; i >= 0; i--) { const d = day0(now); d.setDate(d.getDate() - i); out.push(d); }
+    return out;
+  }
+  function renderChart(all, k) {
+    $("chT").textContent = t()["chT_" + metric]; $("chS").textContent = t().chS;
+    $("chM").innerHTML = ["bk", "sales"].map(x => `<button type="button" data-m="${x}" aria-pressed="${metric === x}">${t()["m_" + x]}</button>`).join("");
+    const ds = days(), today = ymd(new Date());
+    const pts = ds.map(d => { const to = new Date(d); to.setDate(to.getDate() + 1); const m = M(all, d, to), key = ymd(d), goal = metric === "bk" ? bkGoal(key, k || null) : salesGoal(key, k || null);
+      return { key, d, v: metric === "bk" ? m.bk.length : m.sales, goal }; });
+    const goalNow = pts.length ? pts[pts.length - 1].goal : null;
+    const max = Math.max(1, ...pts.map(p => p.v), ...pts.map(p => p.goal || 0)) * 1.12;
+    $("bars").innerHTML = pts.map(p => `<button type="button" class="${p.goal != null && p.v >= p.goal ? "hit" : ""} ${p.key === today ? "today" : ""}" data-d="day" data-a="${esc(k || "")}" data-v="${p.key}" title="${esc(p.d.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "short" }))}"><em>${metric === "bk" ? p.v : p.v ? money(p.v) : "0"}</em><i style="height:${p.v / max * 100}%;${p.goal == null ? "" : p.v >= p.goal ? "" : "background:#f2c27f"}"></i></button>`).join("")
+      + (goalNow ? `<div class="tg" style="bottom:${goalNow / max * 100}%"><span>${esc(metric === "bk" ? goalNow : money(goalNow))}</span></div>` : "");
+    const lbl = d => range === "month" ? String(d.getDate()) : d.toLocaleDateString(loc(), { weekday: "short", day: "numeric" });
+    $("xl").innerHTML = pts.map(p => `<span>${esc(lbl(p.d))}</span>`).join("");
+    $("lg").innerHTML = `<span><i style="background:var(--primary)"></i>${t().lgHit}</span><span><i style="background:#f2c27f"></i>${t().lgMiss}</span><span><i style="background:#8fd0bd"></i>${t().lgNo}</span><span><i style="background:#fff;box-shadow:0 0 0 2px #15304a inset"></i>${t().lgToday}</span>`;
+  }
+  function group(list, keyFn) { const g = {}; list.forEach(o => { const k = keyFn(o); (g[k] = g[k] || []).push(o); }); return Object.entries(g); }
+  function hbList(el, entries, d, k, label, sub, w) {
+    const top = Math.max(1, ...entries.map(([, l]) => w(l)));
+    $(el).innerHTML = entries.length ? entries.map(([v, l]) => `<li><button type="button" data-d="${d}" data-a="${esc(k || "")}" data-v="${esc(v)}"><span>${esc(label(v, l))}</span><b>${esc(sub(l))}</b><i><u style="width:${w(l) / top * 100}%"></u></i></button></li>`).join("") : `<li class="empty">${t().noData}</li>`;
+  }
+  function renderBreak(m, k) {
+    const sum = l => l.reduce((a, o) => a + Number(o.total || 0), 0);
+    hbList("svc", group(m.bk, o => o.service || "other").sort((a, b) => sum(b[1]) - sum(a[1]) || b[1].length - a[1].length), "svc", k, v => svcName(v), l => tx("nBk", { n: l.length, s: money(sum(l)) }), l => sum(l) || l.length);
+    hbList("why", group(m.dec, o => T(o.reason) || t().noReason).sort((a, b) => b[1].length - a[1].length), "why", k, v => v, l => tx("nReq", { n: l.length }), l => l.length);
+    hbList("src", group(m.req, o => o.source || "").sort((a, b) => b[1].length - a[1].length), "src", k, v => srcName(v), l => tx("nReq", { n: l.length }), l => l.length);
+  }
+
+  // ---------- Details: every number opens its requests ----------
+  function detail(d, a, v) {
+    NM = nameMap();
+    const k = isSup ? a || null : myKey, all = mine(sales(), k), m = M(all, startOf(range));
+    let title, list, mark = null;
+    if (d === "day" || d === "dsales") { const from = new Date(v + "T00:00:00"), to = new Date(from); to.setDate(to.getDate() + 1); list = M(all, from, to).bk; title = tx("dDay", { d: from.toLocaleDateString(loc(), { weekday: "long", day: "numeric", month: "long" }) }); }
+    else if (d === "svc") { list = m.bk.filter(o => (o.service || "other") === v); title = tx("dSvc", { s: svcName(v) }); }
+    else if (d === "why") { list = m.dec.filter(o => (T(o.reason) || t().noReason) === v); title = tx("dWhy", { r: v }); }
+    else if (d === "src") { list = m.req.filter(o => (o.source || "") === v); title = tx("dSrc", { s: srcName(v) }); }
+    else if (d === "conv") { list = m.req; mark = isBk; title = t().dConv; }
+    else { list = { req: m.req, bk: m.bk, sales: m.bk, hold: m.hold, late: m.late, links: m.links, dec: m.dec }[d] || []; title = t()["d" + d[0].toUpperCase() + d.slice(1)]; }
+    if (k && isSup) title += tx("dOf", { n: agentName(k) });
+    view = { d, a, v };
+    list = list.slice().sort((x, y) => new Date(y.bookedAt || y.updatedAt || y.createdAt) - new Date(x.bookedAt || x.updatedAt || x.createdAt));
+    const total = list.reduce((s, o) => s + Number(o.total || 0), 0), cols = ["cId", "cPatient", "cService", "cAmount", "cStatus", "cTime", "cActs"];
+    if (isSup && !k) cols.splice(2, 0, "cAgent");
+    const when = o => d === "hold" || d === "late" ? (o.hold && o.hold.dueAt ? stamp(o.hold.dueAt) : "") : d === "links" ? stamp(o.payLink.expiresAt) : stamp(["bk", "sales", "day", "dsales", "svc"].includes(d) ? o.bookedAt : d === "dec" || d === "why" ? o.updatedAt || o.createdAt : o.createdAt);
+    $("dlg").className = "dlg xw";
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x)}</button><h3 id="dT">${esc(title)}</h3>
+      <div class="dsum" style="margin-top:12px"><span><b>${esc(tx("dCount", { n: list.length }))}</b></span>${list.some(o => o.total) ? `<span><b>${esc(tx("dTotal", { s: money(total) }))}</b></span>` : ""}${mark ? `<span><b>${list.filter(mark).length}</b> ${t().converted} · ${pct(list.filter(mark).length, list.length)}</span>` : ""}</div>
+      ${list.length ? `<div class="table-wrap dl" style="border:1px solid var(--border);border-radius:12px"><table><thead><tr>${cols.map(c => `<th>${t()[c]}</th>`).join("")}</tr></thead><tbody>${list.map(o => `<tr>
+        <td data-l="${t().cId}"><a class="oid num" href="request-details.html?id=${encodeURIComponent(o.id)}">${esc(o.id)}</a>${o.bookingId ? `<small class="num">${esc(o.bookingId)}</small>` : ""}</td>
+        <td class="c-who" data-l="${t().cPatient}"><b class="pn">${esc(patientOf(o) || t().noPatient)}</b>${o.mobile ? `<small><span class="num">${esc(o.mobile)}</span></small>` : ""}</td>
+        ${isSup && !k ? `<td data-l="${t().cAgent}">${esc(agentName(keyOf(o)) || T(o.staff))}${(o.transfers || []).length ? `<small>${esc(tx("mvLog", { f: T(o.transfers[o.transfers.length - 1].from), t: T(o.transfers[o.transfers.length - 1].to), b: T(o.transfers[o.transfers.length - 1].by), d: stamp(o.transfers[o.transfers.length - 1].at) }))}</small>` : ""}</td>` : ""}
+        <td data-l="${t().cService}">${esc(svcName(o.service))}${o.source ? `<small>${esc(srcName(o.source))}</small>` : ""}</td>
+        <td data-l="${t().cAmount}"><b class="num">${o.total != null ? money(o.total) : "—"}</b><small>${esc(payName(o))}</small></td>
+        <td data-l="${t().cStatus}"><span class="pill ${ST[o.status] || "p-blue"}">${esc(stName(o))}</span>${mark && mark(o) ? `<small style="color:var(--green);font-weight:700">✓ ${t().converted}</small>` : ""}${o.status === "declined" && o.reason ? `<small>${esc(T(o.reason))}</small>` : ""}</td>
+        <td data-l="${t().cTime}"><span class="num">${esc(when(o))}</span></td>
+        <td class="c-acts"><div class="acts"><a class="ib" href="request-details.html?id=${encodeURIComponent(o.id)}" title="${t().open}" aria-label="${t().open}">${S(I.go)}</a>${o.mobile ? `<a class="ib" href="tel:${esc(o.mobile)}" title="${t().call}" aria-label="${t().call}">${S(I.phone)}</a>` : ""}${canMove(o) ? `<button type="button" class="ib" data-mv="${esc(o.id)}" title="${t().move}" aria-label="${t().move}">${S(I.move)}</button>` : ""}</div></td></tr>`).join("")}</tbody></table></div>` : `<div class="empty">${t().dEmpty}</div>`}
+      <div class="df"><button type="button" class="btn btn-ghost" data-close>${t().close}</button></div>`;
+    $("ov").hidden = false;
+  }
+
+  // ---------- Daily target (supervisor) ----------
+  function goalBox(err) {
+    const g = (goals() || {}).cur || {}, team = agents().filter(a => a.role === "agent" || a.role === "supervisor" || !a.role);
+    view = { goal: true };
+    $("dlg").className = "dlg";
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x)}</button><h3 id="dT">${t().tgT}</h3><p class="sub">${t().tgS}</p>
+      <div class="fg"><div class="row2"><label><span>${t().tgBk}</span><input type="number" min="0" step="1" inputmode="numeric" id="tgBk" value="${g.bookings != null ? esc(g.bookings) : ""}"></label>
+        <label><span>${t().tgSales}</span><input type="number" min="0" step="50" inputmode="numeric" id="tgSales" value="${g.sales != null ? esc(g.sales) : ""}"></label></div>
+        ${team.length ? `<h4>${t().tgPer}</h4><p class="hint">${t().tgPerHint}</p><div class="per">${team.map(a => `<label><span>${esc(T(a.name))}</span><input type="number" min="0" step="1" inputmode="numeric" data-per="${esc(a.key)}" value="${(g.per || {})[a.key] != null ? esc(g.per[a.key]) : ""}"></label>`).join("")}</div>` : ""}
+        ${err ? `<p class="err" role="alert">${esc(err)}</p>` : ""}</div>
+      <div class="df"><button type="button" class="btn btn-ghost" data-close>${t().close}</button><button type="button" class="btn btn-primary" data-tgsave>${t().tgSave}</button></div>`;
+    $("ov").hidden = false;
+  }
+  function goalSave() {
+    const num = v => v === "" ? null : Number(v), bk = num($("tgBk").value), sl = num($("tgSales").value), per = {};
+    let bad = [bk, sl].some(v => v != null && (!isFinite(v) || v < 0));
+    $("dlg").querySelectorAll("[data-per]").forEach(i => { const v = num(i.value); if (v != null && (!isFinite(v) || v < 0)) bad = true; if (v != null) per[i.dataset.per] = v; });
+    if (bad) return goalBox(t().tgErr);
+    const g = goals() || { hist: {} }, cur = { bookings: bk, sales: sl, per };
+    g.cur = cur; g.hist = { ...(g.hist || {}), [ymd(new Date())]: cur }; g.by = me.name; g.at = new Date().toISOString();
+    MadaStore.setJSON(TGT, g);
+    $("ov").hidden = true; view = null; toast(t().tgSaved); render();
+  }
+
+  // ---------- Move a request to another agent (supervisor) ----------
+  function moveBox(id, err) {
+    const o = MadaOrders.get(id); if (!o) return;
+    mvId = id; const from = keyOf(o), back = view && !view.mv ? view : view && view.back;
+    view = { mv: true, back };
+    $("dlg").className = "dlg";
+    $("dlg").innerHTML = `<button type="button" class="x" data-close aria-label="${t().close}">${S(I.x)}</button><h3 id="dT">${t().mvT}</h3><p class="sub">${t().mvS}</p>
+      <div class="mv-o"><b>${esc(patientOf(o) || o.mobile || o.id)}</b> · <span class="num">${esc(o.id)}</span><small>${esc(svcName(o.service))} · ${esc(stName(o))} · ${esc(tx("by", { n: agentName(from) || T(o.staff) }))}</small>
+        ${(o.transfers || []).length ? `<ul class="tr-log">${o.transfers.map(x => `<li>${esc(tx("mvLog", { f: T(x.from), t: T(x.to), b: T(x.by), d: stamp(x.at) }))}${x.note ? " · " + esc(x.note) : ""}</li>`).join("")}</ul>` : ""}</div>
+      <div class="fg"><label><span>${t().mvTo}</span><select id="mvTo"><option value="">${t().mvPick}</option>${agents().filter(a => a.key !== from && !String(a.key).startsWith("n:")).map(a => `<option value="${esc(a.key)}">${esc(T(a.name))}</option>`).join("")}</select></label>
+        <label><span>${t().mvNote}</span><input id="mvNote" maxlength="200" autocomplete="off"></label>${err ? `<p class="err" role="alert">${esc(err)}</p>` : ""}</div>
+      <div class="df"><button type="button" class="btn btn-ghost" data-mvback>${t().close}</button><button type="button" class="btn btn-primary" data-mvsave>${S(I.move)}${t().mvSave}</button></div>`;
+    $("ov").hidden = false;
+  }
+  function moveSave() {
+    const o = MadaOrders.get(mvId), to = agents().find(a => a.key === $("mvTo").value); if (!o) return;
+    if (!to) return moveBox(mvId, t().mvErr);
+    const now = new Date().toISOString(), note = $("mvNote").value.trim();
+    MadaOrders.update(o.id, { staff: to.name, staffId: to.key,
+      hold: o.hold ? { ...o.hold, by: to.name, byId: to.key, warned: null, lastWarn: null } : o.hold,
+      transfers: [...(o.transfers || []), { from: o.staff || null, fromId: keyOf(o), to: to.name, toId: to.key, by: me.name, at: now, note }] });
+    toast(tx("mvOk", { id: o.id, n: T(to.name) }));
+    const back = view && view.back; mvId = null; render();
+    if (back && back.d) detail(back.d, back.a, back.v); else { $("ov").hidden = true; view = null; }
+  }
+
+  // ---------- Events ----------
+  document.addEventListener("click", e => {
+    const mv = e.target.closest("[data-mv]"); if (mv) { if (!$("ov").contains(mv)) view = null; return moveBox(mv.dataset.mv); }
+    const d = e.target.closest("[data-d]"); if (d) { e.stopPropagation(); return detail(d.dataset.d, d.dataset.a, d.dataset.v); }
+    if (e.target.closest("[data-goal]") || e.target.closest("#setGoal")) return goalBox();
+    if (e.target.closest("[data-tgsave]")) return goalSave();
+    if (e.target.closest("[data-mvsave]")) return moveSave();
+    if (e.target.closest("[data-mvback]")) { const b = view && view.back; return b && b.d ? detail(b.d, b.a, b.v) : ($("ov").hidden = true, view = null); }
+    const r = e.target.closest("[data-r]"); if (r) { range = r.dataset.r; return render(); }
+    const mm = e.target.closest("[data-m]"); if (mm) { metric = mm.dataset.m; return render(); }
+    const tb = e.target.closest("[data-tab]"); if (tb) { tab = tb.dataset.tab; return render(); }
+    const row = e.target.closest("[data-row]"); if (row && isSup) { $("who").value = $("who").value === row.dataset.row ? "" : row.dataset.row; return render(); }
+  });
+  $("ov").addEventListener("click", e => { if (e.target.id === "ov" || e.target.closest("[data-close]")) { $("ov").hidden = true; view = null; } });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") { $("ov").hidden = true; view = null; } });
+  $("who").addEventListener("change", render);
+  window.addEventListener("storage", e => { if (!e.key || ["mada-orders", "mada-staff", TGT].includes(e.key)) { render(); if (!$("ov").hidden && view && view.d) detail(view.d, view.a, view.v); } });
+  function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3200); }
+
+  function setLang(lang) {
+    current = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
+    if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
+    NM = nameMap();
+    if (isSup) { const sv = $("who").value; $("who").innerHTML = `<option value="">${t().whoAll}</option>` + agents().map(a => `<option value="${esc(a.key)}">${esc(T(a.name))}</option>`).join(""); $("who").value = sv || ""; }
+    $("who").hidden = !isSup; $("setGoal").hidden = !isSup; $("setGoal").innerHTML = S(I.goal) + esc(t().setGoal);
+    document.title = lang === "ar" ? "مدى كير | المبيعات والمكالمات" : "Mada Care | Sales & Calls";
+    try { localStorage.setItem("mada-lang", lang); } catch (e) {}
+    render();
+    if (!$("ov").hidden && view) { if (view.goal) goalBox(); else if (view.mv && mvId) moveBox(mvId); else if (view.d) detail(view.d, view.a, view.v); }
+  }
+  $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
+  const user = $("user"), userBtn = $("userBtn");
+  userBtn.addEventListener("click", e => { e.stopPropagation(); userBtn.setAttribute("aria-expanded", user.classList.toggle("open")); });
+  document.addEventListener("click", () => { user.classList.remove("open"); userBtn.setAttribute("aria-expanded", false); });
+  $("logout").addEventListener("click", e => { e.preventDefault(); MadaAuth.logout(); });
+
+  if (me) {
+    try { MadaOrders.sweepHolds(); } catch (e) {}
+    let saved = "en";
+    try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
+    setLang(saved);
+    setInterval(() => { render(); }, 30000);
+  }
+</script>
+</body>
+</html>
