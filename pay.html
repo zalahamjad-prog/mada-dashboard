@@ -1049,6 +1049,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="maps-config.js"></script>
+<!-- Payment link: without a staff login, only this request is read and saved (notes/supabase-auth.sql). -->
+<script>var MADA_LINK = { pay: new URLSearchParams(location.search).get("id") || "" };</script>
 <script src="auth.js"></script>
 <script src="patients.js"></script>
 <script src="nurses.js"></script>

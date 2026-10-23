@@ -510,7 +510,7 @@
       pwHint: "Made by the system. They must change it the first time they log in.",
       activeT: "Account activation", activeOn: "Active: they can log in as soon as you save.", activeOff: "Inactive: the account is saved but cannot log in until you activate it.", st_on: "Active", st_off: "Inactive",
       permNote: "What each role can see and do is set in the role permissions, the next step.",
-      cancel: "Cancel", save: "Save Staff Member", fixErr: "Check the highlighted fields.",
+      cancel: "Cancel", save: "Save Staff Member", fixErr: "Check the highlighted fields.", loginErr: "Not saved: the login could not be created ({e}).",
       doneT: "{n} added", doneOn: "Send them these login details. They log in with the employee ID, and must change the password the first time.", doneOff: "The account is inactive, so they can't log in until you activate it.",
       cId: "Employee ID", copyLogin: "Copy login details", toList: "Go to Staff", loginTx: "Mada Care login\nEmployee ID: {u}\nTemporary password: {p}"
     },
@@ -533,7 +533,7 @@
       pwHint: "يولدها النظام، ولازم الموظف يغيرها أول ما يدخل.",
       activeT: "تنشيط الحساب", activeOn: "نشط: يقدر يدخل النظام أول ما تحفظ.", activeOff: "غير نشط: ينحفظ الحساب بس ما يقدر يدخل لين تنشطه.", st_on: "نشط", st_off: "غير نشط",
       permNote: "وش يشوف كل دور ووش يقدر يسوي نحدده في صلاحيات الأدوار، الخطوة الجاية.",
-      cancel: "إلغاء", save: "حفظ الموظف", fixErr: "راجع الخانات المحددة.",
+      cancel: "إلغاء", save: "حفظ الموظف", fixErr: "راجع الخانات المحددة.", loginErr: "ما انحفظ: ما قدرنا ننشئ الدخول ({e}).",
       doneT: "تمت إضافة {n}", doneOn: "أرسل له بيانات الدخول هذي. يدخل بالرقم الوظيفي، ولازم يغير كلمة المرور أول مرة.", doneOff: "الحساب غير نشط، فما يقدر يدخل لين تنشطه.",
       cId: "الرقم الوظيفي", copyLogin: "نسخ بيانات الدخول", toList: "الذهاب للموظفين", loginTx: "الدخول على مدى كير\nالرقم الوظيفي: {u}\nكلمة المرور المؤقتة: {p}"
     }
@@ -637,13 +637,13 @@
     e.preventDefault(); submitted = true;
     if (!validate()) { toast(t().fixErr); const b = document.querySelector(".f.bad"); if (b) b.scrollIntoView({ behavior: "smooth", block: "center" }); return; }
     const v = id => $(id).value.trim(), med = MadaStaff.MEDICAL.includes(state.role);
-    const rec = MadaStaff.add({
+    let rec; try { rec = MadaStaff.add({
       name: { en: v("nameEn"), ar: v("nameAr") }, mobile: v("mobile"), email: v("email") || null,
       idType: state.idType, idNumber: v("idNo"), gender: state.gender, role: state.role,
       specialty: med ? v("spec") : null, license: med ? v("lic") : null, city: v("city"), startDate: v("start"),
       photo: state.photo, password: $("pw").value, mustChangePassword: true,
       status: state.active ? "active" : "disabled", createdBy: me ? me.username : null
-    });
+    }); } catch (x) { toast(tx("loginErr", { e: x.message })); return; }
     showDone(rec);
   });
   let saved = null;

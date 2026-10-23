@@ -88,6 +88,8 @@
   <h1 id="hTitle"></h1><p id="hSub"></p>
 </header>
 <main id="main"></main>
+<!-- Patient link: without a staff login, only the record of this link is read and saved (notes/supabase-auth.sql). -->
+<script>var MADA_LINK = { t: new URLSearchParams(location.search).get("t") || "" };</script>
 <script src="auth.js"></script>
 <script src="orders.js"></script>
 <script src="medical.js"></script>

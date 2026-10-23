@@ -456,7 +456,7 @@
       pwReset: "Temporary Password", pwT: "Give a temporary password?", pwP: "{n} will log in with a new temporary password and must change it the first time. The old password stops working.", pwGo: "Create Password",
       pwDoneT: "Temporary password ready", pwDoneP: "Send these details to {n}. After logging in, they must choose a new password.", pwId: "Employee ID", pwPw: "Temporary password", pwPortal: "Login page",
       pwCopy: "Copy details", pwWa: "Send on WhatsApp", pwCopied: "Copied.", pwLogin: "Mada Care login\nEmployee ID: {u}\nTemporary password: {p}\nLogin: {l}\nYou will be asked to choose a new password.",
-      save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", storeErr: "Couldn't save. The browser storage may be full.", req: "Required."
+      save: "Save", cancel: "Cancel", close: "Close", saved: "Saved.", loginErr: "Not saved: the login could not be updated ({e}).", storeErr: "Couldn't save. The browser storage may be full.", req: "Required."
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -497,7 +497,7 @@
       pwReset: "كلمة مرور مؤقتة", pwT: "تعطي كلمة مرور مؤقتة؟", pwP: "{n} بيدخل بكلمة مرور مؤقتة جديدة، ولازم يغيّرها أول ما يدخل. كلمة المرور القديمة توقف.", pwGo: "إنشاء كلمة المرور",
       pwDoneT: "كلمة المرور المؤقتة جاهزة", pwDoneP: "أرسل هذي البيانات لـ {n}. بعد ما يدخل، لازم يختار كلمة مرور جديدة.", pwId: "الرقم الوظيفي", pwPw: "كلمة المرور المؤقتة", pwPortal: "صفحة الدخول",
       pwCopy: "نسخ البيانات", pwWa: "إرسال واتساب", pwCopied: "تم النسخ.", pwLogin: "دخول مدى كير\nالرقم الوظيفي: {u}\nكلمة المرور المؤقتة: {p}\nرابط الدخول: {l}\nبيطلب منك تختار كلمة مرور جديدة.",
-      save: "حفظ", cancel: "إلغاء", close: "إغلاق", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. يمكن مساحة المتصفح ممتلئة.", req: "مطلوب."
+      save: "حفظ", cancel: "إلغاء", close: "إغلاق", loginErr: "ما انحفظ: ما قدرنا نحدّث الدخول ({e}).", saved: "انحفظ.", storeErr: "ما قدرنا نحفظ. يمكن مساحة المتصفح ممتلئة.", req: "مطلوب."
     }
   };
   let current = "en", tab = "info", modal = null;
@@ -642,7 +642,7 @@
   }
   const redraw = focusSel => { readModal(); drawModal(); const el = focusSel && $("mdBack").querySelector(focusSel); if (el) el.focus(); };
   function persist(patch) {
-    try { s = MadaStaff.update(s.id, patch); return true; } catch (x) { toast(t().storeErr); s = MadaStaff.get(id); return false; }
+    try { s = MadaStaff.update(s.id, patch); return true; } catch (x) { toast(x.message === "not saved" ? t().storeErr : tx("loginErr", { e: x.message })); s = MadaStaff.get(id); return false; }
   }
   function saveModal() {
     readModal(); const m = modal, f = m.f, e = {};
