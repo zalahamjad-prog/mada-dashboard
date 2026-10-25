@@ -718,7 +718,9 @@
   // Temporary password (admin and supervisors): a new password with mustChangePassword, so the login page asks for a new one.
   // TODO: the backend resets the password and sends it; the browser must never keep passwords.
   const canReset = !!me && (me.supervisor || me.username === "admin");
-  const loginUrl = r => new URL(r === "doctor" ? "doctor-login.html" : r === "nurse" ? "nurse-login.html" : "index.html", location.href).href;
+  // Doctors sign in on the doctors site (Face ID step); the old doctor-login.html here only redirects there.
+  const DOCTORS_SITE = "https://zalahamjad-prog.github.io/mada-doctors/";
+  const loginUrl = r => r === "doctor" ? DOCTORS_SITE : new URL(r === "nurse" ? "nurse-login.html" : "index.html", location.href).href;
   function pwModal(step) {
     const n = T(s.name), T2 = t(), b = $("pwBack");
     b.innerHTML = step
