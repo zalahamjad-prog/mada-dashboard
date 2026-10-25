@@ -4,7 +4,8 @@
 //  - the patient directory (MadaStore "mada-patients"): starts empty; a patient is added from the Patients page,
 //    or when a request is saved in the wizard (new file, or an existing sample file that is used for the first time).
 // patient: { fileNo: "MC-2026-001", mobile, name (string or {en, ar}), gender: "m" | "f" | null, dateOfBirth: "YYYY-MM-DD" | null,
-//            approxAge, idType, idNumber, nationality, address: { city, district, ... }, source: "wizard" | "manual", createdAt, createdBy }
+//            approxAge, idType, idNumber, nationality, address: { city, district, ... }, source: "wizard" | "manual", createdAt, createdBy,
+//            insurance: { has, payer, payerId, memberId, policyNo, planClass, expiry, subscriberRel, updatedAt, updatedBy } (patient.html, for nphies) }
 // Replace with calls to the real patients API.
 const MadaPatients = (() => {
   const KEY = "mada-patients";

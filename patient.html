@@ -250,6 +250,14 @@
   .rel.on { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); font-weight: 600; }
   .rel.on svg { width: 14px; height: 14px; }
   .divider { border: 0; border-top: 1px dashed var(--border); }
+  /* Health insurance (patient coverage, needed for nphies eligibility and claims) */
+  .sec-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .ins-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 14px; }
+  .ins-form label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .ins-form .sh-in { width: 100%; }
+  .ins-form .sh-in.bad { border-color: var(--red); }
+  .ins-acts { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+  .ins-none { font-size: 13px; color: var(--muted); }
   .soon-box { display: grid; justify-items: center; text-align: center; padding: 40px 20px; gap: 8px; }
   .soon-box svg { width: 54px; height: 54px; color: var(--primary); }
   .soon-box h3 { font-size: 18px; }
@@ -291,7 +299,7 @@
   @media (max-width: 640px) { .sh-row { grid-template-columns: 1fr; } .sh-acts .btn { flex: 1 1 calc(50% - 8px); } .sh-it { align-items: flex-start; } }
   @media (max-width: 760px) {
     .pf-head, .panel { padding: 16px; }
-    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .facts, .ins-form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .tabs { padding: 0 6px; }
     .table-wrap td.c-svc { grid-column: 1 / -1; }
   }
@@ -423,7 +431,12 @@
       n_rx: "No prescriptions yet. They show here once the doctor signs a visit with medicines.", n_rad: "No imaging reports yet. They show once the doctor reviews them.", n_lab: "No approved lab results yet.", n_rep: "No approved medical reports yet.",
       rxItem: "Prescription · {n} medicines", rxItem1: "Prescription · 1 medicine", repItem: "Medical report · visit {id}", amended: "Updated after results", byDr: "{d} · {n}", visitL: "Visit {id}",
       dlAr: "Arabic", dlEn: "English", ch_wa: "WhatsApp", ch_sms: "SMS", ch_copy: "copy",
-      hTitle: "The health file is coming next", hText: "Medical history, visits, results and the care plan for this patient will live here."
+      hTitle: "The health file is coming next", hText: "Medical history, visits, results and the care plan for this patient will live here.",
+      s3: "Health Insurance", s3Sub: "The patient's insurance card details. nphies uses them to check eligibility and to send claims.",
+      i_none: "No insurance recorded. The patient pays in cash.", i_add: "Add insurance", i_edit: "Edit", i_save: "Save", i_cancel: "Cancel", i_noIns: "No insurance",
+      i_payer: "Insurance Company", i_payerPh: "As written on the card", i_payerId: "Company nphies ID", i_payerIdPh: "Optional, filled later", i_member: "Member ID", i_policy: "Policy No.", i_class: "Class", i_classPh: "e.g. VIP, A, B, C",
+      i_expiry: "Card Expiry", i_rel: "Patient is the", ir_self: "Main member", ir_spouse: "Spouse", ir_child: "Child", ir_other: "Other dependent",
+      i_expired: "Expired", i_updated: "Updated {d} · by {n}", i_req: "Required.", i_saved: "Insurance saved.", i_removed: "Insurance removed. The patient pays in cash.", i_testOnly: "Test data only until the data protection review."
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -453,7 +466,12 @@
       n_rx: "ما فيه وصفات للحين. تظهر هنا أول ما يوقّع الطبيب زيارة فيها أدوية.", n_rad: "ما فيه تقارير أشعة للحين. تظهر بعد ما يراجعها الطبيب.", n_lab: "ما فيه نتائج تحاليل معتمدة للحين.", n_rep: "ما فيه تقارير طبية معتمدة للحين.",
       rxItem: "وصفة طبية · {n} أدوية", rxItem1: "وصفة طبية · دواء واحد", repItem: "تقرير طبي · زيارة {id}", amended: "معدّلة بعد النتائج", byDr: "{d} · {n}", visitL: "زيارة {id}",
       dlAr: "عربي", dlEn: "English", ch_wa: "واتساب", ch_sms: "SMS", ch_copy: "نسخ",
-      hTitle: "الملف الصحي قريباً", hText: "هنا بيكون التاريخ المرضي والزيارات والنتائج والخطة العلاجية للمريض."
+      hTitle: "الملف الصحي قريباً", hText: "هنا بيكون التاريخ المرضي والزيارات والنتائج والخطة العلاجية للمريض.",
+      s3: "التأمين الصحي", s3Sub: "بيانات بطاقة تأمين المريض. نفيس يستخدمها للتحقق من الأهلية ورفع المطالبات.",
+      i_none: "ما فيه تأمين مسجل. المريض يدفع كاش.", i_add: "إضافة تأمين", i_edit: "تعديل", i_save: "حفظ", i_cancel: "إلغاء", i_noIns: "بدون تأمين",
+      i_payer: "شركة التأمين", i_payerPh: "مثل ما هو مكتوب في البطاقة", i_payerId: "رقم الشركة في نفيس", i_payerIdPh: "اختياري، يتعبى بعدين", i_member: "رقم العضوية", i_policy: "رقم الوثيقة", i_class: "الفئة", i_classPh: "مثل VIP أو A أو B أو C",
+      i_expiry: "تاريخ انتهاء البطاقة", i_rel: "المريض هو", ir_self: "المشترك الرئيسي", ir_spouse: "الزوج أو الزوجة", ir_child: "الابن أو الابنة", ir_other: "تابع آخر",
+      i_expired: "منتهية", i_updated: "تعدّل {d} · بواسطة {n}", i_req: "مطلوب.", i_saved: "تم حفظ التأمين.", i_removed: "تم حذف التأمين. المريض يدفع كاش.", i_testOnly: "بيانات تجريبية فقط لين تخلص مراجعة حماية البيانات."
     }
   };
   let current = "en", tab = (location.hash || "#info").slice(1);
@@ -496,7 +514,50 @@
       <section class="sec"><h2><span class="n">2</span>${t().s2}</h2><p>${t().s2Sub}</p>
         <div class="facts">${fact(t().f_rel, esc(relText))}${fact(t().f_caller, esc(rk === "self" ? T(p.name) : p.requesterName || ""))}
           ${fact(t().f_opened, p.createdAt ? esc(tx("openedBy", { d: fmtYmd(p.createdAt).replace(/[⁦⁩]/g, ""), n: T(p.createdBy) || "—" })) + `<span class="sub">${t()["src_" + (p.source || "manual")]}</span>` : "")}</div>
-        <div class="rel-list" aria-label="${esc(t().f_rel)}">${RELS.map(k => `<span class="rel${k === rk ? " on" : ""}">${k === rk ? svg('<path d="m5 12 5 5 9-10"/>', 2.6) : ""}${t()["rel_" + k]}</span>`).join("")}</div></section>`;
+        <div class="rel-list" aria-label="${esc(t().f_rel)}">${RELS.map(k => `<span class="rel${k === rk ? " on" : ""}">${k === rk ? svg('<path d="m5 12 5 5 9-10"/>', 2.6) : ""}${t()["rel_" + k]}</span>`).join("")}</div></section>
+      <hr class="divider">
+      ${insHtml(p)}`;
+  }
+
+  // ---------- Health insurance ----------
+  // patient.insurance: { has: true, payer, payerId, memberId, policyNo, planClass, expiry: "YYYY-MM-DD", subscriberRel, updatedAt, updatedBy }
+  // or { has: false } (cash). Shaped for nphies Coverage (eligibility, prior auth, claims); payerId is the company's nphies ID.
+  const INS_REL = ["self", "spouse", "child", "other"];
+  let insEdit = false, insErr = {};
+  function insHtml(p) {
+    const ins = p.insurance && p.insurance.has ? p.insurance : null;
+    const head = btn => `<div class="sec-head"><div><h2><span class="n">3</span>${t().s3}</h2><p style="font-size:13px;color:var(--muted);margin-bottom:14px">${t().s3Sub}</p></div>${btn}</div>`;
+    if (insEdit) {
+      const v = ins || {}, f = (k, label, ph, type) => `<div><label for="ins_${k}">${label}${["payer", "memberId", "expiry"].includes(k) ? ' <span style="color:var(--red)">*</span>' : ""}</label>
+        <input class="sh-in${insErr[k] ? " bad" : ""}" id="ins_${k}" type="${type || "text"}" maxlength="80" dir="auto" value="${esc(v[k] || "")}" placeholder="${esc(ph || "")}">${insErr[k] ? `<span class="f-err">${t().i_req}</span>` : ""}</div>`;
+      return `<section class="sec">${head("")}
+        <div class="ins-form">${f("payer", t().i_payer, t().i_payerPh)}${f("memberId", t().i_member)}${f("policyNo", t().i_policy)}
+          ${f("planClass", t().i_class, t().i_classPh)}${f("expiry", t().i_expiry, "", "date")}
+          <div><label for="ins_subscriberRel">${t().i_rel}</label><select class="sh-in" id="ins_subscriberRel">${INS_REL.map(k => `<option value="${k}"${(v.subscriberRel || "self") === k ? " selected" : ""}>${t()["ir_" + k]}</option>`).join("")}</select></div>
+          ${f("payerId", t().i_payerId, t().i_payerIdPh)}</div>
+        <p class="ins-none" style="margin-top:10px">${t().i_testOnly}</p>
+        <div class="ins-acts"><button type="button" class="btn btn-primary" data-ins="save">${t().i_save}</button><button type="button" class="btn btn-ghost" data-ins="cancel">${t().i_cancel}</button>
+          ${ins ? `<button type="button" class="btn btn-ghost" data-ins="none">${t().i_noIns}</button>` : ""}</div></section>`;
+    }
+    if (!ins) return `<section class="sec">${head(`<button type="button" class="btn btn-ghost" data-ins="edit">${t().i_add}</button>`)}<p class="ins-none">${t().i_none}</p></section>`;
+    const expired = ins.expiry && ins.expiry < new Date().toISOString().slice(0, 10);
+    return `<section class="sec">${head(`<button type="button" class="btn btn-ghost" data-ins="edit">${t().i_edit}</button>`)}
+      <div class="facts">${fact(t().i_payer, esc(ins.payer))}${fact(t().i_member, ins.memberId ? `<span class="mobile">${esc(ins.memberId)}</span>` : "")}${fact(t().i_policy, ins.policyNo ? `<span class="mobile">${esc(ins.policyNo)}</span>` : "")}
+        ${fact(t().i_class, esc(ins.planClass || ""))}${fact(t().i_expiry, ins.expiry ? fmtYmd(ins.expiry) + (expired ? ` <span class="pill p-red">${t().i_expired}</span>` : "") : "")}${fact(t().i_rel, t()["ir_" + (ins.subscriberRel || "self")])}
+        ${fact(t().i_payerId, ins.payerId ? `<span class="mobile">${esc(ins.payerId)}</span>` : "")}</div>
+      ${ins.updatedAt ? `<p class="ins-none" style="margin-top:10px">${esc(tx("i_updated", { d: fmtYmd(ins.updatedAt).replace(/[⁦⁩]/g, ""), n: T(ins.updatedBy) || "—" }))}</p>` : ""}</section>`;
+  }
+  function insAction(a) {
+    if (a === "edit") { insEdit = true; insErr = {}; render(); const el = $("ins_payer"); if (el) el.focus(); return; }
+    if (a === "cancel") { insEdit = false; insErr = {}; render(); return; }
+    const p = MadaPatients.get(fileNo), by = me ? me.name : null, now = new Date().toISOString();
+    if (a === "none") { MadaPatients.upsert({ fileNo, insurance: { has: false, updatedAt: now, updatedBy: by } }); insEdit = false; toast(t().i_removed); render(); return; }
+    const val = k => ($("ins_" + k).value || "").trim(), ins = { has: true };
+    ["payer", "payerId", "memberId", "policyNo", "planClass", "expiry", "subscriberRel"].forEach(k => ins[k] = val(k));
+    insErr = {}; ["payer", "memberId", "expiry"].forEach(k => { if (!ins[k]) insErr[k] = true; });
+    if (Object.keys(insErr).length) { render(); return; }
+    MadaPatients.upsert({ fileNo: p.fileNo, insurance: { ...ins, updatedAt: now, updatedBy: by } });
+    insEdit = false; toast(t().i_saved); render();
   }
   function bookingsHtml(list) {
     if (!list.length) return `<div class="soon-box">${svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>', 1.5)}<h3>${t().bEmpty}</h3><p>${t().bEmptyText}</p></div>`;
@@ -648,8 +709,9 @@
     const sl = e.target.closest("[data-shl]"); if (sl) { shLang = sl.dataset.shl; render(); }
     const pr = e.target.closest("[data-ptrep]"); if (pr) { const o = MadaOrders.get(pr.dataset.ptrep); if (o) PtReport.download(o, current, toast); }
   });
-  $("content").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; history.replaceState(null, "", "#" + tab); render(); });
-  window.addEventListener("storage", e => { if (!e.key || ["mada-patients", "mada-orders", "mada-medical"].includes(e.key)) { if (document.activeElement && document.activeElement.id === "shPh") return; render(); } });
+  $("content").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; tab = b.dataset.tab; insEdit = false; history.replaceState(null, "", "#" + tab); render(); });
+  $("content").addEventListener("click", e => { const b = e.target.closest("[data-ins]"); if (b) insAction(b.dataset.ins); });
+  window.addEventListener("storage", e => { if (!e.key || ["mada-patients", "mada-orders", "mada-medical"].includes(e.key)) { if (document.activeElement && document.activeElement.id === "shPh") return; if (insEdit) return; render(); } });
 
   // ---------- Language & header ----------
   function setLang(lang) {
