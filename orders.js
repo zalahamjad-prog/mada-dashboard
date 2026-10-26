@@ -14,6 +14,8 @@
 // emergency: { checks: [CHECKS keys], notes } for emergency referrals; locked for agents.
 // closure:  { outcome, note, by, at } written by a supervisor when the emergency case is closed.
 // booking:  { doctorId, nurseId, by, at } team assigned on the Request Details page (appointment holds date, minute, nurse name).
+// owner:    { user, name, at, from? } the staff member who first assigned the doctor. She owns the request until it is closed
+//           (CLOSED statuses) and sees it under "My requests". Another agent can take it over (from: the previous owner's name).
 // location: { address, mapLink, lat, lng, shortCode, floor, landmark, image (data URL), requestedAt, savedAt }
 // notes:    [{ text, by, at }] staff notes, oldest first.
 // driver:   { id, by, at } driver assigned to the booking. arrival: { at, by } when staff confirm the team arrived.
@@ -262,6 +264,7 @@ const MadaOrders = (() => {
           o.bookingId = "BK-" + (++bk); o.bookedAt = iso(made + 20 * 60000);
           o.appointment = { date: day, minute, nurse: NAMES[nurseId] };
           o.booking = { nurseId, doctorId: o.service === "doctor" ? DOCTORS[1 + i % (DOCTORS.length - 1)].id : null, by: o.staff, at: o.bookedAt };
+          if (o.booking.doctorId) o.owner = { user: null, name: o.staff, at: o.bookedAt };
           o.driver = { id: DRIVERS[i % DRIVERS.length].id, by: o.staff, at: o.bookedAt };
           o.arrival = { at: iso(arrived), by: o.staff };
           o.visit = { steps }; o.completedAt = steps.report;
@@ -292,6 +295,7 @@ const MadaOrders = (() => {
           staff: STAFF[i % STAFF.length], createdAt: made, items: [], total: null,
           bookingId: "BK-" + (++bk), bookedAt: made, appointment: { date: ymd(d), minute, nurse: null },
           booking: { nurseId: null, doctorId: DOCTORS[1 + i % (DOCTORS.length - 1)].id, by: STAFF[i % STAFF.length], at: made },
+          owner: { user: null, name: STAFF[i % STAFF.length], at: made },
           address: { city: "jeddah", district: "Al Rawdah", street: "", building: "", postalCode: "", floor: "", mapLink: "", landmark: "" } });
       });
       MadaStore.set("mada-orders-docvisits-v1", "1"); dirty = true;
@@ -316,6 +320,11 @@ const MadaOrders = (() => {
     if (i < 0) return null;
     list[i] = { ...list[i], ...patch, updatedAt: new Date().toISOString() };
     fixProvider(list[i]);
+    // The agent who assigns the doctor becomes the request's owner (kept when the booking is saved again or rescheduled).
+    if (patch.booking && patch.booking.doctorId && !list[i].owner) {
+      const u = agent();
+      list[i].owner = { user: u ? u.username : null, name: u ? u.name : patch.booking.by, at: list[i].updatedAt };
+    }
     // Paying turns the request into a booking (shown on the Bookings page, no longer on Requests).
     // Confirming a visit paid after the service (payWhen "after") also makes it a booking, so it reaches the provider's visits.
     if ((patch.payment === "paid" || patch.payWhen === "after") && !list[i].bookingId) {
@@ -324,6 +333,18 @@ const MadaOrders = (() => {
     }
     save(list);
     return list[i];
+  }
+  // Request owner. Closed requests leave "My requests"; the owner stays on record.
+  const CLOSED = ["completed", "cancelled", "declined", "emergency_closed"];
+  const agent = () => { const u = typeof MadaAuth !== "undefined" ? MadaAuth.currentUser() : null; return u && u.kind === "agent" ? u : null; };
+  const isOpen = o => !CLOSED.includes(o.status);
+  // Matched by username; owners saved without one (demo data) match by name.
+  const ownedBy = (o, u) => !!(o.owner && u && (o.owner.user ? o.owner.user === u.username : JSON.stringify(o.owner.name) === JSON.stringify(u.name)));
+  const isMine = (o, u) => isOpen(o) && ownedBy(o, u || agent());
+  function takeOver(id) {
+    const o = get(id), u = agent();
+    if (!o || !u || ownedBy(o, u)) return o;
+    return update(id, { owner: { user: u.username, name: u.name, at: new Date().toISOString(), from: o.owner ? o.owner.name : null } });
   }
   // A visit booked by the operations team for a service the doctor ordered (Medical Requests page). It is a booking straight away
   // (booking number, shows in the nurse's or doctor's visits) and the patient pays after the service (payWhen "after").
@@ -509,5 +530,5 @@ const MadaOrders = (() => {
     return f.idType === "national" || (!f.idType && f.nationality === "SA");
   }
   const vatRate = o => vatExempt(o) ? 0 : VAT;
-  return { VAT, vatExempt, vatRate, all, get, byReq, add, book, update, text, needsAction, sweepHolds, seedDoctorDemo, STAFF, PAY_MINUTES, CHECKS, OUTCOMES, CANCEL_OUTCOMES, CANCEL_REASONS, DOCTORS, DRIVERS, COVERAGE, coverageAt, zones, saveZones, activeZones, zoneAt, inPolygon };
+  return { VAT, vatExempt, vatRate, all, get, byReq, add, book, update, text, CLOSED, isOpen, ownedBy, isMine, takeOver, needsAction, sweepHolds, seedDoctorDemo, STAFF, PAY_MINUTES, CHECKS, OUTCOMES, CANCEL_OUTCOMES, CANCEL_REASONS, DOCTORS, DRIVERS, COVERAGE, coverageAt, zones, saveZones, activeZones, zoneAt, inPolygon };
 })();

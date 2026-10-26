@@ -171,6 +171,13 @@
   /* ---------- Full request (not locked) ---------- */
   .status-chip.wait { background: var(--orange-soft); color: var(--orange); border: 1px solid #f6d9a8; }
   .banner { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 18px; padding: 12px 14px; border-radius: 10px; background: var(--orange-soft); border: 1px solid #f6d9a8; font-size: 13px; line-height: 1.6; color: #6b4a0c; }
+  .owner-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; padding: 12px 18px; }
+  .owner-bar .avatar { width: 34px; height: 34px; font-size: 13px; }
+  .owner-bar > div { flex: 1; min-width: 0; }
+  .owner-bar small { display: block; font-size: 12px; color: var(--muted); }
+  .owner-bar b { font-size: 14px; }
+  .owner-bar .me-tag { margin-inline-start: 8px; padding: 2px 8px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 11.5px; font-weight: 600; }
+  .owner-bar.none { color: var(--muted); font-size: 13px; }
   .banner.info { background: var(--blue-soft); border-color: #cfe0fd; color: #1e4fa3; }
   .banner.gray { background: #f6f8f9; border-color: var(--border); color: #44545a; }
   .banner > svg { width: 18px; height: 18px; }
@@ -661,6 +668,8 @@
     rs_customer: "Customer asked by phone", rs_whatsapp: "Customer asked on WhatsApp", rs_nurse: "Nurse not available", rs_doctor: "Doctor not available", rs_other: "Other",
     rsNeedReason: "Choose the reason for the change.", rsSame: "Nothing changed: pick a different date, time or nurse.", rsSaved: "Visit moved to {t}. The customer and the team will be notified.",
     rsLog: "Change History", rsFrom: "Moved from", rsTo: "to", rsBy: "{n} · {t}", rsTag: "Rescheduled", rsOrig: "Original booking: {t}", bookingSaved: "Team assigned. The nurse{d} will be notified.", andDoctor: " and the doctor", drAfterPay: "Team assigned. The doctor gets the notification once the customer pays.",
+    ownerLbl: "Request owner · responsible for closing it", ownerSince: "Since {t}", ownerFrom: "Took over from {n} · {t}", ownerMe: "You",
+    ownerNone: "No owner yet. Whoever assigns the doctor becomes the owner.", ownerTake: "Take over", ownerTaken: "You are now the owner of {id}.", ownerClosed: "Request closed",
     bookingErr: "Choose the date, time and nurse first.", docErr: "Choose the doctor first. A doctor visit needs an assigned doctor.", payNeedDoc: "Assign the doctor in Booking Details and save before sending the payment link.", lastSaved: "Last saved by {n} · {t}",
     locAsk: "No location yet? The payment link lets the customer pin their exact location. You can also send a location request, or paste what they send below.", locAskBtn: "Request Location", locAskAgain: "Send Again",
     locAsked: "Location request sent to {m} at {t}. Waiting for the customer.", locAskToast: "Location request sent to {m}.",
@@ -733,6 +742,8 @@
     rs_customer: "العميل طلب عبر الاتصال", rs_whatsapp: "العميل طلب عبر واتساب", rs_nurse: "الممرضة غير متاحة", rs_doctor: "الطبيب غير متاح", rs_other: "أخرى",
     rsNeedReason: "اختر سبب التعديل.", rsSame: "ما تغيّر شي: اختر تاريخ أو وقت أو ممرضة مختلفة.", rsSaved: "تم نقل الزيارة إلى {t}. بيوصل إشعار للعميل والفريق.",
     rsLog: "سجل التعديلات", rsFrom: "من", rsTo: "إلى", rsBy: "{n} · {t}", rsTag: "تم تعديل الموعد", rsOrig: "الحجز الأصلي: {t}", bookingSaved: "تم إسناد الفريق. بيوصل إشعار للممرضة{d}.", andDoctor: " والطبيب", drAfterPay: "تم إسناد الفريق. بيوصل الإشعار للطبيب بعد ما يدفع العميل.",
+    ownerLbl: "مسؤولة الطلب · مسؤولة عن إقفاله", ownerSince: "من {t}", ownerFrom: "استلمته من {n} · {t}", ownerMe: "أنتِ",
+    ownerNone: "ما تحددت مسؤولة للطلب بعد. اللي تسند الطبيب تصير هي المسؤولة.", ownerTake: "أستلم الطلب", ownerTaken: "صرتِ المسؤولة عن {id}.", ownerClosed: "الطلب مقفل",
     bookingErr: "اختاري التاريخ والوقت والممرضة أولاً.", docErr: "اختاري الطبيب أولاً. زيارة الطبيب لازم يكون لها طبيب مسند.", payNeedDoc: "أسندي الطبيب في تفاصيل الحجز واحفظي قبل إرسال رابط الدفع.", lastSaved: "آخر حفظ بواسطة {n} · {t}",
     locAsk: "ما عندك الموقع؟ رابط الدفع يخلي العميل يحدد موقعه الفعلي بنفسه. وتقدرين ترسلين طلب موقع، أو تلصقين اللي يرسله تحت.", locAskBtn: "طلب الموقع", locAskAgain: "إرسال مرة ثانية",
     locAsked: "تم إرسال طلب الموقع إلى {m} الساعة {t}. بانتظار العميل.", locAskToast: "تم إرسال طلب الموقع إلى {m}.",
@@ -820,7 +831,7 @@
       <div>${svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')}<div><small>${t().time}</small><strong>${fmtTime(d)}</strong></div></div>
       ${o.bookingId ? `<div>${svg('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/>')}<div><small>${t().bookingIdLbl}</small><strong class="bid">${esc(o.bookingId)}</strong></div>
         <button type="button" class="btn btn-ghost btn-sm pdf-btn" id="pdfBtn">${svg('<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>')}${t().pdfBtn}</button></div>` : ""}
-    </section>`;
+    </section>${ownerBar(o)}`;
     if (!locked) {
       // Keep what the agent typed but has not saved yet (render runs after every save and language switch).
       const keep = {};
@@ -940,6 +951,19 @@
   const enOf = v => v && typeof v === "object" ? v.en : (v || "");
   const initials = v => T(v).split(/\s+/).filter(w => w && !/^(Dr\.|د\.)$/.test(w)).slice(0, 2).map(w => w[0]).join("").toUpperCase();
   const stamp = d => `${fmtDate(d)} · ${fmtTime(d)}`;
+  // Request owner: the agent who assigned the doctor (MadaOrders sets it). Open requests can be taken over by another agent.
+  function ownerBar(o) {
+    const w = o.owner, open = MadaOrders.isOpen(o), mine = MadaOrders.ownedBy(o, me);
+    if (!w) return open && !o.bookingId && o.service === "doctor" ? `<section class="card owner-bar none">${svg(I.info, 2)}<span>${t().ownerNone}</span></section>` : "";
+    const when = w.from ? tx("ownerFrom", { n: T(w.from), t: stamp(new Date(w.at)) }) : tx("ownerSince", { t: stamp(new Date(w.at)) });
+    return `<section class="card owner-bar"><span class="avatar">${esc(initials(w.name))}</span>
+      <div><small>${t().ownerLbl}</small><b>${esc(T(w.name))}</b>${mine ? `<span class="me-tag">${t().ownerMe}</span>` : ""}<small>${esc(when)}</small></div>
+      ${!open ? `<span class="pill p-gray">${t().ownerClosed}</span>` : mine ? "" : `<button type="button" class="btn btn-ghost btn-sm" data-take-owner>${t().ownerTake}</button>`}</section>`;
+  }
+  document.addEventListener("click", e => {
+    if (!e.target.closest("[data-take-owner]")) return;
+    MadaOrders.takeOver(id); render(); toast(tx("ownerTaken", { id }));
+  });
   const hint = (cls, ic, txt) => `<span class="hint ${cls}">${ic ? svg(ic, 2) : ""}${esc(txt)}</span>`;
   const imgKey = oid => "mada-order-img-" + oid;
 
