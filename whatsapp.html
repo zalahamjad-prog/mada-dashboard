@@ -238,6 +238,67 @@
   .md p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
   .tag-t { display: inline-block; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); font-size: 10.5px; font-weight: 600; line-height: 18px; margin-inline-start: 6px; vertical-align: 2px; }
   .md-act { display: flex; gap: 8px; justify-content: flex-end; }
+  .ph-act { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pin { display: flex; align-items: center; gap: 10px; padding: 8px 16px; background: #fff; border-bottom: 1px solid #e9edef; font-size: 13.5px; color: var(--wa-ink); cursor: pointer; }
+  .pin svg { width: 16px; height: 16px; color: #8696a0; flex: none; }
+  .pin span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pin b { font-weight: 600; color: #008069; margin-inline-end: 4px; }
+  .pin small { color: var(--wa-sub); flex: none; font-size: 11.5px; }
+  .note.ho { background: #e7f0fe; color: #2b4c8c; }
+  .dash { display: grid; gap: 16px; }
+  .dash-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .dash-head h2 { font-size: 18px; font-weight: 600; }
+  .dtiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+  .dtiles.sm { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .dt { padding: 14px 16px; display: grid; gap: 4px; }
+  .dt b { font-size: 24px; font-weight: 700; line-height: 1.1; }
+  .dt span { font-size: 12.5px; color: var(--muted); }
+  .dt.bad b { color: #ea0038; }
+  .dtiles.sm .dt { padding: 10px 12px; } .dtiles.sm .dt b { font-size: 18px; }
+  .dsec { padding: 16px; display: grid; gap: 12px; }
+  .dsec h3 { font-size: 15px; font-weight: 600; } .dsec h3 em { font-style: normal; color: var(--muted); font-weight: 500; }
+  .drows { display: grid; }
+  .drow { display: grid; grid-template-columns: 44px minmax(0, 1.2fr) minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #eef1f2; }
+  .drow .ch-av { width: 44px; height: 44px; font-size: 16px; }
+  .drow-m { min-width: 0; } .drow-m b { font-size: 14.5px; font-weight: 600; }
+  .drow-m small { display: flex; align-items: center; gap: 3px; color: var(--wa-sub); font-size: 13px; margin-top: 3px; white-space: nowrap; overflow: hidden; }
+  .drow-m small svg { width: 15px; height: 15px; flex: none; }
+  .drow-step { height: 38px; border: 1px solid #d9e1e3; border-radius: 8px; padding: 0 10px; font: inherit; font-size: 13.5px; outline: 0; min-width: 0; background: #fffdf3; }
+  .drow-step:focus { border-color: var(--primary); }
+  .dempty { color: var(--muted); font-size: 13.5px; }
+  .ho-in { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 16px; border-radius: 12px; background: #e7f0fe; color: #2b4c8c; font-size: 14px; }
+  .ho-in span { flex: 1; min-width: 200px; font-weight: 500; }
+  .ho-row { display: grid; gap: 2px; padding: 10px 0; border: 0; border-top: 1px solid #eef1f2; background: none; text-align: start; cursor: pointer; font: inherit; }
+  .ho-row span { font-size: 14px; font-weight: 500; } .ho-row small { font-size: 12.5px; color: var(--muted); }
+  .ho-row:hover span { color: var(--primary); }
+  .md.wide { width: min(760px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; }
+  .ho-items { display: grid; gap: 10px; max-height: 46vh; overflow-y: auto; }
+  .ho-it { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid #e3e8ea; border-radius: 10px; }
+  .ho-chk { display: flex !important; flex-wrap: wrap; align-items: center; gap: 6px !important; font-size: 14px !important; cursor: pointer; }
+  .ho-chk small { flex-basis: 100%; display: flex; align-items: center; gap: 3px; color: var(--wa-sub); font-size: 12.5px; }
+  .ho-chk small svg { width: 14px; height: 14px; }
+  .rep { display: grid; gap: 14px; }
+  .rep-h { display: flex; gap: 12px; align-items: center; }
+  .rep-h small { color: var(--muted); font-size: 13px; }
+  .rep-note { padding: 10px 12px; border-radius: 8px; background: #fff8e6; color: #7a5b12; font-size: 13.5px; }
+  .rep-t { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rep-t th { text-align: start; font-weight: 600; color: var(--muted); font-size: 12px; padding: 8px; border-bottom: 1px solid var(--border); }
+  .rep-t td { padding: 9px 8px; border-bottom: 1px solid #eef1f2; vertical-align: top; }
+  .rep-t td small { color: var(--muted); }
+  .rep-foot { font-size: 12.5px; color: var(--muted); }
+  @media print {
+    body.printing > *:not(#ov) { display: none !important; }
+    body.printing #ov { position: static; background: none; padding: 0; display: block; }
+    body.printing .md { box-shadow: none; width: 100%; max-height: none; overflow: visible; }
+    body.printing .md-act { display: none; }
+  }
+  @media (max-width: 1100px) { .dtiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 760px) {
+    .dtiles, .dtiles.sm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .drow { grid-template-columns: 44px minmax(0, 1fr); }
+    .drow-step { grid-column: 1 / -1; } .drow .btn { grid-column: 1 / -1; }
+    .rep-t th:nth-child(3), .rep-t td:nth-child(3) { display: none; }
+  }
   @media (max-width: 1500px) { .wa { grid-template-columns: 340px minmax(0, 1fr); } .side { display: none; } }
   @media (max-width: 760px) {
     .wa { grid-template-columns: 1fr; height: calc(100vh - 150px); border-radius: 0; margin: 0 -16px; }
@@ -297,9 +358,10 @@
       <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"/></svg></span>
       <div><h1 data-i18n="title">Conversations</h1><p data-i18n="subtitle">Customer messages to the Mada Care WhatsApp number. Reply from here; each conversation has one owner.</p></div>
     </div>
-    <div class="ph-act"><button type="button" class="btn btn-ghost" id="testBtn" data-i18n="testNew">Test message</button></div>
+    <div class="ph-act"><button type="button" class="btn btn-ghost" id="dashBtn"><span id="dashLbl">My dashboard</span><span class="nav-count" id="dashCount" hidden>0</span></button><button type="button" class="btn btn-ghost" id="testBtn" data-i18n="testNew">Test message</button></div>
   </div>
   <div class="notice" id="notice" hidden></div>
+  <section class="dash" id="dash" hidden></section>
   <div class="card wa" id="wa">
     <section class="wa-list">
       <div class="wa-tools">
@@ -343,7 +405,12 @@
       notConfigured: "WhatsApp keys are not set in Supabase yet.", sendFail: "Not sent: {e}", assigned: "Transferred to {n}", unassignedT: "Assignment removed", offline: "No connection. Try again.",
       testNew: "Test message", testTag: "Test", testT: "Test message (as the customer)", testHelp: "Before WhatsApp is connected: write as if you were the customer. The message shows here like a WhatsApp message, and replies to it stay inside the system.",
       testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation.", openMap: "Open in Maps", loading: "Loading…", notYet: "Not downloaded yet", aDoc: "Document", aMedia: "Photos & videos", aCam: "Camera", attach: "Attach", record: "Record a voice note", recording: "Recording… press send when done", caption: "Add a caption…", tooBig: "{n} is over 50 MB.", noMic: "The microphone is not available in this browser.", dropHere: "Drop files here to send them", testFile: "Attachment (optional)", menu: "Menu", saveTag: "Save", waitFor: "Waiting {t}", allStaff: "All staff", allTags: "All services", tagT: "Service", tagNone: "Not set", setTag: "Service type",
-      tag_nursing: "Nursing", tag_lab: "Lab tests", tag_physio: "Physiotherapy", tag_doctor: "Doctor visit", tag_iv: "IV therapy", tag_xray: "X-ray", tag_other: "Other", min: "{n} min", hr: "{n} h", day: "{n} d"
+      tag_nursing: "Nursing", tag_lab: "Lab tests", tag_physio: "Physiotherapy", tag_doctor: "Doctor visit", tag_iv: "IV therapy", tag_xray: "X-ray", tag_other: "Other", min: "{n} min", hr: "{n} h", day: "{n} d", myDash: "My dashboard", backInbox: "Back to conversations", dashHi: "{n}'s shift", handover: "Hand over my shift", stOpen: "My open chats", stWaiting: "Waiting for my reply", stChats: "Chats I answered today", stReplies: "My messages today", stAvg: "Average reply time", stClosed: "Closed today",
+      myChats: "My conversations", noMine: "No open conversations with you.", stepPh: "Where it stands, what is next…", openChat: "Open", stepSaved: "Next step saved", nextStep: "Next step", stepHelp: "Where the conversation stands and what should happen next. It stays pinned on top of the chat and goes in the shift handover.",
+      hoLog: "Shift handovers", noHo: "No handovers yet.", hoTo: "Handed to {n}", hoFrom: "Received from {n}", nChats: "{n} chats", receivedAt: "Received {t}", notReceived: "Not confirmed yet",
+      handoverT: "Hand over my shift", handoverHelp: "Your open conversations move to the staff member you choose. Write where each one stands so she knows how to continue.", handTo: "Hand over to", pickStaff: "Choose the next staff member", hoNote: "Note for the shift", hoNotePh: "Anything she should know (optional)", handoverGo: "Hand over",
+      hoNone: "Choose at least one conversation.", hoDone: "Shift handed to {n}", reportT: "Shift handover report", repLine: "From {from} to {to} · {t}", cCustomer: "Customer", cState: "State", stWaitingOne: "Waiting for reply", stReplied: "Replied",
+      closeT: "Close", print: "Print", gotIt: "Received", ackDone: "Handover confirmed", viewReport: "View report", hoInBanner: "{by} handed you {n} conversations at {t}", n_handover: "{by} handed the conversation over to {to}"
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -363,7 +430,12 @@
       notConfigured: "مفاتيح الواتساب لسا ما انحطت في Supabase.", sendFail: "ما انرسلت: {e}", assigned: "تحولت إلى {n}", unassignedT: "انلغى الإسناد", offline: "ما فيه اتصال. حاولي مرة ثانية.",
       testNew: "رسالة تجربة", testTag: "تجربة", testT: "رسالة تجربة (كأنك العميل)", testHelp: "قبل ربط الواتساب: اكتبي كأنك العميل. الرسالة تطلع هنا مثل رسالة الواتساب، والرد عليها يبقى داخل النظام.",
       testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية.", openMap: "افتحي في الخرائط", loading: "جاري التحميل…", notYet: "لسا ما تحمّل", aDoc: "مستند", aMedia: "الصور والفيديو", aCam: "الكاميرا", attach: "إرفاق", record: "سجّلي رسالة صوتية", recording: "جاري التسجيل… اضغطي إرسال لما تخلصين", caption: "أضيفي تعليق…", tooBig: "{n} أكبر من 50 ميجا.", noMic: "المايك مو متاح في هذا المتصفح.", dropHere: "أفلتي الملفات هنا عشان ترسلينها", testFile: "مرفق (اختياري)", menu: "القائمة", saveTag: "حفظ", waitFor: "ينتظر {t}", allStaff: "كل الموظفات", allTags: "كل الخدمات", tagT: "نوع الخدمة", tagNone: "بدون", setTag: "نوع الخدمة",
-      tag_nursing: "تمريض", tag_lab: "تحاليل", tag_physio: "علاج طبيعي", tag_doctor: "زيارة طبيب", tag_iv: "مغذيات", tag_xray: "أشعة", tag_other: "أخرى", min: "{n} د", hr: "{n} س", day: "{n} يوم"
+      tag_nursing: "تمريض", tag_lab: "تحاليل", tag_physio: "علاج طبيعي", tag_doctor: "زيارة طبيب", tag_iv: "مغذيات", tag_xray: "أشعة", tag_other: "أخرى", min: "{n} د", hr: "{n} س", day: "{n} يوم", myDash: "لوحتي", backInbox: "رجوع للمحادثات", dashHi: "شفت {n}", handover: "تسليم الشفت", stOpen: "محادثاتي المفتوحة", stWaiting: "تنتظر ردي", stChats: "محادثات رديت عليها اليوم", stReplies: "رسائلي اليوم", stAvg: "متوسط وقت الرد", stClosed: "أغلقتها اليوم",
+      myChats: "محادثاتي", noMine: "ما عندك محادثات مفتوحة.", stepPh: "وين وقفت، ووش الخطوة الجاية…", openChat: "فتح", stepSaved: "انحفظت الخطوة الجاية", nextStep: "الخطوة الجاية", stepHelp: "وين وصلت المحادثة ووش المفروض يصير بعدها. تتثبت فوق المحادثة، وتروح في تقرير تسليم الشفت.",
+      hoLog: "تسليمات الشفت", noHo: "ما فيه تسليمات للحين.", hoTo: "سلّمتها لـ {n}", hoFrom: "استلمتها من {n}", nChats: "{n} محادثات", receivedAt: "استلمت {t}", notReceived: "لسا ما أكدت الاستلام",
+      handoverT: "تسليم الشفت", handoverHelp: "محادثاتك المفتوحة تتحول للموظفة اللي تختارينها. اكتبي وين وقفت كل وحدة عشان تعرف كيف تكمل.", handTo: "سلّمي إلى", pickStaff: "اختاري الموظفة اللي بعدك", hoNote: "ملاحظة للشفت", hoNotePh: "أي شي لازم تعرفه (اختياري)", handoverGo: "سلّمي",
+      hoNone: "اختاري محادثة وحدة على الأقل.", hoDone: "تم تسليم الشفت لـ {n}", reportT: "تقرير تسليم الشفت", repLine: "من {from} إلى {to} · {t}", cCustomer: "العميل", cState: "الحالة", stWaitingOne: "ينتظر رد", stReplied: "تم الرد",
+      closeT: "إغلاق", print: "طباعة", gotIt: "استلمت", ackDone: "تم تأكيد الاستلام", viewReport: "عرض التقرير", hoInBanner: "سلّمتك {by} {n} محادثات الساعة {t}", n_handover: "سلّمت {by} المحادثة إلى {to}"
     }
   };
   let current = "en";
@@ -400,6 +472,7 @@
     else if (r.status === 404 || (r.json && /wa_list/.test(JSON.stringify(r.json)))) notice(t().offSetup);
     if (!ready) { ready = true; if (filter == null) filter = chats.some(waiting) ? "wait" : chats.some(c => c.assigned_to === myId && c.status === "open") ? "mine" : "all"; }
     drawList();
+    if (view === "dash" && !$("dash").contains(document.activeElement)) drawDash();
     if (sel && !busy) loadThread(false);
   }
   async function loadThread(scroll) {
@@ -508,9 +581,11 @@
         <button type="button" class="ic-btn" data-act="more" aria-label="${esc(t().menu)}" aria-expanded="${menuOpen}">${svg(IC.more)}</button>
         <div class="hd-menu" id="hdMenu"${menuOpen ? "" : " hidden"}>
           <button type="button" data-act="assign">${esc(c.assigned_to ? t().transfer : t().assign)}</button>
+          <button type="button" data-act="step">${esc(t().nextStep)}</button>
           <button type="button" data-act="tag">${esc(t().setTag)}${c.tag ? " · " + esc(t()["tag_" + c.tag] || c.tag) : ""}</button>
           <button type="button" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
           ${c.test ? `<button type="button" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="danger" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div></div>`;
+    $("pin").innerHTML = c.next_step ? `<div class="pin" data-act="step">${svg(IC.pin)}<span><b>${esc(t().nextStep)}:</b>${esc(c.next_step)}</span><small>${esc([c.next_step_by, c.next_step_at ? hm(c.next_step_at) : ""].filter(Boolean).join(" · "))}</small></div>` : "";
     drawSide();
   }
   function mediaHtml(m) {
@@ -533,6 +608,7 @@
   function bubble(m, first, showBy) {
     if (m.dir === "note") {
       const by = m.by_name || m.by_id || "";
+      if (m.type === "handover") { const [to, ...st] = String(m.body || "").split(" · "); return `<div class="note ho">${esc(tx("n_handover", { by, to }))}${st.length ? "<br>" + esc(st.join(" · ")) : ""} · ${esc(hm(m.created_at))}</div>`; }
       const text = m.type === "assign" ? (m.body ? tx("n_assign", { by, to: m.body }) : tx("n_unassign", { by })) : tx(m.type === "closed" ? "n_closed" : "n_open", { by });
       return `<div class="note">${esc(text)} · ${esc(hm(m.created_at))}</div>`;
     }
@@ -583,7 +659,7 @@
     if (convFor !== sel || convOpen !== open || !$("msgs")) {
       const draft = convFor === sel && $("txt") ? $("txt").value : "";
       stopRec(true); closePreview();
-      $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div class="msgs" id="msgs"></div><div id="cmpWrap">${composerHtml(c)}</div>`;
+      $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div id="pin"></div><div class="msgs" id="msgs"></div><div id="cmpWrap">${composerHtml(c)}</div>`;
       if ($("txt")) { $("txt").value = draft; syncSend(); }
       convFor = sel; convOpen = open; scroll = true; menuOpen = false;
     }
@@ -702,13 +778,13 @@
     $("md").innerHTML = `<h2>${esc(t().assignT)}</h2><label>${esc(t().assignTo)}
       <select id="who"><option value="">${esc(t().nobody)}</option>${staff().map(s => `<option value="${esc(s.id)}"${s.id === c.assigned_to ? " selected" : ""}>${esc(T(s.name))} · ${esc(s.id)}</option>`).join("")}</select></label>
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().save)}</button></div>`;
-    $("md").dataset.mode = "assign"; $("ov").hidden = false;
+    $("md").dataset.mode = "assign"; $("md").classList.remove("wide"); $("ov").hidden = false;
   }
   function openTag() {
     const c = chats.find(x => x.wa_id === sel); if (!c) return;
     $("md").innerHTML = `<h2>${esc(t().tagT)}</h2><label>${esc(t().tagT)}<select id="tagSel"><option value="">${esc(t().tagNone)}</option>${TAGS.map(k => `<option value="${k}"${k === c.tag ? " selected" : ""}>${esc(t()["tag_" + k])}</option>`).join("")}</select></label>
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().saveTag)}</button></div>`;
-    $("md").dataset.mode = "tag"; $("ov").hidden = false;
+    $("md").dataset.mode = "tag"; $("md").classList.remove("wide"); $("ov").hidden = false;
   }
   async function saveTag() {
     const r = await MadaStore.auth.rpc("wa_set_tag", { p_wa_id: sel, p_tag: $("tagSel").value || null });
@@ -726,7 +802,7 @@
       <label>${esc(t().testBody)}<textarea id="tBody" rows="3"></textarea></label>
       <label>${esc(t().testFile)}<input type="file" id="tFile"></label>
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit" id="tSend">${esc(t().testSend)}</button></div>`;
-    $("md").dataset.mode = "test"; $("ov").hidden = false; $("tBody").focus();
+    $("md").dataset.mode = "test"; $("md").classList.remove("wide"); $("ov").hidden = false; $("tBody").focus();
   }
   async function sendTest() {
     const body = $("tBody").value.trim(), f = $("tFile").files[0], w = waOf($("tNum").value);
@@ -744,7 +820,10 @@
     drawList(); drawConv(true); await loadThread(true);
   }
   $("testBtn").addEventListener("click", () => openTest(null));
-  $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } if ($("md").dataset.mode === "tag") { saveTag(); return; } const v = $("who").value || null; $("ov").hidden = true; assign(v); });
+  $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } if ($("md").dataset.mode === "tag") { saveTag(); return; }
+    if ($("md").dataset.mode === "step") { $("ov").hidden = true; saveStep(sel, $("stepTx").value); return; }
+    if ($("md").dataset.mode === "handover") { sendHandover(); return; }
+    if ($("md").dataset.mode === "report") return; const v = $("who").value || null; $("ov").hidden = true; assign(v); });
   $("ov").addEventListener("click", e => { if (e.target === $("ov") || e.target.closest("[data-x]")) $("ov").hidden = true; });
 
   // ---------- Events ----------
@@ -785,10 +864,120 @@
     else if (a === "take") assign(myId);
     else if (a === "assign") openAssign();
     else if (a === "tag") openTag();
+    else if (a === "step") openStep();
     else if (a === "asCustomer") openTest(chats.find(x => x.wa_id === sel));
     else if (a === "testDel") { if (!confirm(t().testDelQ)) return; const r = await MadaStore.auth.rpc("wa_test_delete", { p_wa_id: sel }); if (!r.ok) { toast(t().offline); return; } toast(t().testDeleted); sel = null; msgs = []; await loadChats(); drawConv(); }
     else if (a === "open" || a === "closed") { const r = await MadaStore.auth.rpc("wa_set_status", { p_wa_id: sel, p_status: a }); if (!r.ok) toast(t().offline); await loadChats(); await loadThread(true); }
   });
+  // ---------- My dashboard and the shift handover (wa_my_stats, wa_handover, wa_handovers_mine in notes/supabase-whatsapp.sql) ----------
+  let view = "inbox", stats = null, handovers = [];
+  const pendingIn = () => handovers.filter(h => h.to_id === myId && !h.received_at);
+  async function loadDash() {
+    if (!cloud) return;
+    const [a, b] = await Promise.all([MadaStore.auth.rpc("wa_my_stats", {}), MadaStore.auth.rpc("wa_handovers_mine", {})]);
+    if (a.ok) stats = a.json;
+    if (b.ok && Array.isArray(b.json)) handovers = b.json;
+    const n = pendingIn().length, c = $("dashCount"); c.hidden = !n; c.textContent = n;
+    if (view === "dash" && !$("dash").contains(document.activeElement)) drawDash();
+  }
+  function setView(v) {
+    view = v; $("wa").hidden = v !== "inbox"; $("dash").hidden = v !== "dash";
+    $("dashLbl").textContent = v === "dash" ? t().backInbox : t().myDash;
+    if (v === "dash") { drawDash(); loadDash(); }
+  }
+  function tile(label, value, tone) { return `<div class="card dt${tone ? " " + tone : ""}"><b>${esc(value == null ? "–" : value)}</b><span>${esc(label)}</span></div>`; }
+  function drawDash() {
+    const mine = chats.filter(c => c.assigned_to === myId && c.status === "open").sort((a, b) => (waiting(b) - waiting(a)) || (new Date(a.last_in_at || 0) - new Date(b.last_in_at || 0)));
+    const st = stats || {};
+    const inc = pendingIn();
+    $("dash").innerHTML = inc.map(h => `<div class="ho-in"><span>${esc(tx("hoInBanner", { by: h.from_name || h.from_id, n: (h.report.items || []).length, t: hm(h.created_at) }))}</span>
+        <button type="button" class="btn btn-ghost btn-sm" data-ho="${h.id}">${esc(t().viewReport)}</button><button type="button" class="btn btn-primary btn-sm" data-ack="${h.id}">${esc(t().gotIt)}</button></div>`).join("")
+      + `<div class="dash-head"><h2>${esc(tx("dashHi", { n: me && me.name ? me.name[current] : "" }))}</h2><button type="button" class="btn btn-primary" data-act="handover"${mine.length ? "" : " disabled"}>${esc(t().handover)}</button></div>
+      <div class="dtiles">${tile(t().stOpen, st.open)}${tile(t().stWaiting, st.waiting, st.waiting ? "bad" : "")}${tile(t().stChats, st.chats)}${tile(t().stReplies, st.replies)}${tile(t().stAvg, st.avgReply == null ? null : tx("min", { n: st.avgReply }))}${tile(t().stClosed, st.closed)}</div>
+      <div class="card dsec"><h3>${esc(t().myChats)} <em>${mine.length}</em></h3>${mine.length ? `<div class="drows">${mine.map(c => {
+        const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id);
+        return `<div class="drow" data-id="${esc(c.wa_id)}"><span class="ch-av" style="background:${avColor(c.wa_id)}">${avatar(name)}</span>
+          <div class="drow-m"><b>${esc(name)}</b>${c.tag ? ` <span class="ch-tag">${esc(t()["tag_" + c.tag] || c.tag)}</span>` : ""}${waiting(c) ? ` <span class="ch-wait${waitMin(c) >= 10 ? " late" : ""}">${esc(tx("waitFor", { t: ago(waitMin(c)) }))}</span>` : ""}
+            <small>${lastLine(c)}</small></div>
+          <input class="drow-step" data-step="${esc(c.wa_id)}" value="${esc(c.next_step || "")}" placeholder="${esc(t().stepPh)}" maxlength="500">
+          <button type="button" class="btn btn-ghost btn-sm" data-open="${esc(c.wa_id)}">${esc(t().openChat)}</button></div>`;
+      }).join("")}</div>` : `<p class="dempty">${esc(t().noMine)}</p>`}</div>
+      <div class="card dsec"><h3>${esc(t().hoLog)}</h3>${handovers.length ? `<div class="drows">${handovers.map(h => `<button type="button" class="ho-row" data-ho="${h.id}">
+          <span>${esc(h.from_id === myId ? tx("hoTo", { n: h.to_name || h.to_id }) : tx("hoFrom", { n: h.from_name || h.from_id }))}</span>
+          <small>${esc(dayLabel(h.created_at) + " " + hm(h.created_at))} · ${esc(tx("nChats", { n: (h.report.items || []).length }))} · ${esc(h.received_at ? tx("receivedAt", { t: hm(h.received_at) }) : t().notReceived)}</small></button>`).join("")}</div>` : `<p class="dempty">${esc(t().noHo)}</p>`}</div>`;
+  }
+  async function saveStep(waId, text) {
+    const c = chats.find(x => x.wa_id === waId); if (!c || (c.next_step || "") === text.trim()) return;
+    const r = await MadaStore.auth.rpc("wa_set_step", { p_wa_id: waId, p_text: text });
+    if (!r.ok) { toast(r.offline ? t().offline : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
+    Object.assign(c, r.json); toast(t().stepSaved);
+    if (waId === sel) drawHead();
+  }
+  function openStep() {
+    const c = chats.find(x => x.wa_id === sel); if (!c) return;
+    $("md").innerHTML = `<h2>${esc(t().nextStep)}</h2><p>${esc(t().stepHelp)}</p><label>${esc(t().nextStep)}<textarea id="stepTx" rows="3" maxlength="500" placeholder="${esc(t().stepPh)}">${esc(c.next_step || "")}</textarea></label>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().saveTag)}</button></div>`;
+    $("md").dataset.mode = "step"; $("md").classList.remove("wide"); $("ov").hidden = false; $("stepTx").focus();
+  }
+  function openHandover() {
+    const mine = chats.filter(c => c.assigned_to === myId && c.status === "open");
+    const others = staff().filter(s => String(s.id).toUpperCase() !== myId);
+    $("md").innerHTML = `<h2>${esc(t().handoverT)}</h2><p>${esc(t().handoverHelp)}</p>
+      <label>${esc(t().handTo)}<select id="hoTo" required><option value="">${esc(t().pickStaff)}</option>${others.map(s => `<option value="${esc(s.id)}">${esc(T(s.name))} · ${esc(s.id)}</option>`).join("")}</select></label>
+      <div class="ho-items">${mine.map(c => {
+        const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id);
+        return `<div class="ho-it"><label class="ho-chk"><input type="checkbox" data-hw="${esc(c.wa_id)}" checked> <b>${esc(name)}</b>${waiting(c) ? ` <span class="ch-wait${waitMin(c) >= 10 ? " late" : ""}">${esc(tx("waitFor", { t: ago(waitMin(c)) }))}</span>` : ""}<small>${lastLine(c)}</small></label>
+          <textarea rows="2" data-hs="${esc(c.wa_id)}" maxlength="500" placeholder="${esc(t().stepPh)}">${esc(c.next_step || "")}</textarea></div>`;
+      }).join("")}</div>
+      <label>${esc(t().hoNote)}<textarea id="hoNote" rows="2" placeholder="${esc(t().hoNotePh)}"></textarea></label>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit" id="hoSend">${esc(t().handoverGo)}</button></div>`;
+    $("md").dataset.mode = "handover"; $("md").classList.add("wide"); $("ov").hidden = false;
+  }
+  async function sendHandover() {
+    const to = $("hoTo").value; if (!to) { $("hoTo").focus(); return; }
+    const items = [...$("md").querySelectorAll("[data-hw]")].filter(x => x.checked).map(x => ({ wa_id: x.dataset.hw, step: $("md").querySelector(`[data-hs="${x.dataset.hw}"]`).value }));
+    if (!items.length) { toast(t().hoNone); return; }
+    $("hoSend").disabled = true;
+    const r = await MadaStore.auth.rpc("wa_handover", { p_to: to, p_items: items, p_note: $("hoNote").value });
+    if (!r.ok) { $("hoSend").disabled = false; toast(r.offline ? t().offline : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
+    toast(tx("hoDone", { n: r.json.to_name || to }));
+    await loadChats(); await loadDash(); openReport(r.json);
+  }
+  // The handover report (also printed).
+  function openReport(h) {
+    if (typeof h !== "object") h = handovers.find(x => String(x.id) === String(h)); if (!h) return;
+    const st = (h.report && h.report.stats) || {}, items = (h.report && h.report.items) || [], toMe = h.to_id === myId;
+    $("md").innerHTML = `<div class="rep"><div class="rep-h"><img src="assets/mada-logo.png" alt="" width="36" height="38"><div><h2>${esc(t().reportT)}</h2>
+        <small>${esc(tx("repLine", { from: h.from_name || h.from_id, to: h.to_name || h.to_id, t: dayLabel(h.created_at) + " " + hm(h.created_at) }))}</small></div></div>
+      ${h.note ? `<p class="rep-note">${esc(h.note)}</p>` : ""}
+      <div class="dtiles sm">${tile(t().stReplies, st.replies)}${tile(t().stChats, st.chats)}${tile(t().stAvg, st.avgReply == null ? null : tx("min", { n: st.avgReply }))}${tile(t().stClosed, st.closed)}</div>
+      <table class="rep-t"><thead><tr><th>${esc(t().cCustomer)}</th><th>${esc(t().tagT)}</th><th>${esc(t().cState)}</th><th>${esc(t().nextStep)}</th></tr></thead><tbody>
+      ${items.map(i => `<tr><td><b>${esc(i.name || shown(i.wa_id))}</b><br><span class="ltr">${esc(shown(i.wa_id))}</span></td><td>${esc(i.tag ? t()["tag_" + i.tag] || i.tag : "–")}</td>
+        <td>${esc(i.waiting ? t().stWaitingOne : t().stReplied)}<br><small>${esc(i.last_body && !/^\[\w+\]$/.test(i.last_body) ? i.last_body.slice(0, 80) : "")}</small></td><td>${esc(i.step || "–")}</td></tr>`).join("") || `<tr><td colspan="4">${esc(t().noMine)}</td></tr>`}
+      </tbody></table>
+      <p class="rep-foot">${esc(h.received_at ? tx("receivedAt", { t: dayLabel(h.received_at) + " " + hm(h.received_at) }) : t().notReceived)}</p></div>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().closeT)}</button><button type="button" class="btn btn-ghost" data-print>${esc(t().print)}</button>${toMe && !h.received_at ? `<button type="button" class="btn btn-primary" data-ack="${h.id}">${esc(t().gotIt)}</button>` : ""}</div>`;
+    $("md").dataset.mode = "report"; $("md").classList.add("wide"); $("ov").hidden = false;
+  }
+  async function ack(id) {
+    const r = await MadaStore.auth.rpc("wa_handover_ack", { p_id: Number(id) });
+    if (!r.ok) { toast(t().offline); return; }
+    $("ov").hidden = true; toast(t().ackDone); await loadDash();
+  }
+  $("dashBtn").addEventListener("click", () => setView(view === "dash" ? "inbox" : "dash"));
+  $("dash").addEventListener("click", e => {
+    const o = e.target.closest("[data-open]"); if (o) { setView("inbox"); sel = o.dataset.open; msgs = []; if (!inFilter(chats.find(x => x.wa_id === sel) || {}, filter)) filter = "mine"; drawList(); drawConv(true); loadThread(true); return; }
+    const h = e.target.closest("[data-ho]"); if (h) { openReport(h.dataset.ho); return; }
+    const a = e.target.closest("[data-ack]"); if (a) { ack(a.dataset.ack); return; }
+    if (e.target.closest('[data-act="handover"]')) openHandover();
+  });
+  $("dash").addEventListener("change", e => { if (e.target.dataset.step) saveStep(e.target.dataset.step, e.target.value); });
+  $("dash").addEventListener("keydown", e => { if (e.target.dataset.step && e.key === "Enter") e.target.blur(); });
+  $("md").addEventListener("click", e => {
+    if (e.target.closest("[data-print]")) { document.body.classList.add("printing"); window.print(); setTimeout(() => document.body.classList.remove("printing"), 500); }
+    const a = e.target.closest("[data-ack]"); if (a) ack(a.dataset.ack);
+  });
+  setInterval(() => { if (!document.hidden) loadDash(); }, 30000);
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3500); }
   // New messages: checked every 5 seconds while the page is in front.
   setInterval(() => { if (!document.hidden) loadChats(); }, 5000);
@@ -804,6 +993,7 @@
     document.title = lang === "ar" ? "مدى كير | المحادثات" : "Mada Care | Conversations";
     try { localStorage.setItem("mada-lang", lang); } catch (e) {}
     convFor = null; drawList(); drawConv();
+    $("dashLbl").textContent = view === "dash" ? t().backInbox : t().myDash; if (view === "dash") drawDash();
   }
   $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
   const user = $("user"), userBtn = $("userBtn");
@@ -814,7 +1004,7 @@
   let saved = "en";
   try { saved = localStorage.getItem("mada-lang") || "en"; } catch (e) {}
   setLang(saved);
-  loadChats();
+  loadChats(); loadDash();
 </script>
 </body>
 </html>
