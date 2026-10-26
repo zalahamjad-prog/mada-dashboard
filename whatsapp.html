@@ -113,7 +113,12 @@
   .ch-l { font-size: 14px; color: var(--wa-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 3px; }
   .ch-l svg { width: 16px; height: 16px; flex: none; }
   .ch-u { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #25d366; color: #fff; font-size: 12px; font-weight: 600; line-height: 20px; text-align: center; flex: none; }
-  .ch-a { font-size: 11.5px; color: #008069; }
+  .ch-a { font-size: 11.5px; color: #008069; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .ch-wait { display: inline-flex; align-items: center; gap: 3px; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--orange-soft); color: var(--orange); font-size: 11px; font-weight: 600; }
+  .ch-wait.late { background: #fde8e8; color: #ea0038; }
+  .ch-tag { display: inline-block; height: 18px; padding: 0 7px; border-radius: 9px; background: #e7f0fe; color: #2b63c8; font-size: 11px; font-weight: 500; line-height: 18px; }
+  .flt { display: flex; gap: 8px; }
+  .flt select { flex: 1; min-width: 0; height: 32px; border: 0; border-radius: 8px; background: var(--wa-bar); padding: 0 8px; font: inherit; font-size: 13px; color: #54656f; }
   .ch-a.none { color: var(--orange); }
   .wa-empty { padding: 40px 20px; text-align: center; color: var(--wa-sub); font-size: 14px; line-height: 1.7; }
   .conv { position: relative; display: flex; flex-direction: column; min-height: 0; min-width: 0; background-color: var(--wa-bg);
@@ -300,6 +305,7 @@
       <div class="wa-tools">
         <div class="srch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" autocomplete="off"></div>
         <div class="tabs" id="tabs" role="group"></div>
+        <div class="flt"><select id="fWho" aria-label="Staff"></select><select id="fTag" aria-label="Service"></select></div>
       </div>
       <div class="chats" id="chats"></div>
     </section>
@@ -323,7 +329,7 @@
       tagline: "Caring Like Family", otherLang: "العربية", profile: "My Profile", settings: "Settings", logout: "Log out",
       navDashboard: "Dashboard", navRequests: "Requests", navBookings: "Bookings", navPatients: "Patients", navMedical: "Medical Requests", navInvoices: "Invoices", navQuality: "Quality", navSoon: "Soon", navStaff: "Staff", navPolicies: "Policies", navServices: "Services",
       title: "Conversations", subtitle: "Customer messages to the Mada Care WhatsApp number. Reply from here; each conversation has one owner.",
-      search: "Search by name or number", f_mine: "Mine", f_none: "Unassigned", f_all: "All open", f_closed: "Closed",
+      search: "Search by name or number", f_wait: "Waiting for reply", f_mine: "Mine", f_none: "Unassigned", f_all: "All open", f_closed: "Closed",
       noChats: "No conversations here.", pick: "Choose a conversation.", unassigned: "Not assigned", owner: "With {n}",
       assign: "Assign", transfer: "Transfer", takeIt: "Take it", close: "Close", reopen: "Reopen", back: "Back",
       assignT: "Transfer the conversation", assignTo: "Transfer to", nobody: "Nobody (unassigned)", save: "Transfer", cancel: "Cancel",
@@ -336,13 +342,14 @@
       offCloud: "Conversations need the shared database and staff logins (Supabase).", offSetup: "WhatsApp is not connected yet. Run notes/supabase-whatsapp.sql in Supabase, then deploy the mada-whatsapp function.",
       notConfigured: "WhatsApp keys are not set in Supabase yet.", sendFail: "Not sent: {e}", assigned: "Transferred to {n}", unassignedT: "Assignment removed", offline: "No connection. Try again.",
       testNew: "Test message", testTag: "Test", testT: "Test message (as the customer)", testHelp: "Before WhatsApp is connected: write as if you were the customer. The message shows here like a WhatsApp message, and replies to it stay inside the system.",
-      testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation.", openMap: "Open in Maps", loading: "Loading…", notYet: "Not downloaded yet", aDoc: "Document", aMedia: "Photos & videos", aCam: "Camera", attach: "Attach", record: "Record a voice note", recording: "Recording… press send when done", caption: "Add a caption…", tooBig: "{n} is over 50 MB.", noMic: "The microphone is not available in this browser.", dropHere: "Drop files here to send them", testFile: "Attachment (optional)", menu: "Menu"
+      testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation.", openMap: "Open in Maps", loading: "Loading…", notYet: "Not downloaded yet", aDoc: "Document", aMedia: "Photos & videos", aCam: "Camera", attach: "Attach", record: "Record a voice note", recording: "Recording… press send when done", caption: "Add a caption…", tooBig: "{n} is over 50 MB.", noMic: "The microphone is not available in this browser.", dropHere: "Drop files here to send them", testFile: "Attachment (optional)", menu: "Menu", saveTag: "Save", waitFor: "Waiting {t}", allStaff: "All staff", allTags: "All services", tagT: "Service", tagNone: "Not set", setTag: "Service type",
+      tag_nursing: "Nursing", tag_lab: "Lab tests", tag_physio: "Physiotherapy", tag_doctor: "Doctor visit", tag_iv: "IV therapy", tag_xray: "X-ray", tag_other: "Other", min: "{n} min", hr: "{n} h", day: "{n} d"
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
       navDashboard: "الرئيسية", navRequests: "الطلبات", navBookings: "الحجوزات", navPatients: "المرضى", navMedical: "الطلبات الطبية", navInvoices: "الفواتير", navQuality: "الجودة", navSoon: "قريباً", navStaff: "الموظفين", navPolicies: "السياسات", navServices: "الخدمات",
       title: "المحادثات", subtitle: "رسائل العملاء على واتساب مدى كير. ردّي من هنا، ولكل محادثة موظفة مسؤولة عنها.",
-      search: "ابحثي بالاسم أو الرقم", f_mine: "محادثاتي", f_none: "غير مسندة", f_all: "كل المفتوحة", f_closed: "المغلقة",
+      search: "ابحثي بالاسم أو الرقم", f_wait: "تنتظر رد", f_mine: "محادثاتي", f_none: "غير مسندة", f_all: "كل المفتوحة", f_closed: "المغلقة",
       noChats: "ما فيه محادثات هنا.", pick: "اختاري محادثة.", unassigned: "غير مسندة", owner: "عند {n}",
       assign: "إسناد", transfer: "تحويل", takeIt: "استلميها", close: "إغلاق", reopen: "إعادة فتح", back: "رجوع",
       assignT: "تحويل المحادثة", assignTo: "حوّليها إلى", nobody: "بدون (غير مسندة)", save: "تحويل", cancel: "إلغاء",
@@ -355,7 +362,8 @@
       offCloud: "المحادثات تحتاج قاعدة البيانات المشتركة وتسجيل دخول الموظفين (Supabase).", offSetup: "الواتساب لسا ما انربط. شغّل notes/supabase-whatsapp.sql في Supabase، وبعدها انشر دالة mada-whatsapp.",
       notConfigured: "مفاتيح الواتساب لسا ما انحطت في Supabase.", sendFail: "ما انرسلت: {e}", assigned: "تحولت إلى {n}", unassignedT: "انلغى الإسناد", offline: "ما فيه اتصال. حاولي مرة ثانية.",
       testNew: "رسالة تجربة", testTag: "تجربة", testT: "رسالة تجربة (كأنك العميل)", testHelp: "قبل ربط الواتساب: اكتبي كأنك العميل. الرسالة تطلع هنا مثل رسالة الواتساب، والرد عليها يبقى داخل النظام.",
-      testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية.", openMap: "افتحي في الخرائط", loading: "جاري التحميل…", notYet: "لسا ما تحمّل", aDoc: "مستند", aMedia: "الصور والفيديو", aCam: "الكاميرا", attach: "إرفاق", record: "سجّلي رسالة صوتية", recording: "جاري التسجيل… اضغطي إرسال لما تخلصين", caption: "أضيفي تعليق…", tooBig: "{n} أكبر من 50 ميجا.", noMic: "المايك مو متاح في هذا المتصفح.", dropHere: "أفلتي الملفات هنا عشان ترسلينها", testFile: "مرفق (اختياري)", menu: "القائمة"
+      testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية.", openMap: "افتحي في الخرائط", loading: "جاري التحميل…", notYet: "لسا ما تحمّل", aDoc: "مستند", aMedia: "الصور والفيديو", aCam: "الكاميرا", attach: "إرفاق", record: "سجّلي رسالة صوتية", recording: "جاري التسجيل… اضغطي إرسال لما تخلصين", caption: "أضيفي تعليق…", tooBig: "{n} أكبر من 50 ميجا.", noMic: "المايك مو متاح في هذا المتصفح.", dropHere: "أفلتي الملفات هنا عشان ترسلينها", testFile: "مرفق (اختياري)", menu: "القائمة", saveTag: "حفظ", waitFor: "ينتظر {t}", allStaff: "كل الموظفات", allTags: "كل الخدمات", tagT: "نوع الخدمة", tagNone: "بدون", setTag: "نوع الخدمة",
+      tag_nursing: "تمريض", tag_lab: "تحاليل", tag_physio: "علاج طبيعي", tag_doctor: "زيارة طبيب", tag_iv: "مغذيات", tag_xray: "أشعة", tag_other: "أخرى", min: "{n} د", hr: "{n} س", day: "{n} يوم"
     }
   };
   let current = "en";
@@ -390,7 +398,7 @@
     const r = await MadaStore.auth.rpc("wa_list", {});
     if (r.ok && Array.isArray(r.json)) { chats = r.json; notice(""); }
     else if (r.status === 404 || (r.json && /wa_list/.test(JSON.stringify(r.json)))) notice(t().offSetup);
-    if (!ready) { ready = true; if (filter == null) filter = chats.some(c => c.assigned_to === myId && c.status === "open") ? "mine" : "all"; }
+    if (!ready) { ready = true; if (filter == null) filter = chats.some(waiting) ? "wait" : chats.some(c => c.assigned_to === myId && c.status === "open") ? "mine" : "all"; }
     drawList();
     if (sel && !busy) loadThread(false);
   }
@@ -438,7 +446,13 @@
   }
 
   // ---------- Inbox ----------
-  const inFilter = (c, f) => f === "mine" ? c.status === "open" && c.assigned_to === myId : f === "none" ? c.status === "open" && !c.assigned_to : f === "closed" ? c.status === "closed" : c.status === "open";
+  // Waiting for reply: the customer wrote last and nobody answered yet (oldest first, red after 10 minutes).
+  const TAGS = ["nursing", "lab", "physio", "doctor", "iv", "xray", "other"];
+  const waiting = c => c.status === "open" && c.last_dir === "in";
+  const waitMin = c => c.last_in_at ? Math.max(0, Math.floor((Date.now() - new Date(c.last_in_at).getTime()) / 60000)) : 0;
+  const ago = n => n < 60 ? tx("min", { n }) : n < 1440 ? tx("hr", { n: Math.floor(n / 60) }) : tx("day", { n: Math.floor(n / 1440) });
+  let fWho = "", fTag = "";
+  const inFilter = (c, f) => f === "wait" ? waiting(c) : f === "mine" ? c.status === "open" && c.assigned_to === myId : f === "none" ? c.status === "open" && !c.assigned_to : f === "closed" ? c.status === "closed" : c.status === "open";
   const KIND_IC = { image: IC.photo, sticker: IC.photo, video: IC.video, audio: IC.mic, document: IC.doc, location: IC.pin };
   function lastLine(c) {
     const m = /^\[(\w+)\]$/.exec(c.last_body || "");
@@ -447,17 +461,22 @@
     return ticks + esc(c.last_body || "");
   }
   function drawList() {
-    const F = ["mine", "none", "all", "closed"];
+    const F = ["wait", "mine", "none", "all", "closed"];
     $("tabs").innerHTML = F.map(f => `<button type="button" data-f="${f}" aria-pressed="${filter === f}">${esc(t()["f_" + f])}<em>${chats.filter(c => inFilter(c, f)).length}</em></button>`).join("");
     const s = q.trim().toLowerCase();
-    const list = chats.filter(c => inFilter(c, filter)).filter(c => !s || [c.name, c.wa_id, local(c.wa_id), ...patientsOf(c).map(p => T(p.name))].some(v => String(v || "").toLowerCase().includes(s)));
+    const owners = [...new Map(chats.filter(c => c.assigned_to).map(c => [c.assigned_to, c.assigned_name || c.assigned_to])).entries()];
+    $("fWho").innerHTML = `<option value="">${esc(t().allStaff)}</option>` + owners.map(([id, n]) => `<option value="${esc(id)}"${id === fWho ? " selected" : ""}>${esc(n)}</option>`).join("");
+    $("fTag").innerHTML = `<option value="">${esc(t().allTags)}</option>` + TAGS.map(k => `<option value="${k}"${k === fTag ? " selected" : ""}>${esc(t()["tag_" + k])}</option>`).join("");
+    $("fWho").hidden = filter === "mine";
+    const list = chats.filter(c => inFilter(c, filter)).filter(c => (!fWho || filter === "mine" || c.assigned_to === fWho) && (!fTag || c.tag === fTag))
+      .sort((a, b) => filter === "wait" ? new Date(a.last_in_at) - new Date(b.last_in_at) : 0).filter(c => !s || [c.name, c.wa_id, local(c.wa_id), ...patientsOf(c).map(p => T(p.name))].some(v => String(v || "").toLowerCase().includes(s)));
     $("chats").innerHTML = list.length ? list.map(c => {
       const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id);
       return `<button type="button" class="ch${c.unread ? " unread" : ""}" data-id="${esc(c.wa_id)}" aria-current="${c.wa_id === sel}">
         <span class="ch-av" style="background:${avColor(c.wa_id)}">${avatar(name)}</span>
         <span class="ch-b"><span class="ch-t"><span class="ch-n">${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</span><span class="ch-w">${esc(shortWhen(c.last_at))}</span></span>
           <span class="ch-s"><span class="ch-l">${lastLine(c)}</span>${c.unread ? `<span class="ch-u">${c.unread}</span>` : ""}</span>
-          <span class="ch-a${c.assigned_to ? "" : " none"}">${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span></button>`;
+          <span class="ch-a${c.assigned_to ? "" : " none"}">${waiting(c) ? `<span class="ch-wait${waitMin(c) >= 10 ? " late" : ""}">${esc(tx("waitFor", { t: ago(waitMin(c)) }))}</span>` : ""}${c.tag ? `<span class="ch-tag">${esc(t()["tag_" + c.tag] || c.tag)}</span>` : ""}<span>${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span></span></button>`;
     }).join("") : `<div class="wa-empty">${esc(t().noChats)}</div>`;
   }
   const patientsOf = c => typeof MadaPatients !== "undefined" ? MadaPatients.findByMobile(local(c.wa_id)) : [];
@@ -489,6 +508,7 @@
         <button type="button" class="ic-btn" data-act="more" aria-label="${esc(t().menu)}" aria-expanded="${menuOpen}">${svg(IC.more)}</button>
         <div class="hd-menu" id="hdMenu"${menuOpen ? "" : " hidden"}>
           <button type="button" data-act="assign">${esc(c.assigned_to ? t().transfer : t().assign)}</button>
+          <button type="button" data-act="tag">${esc(t().setTag)}${c.tag ? " · " + esc(t()["tag_" + c.tag] || c.tag) : ""}</button>
           <button type="button" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
           ${c.test ? `<button type="button" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="danger" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div></div>`;
     drawSide();
@@ -684,6 +704,18 @@
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().save)}</button></div>`;
     $("md").dataset.mode = "assign"; $("ov").hidden = false;
   }
+  function openTag() {
+    const c = chats.find(x => x.wa_id === sel); if (!c) return;
+    $("md").innerHTML = `<h2>${esc(t().tagT)}</h2><label>${esc(t().tagT)}<select id="tagSel"><option value="">${esc(t().tagNone)}</option>${TAGS.map(k => `<option value="${k}"${k === c.tag ? " selected" : ""}>${esc(t()["tag_" + k])}</option>`).join("")}</select></label>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().saveTag)}</button></div>`;
+    $("md").dataset.mode = "tag"; $("ov").hidden = false;
+  }
+  async function saveTag() {
+    const r = await MadaStore.auth.rpc("wa_set_tag", { p_wa_id: sel, p_tag: $("tagSel").value || null });
+    $("ov").hidden = true;
+    if (!r.ok) { toast(r.offline ? t().offline : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
+    await loadChats(); drawHead();
+  }
   // Test mode: a message typed by staff as if it came from the customer, with an optional attachment (wa_test_in).
   const waOf = v => { const w = String(v || "").replace(/\D/g, ""); return /^05\d{8}$/.test(w) ? "966" + w.slice(1) : w; };
   function openTest(c) {
@@ -712,13 +744,15 @@
     drawList(); drawConv(true); await loadThread(true);
   }
   $("testBtn").addEventListener("click", () => openTest(null));
-  $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } const v = $("who").value || null; $("ov").hidden = true; assign(v); });
+  $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } if ($("md").dataset.mode === "tag") { saveTag(); return; } const v = $("who").value || null; $("ov").hidden = true; assign(v); });
   $("ov").addEventListener("click", e => { if (e.target === $("ov") || e.target.closest("[data-x]")) $("ov").hidden = true; });
 
   // ---------- Events ----------
   $("chats").addEventListener("click", e => { const b = e.target.closest(".ch"); if (!b) return; sel = b.dataset.id; msgs = []; drawList(); drawConv(true); loadThread(true); });
   $("tabs").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (b) { filter = b.dataset.f; drawList(); } });
   $("q").addEventListener("input", e => { q = e.target.value; drawList(); });
+  $("fWho").addEventListener("change", e => { fWho = e.target.value; drawList(); });
+  $("fTag").addEventListener("change", e => { fTag = e.target.value; drawList(); });
   const conv = $("conv");
   conv.addEventListener("input", e => { if (e.target.id === "txt") syncSend(); });
   conv.addEventListener("keydown", e => {
@@ -750,6 +784,7 @@
     else if (a === "pvSend") { const files = pvFiles.slice(), cap = $("pvCap").value.trim(); pvFiles = []; $("pv").remove(); sendFiles(files, cap); }
     else if (a === "take") assign(myId);
     else if (a === "assign") openAssign();
+    else if (a === "tag") openTag();
     else if (a === "asCustomer") openTest(chats.find(x => x.wa_id === sel));
     else if (a === "testDel") { if (!confirm(t().testDelQ)) return; const r = await MadaStore.auth.rpc("wa_test_delete", { p_wa_id: sel }); if (!r.ok) { toast(t().offline); return; } toast(t().testDeleted); sel = null; msgs = []; await loadChats(); drawConv(); }
     else if (a === "open" || a === "closed") { const r = await MadaStore.auth.rpc("wa_set_status", { p_wa_id: sel, p_status: a }); if (!r.ok) toast(t().offline); await loadChats(); await loadThread(true); }
