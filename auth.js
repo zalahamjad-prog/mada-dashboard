@@ -92,6 +92,14 @@ const MadaStore = (() => {
       async rpc(name, body) { const tk = token(); if (!tk) return { ok: false, status: 401, json: null };
         try { const r = await fetch(base + "/rest/v1/rpc/" + name, { method: "POST", headers: { apikey: C.key, "Content-Type": "application/json", Authorization: "Bearer " + tk }, body: JSON.stringify(body || {}) });
           let json = null; try { json = await r.json(); } catch (e) {} return { ok: r.ok, status: r.status, json }; } catch (e) { return { ok: false, status: 0, offline: true, json: null }; } },
+      // Private file storage (Supabase Storage) as the logged-in staff member. Resolves to { ok, status, json }.
+      async upload(bucket, path, file) { const tk = token(); if (!tk) return { ok: false, status: 401, json: null };
+        try { const r = await fetch(base + "/storage/v1/object/" + bucket + "/" + path.split("/").map(encodeURIComponent).join("/"), { method: "POST", headers: { apikey: C.key, Authorization: "Bearer " + tk, "Content-Type": file.type || "application/octet-stream", "x-upsert": "false" }, body: file });
+          let json = null; try { json = await r.json(); } catch (e) {} return { ok: r.ok, status: r.status, json }; } catch (e) { return { ok: false, status: 0, offline: true, json: null }; } },
+      // Short-lived links to private files: resolves to { path: url } (files that could not be signed are left out).
+      async sign(bucket, paths, secs) { const tk = token(); if (!tk || !paths.length) return {};
+        try { const r = await fetch(base + "/storage/v1/object/sign/" + bucket, { method: "POST", headers: { apikey: C.key, "Content-Type": "application/json", Authorization: "Bearer " + tk }, body: JSON.stringify({ expiresIn: secs || 3600, paths }) });
+          const j = r.ok ? await r.json() : []; const out = {}; (Array.isArray(j) ? j : []).forEach(x => { if (x && x.signedURL && !x.error) out[x.path] = base + "/storage/v1" + x.signedURL; }); return out; } catch (e) { return {}; } },
       // After logging in: read the shared data again, now with the staff member's token.
       reload() { rows.clear(); boot(); },
       // After logging out: remove this device's copies of the shared data (they stay in Supabase), unless saves are still waiting.

@@ -87,57 +87,135 @@
   .ph-icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--primary-soft); color: var(--primary); }
   .ph-icon svg { width: 25px; height: 25px; }
   @media (max-width: 760px) { .ph-icon { width: 40px; height: 40px; } }
-  /* ---------- Conversations (WhatsApp) ---------- */
-  .wa { display: grid; grid-template-columns: 340px minmax(0, 1fr) 280px; height: calc(100vh - 190px); min-height: 520px; overflow: hidden; }
-  .wa-list { display: flex; flex-direction: column; border-inline-end: 1px solid var(--border); min-height: 0; }
-  .wa-tools { padding: 12px; display: grid; gap: 10px; border-bottom: 1px solid var(--border); }
-  .wa-tools .srch { width: 100%; }
+  /* ---------- Conversations (WhatsApp look) ---------- */
+  .wa { --wa-bg: #efeae2; --wa-in: #fff; --wa-out: #d9fdd3; --wa-bar: #f0f2f5; --wa-ink: #111b21; --wa-sub: #667781; --wa-green: #00a884; --wa-tick: #53bdeb;
+    display: grid; grid-template-columns: 360px minmax(0, 1fr) 270px; height: calc(100vh - 190px); min-height: 540px; overflow: hidden; }
+  .wa-list { display: flex; flex-direction: column; border-inline-end: 1px solid #e9edef; min-height: 0; background: #fff; }
+  .wa-tools { padding: 10px 12px 8px; display: grid; gap: 10px; }
   .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tabs button { height: 30px; padding: 0 11px; border-radius: 15px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #44545a; }
-  .tabs button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-  .tabs button em { font-style: normal; opacity: .65; margin-inline-start: 4px; }
+  .tabs button { height: 30px; padding: 0 12px; border-radius: 15px; border: 0; background: var(--wa-bar); cursor: pointer; font-size: 13px; font-weight: 500; color: #54656f; }
+  .tabs button[aria-pressed="true"] { background: #e7fce3; color: #008069; }
+  .tabs button em { font-style: normal; opacity: .7; margin-inline-start: 4px; }
   .srch { position: relative; }
-  .srch svg { position: absolute; top: 50%; inset-inline-start: 12px; transform: translateY(-50%); width: 17px; height: 17px; color: var(--muted); }
-  .srch input { width: 100%; height: 38px; padding-inline: 38px 12px; border: 1px solid #d9e1e3; border-radius: 10px; background: #fff; font-size: 14px; outline: 0; }
-  .srch input:focus { border-color: var(--primary); }
+  .srch svg { position: absolute; top: 50%; inset-inline-start: 12px; transform: translateY(-50%); width: 16px; height: 16px; color: #54656f; }
+  .srch input { width: 100%; height: 36px; padding-inline: 40px 12px; border: 0; border-radius: 8px; background: var(--wa-bar); font-size: 14px; outline: 0; }
   .chats { overflow-y: auto; flex: 1; }
-  .ch { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 10px; align-items: center; width: 100%; padding: 11px 12px; border: 0; border-bottom: 1px solid #f0f3f4; background: #fff; cursor: pointer; text-align: start; }
-  .ch:hover { background: #f7f9fa; }
-  .ch[aria-current="true"] { background: var(--primary-soft); }
-  .ch-av { width: 40px; height: 40px; border-radius: 50%; background: #e7f6ec; color: var(--green); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
-  .ch-n { display: block; font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ch-l { display: block; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-  .ch-a { display: block; font-size: 11px; color: var(--primary); margin-top: 3px; }
+  .ch { display: grid; grid-template-columns: 49px minmax(0, 1fr); gap: 12px; align-items: center; width: 100%; padding: 0 12px; border: 0; background: #fff; cursor: pointer; text-align: start; }
+  .ch:hover { background: #f5f6f6; }
+  .ch[aria-current="true"] { background: #f0f2f5; }
+  .ch-av { width: 49px; height: 49px; border-radius: 50%; background: #dfe5e7; color: #fff; display: grid; place-items: center; font-weight: 600; font-size: 18px; }
+  .ch-b { min-width: 0; padding: 12px 0; border-bottom: 1px solid #e9edef; display: grid; gap: 2px; }
+  .ch-t { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .ch-n { font-size: 16px; color: var(--wa-ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-w { font-size: 12px; color: var(--wa-sub); flex: none; }
+  .ch.unread .ch-w { color: var(--wa-green); }
+  .ch-s { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .ch-l { font-size: 14px; color: var(--wa-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 3px; }
+  .ch-l svg { width: 16px; height: 16px; flex: none; }
+  .ch-u { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #25d366; color: #fff; font-size: 12px; font-weight: 600; line-height: 20px; text-align: center; flex: none; }
+  .ch-a { font-size: 11.5px; color: #008069; }
   .ch-a.none { color: var(--orange); }
-  .ch-r { display: grid; justify-items: end; gap: 4px; font-size: 11px; color: var(--muted); }
-  .ch-u { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--green); color: #fff; font-size: 11px; font-weight: 700; line-height: 20px; text-align: center; }
-  .wa-empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
-  .conv { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: #f4f1ec; }
-  .cv-h { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .wa-empty { padding: 40px 20px; text-align: center; color: var(--wa-sub); font-size: 14px; line-height: 1.7; }
+  .conv { position: relative; display: flex; flex-direction: column; min-height: 0; min-width: 0; background-color: var(--wa-bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23ded6c9' stroke-width='1.3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M28 30c-4-6-14-3-12 4 1 5 12 12 12 12s11-7 12-12c2-7-8-10-12-4z'/%3E%3Cpath d='M92 18v14M85 25h14'/%3E%3Crect x='140' y='20' width='22' height='10' rx='5' transform='rotate(-30 151 25)'/%3E%3Cpath d='M20 92h22a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-12l-6 5v-5h-4a4 4 0 0 1-4-4V96a4 4 0 0 1 4-4z'/%3E%3Ccircle cx='96' cy='96' r='9'/%3E%3Cpath d='M96 91v5l3 2'/%3E%3Cpath d='M150 88l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z'/%3E%3Cpath d='M30 150c0 8 6 12 12 12s10-5 10-11v-6'/%3E%3Ccircle cx='52' cy='143' r='3'/%3E%3Cpath d='M24 140v6a6 6 0 0 0 12 0v-6'/%3E%3Cpath d='M86 146h20v16H86zM90 146v-4h12v4'/%3E%3Cpath d='M140 150a10 10 0 1 0 20 0 10 10 0 1 0-20 0M150 145v10M145 150h10'/%3E%3Ccircle cx='60' cy='60' r='2'/%3E%3Ccircle cx='125' cy='60' r='2'/%3E%3Ccircle cx='60' cy='122' r='2'/%3E%3Ccircle cx='125' cy='125' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+  .cv-h { display: flex; align-items: center; gap: 12px; padding: 8px 14px; background: var(--wa-bar); border-inline-start: 1px solid #e9edef; flex-wrap: wrap; min-height: 59px; }
   .cv-h .back { display: none; }
+  .cv-av { width: 40px; height: 40px; border-radius: 50%; background: #dfe5e7; color: #fff; display: grid; place-items: center; font-weight: 600; flex: none; }
   .cv-who { min-width: 0; flex: 1; }
-  .cv-who b { display: block; font-size: 14.5px; }
-  .cv-who span { font-size: 12px; color: var(--muted); }
+  .cv-who b { display: block; font-size: 16px; font-weight: 500; color: var(--wa-ink); }
+  .cv-who span { font-size: 13px; color: var(--wa-sub); }
   .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; white-space: nowrap; }
-  .cv-act { display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn-sm { height: 34px; padding: 0 12px; font-size: 12.5px; }
-  .msgs { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
-  .bb { max-width: min(75%, 520px); padding: 8px 11px 6px; border-radius: 10px; font-size: 14px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 1px 1px rgba(0,0,0,.06); }
-  .bb.in { align-self: flex-start; background: #fff; }
-  .bb.out { align-self: flex-end; background: #d9fdd3; }
-  .bb.failed { background: var(--red-soft); }
-  .bb .meta { display: flex; gap: 6px; justify-content: flex-end; align-items: center; margin-top: 3px; font-size: 10.5px; color: var(--muted); }
-  .bb .by { font-size: 11px; font-weight: 600; color: var(--primary); display: block; margin-bottom: 2px; }
-  .bb .kind { display: inline-block; font-size: 12px; color: var(--muted); font-style: italic; }
-  .bb .err { display: block; font-size: 11.5px; color: var(--red); margin-top: 3px; }
-  .tick { font-weight: 700; } .tick.read { color: #3b82f6; }
-  .note { align-self: center; max-width: 90%; padding: 5px 12px; border-radius: 8px; background: #fff8e6; color: #7a5b12; font-size: 12px; text-align: center; }
-  .day { align-self: center; padding: 3px 10px; border-radius: 8px; background: #fff; color: var(--muted); font-size: 11.5px; margin: 6px 0; }
-  .cmp { display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px; background: #fff; border-top: 1px solid var(--border); }
-  .cmp textarea { flex: 1; min-height: 42px; max-height: 140px; resize: none; padding: 10px 12px; border: 1px solid #d9e1e3; border-radius: 10px; font: inherit; font-size: 14px; outline: 0; }
-  .cmp textarea:focus { border-color: var(--primary); }
-  .cmp-off { padding: 12px 14px; background: var(--orange-soft); color: #8a4b05; font-size: 12.5px; line-height: 1.6; border-top: 1px solid var(--border); }
-  .side { border-inline-start: 1px solid var(--border); padding: 16px; overflow-y: auto; display: grid; align-content: start; gap: 14px; }
+  .cv-act { position: relative; display: flex; gap: 4px; align-items: center; }
+  .hd-menu { position: absolute; top: 46px; inset-inline-end: 0; z-index: 8; background: #fff; border-radius: 6px; box-shadow: 0 2px 12px rgba(11,20,26,.2); padding: 8px 0; min-width: 210px; display: grid; }
+  .hd-menu button { height: 40px; padding: 0 22px; border: 0; background: none; cursor: pointer; font-size: 14.5px; color: var(--wa-ink); text-align: start; }
+  .hd-menu button:hover { background: var(--wa-bar); }
+  .hd-menu button.danger { color: #ea0038; }
+  .btn-sm { height: 32px; padding: 0 12px; font-size: 12.5px; }
+  .msgs { flex: 1; overflow-y: auto; padding: 14px 6% 10px; display: flex; flex-direction: column; gap: 2px; }
+  .bb { position: relative; max-width: min(65%, 520px); padding: 6px 7px 8px 9px; border-radius: 7.5px; font-size: 14.2px; line-height: 19px; color: var(--wa-ink); box-shadow: 0 1px .5px rgba(11,20,26,.13); overflow-wrap: anywhere; }
+  .bb + .bb, .bb + .note { margin-top: 2px; }
+  .bb.first { margin-top: 10px; }
+  .bb.in { align-self: flex-start; background: var(--wa-in); }
+  .bb.out { align-self: flex-end; background: var(--wa-out); }
+  .bb.first.in { border-start-start-radius: 0; } .bb.first.out { border-start-end-radius: 0; }
+  .bb.first::before { content: ""; position: absolute; top: 0; width: 8px; height: 13px; }
+  .bb.first.in::before { inset-inline-start: -8px; background: var(--wa-in); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .bb.first.out::before { inset-inline-end: -8px; background: var(--wa-out); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  [dir="rtl"] .bb.first.in::before { clip-path: polygon(0 0, 100% 0, 0 100%); }
+  [dir="rtl"] .bb.first.out::before { clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .bb.failed { background: #fde8e8; } .bb.failed.first.out::before { background: #fde8e8; }
+  .bb .by { display: block; font-size: 12.8px; font-weight: 500; color: #027eb5; margin-bottom: 2px; }
+  .bb .tx { white-space: pre-wrap; }
+  .bb .tx a { color: #027eb5; }
+  .meta { float: inline-end; display: inline-flex; align-items: center; gap: 3px; margin: 6px 0 -5px; margin-inline-start: 10px; position: relative; top: 4px; font-size: 11px; color: var(--wa-sub); white-space: nowrap; line-height: 15px; }
+  .meta svg { width: 16px; height: 11px; }
+  .meta .read { color: var(--wa-tick); }
+  .bb .err { display: block; clear: both; font-size: 12px; color: var(--red); padding-top: 4px; }
+  .m-media { position: relative; display: block; margin: -3px -4px 3px -6px; border-radius: 6px; overflow: hidden; background: #cfd4d6; }
+  [dir="rtl"] .m-media { margin: -3px -6px 3px -4px; }
+  .m-media img, .m-media video { display: block; width: 100%; max-width: 330px; max-height: 360px; object-fit: cover; }
+  .m-media.sticker { background: none; } .m-media.sticker img { width: 140px; }
+  .bb.only-media { padding: 3px; } .bb.only-media .m-media { margin: 0; }
+  .bb.only-media .meta { position: absolute; bottom: 7px; inset-inline-end: 9px; margin: 0; top: auto; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+  .bb.only-media .meta .read { color: #fff; }
+  .m-wait { width: 240px; height: 160px; display: grid; place-items: center; color: #fff; font-size: 12.5px; text-align: center; padding: 12px; }
+  .m-doc { display: flex; align-items: center; gap: 10px; min-width: 240px; padding: 10px; margin: -2px -3px 4px -5px; border-radius: 6px; background: rgba(11,20,26,.05); color: var(--wa-ink); text-decoration: none; }
+  .m-doc-ic { width: 34px; height: 40px; border-radius: 4px; background: #8696a0; color: #fff; display: grid; place-items: end center; padding-bottom: 5px; font-size: 9px; font-weight: 700; flex: none; }
+  .m-doc-ic.pdf { background: #e2493f; } .m-doc-ic.doc, .m-doc-ic.docx { background: #2b78e4; } .m-doc-ic.xls, .m-doc-ic.xlsx, .m-doc-ic.csv { background: #1d9d5c; }
+  .m-doc b { display: block; font-size: 14px; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+  .m-doc small { font-size: 11.5px; color: var(--wa-sub); }
+  .m-doc .dl { margin-inline-start: auto; width: 32px; height: 32px; border-radius: 50%; border: 1px solid #c7ced1; display: grid; place-items: center; color: #8696a0; flex: none; }
+  .m-doc .dl svg { width: 16px; height: 16px; }
+  .m-aud { display: flex; align-items: center; gap: 8px; min-width: 260px; margin-bottom: 2px; }
+  .m-aud-ic { width: 40px; height: 40px; border-radius: 50%; background: #ffa94d; color: #fff; display: grid; place-items: center; flex: none; }
+  .bb.out .m-aud-ic { background: #00a884; }
+  .m-aud-ic svg { width: 20px; height: 20px; }
+  .m-aud audio { height: 36px; width: 220px; max-width: 100%; }
+  .m-loc { display: flex; align-items: center; gap: 10px; padding: 10px; margin: -2px -3px 4px -5px; border-radius: 6px; background: rgba(11,20,26,.05); color: var(--wa-ink); text-decoration: none; min-width: 220px; }
+  .m-loc i { width: 40px; height: 40px; border-radius: 50%; background: #e2493f; color: #fff; display: grid; place-items: center; flex: none; font-style: normal; }
+  .m-loc i svg { width: 20px; height: 20px; }
+  .m-loc small { display: block; color: #027eb5; font-size: 12.5px; }
+  .note { align-self: center; max-width: 85%; margin: 8px 0; padding: 5px 12px; border-radius: 7.5px; background: #fff5c4; color: #54656f; font-size: 12.5px; text-align: center; box-shadow: 0 1px .5px rgba(11,20,26,.13); }
+  .day { align-self: center; margin: 12px 0 4px; padding: 5px 12px; border-radius: 7.5px; background: #fff; color: #54656f; font-size: 12.5px; box-shadow: 0 1px .5px rgba(11,20,26,.13); }
+  .cmp { position: relative; display: flex; gap: 8px; align-items: flex-end; padding: 8px 12px; background: var(--wa-bar); }
+  .ic-btn { width: 42px; height: 42px; border: 0; border-radius: 50%; background: none; color: #54656f; cursor: pointer; display: grid; place-items: center; flex: none; }
+  .ic-btn:hover { background: rgba(11,20,26,.06); }
+  .ic-btn svg { width: 24px; height: 24px; }
+  .ic-btn[data-act="attach"][aria-expanded="true"] svg { transform: rotate(45deg); }
+  .cmp-in { flex: 1; min-width: 0; background: #fff; border-radius: 8px; padding: 9px 12px; }
+  .cmp-in textarea { display: block; width: 100%; min-height: 24px; max-height: 120px; resize: none; border: 0; outline: 0; font: inherit; font-size: 15px; line-height: 22px; background: none; }
+  .snd { width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--wa-green); color: #fff; cursor: pointer; display: grid; place-items: center; flex: none; }
+  .snd svg { width: 22px; height: 22px; }
+  [dir="rtl"] .snd .plane, [dir="rtl"] .pv-send .plane { transform: scaleX(-1); }
+  .att-menu { position: absolute; bottom: 62px; inset-inline-start: 12px; z-index: 5; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px rgba(11,20,26,.18); padding: 8px; display: grid; min-width: 210px; }
+  .att-menu button { display: flex; align-items: center; gap: 14px; height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: none; cursor: pointer; font-size: 14.5px; color: var(--wa-ink); text-align: start; }
+  .att-menu button:hover { background: var(--wa-bar); }
+  .att-menu i { width: 26px; height: 26px; display: grid; place-items: center; font-style: normal; }
+  .att-menu i svg { width: 22px; height: 22px; }
+  .rec { display: flex; align-items: center; gap: 12px; padding: 8px 12px; background: var(--wa-bar); }
+  .rec .dot { width: 10px; height: 10px; border-radius: 50%; background: #ea0038; animation: blink 1s infinite; }
+  .rec .tm { font-size: 16px; color: #54656f; min-width: 44px; }
+  .rec .grow { flex: 1; font-size: 13px; color: var(--wa-sub); }
+  @keyframes blink { 50% { opacity: .2; } }
+  .cmp-off { padding: 12px 16px; background: var(--wa-bar); color: #54656f; font-size: 13px; line-height: 1.6; text-align: center; }
+  .pv { position: absolute; inset: 0; z-index: 6; background: #e9edef; display: flex; flex-direction: column; }
+  .pv-h { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--wa-bar); font-size: 15px; color: var(--wa-ink); }
+  .pv-h b { font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pv-main { flex: 1; min-height: 0; display: grid; place-items: center; padding: 20px; }
+  .pv-main img, .pv-main video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+  .pv-file { display: grid; justify-items: center; gap: 10px; color: #54656f; font-size: 14px; text-align: center; }
+  .pv-file .m-doc-ic { width: 70px; height: 84px; font-size: 14px; padding-bottom: 10px; }
+  .pv-foot { padding: 10px 16px 16px; display: grid; gap: 10px; }
+  .pv-cap { display: flex; gap: 10px; align-items: center; }
+  .pv-cap input { flex: 1; height: 42px; border: 0; border-radius: 8px; padding: 0 14px; font: inherit; font-size: 15px; outline: 0; }
+  .pv-thumbs { display: flex; gap: 8px; overflow-x: auto; justify-content: center; }
+  .pv-thumbs button { position: relative; width: 52px; height: 52px; border-radius: 6px; border: 2px solid transparent; padding: 0; overflow: hidden; background: #fff; cursor: pointer; flex: none; display: grid; place-items: center; font-size: 10px; color: #54656f; }
+  .pv-thumbs button[aria-current="true"] { border-color: var(--wa-green); }
+  .pv-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+  .pv-send { width: 52px; height: 52px; border: 0; border-radius: 50%; background: var(--wa-green); color: #fff; display: grid; place-items: center; cursor: pointer; flex: none; }
+  .pv-send svg { width: 24px; height: 24px; }
+  .drop { position: absolute; inset: 0; z-index: 7; background: rgba(233,237,239,.92); border: 3px dashed #8696a0; display: grid; place-items: center; font-size: 18px; color: #54656f; }
+  .side { border-inline-start: 1px solid #e9edef; padding: 16px; overflow-y: auto; display: grid; align-content: start; gap: 14px; background: #fff; }
   .side h3 { font-size: 13px; color: var(--muted); font-weight: 600; }
   .pf { display: block; padding: 12px; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--ink); }
   .pf:hover { border-color: var(--primary); }
@@ -150,16 +228,20 @@
   .md select { height: 42px; border: 1px solid #d9e1e3; border-radius: 10px; padding: 0 10px; font-size: 14px; background: #fff; }
   .md label { display: grid; gap: 6px; font-size: 13px; }
   .md input, .md textarea { border: 1px solid #d9e1e3; border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px; outline: 0; }
+  .md input[type="file"] { padding: 8px; font-size: 13px; }
   .md input:focus, .md textarea:focus, .md select:focus { border-color: var(--primary); }
   .md p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-  .tag-t { display: inline-block; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); font-size: 10.5px; font-weight: 600; line-height: 18px; margin-inline-start: 6px; vertical-align: 1px; }
+  .tag-t { display: inline-block; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); font-size: 10.5px; font-weight: 600; line-height: 18px; margin-inline-start: 6px; vertical-align: 2px; }
   .md-act { display: flex; gap: 8px; justify-content: flex-end; }
-  @media (max-width: 1180px) { .wa { grid-template-columns: 300px minmax(0, 1fr); } .side { display: none; } }
+  @media (max-width: 1500px) { .wa { grid-template-columns: 340px minmax(0, 1fr); } .side { display: none; } }
   @media (max-width: 760px) {
-    .wa { grid-template-columns: 1fr; height: calc(100vh - 170px); }
+    .wa { grid-template-columns: 1fr; height: calc(100vh - 150px); border-radius: 0; margin: 0 -16px; }
     .wa.open .wa-list { display: none; } .wa:not(.open) .conv { display: none; }
-    .cv-h .back { display: inline-flex; }
-    .bb { max-width: 88%; }
+    .wa.open { position: fixed; inset: 0; z-index: 900; height: 100vh; height: 100dvh; min-height: 0; margin: 0; border: 0; border-radius: 0; }
+    .cv-h .back { display: grid; }
+    .cv-act .btn-sm { padding: 0 9px; }
+    .msgs { padding: 10px 12px; }
+    .bb { max-width: 85%; }
   }
 </style>
 </head>
@@ -249,12 +331,12 @@
       winClosed: "More than 24 hours passed since the customer's last message. WhatsApp only allows an approved template message now (coming soon), or wait for the customer to write.",
       n_assign: "{by} transferred the conversation to {to}", n_unassign: "{by} removed the assignment", n_closed: "{by} closed the conversation", n_open: "{by} reopened the conversation",
       patient: "Patient file", noPatient: "No file has this mobile number.", newFile: "Search the patients", window: "Free replies until {t}", windowOff: "Reply window closed",
-      k_image: "Photo", k_audio: "Voice note", k_video: "Video", k_document: "File", k_sticker: "Sticker", k_location: "Location", k_other: "Message type: {t}", openPhone: "open it on the WhatsApp phone",
+      k_image: "Photo", k_audio: "Voice note", k_video: "Video", k_document: "File", k_sticker: "Sticker", k_location: "Location", k_other: "Message type: {t}",
       failed: "Not sent", today: "Today", yesterday: "Yesterday",
       offCloud: "Conversations need the shared database and staff logins (Supabase).", offSetup: "WhatsApp is not connected yet. Run notes/supabase-whatsapp.sql in Supabase, then deploy the mada-whatsapp function.",
       notConfigured: "WhatsApp keys are not set in Supabase yet.", sendFail: "Not sent: {e}", assigned: "Transferred to {n}", unassignedT: "Assignment removed", offline: "No connection. Try again.",
       testNew: "Test message", testTag: "Test", testT: "Test message (as the customer)", testHelp: "Before WhatsApp is connected: write as if you were the customer. The message shows here like a WhatsApp message, and replies to it stay inside the system.",
-      testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation."
+      testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation.", openMap: "Open in Maps", loading: "Loading…", notYet: "Not downloaded yet", aDoc: "Document", aMedia: "Photos & videos", aCam: "Camera", attach: "Attach", record: "Record a voice note", recording: "Recording… press send when done", caption: "Add a caption…", tooBig: "{n} is over 50 MB.", noMic: "The microphone is not available in this browser.", dropHere: "Drop files here to send them", testFile: "Attachment (optional)", menu: "Menu"
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -268,12 +350,12 @@
       winClosed: "مرّ أكثر من ٢٤ ساعة على آخر رسالة من العميل. واتساب ما يسمح الحين إلا برسالة قالب معتمدة (قريباً)، أو انتظري العميل يكتب.",
       n_assign: "حوّلت {by} المحادثة إلى {to}", n_unassign: "ألغت {by} الإسناد", n_closed: "أغلقت {by} المحادثة", n_open: "أعادت {by} فتح المحادثة",
       patient: "ملف المريض", noPatient: "ما فيه ملف بهذا الجوال.", newFile: "ابحثي في المرضى", window: "الرد المجاني متاح حتى {t}", windowOff: "انتهت مهلة الرد",
-      k_image: "صورة", k_audio: "رسالة صوتية", k_video: "فيديو", k_document: "ملف", k_sticker: "ملصق", k_location: "موقع", k_other: "نوع الرسالة: {t}", openPhone: "افتحيها من جوال الواتساب",
+      k_image: "صورة", k_audio: "رسالة صوتية", k_video: "فيديو", k_document: "ملف", k_sticker: "ملصق", k_location: "موقع", k_other: "نوع الرسالة: {t}",
       failed: "ما انرسلت", today: "اليوم", yesterday: "أمس",
       offCloud: "المحادثات تحتاج قاعدة البيانات المشتركة وتسجيل دخول الموظفين (Supabase).", offSetup: "الواتساب لسا ما انربط. شغّل notes/supabase-whatsapp.sql في Supabase، وبعدها انشر دالة mada-whatsapp.",
       notConfigured: "مفاتيح الواتساب لسا ما انحطت في Supabase.", sendFail: "ما انرسلت: {e}", assigned: "تحولت إلى {n}", unassignedT: "انلغى الإسناد", offline: "ما فيه اتصال. حاولي مرة ثانية.",
       testNew: "رسالة تجربة", testTag: "تجربة", testT: "رسالة تجربة (كأنك العميل)", testHelp: "قبل ربط الواتساب: اكتبي كأنك العميل. الرسالة تطلع هنا مثل رسالة الواتساب، والرد عليها يبقى داخل النظام.",
-      testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية."
+      testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية.", openMap: "افتحي في الخرائط", loading: "جاري التحميل…", notYet: "لسا ما تحمّل", aDoc: "مستند", aMedia: "الصور والفيديو", aCam: "الكاميرا", attach: "إرفاق", record: "سجّلي رسالة صوتية", recording: "جاري التسجيل… اضغطي إرسال لما تخلصين", caption: "أضيفي تعليق…", tooBig: "{n} أكبر من 50 ميجا.", noMic: "المايك مو متاح في هذا المتصفح.", dropHere: "أفلتي الملفات هنا عشان ترسلينها", testFile: "مرفق (اختياري)", menu: "القائمة"
     }
   };
   let current = "en";
@@ -322,7 +404,48 @@
     if (changed || scroll) drawConv(true); else drawHead();
   }
 
+  const IC = {
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+    cam: '<path d="M4 8h3.2l1.8-2.6h6l1.8 2.6H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/>',
+    doc: '<path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+    photo: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+    dl: '<path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/>',
+    pin: '<path d="M12 21s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+    trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+    x: '<path d="M6 6l12 12M18 6 6 18"/>',
+    back: '<path d="m15 6-6 6 6 6"/>',
+    video: '<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',
+    clock: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 1.5"/>',
+    more: '<circle cx="12" cy="5.5" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="12" cy="18.5" r="1.3"/>'
+  };
+  const PLANE = '<svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6v6.5L15 12 3.4 13.9z"/></svg>';
+  const TICK1 = '<svg viewBox="0 0 16 11" aria-hidden="true"><path fill="currentColor" d="M11.1.7 4.3 7.6 1.7 5 .6 6.1l3.7 3.7 7.9-8z"/></svg>';
+  const TICK2 = '<svg viewBox="0 0 16 11" aria-hidden="true"><path fill="currentColor" d="M11.1.7 4.3 7.6 1.7 5 .6 6.1l3.7 3.7 7.9-8zM15.4.7 8.6 7.6l-.8-.8-1.1 1.1 1.9 1.9 7.9-8z"/></svg>';
+  const fmtSize = n => !n ? "" : n < 1024 ? n + " B" : n < 1048576 ? Math.round(n / 1024) + " KB" : (n / 1048576).toFixed(1) + " MB";
+  const extOf = name => (String(name || "").split(".").length > 1 ? String(name).split(".").pop() : "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 5);
+  const linkify = s => esc(s).replace(/\bhttps?:\/\/[^\s<]+/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+  const avatar = n => esc(String(n || "#").trim().charAt(0).toUpperCase() || "#");
+  const AV = ["#6bcbef", "#ffa97a", "#a5b337", "#e542a3", "#35cd96", "#ff8f7d", "#53a6fd", "#c79ecc"];
+  const avColor = w => AV[[...String(w)].reduce((a, c) => a + c.charCodeAt(0), 0) % AV.length];
+  // What WhatsApp accepts per kind (Meta's limits): JPEG/PNG photos up to 5 MB, MP4 video and voice notes up to 16 MB, any file up to 50 MB here.
+  function kindOf(f) {
+    const m = (f.type || "").split(";")[0];
+    if (["image/jpeg", "image/png"].includes(m) && f.size <= 5 * 1048576) return "image";
+    if (["video/mp4", "video/3gpp"].includes(m) && f.size <= 16 * 1048576) return "video";
+    if (/^audio\/(aac|mp4|mpeg|amr|ogg)/.test(m) && f.size <= 16 * 1048576) return "audio";
+    return "document";
+  }
+
+  // ---------- Inbox ----------
   const inFilter = (c, f) => f === "mine" ? c.status === "open" && c.assigned_to === myId : f === "none" ? c.status === "open" && !c.assigned_to : f === "closed" ? c.status === "closed" : c.status === "open";
+  const KIND_IC = { image: IC.photo, sticker: IC.photo, video: IC.video, audio: IC.mic, document: IC.doc, location: IC.pin };
+  function lastLine(c) {
+    const m = /^\[(\w+)\]$/.exec(c.last_body || "");
+    const k = m ? m[1] : null, ticks = c.last_dir === "out" ? `<span style="color:var(--wa-tick)">${TICK2}</span>` : "";
+    if (k) return ticks + (KIND_IC[k] ? svg(KIND_IC[k]) : "") + esc(t()["k_" + k] || k);
+    return ticks + esc(c.last_body || "");
+  }
   function drawList() {
     const F = ["mine", "none", "all", "closed"];
     $("tabs").innerHTML = F.map(f => `<button type="button" data-f="${f}" aria-pressed="${filter === f}">${esc(t()["f_" + f])}<em>${chats.filter(c => inFilter(c, f)).length}</em></button>`).join("");
@@ -330,53 +453,121 @@
     const list = chats.filter(c => inFilter(c, filter)).filter(c => !s || [c.name, c.wa_id, local(c.wa_id), ...patientsOf(c).map(p => T(p.name))].some(v => String(v || "").toLowerCase().includes(s)));
     $("chats").innerHTML = list.length ? list.map(c => {
       const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id);
-      const last = c.last_body || "";
-      return `<button type="button" class="ch" data-id="${esc(c.wa_id)}" aria-current="${c.wa_id === sel}">
-        <span class="ch-av">${esc(String(name).trim().charAt(0) || "#")}</span>
-        <span style="min-width:0"><span class="ch-n">${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</span><span class="ch-l">${c.last_dir === "out" ? "↩ " : ""}${esc(last)}</span>
-          <span class="ch-a${c.assigned_to ? "" : " none"}">${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span>
-        <span class="ch-r"><span>${esc(shortWhen(c.last_at))}</span>${c.unread ? `<span class="ch-u">${c.unread}</span>` : ""}</span></button>`;
+      return `<button type="button" class="ch${c.unread ? " unread" : ""}" data-id="${esc(c.wa_id)}" aria-current="${c.wa_id === sel}">
+        <span class="ch-av" style="background:${avColor(c.wa_id)}">${avatar(name)}</span>
+        <span class="ch-b"><span class="ch-t"><span class="ch-n">${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</span><span class="ch-w">${esc(shortWhen(c.last_at))}</span></span>
+          <span class="ch-s"><span class="ch-l">${lastLine(c)}</span>${c.unread ? `<span class="ch-u">${c.unread}</span>` : ""}</span>
+          <span class="ch-a${c.assigned_to ? "" : " none"}">${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span></button>`;
     }).join("") : `<div class="wa-empty">${esc(t().noChats)}</div>`;
   }
   const patientsOf = c => typeof MadaPatients !== "undefined" ? MadaPatients.findByMobile(local(c.wa_id)) : [];
   const winEnd = c => c && c.last_in_at ? new Date(c.last_in_at).getTime() + 864e5 : 0;
 
+  // ---------- Attachment links (private bucket wa-media, links last an hour) ----------
+  const urls = {}; let signing = false;
+  async function signMissing() {
+    if (signing) return;
+    const need = [...new Set(msgs.filter(m => m.media_path && (!urls[m.media_path] || Date.now() - urls[m.media_path].at > 50 * 60000)).map(m => m.media_path))];
+    if (!need.length) return;
+    signing = true;
+    const got = await MadaStore.auth.sign("wa-media", need, 3600);
+    signing = false;
+    Object.entries(got).forEach(([p, u]) => urls[p] = { u, at: Date.now() });
+    if (Object.keys(got).length) drawMsgs(false);
+  }
+  const urlOf = m => m.local || (m.media_path && urls[m.media_path] ? urls[m.media_path].u : null);
+
+  // ---------- Conversation ----------
+  let menuOpen = false;
   function drawHead() {
     const c = chats.find(x => x.wa_id === sel), h = $("cvh"); if (!c || !h) return;
     const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id), mine = c.assigned_to === myId;
-    h.innerHTML = `<button type="button" class="btn btn-ghost btn-sm back" data-act="back">${esc(t().back)}</button>
+    h.innerHTML = `<button type="button" class="ic-btn back" data-act="back" aria-label="${esc(t().back)}">${svg(IC.back)}</button>
+      <span class="cv-av" style="background:${avColor(c.wa_id)}">${avatar(name)}</span>
       <div class="cv-who"><b>${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</b><span class="ltr">${esc(shown(c.wa_id))}</span> · <span>${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></div>
       <div class="cv-act">${!mine && myId && c.status === "open" ? `<button type="button" class="btn btn-primary btn-sm" data-act="take">${esc(t().takeIt)}</button>` : ""}
-        <button type="button" class="btn btn-ghost btn-sm" data-act="assign">${esc(c.assigned_to ? t().transfer : t().assign)}</button>
-        <button type="button" class="btn btn-ghost btn-sm" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
-        ${c.test ? `<button type="button" class="btn btn-ghost btn-sm" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="btn btn-ghost btn-sm" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div>`;
+        <button type="button" class="ic-btn" data-act="more" aria-label="${esc(t().menu)}" aria-expanded="${menuOpen}">${svg(IC.more)}</button>
+        <div class="hd-menu" id="hdMenu"${menuOpen ? "" : " hidden"}>
+          <button type="button" data-act="assign">${esc(c.assigned_to ? t().transfer : t().assign)}</button>
+          <button type="button" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
+          ${c.test ? `<button type="button" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="danger" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div></div>`;
     drawSide();
   }
-  function bubble(m) {
+  function mediaHtml(m) {
+    const u = urlOf(m), k = m.type, name = m.file_name || t()["k_" + k] || k;
+    if (k === "location") {
+      const ll = /(-?\d+\.\d+),\s*(-?\d+\.\d+)\s*$/.exec(m.body || ""), label = (m.body || "").replace(/(·\s*)?-?\d+\.\d+,\s*-?\d+\.\d+\s*$/, "").trim();
+      return `<a class="m-loc" href="https://maps.google.com/?q=${ll ? ll[1] + "," + ll[2] : encodeURIComponent(m.body || "")}" target="_blank" rel="noopener"><i>${svg(IC.pin)}</i><span>${esc(label || t().k_location)}<small>${esc(t().openMap)}</small></span></a>`;
+    }
+    if (!["image", "sticker", "video", "audio", "document"].includes(k)) return "";
+    if (!u) return k === "document" || k === "audio"
+      ? `<div class="m-doc"><span class="m-doc-ic">${esc(extOf(name).toUpperCase())}</span><span><b>${esc(name)}</b><small>${esc(m.media_path ? t().loading : m.media_id ? t().notYet : "")}</small></span></div>`
+      : `<span class="m-media"><span class="m-wait">${svg(KIND_IC[k] || IC.photo)}<br>${esc(m.media_path ? t().loading : t().notYet)}</span></span>`;
+    if (k === "image" || k === "sticker") return `<a class="m-media${k === "sticker" ? " sticker" : ""}" href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="${esc(name)}" loading="lazy"></a>`;
+    if (k === "video") return `<span class="m-media"><video src="${esc(u)}" controls preload="metadata" playsinline></video></span>`;
+    if (k === "audio") return `<div class="m-aud"><span class="m-aud-ic">${svg(IC.mic)}</span><audio src="${esc(u)}" controls preload="metadata"></audio></div>`;
+    const ext = extOf(name);
+    return `<a class="m-doc" href="${esc(u)}" target="_blank" rel="noopener" download="${esc(name)}"><span class="m-doc-ic ${esc(ext)}">${esc(ext.toUpperCase() || "FILE")}</span>
+      <span style="min-width:0"><b>${esc(name)}</b><small>${m.file_size ? `<span class="ltr">${esc(fmtSize(m.file_size))}</span> · ` : ""}${esc(ext.toUpperCase())}</small></span><span class="dl">${svg(IC.dl)}</span></a>`;
+  }
+  function bubble(m, first, showBy) {
     if (m.dir === "note") {
       const by = m.by_name || m.by_id || "";
       const text = m.type === "assign" ? (m.body ? tx("n_assign", { by, to: m.body }) : tx("n_unassign", { by })) : tx(m.type === "closed" ? "n_closed" : "n_open", { by });
       return `<div class="note">${esc(text)} · ${esc(hm(m.created_at))}</div>`;
     }
-    const kind = m.type === "text" ? "" : `<span class="kind">${esc(t()["k_" + m.type] || tx("k_other", { t: m.type }))}${m.media_id ? " · " + esc(t().openPhone) : ""}</span>${m.body ? "\n" : ""}`;
-    const tick = m.dir !== "out" ? "" : m.status === "read" ? '<span class="tick read">✓✓</span>' : m.status === "delivered" ? '<span class="tick">✓✓</span>' : m.status === "sent" ? '<span class="tick">✓</span>' : m.status === "failed" ? "" : "…";
-    return `<div class="bb ${m.dir}${m.status === "failed" ? " failed" : ""}">${m.dir === "out" && m.by_name ? `<span class="by">${esc(m.by_name)}</span>` : ""}${kind}${esc(m.body || "")}<span class="meta">${esc(hm(m.created_at))} ${tick}</span>${m.status === "failed" ? `<span class="err">${esc(t().failed)}${m.error ? " · " + esc(m.error) : ""}</span>` : ""}</div>`;
+    const tick = m.dir !== "out" ? "" : m.status === "sending" ? svg(IC.clock) : m.status === "read" ? `<span class="read">${TICK2}</span>` : m.status === "delivered" ? TICK2 : m.status === "sent" ? TICK1 : "";
+    const media = m.type === "text" ? "" : mediaHtml(m);
+    const text = m.type === "location" ? "" : m.body;
+    const onlyMedia = !text && ["image", "sticker", "video"].includes(m.type) && urlOf(m);
+    return `<div class="bb ${m.dir}${first ? " first" : ""}${m.status === "failed" ? " failed" : ""}${onlyMedia ? " only-media" : ""}">${showBy && m.by_name ? `<span class="by">${esc(m.by_name)}</span>` : ""}${media}${text ? `<span class="tx">${linkify(text)}</span>` : ""}<span class="meta">${esc(hm(m.created_at))}${tick}</span>${m.status === "failed" ? `<span class="err">${esc(t().failed)}${m.error ? " · " + esc(m.error) : ""}</span>` : ""}</div>`;
   }
+  function drawMsgs(scroll) {
+    const box = $("msgs"); if (!box) return;
+    const keep = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
+    let last = "", prev = null, html = "";
+    msgs.concat(pending.filter(p => p.wa_id === sel)).forEach(m => {
+      const k = dayKey(m.created_at);
+      if (k !== last) { html += `<div class="day">${esc(dayLabel(m.created_at))}</div>`; last = k; prev = null; }
+      const first = !prev || prev.dir !== m.dir || prev.dir === "note";
+      html += bubble(m, first, m.dir === "out" && (first || prev.by_name !== m.by_name));
+      prev = m;
+    });
+    box.innerHTML = html;
+    if (scroll || keep) { box.scrollTop = box.scrollHeight; box.querySelectorAll("img,video").forEach(x => x.addEventListener(x.tagName === "IMG" ? "load" : "loadedmetadata", () => { box.scrollTop = box.scrollHeight; }, { once: true })); }
+    signMissing();
+  }
+  function composerHtml(c) {
+    if (!(Date.now() < winEnd(c))) return `<div class="cmp-off">${esc(t().winClosed)}</div>`;
+    return `<div class="cmp" id="cmp">
+        <div class="att-menu" id="attMenu" hidden>
+          <button type="button" data-act="pickDoc"><i style="color:#7f66ff">${svg(IC.doc)}</i>${esc(t().aDoc)}</button>
+          <button type="button" data-act="pickMedia"><i style="color:#007bfc">${svg(IC.photo)}</i>${esc(t().aMedia)}</button>
+          <button type="button" data-act="pickCam"><i style="color:#ff2e74">${svg(IC.cam)}</i>${esc(t().aCam)}</button>
+        </div>
+        <button type="button" class="ic-btn" data-act="attach" aria-label="${esc(t().attach)}" aria-expanded="false">${svg(IC.plus)}</button>
+        <div class="cmp-in"><textarea id="txt" rows="1" placeholder="${esc(t().typeMsg)}"></textarea></div>
+        <button type="button" class="ic-btn" id="camBtn" data-act="pickCam" aria-label="${esc(t().aCam)}">${svg(IC.cam)}</button>
+        <button type="button" class="snd" id="sndBtn" data-act="mic" aria-label="${esc(t().record)}">${svg(IC.mic)}</button>
+      </div>
+      <div class="rec" id="rec" hidden><button type="button" class="ic-btn" data-act="recCancel" aria-label="${esc(t().cancel)}">${svg(IC.trash)}</button><span class="dot"></span><span class="tm" id="recTm">0:00</span><span class="grow">${esc(t().recording)}</span><button type="button" class="snd" data-act="recSend" aria-label="${esc(t().send)}">${PLANE}</button></div>
+      <input type="file" id="fDoc" multiple hidden><input type="file" id="fMedia" accept="image/*,video/*" multiple hidden><input type="file" id="fCam" accept="image/*" capture="environment" hidden>`;
+  }
+  let convFor = null, convOpen = null;
   function drawConv(scroll) {
     $("wa").classList.toggle("open", !!sel);
     const c = chats.find(x => x.wa_id === sel);
-    if (!c) { $("conv").innerHTML = `<div class="wa-empty" style="margin:auto">${esc(t().pick)}</div>`; $("side").innerHTML = ""; return; }
-    const box = $("msgs"), keep = box && box.scrollHeight - box.scrollTop - box.clientHeight < 40;
-    const draft = $("txt") ? $("txt").value : "";
-    let last = "", html = "";
-    msgs.forEach(m => { const k = dayKey(m.created_at); if (k !== last) { html += `<div class="day">${esc(dayLabel(m.created_at))}</div>`; last = k; } html += bubble(m); });
+    if (!c) { convFor = null; $("conv").innerHTML = `<div class="wa-empty" style="margin:auto">${esc(t().pick)}</div>`; $("side").innerHTML = ""; return; }
     const open = Date.now() < winEnd(c);
-    $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div class="msgs" id="msgs">${html}</div>` + (open
-      ? `<form class="cmp" id="cmp"><textarea id="txt" rows="1" placeholder="${esc(t().typeMsg)}"></textarea><button class="btn btn-primary" id="sendBtn" type="submit">${esc(t().send)}</button></form>`
-      : `<div class="cmp-off">${esc(t().winClosed)}</div>`);
-    if ($("txt")) $("txt").value = draft;
-    drawHead();
-    if (scroll || keep) $("msgs").scrollTop = $("msgs").scrollHeight;
+    // The composer is drawn again only when the chat or its reply window changes, so a draft, a recording or a preview stays.
+    if (convFor !== sel || convOpen !== open || !$("msgs")) {
+      const draft = convFor === sel && $("txt") ? $("txt").value : "";
+      stopRec(true); closePreview();
+      $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div class="msgs" id="msgs"></div><div id="cmpWrap">${composerHtml(c)}</div>`;
+      if ($("txt")) { $("txt").value = draft; syncSend(); }
+      convFor = sel; convOpen = open; scroll = true; menuOpen = false;
+    }
+    drawHead(); drawMsgs(scroll);
   }
   function drawSide() {
     const c = chats.find(x => x.wa_id === sel); if (!c) return;
@@ -385,21 +576,101 @@
       : `<p>${esc(t().noPatient)}</p><a class="btn btn-ghost btn-sm" href="patients.html">${esc(t().newFile)}</a>`)
       + `<p>${esc(Date.now() < end ? tx("window", { t: dayLabel(end) + " " + hm(end) }) : t().windowOff)}</p>`;
   }
+  // Mic when the box is empty, send arrow when there is text (as in WhatsApp).
+  function syncSend() {
+    const b = $("sndBtn"), has = $("txt") && $("txt").value.trim();
+    if (!b) return;
+    b.dataset.act = has ? "send" : "mic"; b.innerHTML = has ? PLANE : svg(IC.mic); b.setAttribute("aria-label", has ? t().send : t().record);
+    if ($("camBtn")) $("camBtn").hidden = !!has;
+    const ta = $("txt"); ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight, 120) + "px";
+  }
 
-  async function send(e) {
-    e.preventDefault();
-    const ta = $("txt"), text = ta.value.trim(); if (!text || busy) return;
-    busy = true; $("sendBtn").disabled = true; $("sendBtn").textContent = t().sending;
-    const c = chats.find(x => x.wa_id === sel);
+  // ---------- Sending ----------
+  const pending = []; let pid = 0;
+  async function postOut(waId, text, media) {
+    const c = chats.find(x => x.wa_id === waId);
     // A test chat never goes to WhatsApp: the reply is only saved.
-    const r = c && c.test ? await MadaStore.auth.rpc("wa_test_out", { p_wa_id: sel, p_body: text })
-      : await MadaStore.auth.call("mada-whatsapp", { action: "send", waId: sel, text }, 30000);
-    busy = false;
-    if (r.ok) { ta.value = ""; }
-    else toast(r.offline ? t().offline : r.json && r.json.error === "not_configured" ? t().notConfigured : tx("sendFail", { e: (r.json && (r.json.error || r.json.message)) || r.status }));
-    if ($("sendBtn")) { $("sendBtn").disabled = false; $("sendBtn").textContent = t().send; }
+    return c && c.test ? MadaStore.auth.rpc("wa_test_out", { p_wa_id: waId, p_body: text, p_media: media })
+      : MadaStore.auth.call("mada-whatsapp", { action: "send", waId, text, media }, 60000);
+  }
+  const sendErr = r => r.offline ? t().offline : r.json && r.json.error === "not_configured" ? t().notConfigured : tx("sendFail", { e: (r.json && (r.json.error || r.json.message)) || r.status });
+  async function sendText() {
+    const ta = $("txt"), text = ta.value.trim(); if (!text || busy) return;
+    busy = true; const p = { id: "p" + (++pid), wa_id: sel, dir: "out", type: "text", body: text, status: "sending", by_name: me && me.name ? me.name.ar : "", created_at: new Date().toISOString() };
+    pending.push(p); ta.value = ""; syncSend(); drawMsgs(true);
+    const r = await postOut(sel, text, null);
+    busy = false; pending.splice(pending.indexOf(p), 1);
+    if (!r.ok) { toast(sendErr(r)); if ($("txt") && !$("txt").value) { $("txt").value = text; syncSend(); } }
     await loadChats(); await loadThread(true);
   }
+  // Upload each file to wa-media, then send it (the caption goes with the first one).
+  async function uploadFile(waId, f) {
+    const ext = extOf(f.name) || ((f.type || "").split("/")[1] || "bin").replace(/[^a-z0-9]/g, "").slice(0, 5);
+    const path = `${waId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const mime = (f.type || "application/octet-stream").split(";")[0];
+    const up = await MadaStore.auth.upload("wa-media", path, f.type === mime ? f : new Blob([f], { type: mime }));
+    return up.ok ? { path, mime, name: f.name || ("file." + ext), size: f.size } : { error: up.offline ? t().offline : (up.json && (up.json.message || up.json.error)) || up.status };
+  }
+  async function sendFiles(files, caption) {
+    const waId = sel;
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i], cap = i === 0 ? caption : "";
+      if (f.size > 50 * 1048576) { toast(tx("tooBig", { n: f.name })); continue; }
+      const kind = kindOf(f), local = URL.createObjectURL(f);
+      const p = { id: "p" + (++pid), wa_id: waId, dir: "out", type: kind, body: cap, file_name: f.name, file_size: f.size, local, status: "sending", by_name: me && me.name ? me.name.ar : "", created_at: new Date().toISOString() };
+      pending.push(p); if (sel === waId) drawMsgs(true);
+      const media = await uploadFile(waId, f);
+      const r = media.error ? { ok: false, json: { error: media.error } } : await postOut(waId, cap, media);
+      pending.splice(pending.indexOf(p), 1);
+      if (!r.ok) toast(sendErr(r));
+      else if (media.path) urls[media.path] = { u: local, at: Date.now() };
+    }
+    await loadChats(); await loadThread(true);
+  }
+
+  // ---------- Preview before sending (like WhatsApp) ----------
+  let pvFiles = [], pvAt = 0;
+  function openPreview(files) {
+    files = [...files].filter(f => f && f.size); if (!files.length) return;
+    pvFiles = files; pvAt = 0; drawPreview(); setTimeout(() => $("pvCap") && $("pvCap").focus(), 0);
+  }
+  function closePreview() { pvFiles.forEach(f => f._u && URL.revokeObjectURL(f._u)); pvFiles = []; const el = $("pv"); if (el) el.remove(); }
+  const blobUrl = f => f._u || (f._u = URL.createObjectURL(f));
+  function drawPreview() {
+    let el = $("pv"); if (!el) { el = document.createElement("div"); el.className = "pv"; el.id = "pv"; $("conv").appendChild(el); }
+    const f = pvFiles[pvAt], k = kindOf(f), cap = $("pvCap") ? $("pvCap").value : "";
+    const big = k === "image" || (f.type || "").startsWith("image/") ? `<img src="${blobUrl(f)}" alt="">` : k === "video" ? `<video src="${blobUrl(f)}" controls playsinline></video>`
+      : `<div class="pv-file"><span class="m-doc-ic ${esc(extOf(f.name))}">${esc(extOf(f.name).toUpperCase() || "FILE")}</span><b>${esc(f.name)}</b><span class="ltr">${esc(fmtSize(f.size))}</span></div>`;
+    el.innerHTML = `<div class="pv-h"><button type="button" class="ic-btn" data-act="pvClose" aria-label="${esc(t().cancel)}">${svg(IC.x)}</button><b>${esc(f.name)}</b></div>
+      <div class="pv-main">${big}</div>
+      <div class="pv-foot">${pvFiles.length > 1 ? `<div class="pv-thumbs">${pvFiles.map((x, i) => `<button type="button" data-pv="${i}" aria-current="${i === pvAt}">${(x.type || "").startsWith("image/") ? `<img src="${blobUrl(x)}" alt="">` : esc(extOf(x.name).toUpperCase() || "FILE")}</button>`).join("")}</div>` : ""}
+        <div class="pv-cap"><input id="pvCap" placeholder="${esc(t().caption)}" value="${esc(cap)}"><button type="button" class="pv-send" data-act="pvSend" aria-label="${esc(t().send)}">${PLANE}</button></div></div>`;
+  }
+
+  // ---------- Voice note ----------
+  let rec = null;
+  function recMime() {
+    const list = ["audio/ogg;codecs=opus", "audio/mp4", "audio/webm;codecs=opus", "audio/webm"];
+    return typeof MediaRecorder !== "undefined" ? list.find(m => MediaRecorder.isTypeSupported(m)) || "" : "";
+  }
+  async function startRec() {
+    if (!navigator.mediaDevices || typeof MediaRecorder === "undefined") { toast(t().noMic); return; }
+    let stream; try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { toast(t().noMic); return; }
+    const mime = recMime(), mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined), parts = [];
+    mr.ondataavailable = e => e.data.size && parts.push(e.data);
+    rec = { mr, stream, parts, at: Date.now(), send: false, timer: setInterval(() => { const s = Math.floor((Date.now() - rec.at) / 1000); if ($("recTm")) $("recTm").textContent = Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); }, 250) };
+    mr.onstop = () => {
+      const r = rec; rec = null; clearInterval(r.timer); r.stream.getTracks().forEach(x => x.stop());
+      if ($("cmp")) { $("cmp").hidden = false; $("rec").hidden = true; }
+      if (!r.send || !r.parts.length) return;
+      const type = (mr.mimeType || mime || "audio/webm").split(";")[0], ext = { "audio/ogg": "ogg", "audio/mp4": "m4a", "audio/webm": "webm" }[type] || "audio";
+      sendFiles([new File(r.parts, `voice-${new Date().toISOString().slice(0, 19).replace(/\D/g, "")}.${ext}`, { type })], "");
+    };
+    mr.start(); $("cmp").hidden = true; $("rec").hidden = false;
+  }
+  function stopRec(cancel) { if (rec) { rec.send = !cancel; rec.mr.stop(); } }
+
+  // ---------- Assign, test mode ----------
   async function assign(staffId) {
     const r = await MadaStore.auth.rpc("wa_assign", { p_wa_id: sel, p_staff_id: staffId });
     if (!r.ok) { toast(r.offline ? t().offline : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
@@ -408,49 +679,80 @@
   }
   function openAssign() {
     const c = chats.find(x => x.wa_id === sel); if (!c) return;
-    $("md").innerHTML = `<h2>${esc(t().assignT)}</h2><label style="display:grid;gap:6px;font-size:13px">${esc(t().assignTo)}
+    $("md").innerHTML = `<h2>${esc(t().assignT)}</h2><label>${esc(t().assignTo)}
       <select id="who"><option value="">${esc(t().nobody)}</option>${staff().map(s => `<option value="${esc(s.id)}"${s.id === c.assigned_to ? " selected" : ""}>${esc(T(s.name))} · ${esc(s.id)}</option>`).join("")}</select></label>
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().save)}</button></div>`;
     $("md").dataset.mode = "assign"; $("ov").hidden = false;
   }
-  // Test mode: a message typed by staff as if it came from the customer (notes/supabase-whatsapp.sql, wa_test_in).
+  // Test mode: a message typed by staff as if it came from the customer, with an optional attachment (wa_test_in).
+  const waOf = v => { const w = String(v || "").replace(/\D/g, ""); return /^05\d{8}$/.test(w) ? "966" + w.slice(1) : w; };
   function openTest(c) {
     const num = c ? local(c.wa_id) : "05" + String(Math.floor(Math.random() * 1e8)).padStart(8, "0");
     $("md").innerHTML = `<h2>${esc(t().testT)}</h2><p>${esc(t().testHelp)}</p>
       <label>${esc(t().testNum)}<input id="tNum" class="ltr" inputmode="tel" value="${esc(num)}"${c ? " readonly" : ""}></label>
       <label>${esc(t().testName)}<input id="tName" value="${esc(c ? c.name || "" : "")}"${c ? " readonly" : ""}></label>
       <label>${esc(t().testBody)}<textarea id="tBody" rows="3"></textarea></label>
-      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().testSend)}</button></div>`;
+      <label>${esc(t().testFile)}<input type="file" id="tFile"></label>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit" id="tSend">${esc(t().testSend)}</button></div>`;
     $("md").dataset.mode = "test"; $("ov").hidden = false; $("tBody").focus();
   }
   async function sendTest() {
-    const body = $("tBody").value.trim(); if (!body) { $("tBody").focus(); return; }
-    const r = await MadaStore.auth.rpc("wa_test_in", { p_wa_id: $("tNum").value, p_name: $("tName").value, p_body: body });
+    const body = $("tBody").value.trim(), f = $("tFile").files[0], w = waOf($("tNum").value);
+    if (!body && !f) { $("tBody").focus(); return; }
+    $("tSend").disabled = true;
+    let media = null;
+    if (f) { if (f.size > 50 * 1048576) { toast(tx("tooBig", { n: f.name })); $("tSend").disabled = false; return; } media = await uploadFile(w, f); if (media.error) { toast(tx("sendFail", { e: media.error })); $("tSend").disabled = false; return; } }
+    const r = await MadaStore.auth.rpc("wa_test_in", { p_wa_id: w, p_name: $("tName").value, p_body: body, p_media: media });
+    if ($("tSend")) $("tSend").disabled = false;
     if (!r.ok) { toast(r.offline ? t().offline : r.json && /real WhatsApp/.test(r.json.message || "") ? t().testRealNo : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
     $("ov").hidden = true;
     sel = r.json.wa_id; msgs = [];
     await loadChats();
     const c = chats.find(x => x.wa_id === sel); if (c && !inFilter(c, filter)) filter = c.assigned_to === myId ? "mine" : c.assigned_to ? "all" : "none";
-    drawList(); await loadThread(true);
+    drawList(); drawConv(true); await loadThread(true);
   }
   $("testBtn").addEventListener("click", () => openTest(null));
   $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } const v = $("who").value || null; $("ov").hidden = true; assign(v); });
   $("ov").addEventListener("click", e => { if (e.target === $("ov") || e.target.closest("[data-x]")) $("ov").hidden = true; });
 
+  // ---------- Events ----------
   $("chats").addEventListener("click", e => { const b = e.target.closest(".ch"); if (!b) return; sel = b.dataset.id; msgs = []; drawList(); drawConv(true); loadThread(true); });
   $("tabs").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (b) { filter = b.dataset.f; drawList(); } });
   $("q").addEventListener("input", e => { q = e.target.value; drawList(); });
-  $("conv").addEventListener("submit", e => { if (e.target.id === "cmp") send(e); });
-  $("conv").addEventListener("keydown", e => { if (e.target.id === "txt" && e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); $("cmp").requestSubmit(); } });
-  $("conv").addEventListener("click", async e => {
+  const conv = $("conv");
+  conv.addEventListener("input", e => { if (e.target.id === "txt") syncSend(); });
+  conv.addEventListener("keydown", e => {
+    if (e.target.id === "txt" && e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendText(); }
+    if (e.target.id === "pvCap" && e.key === "Enter" && !e.isComposing) { e.preventDefault(); conv.querySelector('[data-act="pvSend"]').click(); }
+    if (e.key === "Escape" && $("pv")) closePreview();
+  });
+  conv.addEventListener("change", e => { if (["fDoc", "fMedia", "fCam"].includes(e.target.id)) { openPreview(e.target.files); e.target.value = ""; } });
+  conv.addEventListener("paste", e => { if (e.target.id !== "txt" || !e.clipboardData) return; const fs = [...e.clipboardData.files]; if (fs.length) { e.preventDefault(); openPreview(fs); } });
+  conv.addEventListener("dragover", e => { if (!$("cmp") || ![...(e.dataTransfer.types || [])].includes("Files")) return; e.preventDefault(); if (!$("drop")) conv.insertAdjacentHTML("beforeend", `<div class="drop" id="drop">${esc(t().dropHere)}</div>`); });
+  conv.addEventListener("dragleave", e => { if (e.target.id === "drop") $("drop").remove(); });
+  conv.addEventListener("drop", e => { if (!$("drop")) return; e.preventDefault(); $("drop").remove(); openPreview(e.dataTransfer.files); });
+  document.addEventListener("click", e => { if (menuOpen && !e.target.closest("#hdMenu,[data-act=more]")) { menuOpen = false; if ($("hdMenu")) $("hdMenu").hidden = true; } });
+  document.addEventListener("click", e => { const m = $("attMenu"); if (m && !m.hidden && !e.target.closest("#attMenu,[data-act=attach]")) { m.hidden = true; conv.querySelector("[data-act=attach]").setAttribute("aria-expanded", false); } });
+  conv.addEventListener("click", async e => {
+    const pv = e.target.closest("[data-pv]"); if (pv) { pvAt = +pv.dataset.pv; drawPreview(); return; }
     const b = e.target.closest("[data-act]"); if (!b) return;
     const a = b.dataset.act;
+    if (a === "more") { menuOpen = !menuOpen; $("hdMenu").hidden = !menuOpen; b.setAttribute("aria-expanded", menuOpen); return; }
+    if (b.closest("#hdMenu")) { menuOpen = false; $("hdMenu").hidden = true; }
     if (a === "back") { sel = null; drawList(); drawConv(); }
+    else if (a === "attach") { const m = $("attMenu"); m.hidden = !m.hidden; b.setAttribute("aria-expanded", !m.hidden); }
+    else if (a === "pickDoc" || a === "pickMedia" || a === "pickCam") { $("attMenu").hidden = true; conv.querySelector("[data-act=attach]").setAttribute("aria-expanded", false); $({ pickDoc: "fDoc", pickMedia: "fMedia", pickCam: "fCam" }[a]).click(); }
+    else if (a === "send") sendText();
+    else if (a === "mic") startRec();
+    else if (a === "recCancel") stopRec(true);
+    else if (a === "recSend") stopRec(false);
+    else if (a === "pvClose") closePreview();
+    else if (a === "pvSend") { const files = pvFiles.slice(), cap = $("pvCap").value.trim(); pvFiles = []; $("pv").remove(); sendFiles(files, cap); }
     else if (a === "take") assign(myId);
     else if (a === "assign") openAssign();
     else if (a === "asCustomer") openTest(chats.find(x => x.wa_id === sel));
     else if (a === "testDel") { if (!confirm(t().testDelQ)) return; const r = await MadaStore.auth.rpc("wa_test_delete", { p_wa_id: sel }); if (!r.ok) { toast(t().offline); return; } toast(t().testDeleted); sel = null; msgs = []; await loadChats(); drawConv(); }
-    else { const r = await MadaStore.auth.rpc("wa_set_status", { p_wa_id: sel, p_status: a }); if (!r.ok) toast(t().offline); await loadChats(); await loadThread(true); }
+    else if (a === "open" || a === "closed") { const r = await MadaStore.auth.rpc("wa_set_status", { p_wa_id: sel, p_status: a }); if (!r.ok) toast(t().offline); await loadChats(); await loadThread(true); }
   });
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3500); }
   // New messages: checked every 5 seconds while the page is in front.
@@ -466,7 +768,7 @@
     if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }
     document.title = lang === "ar" ? "مدى كير | المحادثات" : "Mada Care | Conversations";
     try { localStorage.setItem("mada-lang", lang); } catch (e) {}
-    drawList(); drawConv();
+    convFor = null; drawList(); drawConv();
   }
   $("langToggle").addEventListener("click", () => setLang(current === "en" ? "ar" : "en"));
   const user = $("user"), userBtn = $("userBtn");
