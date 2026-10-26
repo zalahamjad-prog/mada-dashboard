@@ -504,7 +504,8 @@ const MadaPerms = (() => {
   const SECTIONS = [
     { k: "dashboard", pages: ["dashboard.html"] },
     { k: "ops", pages: ["ops.html"] },
-    { k: "sales", pages: ["sales.html", "whatsapp.html"] },
+    { k: "sales", pages: ["sales.html"] },
+    { k: "whatsapp", pages: ["whatsapp.html"] },
     { k: "newRequest", pages: ["new-request.html"] },
     { k: "requests", pages: ["requests.html", "request-details.html"] },
     { k: "bookings", pages: ["bookings.html", "booking-schedule.html"] },
