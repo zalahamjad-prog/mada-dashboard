@@ -88,6 +88,10 @@ const MadaStore = (() => {
       async call(name, body) { const tk = token(); if (!tk) return { ok: false, status: 401, json: { error: "Not logged in" } };
         try { const r = await fetch(base + "/functions/v1/" + name, { method: "POST", headers: { apikey: C.key, "Content-Type": "application/json", Authorization: "Bearer " + tk }, body: JSON.stringify(body) });
           let json = null; try { json = await r.json(); } catch (e) {} return { ok: r.ok, status: r.status, json }; } catch (e) { return { ok: false, status: 0, offline: true, json: null }; } },
+      // Calls a database function (Supabase RPC) as the logged-in staff member, without freezing the page. Resolves to { ok, status, json }.
+      async rpc(name, body) { const tk = token(); if (!tk) return { ok: false, status: 401, json: null };
+        try { const r = await fetch(base + "/rest/v1/rpc/" + name, { method: "POST", headers: { apikey: C.key, "Content-Type": "application/json", Authorization: "Bearer " + tk }, body: JSON.stringify(body || {}) });
+          let json = null; try { json = await r.json(); } catch (e) {} return { ok: r.ok, status: r.status, json }; } catch (e) { return { ok: false, status: 0, offline: true, json: null }; } },
       // After logging in: read the shared data again, now with the staff member's token.
       reload() { rows.clear(); boot(); },
       // After logging out: remove this device's copies of the shared data (they stay in Supabase), unless saves are still waiting.
@@ -501,6 +505,7 @@ const MadaPerms = (() => {
     { k: "dashboard", pages: ["dashboard.html"] },
     { k: "ops", pages: ["ops.html"] },
     { k: "sales", pages: ["sales.html"] },
+    { k: "whatsapp", pages: ["whatsapp.html"] },
     { k: "newRequest", pages: ["new-request.html"] },
     { k: "requests", pages: ["requests.html", "request-details.html"] },
     { k: "bookings", pages: ["bookings.html", "booking-schedule.html"] },
