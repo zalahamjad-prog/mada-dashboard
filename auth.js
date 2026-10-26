@@ -527,9 +527,9 @@ const MadaPerms = (() => {
   const DEFAULTS = {
     gm: ALL, admin: ALL,
     ops: ALL,
-    supervisor: ["dashboard", "sales", "newRequest", "requests", "bookings", "patients", "medical", "physio", "invoices", "coupons"],
-    agent: ["dashboard", "sales", "newRequest", "requests", "bookings", "patients"],
-    quality: ["dashboard", "requests", "patients", "results", "quality"],
+    supervisor: ["dashboard", "sales", "whatsapp", "newRequest", "requests", "bookings", "patients", "medical", "physio", "invoices", "coupons"],
+    agent: ["dashboard", "sales", "whatsapp", "newRequest", "requests", "bookings", "patients"],
+    quality: ["dashboard", "whatsapp", "requests", "patients", "results", "quality"],
     lab: ["dashboard", "medical", "results"],
     driver: ["dashboard", "bookings"]
   };
