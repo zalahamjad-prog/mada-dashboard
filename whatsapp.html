@@ -148,6 +148,11 @@
   .md { width: min(420px, 100%); background: #fff; border-radius: 16px; box-shadow: 0 20px 50px rgba(16,35,43,.25); padding: 20px; display: grid; gap: 14px; }
   .md h2 { font-size: 17px; }
   .md select { height: 42px; border: 1px solid #d9e1e3; border-radius: 10px; padding: 0 10px; font-size: 14px; background: #fff; }
+  .md label { display: grid; gap: 6px; font-size: 13px; }
+  .md input, .md textarea { border: 1px solid #d9e1e3; border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px; outline: 0; }
+  .md input:focus, .md textarea:focus, .md select:focus { border-color: var(--primary); }
+  .md p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .tag-t { display: inline-block; height: 18px; padding: 0 7px; border-radius: 9px; background: var(--purple-soft); color: var(--purple); font-size: 10.5px; font-weight: 600; line-height: 18px; margin-inline-start: 6px; vertical-align: 1px; }
   .md-act { display: flex; gap: 8px; justify-content: flex-end; }
   @media (max-width: 1180px) { .wa { grid-template-columns: 300px minmax(0, 1fr); } .side { display: none; } }
   @media (max-width: 760px) {
@@ -205,6 +210,7 @@
       <span class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"/></svg></span>
       <div><h1 data-i18n="title">Conversations</h1><p data-i18n="subtitle">Customer messages to the Mada Care WhatsApp number. Reply from here; each conversation has one owner.</p></div>
     </div>
+    <div class="ph-act"><button type="button" class="btn btn-ghost" id="testBtn" data-i18n="testNew">Test message</button></div>
   </div>
   <div class="notice" id="notice" hidden></div>
   <div class="card wa" id="wa">
@@ -246,7 +252,9 @@
       k_image: "Photo", k_audio: "Voice note", k_video: "Video", k_document: "File", k_sticker: "Sticker", k_location: "Location", k_other: "Message type: {t}", openPhone: "open it on the WhatsApp phone",
       failed: "Not sent", today: "Today", yesterday: "Yesterday",
       offCloud: "Conversations need the shared database and staff logins (Supabase).", offSetup: "WhatsApp is not connected yet. Run notes/supabase-whatsapp.sql in Supabase, then deploy the mada-whatsapp function.",
-      notConfigured: "WhatsApp keys are not set in Supabase yet.", sendFail: "Not sent: {e}", assigned: "Transferred to {n}", unassignedT: "Assignment removed", offline: "No connection. Try again."
+      notConfigured: "WhatsApp keys are not set in Supabase yet.", sendFail: "Not sent: {e}", assigned: "Transferred to {n}", unassignedT: "Assignment removed", offline: "No connection. Try again.",
+      testNew: "Test message", testTag: "Test", testT: "Test message (as the customer)", testHelp: "Before WhatsApp is connected: write as if you were the customer. The message shows here like a WhatsApp message, and replies to it stay inside the system.",
+      testNum: "Customer mobile", testName: "Customer name", testBody: "Message", testSend: "Send as the customer", asCustomer: "Write as the customer", testDel: "Delete test", testDelQ: "Delete this test conversation?", testDeleted: "Test conversation deleted", testRealNo: "This number has a real WhatsApp conversation."
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -263,7 +271,9 @@
       k_image: "صورة", k_audio: "رسالة صوتية", k_video: "فيديو", k_document: "ملف", k_sticker: "ملصق", k_location: "موقع", k_other: "نوع الرسالة: {t}", openPhone: "افتحيها من جوال الواتساب",
       failed: "ما انرسلت", today: "اليوم", yesterday: "أمس",
       offCloud: "المحادثات تحتاج قاعدة البيانات المشتركة وتسجيل دخول الموظفين (Supabase).", offSetup: "الواتساب لسا ما انربط. شغّل notes/supabase-whatsapp.sql في Supabase، وبعدها انشر دالة mada-whatsapp.",
-      notConfigured: "مفاتيح الواتساب لسا ما انحطت في Supabase.", sendFail: "ما انرسلت: {e}", assigned: "تحولت إلى {n}", unassignedT: "انلغى الإسناد", offline: "ما فيه اتصال. حاولي مرة ثانية."
+      notConfigured: "مفاتيح الواتساب لسا ما انحطت في Supabase.", sendFail: "ما انرسلت: {e}", assigned: "تحولت إلى {n}", unassignedT: "انلغى الإسناد", offline: "ما فيه اتصال. حاولي مرة ثانية.",
+      testNew: "رسالة تجربة", testTag: "تجربة", testT: "رسالة تجربة (كأنك العميل)", testHelp: "قبل ربط الواتساب: اكتبي كأنك العميل. الرسالة تطلع هنا مثل رسالة الواتساب، والرد عليها يبقى داخل النظام.",
+      testNum: "جوال العميل", testName: "اسم العميل", testBody: "الرسالة", testSend: "أرسليها كأنك العميل", asCustomer: "اكتبي كأنك العميل", testDel: "حذف التجربة", testDelQ: "تحذفين محادثة التجربة هذي؟", testDeleted: "انحذفت محادثة التجربة", testRealNo: "هذا الرقم عليه محادثة واتساب حقيقية."
     }
   };
   let current = "en";
@@ -293,6 +303,7 @@
 
   function notice(text) { $("notice").hidden = !text; $("notice").textContent = text || ""; }
   async function loadChats() {
+    $("testBtn").hidden = !cloud;
     if (!cloud) { notice(t().offCloud); return; }
     const r = await MadaStore.auth.rpc("wa_list", {});
     if (r.ok && Array.isArray(r.json)) { chats = r.json; notice(""); }
@@ -322,7 +333,7 @@
       const last = c.last_body || "";
       return `<button type="button" class="ch" data-id="${esc(c.wa_id)}" aria-current="${c.wa_id === sel}">
         <span class="ch-av">${esc(String(name).trim().charAt(0) || "#")}</span>
-        <span style="min-width:0"><span class="ch-n">${esc(name)}</span><span class="ch-l">${c.last_dir === "out" ? "↩ " : ""}${esc(last)}</span>
+        <span style="min-width:0"><span class="ch-n">${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</span><span class="ch-l">${c.last_dir === "out" ? "↩ " : ""}${esc(last)}</span>
           <span class="ch-a${c.assigned_to ? "" : " none"}">${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span>
         <span class="ch-r"><span>${esc(shortWhen(c.last_at))}</span>${c.unread ? `<span class="ch-u">${c.unread}</span>` : ""}</span></button>`;
     }).join("") : `<div class="wa-empty">${esc(t().noChats)}</div>`;
@@ -334,10 +345,11 @@
     const c = chats.find(x => x.wa_id === sel), h = $("cvh"); if (!c || !h) return;
     const p = patientsOf(c)[0], name = c.name || (p && T(p.name)) || shown(c.wa_id), mine = c.assigned_to === myId;
     h.innerHTML = `<button type="button" class="btn btn-ghost btn-sm back" data-act="back">${esc(t().back)}</button>
-      <div class="cv-who"><b>${esc(name)}</b><span class="ltr">${esc(shown(c.wa_id))}</span> · <span>${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></div>
+      <div class="cv-who"><b>${esc(name)}${c.test ? `<span class="tag-t">${esc(t().testTag)}</span>` : ""}</b><span class="ltr">${esc(shown(c.wa_id))}</span> · <span>${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></div>
       <div class="cv-act">${!mine && myId && c.status === "open" ? `<button type="button" class="btn btn-primary btn-sm" data-act="take">${esc(t().takeIt)}</button>` : ""}
         <button type="button" class="btn btn-ghost btn-sm" data-act="assign">${esc(c.assigned_to ? t().transfer : t().assign)}</button>
-        <button type="button" class="btn btn-ghost btn-sm" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button></div>`;
+        <button type="button" class="btn btn-ghost btn-sm" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
+        ${c.test ? `<button type="button" class="btn btn-ghost btn-sm" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="btn btn-ghost btn-sm" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div>`;
     drawSide();
   }
   function bubble(m) {
@@ -378,10 +390,13 @@
     e.preventDefault();
     const ta = $("txt"), text = ta.value.trim(); if (!text || busy) return;
     busy = true; $("sendBtn").disabled = true; $("sendBtn").textContent = t().sending;
-    const r = await MadaStore.auth.call("mada-whatsapp", { action: "send", waId: sel, text }, 30000);
+    const c = chats.find(x => x.wa_id === sel);
+    // A test chat never goes to WhatsApp: the reply is only saved.
+    const r = c && c.test ? await MadaStore.auth.rpc("wa_test_out", { p_wa_id: sel, p_body: text })
+      : await MadaStore.auth.call("mada-whatsapp", { action: "send", waId: sel, text }, 30000);
     busy = false;
     if (r.ok) { ta.value = ""; }
-    else toast(r.offline ? t().offline : r.json && r.json.error === "not_configured" ? t().notConfigured : tx("sendFail", { e: (r.json && r.json.error) || r.status }));
+    else toast(r.offline ? t().offline : r.json && r.json.error === "not_configured" ? t().notConfigured : tx("sendFail", { e: (r.json && (r.json.error || r.json.message)) || r.status }));
     if ($("sendBtn")) { $("sendBtn").disabled = false; $("sendBtn").textContent = t().send; }
     await loadChats(); await loadThread(true);
   }
@@ -396,9 +411,30 @@
     $("md").innerHTML = `<h2>${esc(t().assignT)}</h2><label style="display:grid;gap:6px;font-size:13px">${esc(t().assignTo)}
       <select id="who"><option value="">${esc(t().nobody)}</option>${staff().map(s => `<option value="${esc(s.id)}"${s.id === c.assigned_to ? " selected" : ""}>${esc(T(s.name))} · ${esc(s.id)}</option>`).join("")}</select></label>
       <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().save)}</button></div>`;
-    $("ov").hidden = false;
+    $("md").dataset.mode = "assign"; $("ov").hidden = false;
   }
-  $("md").addEventListener("submit", e => { e.preventDefault(); const v = $("who").value || null; $("ov").hidden = true; assign(v); });
+  // Test mode: a message typed by staff as if it came from the customer (notes/supabase-whatsapp.sql, wa_test_in).
+  function openTest(c) {
+    const num = c ? local(c.wa_id) : "05" + String(Math.floor(Math.random() * 1e8)).padStart(8, "0");
+    $("md").innerHTML = `<h2>${esc(t().testT)}</h2><p>${esc(t().testHelp)}</p>
+      <label>${esc(t().testNum)}<input id="tNum" class="ltr" inputmode="tel" value="${esc(num)}"${c ? " readonly" : ""}></label>
+      <label>${esc(t().testName)}<input id="tName" value="${esc(c ? c.name || "" : "")}"${c ? " readonly" : ""}></label>
+      <label>${esc(t().testBody)}<textarea id="tBody" rows="3"></textarea></label>
+      <div class="md-act"><button type="button" class="btn btn-ghost" data-x>${esc(t().cancel)}</button><button class="btn btn-primary" type="submit">${esc(t().testSend)}</button></div>`;
+    $("md").dataset.mode = "test"; $("ov").hidden = false; $("tBody").focus();
+  }
+  async function sendTest() {
+    const body = $("tBody").value.trim(); if (!body) { $("tBody").focus(); return; }
+    const r = await MadaStore.auth.rpc("wa_test_in", { p_wa_id: $("tNum").value, p_name: $("tName").value, p_body: body });
+    if (!r.ok) { toast(r.offline ? t().offline : r.json && /real WhatsApp/.test(r.json.message || "") ? t().testRealNo : tx("sendFail", { e: (r.json && r.json.message) || r.status })); return; }
+    $("ov").hidden = true;
+    sel = r.json.wa_id; msgs = [];
+    await loadChats();
+    const c = chats.find(x => x.wa_id === sel); if (c && !inFilter(c, filter)) filter = c.assigned_to === myId ? "mine" : c.assigned_to ? "all" : "none";
+    drawList(); await loadThread(true);
+  }
+  $("testBtn").addEventListener("click", () => openTest(null));
+  $("md").addEventListener("submit", e => { e.preventDefault(); if ($("md").dataset.mode === "test") { sendTest(); return; } const v = $("who").value || null; $("ov").hidden = true; assign(v); });
   $("ov").addEventListener("click", e => { if (e.target === $("ov") || e.target.closest("[data-x]")) $("ov").hidden = true; });
 
   $("chats").addEventListener("click", e => { const b = e.target.closest(".ch"); if (!b) return; sel = b.dataset.id; msgs = []; drawList(); drawConv(true); loadThread(true); });
@@ -412,6 +448,8 @@
     if (a === "back") { sel = null; drawList(); drawConv(); }
     else if (a === "take") assign(myId);
     else if (a === "assign") openAssign();
+    else if (a === "asCustomer") openTest(chats.find(x => x.wa_id === sel));
+    else if (a === "testDel") { if (!confirm(t().testDelQ)) return; const r = await MadaStore.auth.rpc("wa_test_delete", { p_wa_id: sel }); if (!r.ok) { toast(t().offline); return; } toast(t().testDeleted); sel = null; msgs = []; await loadChats(); drawConv(); }
     else { const r = await MadaStore.auth.rpc("wa_set_status", { p_wa_id: sel, p_status: a }); if (!r.ok) toast(t().offline); await loadChats(); await loadThread(true); }
   });
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3500); }
