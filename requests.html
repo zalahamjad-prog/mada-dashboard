@@ -115,6 +115,9 @@
   /* ---------- Table ---------- */
   .list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
   .per-page { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #44545a; }
+  .mine-btn .n { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #eef1f2; font-size: 11.5px; display: inline-grid; place-items: center; }
+  .mine-btn[aria-pressed="true"] .n { background: var(--primary); color: #fff; }
+  .staff .owner { display: block; font-size: 11.5px; color: var(--muted); }
   .per-page select { height: 34px; width: auto; padding-inline-start: 10px; }
   .active-filters { font-size: 12.5px; color: var(--muted); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -430,6 +433,7 @@
         <select class="field" id="perPage"><option>10</option><option>25</option><option>50</option></select>
         <span data-i18n="entries">entries</span>
       </label>
+      <button type="button" class="chip mine-btn" id="mineBtn" aria-pressed="false" title="Open requests you own" data-i18n-title="mineHint"><span data-i18n="mine">My Requests</span><span class="n" id="mineCount">0</span></button>
       <span class="active-filters" id="activeFilters"></span>
       <button type="button" class="btn btn-ghost" id="export">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
@@ -524,6 +528,7 @@
       hr_noReply: "Customer stopped replying", hr_callBack: "Customer will call back", hr_waitingInfo: "Waiting for documents", hr_thinking: "Customer is thinking about it", hr_other: "Other", hr_web: "Website request: call the customer",
       show: "Show", entries: "entries", export: "Export",
       cId: "Order ID", cService: "Service Type", cMobile: "Mobile Number", cMedical: "Medical Status", cDecision: "Customer Decision",
+      mine: "My Requests", mineHint: "Open requests you own (you assigned the doctor)", ownerShort: "Owner: {n}",
       cPayment: "Payment", cStaff: "Created By", cDue: "Payment Deadline",
       dueLeft: "left", dueUntil: "until {t}", dueExpired: "Expired", dueExpiredAt: "at {t}", dueNoLink: "Link not sent", dueOpened: "Opened {t}", dueNotOpened: "Not opened yet", duePaid: "Paid {t}",
       dPayLink: "Payment link", dPayLinkSent: "Sent {t}, valid for 1 hour", dPayLinkExpired: "Expired at {t}. Send a new link.", resendLink: "Resend Payment Link", sendLink: "Send Payment Link", linkSentToast: "Payment link sent to {m}. It is valid for 1 hour.", cTime: "Time", cActions: "Actions",
@@ -563,6 +568,7 @@
       hr_noReply: "العميل توقف عن الرد", hr_callBack: "العميل بيتصل لاحقاً", hr_waitingInfo: "بانتظار مستندات", hr_thinking: "العميل يفكر", hr_other: "سبب آخر", hr_web: "طلب من الموقع، اتصلي بالعميل",
       show: "عرض", entries: "طلبات", export: "تصدير",
       cId: "رقم الطلب", cService: "نوع الخدمة", cMobile: "رقم الجوال", cMedical: "الحالة الطبية", cDecision: "قرار العميل",
+      mine: "طلباتي", mineHint: "الطلبات المفتوحة اللي أنتِ مسؤولة عنها (أسندتِ فيها الطبيب)", ownerShort: "المسؤولة: {n}",
       cPayment: "الدفع", cStaff: "أنشأ الطلب", cDue: "مهلة الدفع",
       dueLeft: "متبقي", dueUntil: "حتى {t}", dueExpired: "انتهت المهلة", dueExpiredAt: "الساعة {t}", dueNoLink: "لم يُرسل الرابط", dueOpened: "فتحه {t}", dueNotOpened: "لم يفتحه بعد", duePaid: "دُفع {t}",
       dPayLink: "رابط الدفع", dPayLinkSent: "أُرسل {t}، صالح لمدة ساعة", dPayLinkExpired: "انتهى الساعة {t}. أرسل رابط جديد.", resendLink: "إعادة إرسال رابط الدفع", sendLink: "إرسال رابط الدفع", linkSentToast: "تم إرسال رابط الدفع إلى {m}. صالح لمدة ساعة.", cTime: "الوقت", cActions: "إجراءات",
@@ -676,7 +682,7 @@
   }
 
   // ---------- Filters ----------
-  const blank = () => ({ q: "", svc: "", from: "", to: "", range: "", medical: [], decision: [], stat: "" });
+  const blank = () => ({ q: "", svc: "", from: "", to: "", range: "", medical: [], decision: [], stat: "", mine: false });
   let draft = blank(), applied = blank(), page = 1;
   const newId = new URLSearchParams(location.search).get("new");
 
@@ -730,7 +736,10 @@
   let qTimer;
   $("q").addEventListener("input", () => { draft.q = $("q").value; clearTimeout(qTimer); qTimer = setTimeout(() => { applied.q = draft.q; page = 1; render(); }, 200); });
   $("q").addEventListener("keydown", e => { if (e.key === "Enter") applyFilters(); });
-  function applyFilters() { applied = { ...draft, medical: [...draft.medical], decision: [...draft.decision], stat: "" }; page = 1; syncDraftUI(); render(); }
+  function applyFilters() { applied = { ...draft, medical: [...draft.medical], decision: [...draft.decision], stat: "", mine: applied.mine }; page = 1; syncDraftUI(); render(); }
+  // My Requests: open requests this agent owns (she assigned the doctor). ?mine=1 opens the page with it on.
+  $("mineBtn").addEventListener("click", () => { applied.mine = draft.mine = !applied.mine; page = 1; render(); });
+  if (new URLSearchParams(location.search).get("mine")) applied.mine = draft.mine = true;
   $("apply").addEventListener("click", applyFilters);
   $("reset").addEventListener("click", () => { draft = blank(); applied = blank(); page = 1; syncDraftUI(); render(); });
   document.querySelectorAll("#stats .stat").forEach(b => b.addEventListener("click", () => {
@@ -759,9 +768,10 @@
     if (f.decision.length && !f.decision.includes(o.decision)) return false;
     if (f.stat === "unpaid" && !(o.decision === "approved" && o.payment === "unpaid")) return false;
     if (f.stat === "completed" && o.status !== "completed") return false;
+    if (f.mine && !MadaOrders.isMine(o, me)) return false;
     return true;
   }
-  const filterCount = f => [f.q, f.svc, f.from || f.to, f.medical.length, f.decision.length, f.stat === "unpaid" || f.stat === "completed"].filter(Boolean).length;
+  const filterCount = f => [f.q, f.svc, f.from || f.to, f.medical.length, f.decision.length, f.stat === "unpaid" || f.stat === "completed", f.mine].filter(Boolean).length;
 
   // ---------- Render ----------
   let rowsCache = [];
@@ -776,6 +786,8 @@
     $("stHold").textContent = list.filter(o => o.status === "on_hold").length;
     $("stUnpaid").textContent = list.filter(o => o.decision === "approved" && o.payment === "unpaid").length;
     $("stCompleted").textContent = list.filter(o => o.status === "completed" && ymd(dateOf(o.updatedAt || o.createdAt)) >= monthStart).length;
+    $("mineCount").textContent = list.filter(o => MadaOrders.isMine(o, me)).length;
+    $("mineBtn").setAttribute("aria-pressed", !!applied.mine);
     const needs = list.filter(o => statusOf(o) === "ready_to_confirm").length;
     $("navCount").hidden = !needs; $("navCount").textContent = needs;
 
@@ -802,7 +814,7 @@
         <td data-l="${esc(t().cDecision)}">${decisionPill(o)}${stLine}</td>
         <td class="c-pay" data-l="${esc(t().cPayment)}">${paymentPill(o)}</td>
         <td class="c-due" data-l="${esc(t().cDue)}">${dueCell(o)}</td>
-        <td class="c-staff" data-l="${esc(t().cStaff)}"><span class="staff"><span class="avatar">${esc(initials(o.staff))}</span>${esc(T(o.staff) || "—")}</span></td>
+        <td class="c-staff" data-l="${esc(t().cStaff)}"><span class="staff"><span class="avatar">${esc(initials(o.staff))}</span><span>${esc(T(o.staff) || "—")}${o.owner ? `<span class="owner">${esc(tx("ownerShort", { n: T(o.owner.name) }))}</span>` : ""}</span></span></td>
         <td class="c-time" data-l="${esc(t().cTime)}"><span class="time">${fmtTime(d)}<span class="sub">${fmtDate(d)}</span></span></td>
         <td class="c-acts"><div class="acts">
           <button type="button" class="act" data-view="${o.id}" aria-label="${esc(tx("view", { id: o.id }))}" title="${esc(tx("view", { id: o.id }))}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
@@ -970,6 +982,7 @@
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
     document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t()[el.dataset.i18n]);
+    document.querySelectorAll("[data-i18n-title]").forEach(el => el.title = t()[el.dataset.i18nTitle]);
     document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t()[el.dataset.i18nPh]);
     document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t()[el.dataset.i18nAria]));
     if (me) { $("userName").textContent = me.name[lang]; $("userRole").textContent = me.role[lang]; $("avatar").textContent = me.initials[lang]; }

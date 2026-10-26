@@ -67,6 +67,9 @@
   .btn-primary:hover { background: var(--primary-dark); }
   .btn-ghost { background: #fff; color: var(--ink); border-color: #d9e1e3; }
   .btn-ghost:hover { background: #f5f8f8; }
+  .mine-btn[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .mine-btn .n { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #eef1f2; font-size: 11.5px; display: inline-grid; place-items: center; }
+  .mine-btn[aria-pressed="true"] .n { background: var(--primary); color: #fff; }
   /* ---------- Stats ---------- */
   .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
   .stat { display: flex; align-items: center; gap: 16px; padding: 18px 20px; }
@@ -393,6 +396,7 @@
         <p id="showing">Showing 0 of 0 bookings</p>
       </div>
       <div class="list-tools">
+        <button type="button" class="btn btn-ghost mine-btn" id="mineBtn" aria-pressed="false"><span data-i18n="mine">My Requests</span><span class="n" id="mineCount">0</span></button>
         <button type="button" class="btn btn-ghost" id="export">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
           <span data-i18n="export">Export</span>
@@ -442,6 +446,7 @@
       method: "Payment Method", allMethods: "All Methods", pm_apple: "Apple Pay", pm_card: "Card", pm_tamara: "Tamara", pm_tabby: "Tabby", pm_staff: "Confirmed by staff",
       timeOfDay: "Time of Day", anyTime: "Any Time", morning: "Morning (before 12 PM)", afternoon: "Afternoon (12 to 5 PM)", evening: "Evening (after 5 PM)",
       reset: "Reset", apply: "Apply Filters",
+      mine: "My Requests", ownerShort: "Owner: {n}",
       listTitle: "Bookings List", showing: "Showing {n} of {t} bookings", export: "Export", columns: "Columns",
       cOrder: "Order ID", cBooking: "Booking ID", cService: "Service Type", cProvider: "Service Provider", cDate: "Service Date", cTime: "Service Time", cStatus: "Status", cActions: "Actions",
       cPatient: "Patient", cPaid: "Amount Paid",
@@ -478,6 +483,7 @@
       method: "طريقة الدفع", allMethods: "كل الطرق", pm_apple: "Apple Pay", pm_card: "بطاقة", pm_tamara: "تمارا", pm_tabby: "تابي", pm_staff: "أكده الموظف",
       timeOfDay: "وقت الزيارة", anyTime: "أي وقت", morning: "صباحاً (قبل 12 ظهراً)", afternoon: "ظهراً (من 12 إلى 5 مساءً)", evening: "مساءً (بعد 5)",
       reset: "إعادة تعيين", apply: "تطبيق الفلاتر",
+      mine: "طلباتي", ownerShort: "المسؤولة: {n}",
       listTitle: "قائمة الحجوزات", showing: "عرض {n} من {t} حجز", export: "تصدير", columns: "الأعمدة",
       cOrder: "رقم الطلب", cBooking: "رقم الحجز", cService: "نوع الخدمة", cProvider: "مقدم الخدمة", cDate: "تاريخ الخدمة", cTime: "وقت الخدمة", cStatus: "الحالة", cActions: "الإجراءات",
       cPatient: "المريض", cPaid: "المبلغ المدفوع",
@@ -609,6 +615,9 @@
   // ---------- Filters ----------
   const blank = () => ({ svc: "", from: "", to: "", status: "", q: "", provider: "", method: "", time: "" });
   let applied = blank();
+  // My Requests: open bookings this agent owns (she assigned the doctor). ?mine=1 opens the page with it on.
+  let mine = !!new URLSearchParams(location.search).get("mine");
+  $("mineBtn").addEventListener("click", () => { mine = !mine; render(); });
   function fromDmy(v) {
     const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(v); if (!m) return null;
     const d = new Date(+m[3], +m[2] - 1, +m[1]);
@@ -672,7 +681,9 @@
     $("provider").innerHTML = opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}</option>`).join("");
     $("provider").value = pv;
 
-    const list = all.filter(o => matches(o, applied));
+    $("mineCount").textContent = all.filter(o => MadaOrders.isMine(o, me)).length;
+    $("mineBtn").setAttribute("aria-pressed", mine);
+    const list = all.filter(o => matches(o, applied) && (!mine || MadaOrders.isMine(o, me)));
     const fn = sortVal[sort.k];
     list.sort((a, b) => { const x = fn(a), y = fn(b); return (x > y ? 1 : x < y ? -1 : 0) * sort.dir; });
     rowsCache = list;
@@ -682,7 +693,7 @@
       : `<th class="c-${c.k}"><button type="button" class="sort" data-sort="${c.k}" aria-sort="${sort.k === c.k ? (sort.dir > 0 ? "ascending" : "descending") : "none"}">${t()[c.l]}${SORT_ICON}</button></th>`).join("");
 
     const cell = {
-      order: o => `<button type="button" class="oid oid-btn" data-open="${esc(o.id)}">${esc(o.id)}</button>`,
+      order: o => `<button type="button" class="oid oid-btn" data-open="${esc(o.id)}">${esc(o.id)}</button>${o.owner ? `<span class="sub">${esc(tx("ownerShort", { n: T(o.owner.name) }))}</span>` : ""}`,
       // A visit booked from a doctor's order (DBK-) is internal and may still be unpaid.
       booking: o => o.fromMr ? `<span class="bid">${esc(o.bookingId)}</span><span class="sub">${esc(tx("bookedAt", { t: fmtStamp(o.bookedAt) }))}</span>
           <span class="int-tags"><span class="int-tag">${t().intTag}</span><span class="int-tag ${o.payment === "paid" ? "ok" : "due"}">${o.payment === "paid" ? t().paidTag : t().unpaidTag}</span></span>`
