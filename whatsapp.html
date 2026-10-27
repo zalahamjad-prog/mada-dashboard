@@ -244,6 +244,22 @@
   .pin span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pin b { font-weight: 600; color: #008069; margin-inline-end: 4px; }
   .pin small { color: var(--wa-sub); flex: none; font-size: 11.5px; }
+  .cst { background: #fff; border-bottom: 1px solid #e9edef; font-size: 13px; }
+  .cst-row { display: flex; align-items: center; gap: 8px; padding: 7px 16px; flex-wrap: wrap; cursor: pointer; }
+  .cst-row:hover { background: #f7f8f8; }
+  .cst-row .cst-ic { width: 16px; height: 16px; color: #8696a0; flex: none; }
+  .cst-more { margin-inline-start: auto; color: #027eb5; font-size: 12.5px; }
+  .chip { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 9px; border-radius: 11px; font-size: 12px; font-weight: 500; white-space: nowrap; background: #eef1f2; color: #3b4a54; }
+  .chip.g { background: #e7f6ec; color: #15803d; } .chip.o { background: var(--orange-soft); color: #b45309; } .chip.r { background: #fde8e8; color: #c81e1e; } .chip.b { background: #e7f0fe; color: #2b63c8; }
+  .cst-list { display: grid; gap: 8px; padding: 4px 16px 12px; }
+  .ord { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid #e3e8ea; border-radius: 10px; background: #fff; text-decoration: none; color: var(--wa-ink); }
+  .ord:hover { border-color: var(--primary); }
+  .ord-h { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ord-h b { font-size: 13.5px; } .ord-h .ltr { color: var(--wa-sub); font-size: 12px; }
+  .ord-c { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ord small { color: var(--wa-sub); font-size: 12px; }
+  .side .ord { font-size: 13px; min-width: 0; }
+  .side .chip { white-space: normal; height: auto; min-height: 22px; padding: 3px 9px; line-height: 1.4; }
   .note.ho { background: #e7f0fe; color: #2b4c8c; }
   .dash { display: grid; gap: 16px; }
   .dash-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -410,7 +426,12 @@
       hoLog: "Shift handovers", noHo: "No handovers yet.", hoTo: "Handed to {n}", hoFrom: "Received from {n}", nChats: "{n} chats", receivedAt: "Received {t}", notReceived: "Not confirmed yet",
       handoverT: "Hand over my shift", handoverHelp: "Your open conversations move to the staff member you choose. Write where each one stands so she knows how to continue.", handTo: "Hand over to", pickStaff: "Choose the next staff member", hoNote: "Note for the shift", hoNotePh: "Anything she should know (optional)", handoverGo: "Hand over",
       hoNone: "Choose at least one conversation.", hoDone: "Shift handed to {n}", reportT: "Shift handover report", repLine: "From {from} to {to} · {t}", cCustomer: "Customer", cState: "State", stWaitingOne: "Waiting for reply", stReplied: "Replied",
-      closeT: "Close", print: "Print", gotIt: "Received", ackDone: "Handover confirmed", viewReport: "View report", hoInBanner: "{by} handed you {n} conversations at {t}", n_handover: "{by} handed the conversation over to {to}"
+      closeT: "Close", print: "Print", gotIt: "Received", ackDone: "Handover confirmed", viewReport: "View report", hoInBanner: "{by} handed you {n} conversations at {t}", n_handover: "{by} handed the conversation over to {to}",
+      custStatus: "Customer status", noOrders: "No requests or bookings for this number.", moreN: "+{n} more", showAll: "Details", hideAll: "Hide",
+      o_booked: "Booked", o_awaiting_doctor: "Waiting for the doctor", o_on_hold: "On hold", o_referred: "Referred to emergency", o_emergency_closed: "Emergency closed", o_declined: "Customer declined", o_cancelled: "Cancelled", o_completed: "Visit completed", o_pending: "Waiting for the customer",
+      o_onway: "Team on the way", o_arrived: "Team arrived", o_inVisit: "Visit in progress", req: "Request {id}", bk: "Booking {id}", appt: "Visit {d}",
+      p_paid: "Paid", p_none: "Payment link not sent", p_sent: "Link sent {t}, not opened", p_opened: "Link opened {n}× (last {t}), not paid", p_expired: "Link expired, not paid", p_after: "Pays after the visit", p_drSent: "Doctor's orders link sent {t}", p_drOpened: "Doctor's orders link opened {n}×",
+      svc_doctor: "Doctor visit", svc_blood: "Lab tests", svc_nursing: "Nursing", svc_iv: "IV therapy", svc_physio: "Physiotherapy", svc_xray: "X-ray", svc_rad: "X-ray"
     },
     ar: {
       tagline: "رعاية كالعائلة", otherLang: "English", profile: "ملفي الشخصي", settings: "الإعدادات", logout: "تسجيل الخروج",
@@ -435,7 +456,12 @@
       hoLog: "تسليمات الشفت", noHo: "ما فيه تسليمات للحين.", hoTo: "سلّمتها لـ {n}", hoFrom: "استلمتها من {n}", nChats: "{n} محادثات", receivedAt: "استلمت {t}", notReceived: "لسا ما أكدت الاستلام",
       handoverT: "تسليم الشفت", handoverHelp: "محادثاتك المفتوحة تتحول للموظفة اللي تختارينها. اكتبي وين وقفت كل وحدة عشان تعرف كيف تكمل.", handTo: "سلّمي إلى", pickStaff: "اختاري الموظفة اللي بعدك", hoNote: "ملاحظة للشفت", hoNotePh: "أي شي لازم تعرفه (اختياري)", handoverGo: "سلّمي",
       hoNone: "اختاري محادثة وحدة على الأقل.", hoDone: "تم تسليم الشفت لـ {n}", reportT: "تقرير تسليم الشفت", repLine: "من {from} إلى {to} · {t}", cCustomer: "العميل", cState: "الحالة", stWaitingOne: "ينتظر رد", stReplied: "تم الرد",
-      closeT: "إغلاق", print: "طباعة", gotIt: "استلمت", ackDone: "تم تأكيد الاستلام", viewReport: "عرض التقرير", hoInBanner: "سلّمتك {by} {n} محادثات الساعة {t}", n_handover: "سلّمت {by} المحادثة إلى {to}"
+      closeT: "إغلاق", print: "طباعة", gotIt: "استلمت", ackDone: "تم تأكيد الاستلام", viewReport: "عرض التقرير", hoInBanner: "سلّمتك {by} {n} محادثات الساعة {t}", n_handover: "سلّمت {by} المحادثة إلى {to}",
+      custStatus: "حالة العميل", noOrders: "ما عنده طلبات ولا حجوزات بهذا الرقم.", moreN: "+{n} كمان", showAll: "التفاصيل", hideAll: "إخفاء",
+      o_booked: "تم الحجز", o_awaiting_doctor: "بانتظار الطبيب", o_on_hold: "معلّق", o_referred: "حُوّل للطوارئ", o_emergency_closed: "أُقفلت الحالة الطارئة", o_declined: "اعتذر العميل", o_cancelled: "ملغي", o_completed: "اكتملت الزيارة", o_pending: "بانتظار العميل",
+      o_onway: "الفريق في الطريق", o_arrived: "الفريق وصل", o_inVisit: "الزيارة جارية", req: "طلب {id}", bk: "حجز {id}", appt: "الموعد {d}",
+      p_paid: "مدفوع", p_none: "ما انرسل رابط الدفع", p_sent: "انرسل الرابط {t}، ما انفتح", p_opened: "فتح الرابط {n} مرات (آخر مرة {t})، ما دفع", p_expired: "انتهى الرابط، ما دفع", p_after: "يدفع بعد الزيارة", p_drSent: "انرسل رابط طلبات الطبيب {t}", p_drOpened: "فتح رابط طلبات الطبيب {n} مرات",
+      svc_doctor: "زيارة طبيب", svc_blood: "تحاليل", svc_nursing: "تمريض", svc_iv: "مغذيات", svc_physio: "علاج طبيعي", svc_xray: "أشعة", svc_rad: "أشعة"
     }
   };
   let current = "en";
@@ -552,6 +578,64 @@
           <span class="ch-a${c.assigned_to ? "" : " none"}">${waiting(c) ? `<span class="ch-wait${waitMin(c) >= 10 ? " late" : ""}">${esc(tx("waitFor", { t: ago(waitMin(c)) }))}</span>` : ""}${c.tag ? `<span class="ch-tag">${esc(t()["tag_" + c.tag] || c.tag)}</span>` : ""}<span>${esc(c.assigned_to ? tx("owner", { n: c.assigned_name || c.assigned_to }) : t().unassigned)}</span></span></span></button>`;
     }).join("") : `<div class="wa-empty">${esc(t().noChats)}</div>`;
   }
+  // ---------- Customer status: requests and bookings on this mobile (MadaOrders, orders.js) ----------
+  const digits = v => { const d = String(v || "").replace(/\D/g, ""); return /^9665\d{8}$/.test(d) ? "0" + d.slice(3) : /^5\d{8}$/.test(d) ? "0" + d : d; };
+  const DONE = ["cancelled", "declined", "emergency_closed", "referred", "completed"];
+  function ordersOf(c) {
+    if (typeof MadaOrders === "undefined") return [];
+    const m = local(c.wa_id);
+    return MadaOrders.all().filter(o => digits(o.mobile) === m)
+      .sort((a, b) => (DONE.includes(a.status) - DONE.includes(b.status)) || (new Date(b.createdAt || 0) - new Date(a.createdAt || 0)));
+  }
+  const whenShort = d => dayKey(d) === new Date().toDateString() ? hm(d) : dayLabel(d) + " " + hm(d);
+  function apptText(o) {
+    const a = o.appointment; if (!a || !a.date) return "";
+    const d = new Date(a.date + "T00:00:00"); if (a.minute != null) d.setMinutes(a.minute);
+    return tx("appt", { d: dayLabel(d.toISOString()) + (a.minute != null ? " " + hm(d.toISOString()) : "") });
+  }
+  // Where the request stands, then the payment link: [label, tone].
+  function stageOf(o) {
+    if (o.completedAt || o.status === "completed") return [t().o_completed, "g"];
+    if (o.visit && o.visit.steps && Object.keys(o.visit.steps).length) return [t().o_inVisit, "b"];
+    if (o.arrival) return [t().o_arrived, "b"];
+    if (o.status === "booked" && o.driver) return [t().o_onway, "b"];
+    if (o.decision === "pending" && o.status !== "awaiting_doctor") return [t().o_pending, "o"];
+    const k = "o_" + o.status;
+    return [t()[k] || o.status || "–", ["cancelled", "declined", "referred", "emergency_closed"].includes(o.status) ? "r" : o.status === "booked" ? "g" : "o"];
+  }
+  function payOf(o) {
+    const out = [], pl = o.payLink;
+    if (o.payment === "paid") out.push([t().p_paid, "g"]);
+    else if (o.payment === "unpaid") {
+      if (o.payWhen === "after") out.push([t().p_after, ""]);
+      else if (!pl) out.push([t().p_none, "o"]);
+      else if (pl.expiresAt && new Date(pl.expiresAt) < Date.now() && !pl.paidAt) out.push([t().p_expired, "r"]);
+      else if (pl.openedAt) out.push([tx("p_opened", { n: pl.opens || 1, t: whenShort(pl.lastOpenAt || pl.openedAt) }), "o"]);
+      else out.push([tx("p_sent", { t: whenShort(pl.sentAt) }), "o"]);
+    }
+    const dl = o.doctorVisit && o.doctorVisit.payLink;
+    if (dl) out.push(dl.openedAt ? [tx("p_drOpened", { n: dl.opens || 1 }), "b"] : [tx("p_drSent", { t: dl.sentAt ? whenShort(dl.sentAt) : "" }), "o"]);
+    return out;
+  }
+  const chip = ([l, tone]) => `<span class="chip ${tone || ""}">${esc(l)}</span>`;
+  function ordCard(o) {
+    const svc = (o.services && o.services.length > 1 ? o.services : [o.service]).map(x => t()["svc_" + x] || x).filter(Boolean).join(" + ");
+    return `<a class="ord" href="request-details.html?id=${encodeURIComponent(o.id)}" target="_blank" rel="noopener">
+      <span class="ord-h"><b>${esc(svc || "–")}</b><span class="ltr">${esc(o.bookingId || o.id)}</span></span>
+      <span class="ord-c">${chip(stageOf(o))}${payOf(o).map(chip).join("")}</span>${apptText(o) ? `<small>${esc(apptText(o))}</small>` : ""}</a>`;
+  }
+  let cstOpen = false;
+  function drawCust(c) {
+    const el = $("cst"); if (!el) return;
+    const os = ordersOf(c);
+    if (!os.length) { el.innerHTML = `<div class="cst-row"><svg class="cst-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">${IC.doc}</svg><span style="color:var(--wa-sub)">${esc(t().noOrders)}</span></div>`; return; }
+    const o = os[0], active = os.filter(x => !DONE.includes(x.status));
+    el.innerHTML = `<div class="cst-row" data-act="cst"><svg class="cst-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">${IC.doc}</svg>
+        <b>${esc(o.bookingId ? tx("bk", { id: o.bookingId }) : tx("req", { id: o.id }))}</b>${chip(stageOf(o))}${payOf(o).map(chip).join("")}${apptText(o) ? `<small style="color:var(--wa-sub)">${esc(apptText(o))}</small>` : ""}
+        <span class="cst-more">${esc(cstOpen ? t().hideAll : os.length > 1 ? tx("moreN", { n: os.length - 1 }) : t().showAll)}</span></div>
+      ${cstOpen ? `<div class="cst-list">${os.slice(0, 8).map(ordCard).join("")}</div>` : ""}`;
+    void active;
+  }
   const patientsOf = c => typeof MadaPatients !== "undefined" ? MadaPatients.findByMobile(local(c.wa_id)) : [];
   const winEnd = c => c && c.last_in_at ? new Date(c.last_in_at).getTime() + 864e5 : 0;
 
@@ -586,6 +670,7 @@
           <button type="button" data-act="${c.status === "closed" ? "open" : "closed"}">${esc(c.status === "closed" ? t().reopen : t().close)}</button>
           ${c.test ? `<button type="button" data-act="asCustomer">${esc(t().asCustomer)}</button><button type="button" class="danger" data-act="testDel">${esc(t().testDel)}</button>` : ""}</div></div>`;
     $("pin").innerHTML = c.next_step ? `<div class="pin" data-act="step">${svg(IC.pin)}<span><b>${esc(t().nextStep)}:</b>${esc(c.next_step)}</span><small>${esc([c.next_step_by, c.next_step_at ? hm(c.next_step_at) : ""].filter(Boolean).join(" · "))}</small></div>` : "";
+    drawCust(c);
     drawSide();
   }
   function mediaHtml(m) {
@@ -659,9 +744,9 @@
     if (convFor !== sel || convOpen !== open || !$("msgs")) {
       const draft = convFor === sel && $("txt") ? $("txt").value : "";
       stopRec(true); closePreview();
-      $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div id="pin"></div><div class="msgs" id="msgs"></div><div id="cmpWrap">${composerHtml(c)}</div>`;
+      $("conv").innerHTML = `<div class="cv-h" id="cvh"></div><div id="pin"></div><div class="cst" id="cst"></div><div class="msgs" id="msgs"></div><div id="cmpWrap">${composerHtml(c)}</div>`;
       if ($("txt")) { $("txt").value = draft; syncSend(); }
-      convFor = sel; convOpen = open; scroll = true; menuOpen = false;
+      convFor = sel; convOpen = open; scroll = true; menuOpen = false; cstOpen = false;
     }
     drawHead(); drawMsgs(scroll);
   }
@@ -670,6 +755,7 @@
     const ps = patientsOf(c), end = winEnd(c);
     $("side").innerHTML = `<h3>${esc(t().patient)}</h3>` + (ps.length ? ps.map(p => `<a class="pf" href="patient.html?file=${encodeURIComponent(p.fileNo)}"><b>${esc(T(p.name))}</b><span class="ltr">${esc(p.fileNo)}</span></a>`).join("")
       : `<p>${esc(t().noPatient)}</p><a class="btn btn-ghost btn-sm" href="patients.html">${esc(t().newFile)}</a>`)
+      + `<h3>${esc(t().custStatus)}</h3>` + (ordersOf(c).length ? ordersOf(c).slice(0, 6).map(ordCard).join("") : `<p>${esc(t().noOrders)}</p>`)
       + `<p>${esc(Date.now() < end ? tx("window", { t: dayLabel(end) + " " + hm(end) }) : t().windowOff)}</p>`;
   }
   // Mic when the box is empty, send arrow when there is text (as in WhatsApp).
@@ -850,6 +936,7 @@
     const pv = e.target.closest("[data-pv]"); if (pv) { pvAt = +pv.dataset.pv; drawPreview(); return; }
     const b = e.target.closest("[data-act]"); if (!b) return;
     const a = b.dataset.act;
+    if (a === "cst") { cstOpen = !cstOpen; drawCust(chats.find(x => x.wa_id === sel)); return; }
     if (a === "more") { menuOpen = !menuOpen; $("hdMenu").hidden = !menuOpen; b.setAttribute("aria-expanded", menuOpen); return; }
     if (b.closest("#hdMenu")) { menuOpen = false; $("hdMenu").hidden = true; }
     if (a === "back") { sel = null; drawList(); drawConv(); }
@@ -978,6 +1065,7 @@
     const a = e.target.closest("[data-ack]"); if (a) ack(a.dataset.ack);
   });
   setInterval(() => { if (!document.hidden) loadDash(); }, 30000);
+  window.addEventListener("storage", e => { if (sel && (!e.key || e.key === "mada-orders")) { const c = chats.find(x => x.wa_id === sel); if (c) { drawCust(c); drawSide(); } } });
   function toast(msg) { const el = $("toast"); el.textContent = msg; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 3500); }
   // New messages: checked every 5 seconds while the page is in front.
   setInterval(() => { if (!document.hidden) loadChats(); }, 5000);
