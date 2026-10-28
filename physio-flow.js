@@ -3,7 +3,7 @@
 // patient (or of a package) is a follow-up session with its own steps. Saved steps are order.physioVisit.steps[key] { at, by, ... };
 // the first time a step was opened is order.physioVisit.stepLog[key].openedAt.
 const PtFlow = (() => {
-  const INITIAL = ["arrival", "ptPain", "ptHistory", "ptFunc", "ptExam", "ptGoals", "ptPlan", "ptHep", "idform", "consent"];
+  const INITIAL = ["idform", "arrival", "ptPain", "ptHistory", "ptFunc", "ptExam", "ptGoals", "ptPlan", "ptHep", "consent"];
   const pv = o => (o && o.physioVisit) || {};
   const apptKey = o => ((o.appointment && o.appointment.date) || "") + String((o.appointment && o.appointment.minute) || 0).padStart(4, "0");
   // A follow-up: its own steps say so, or it is booked from an earlier physio visit, or the patient had an earlier assessed visit.
@@ -20,8 +20,8 @@ const PtFlow = (() => {
   function keys(o) {
     if (!isFollow(o)) return INITIAL;
     const s = pv(o).steps || {};
-    return ["arrival", "fuInfo", "fuToday", ...((s.fuToday || {}).exam === "detailed" ? ["ptExam"] : []), "fuTx", "ptHep", "fuNext",
-      ...((s.fuNext || {}).decision === "discharge" ? [] : ["ptPlan"]), "fuSign", "idform", "consent"];
+    return ["idform", "arrival", "fuInfo", "fuToday", ...((s.fuToday || {}).exam === "detailed" ? ["ptExam"] : []), "fuTx", "ptHep", "fuNext",
+      ...((s.fuNext || {}).decision === "discharge" ? [] : ["ptPlan"]), "fuSign", "consent"];
   }
   const L = {
     en: { arrival: "Arrival Confirmation", ptPain: "Pain Assessment", ptHistory: "Medical History", ptFunc: "Functional Limitations", ptExam: "Objective Examination",
