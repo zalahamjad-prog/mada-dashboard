@@ -391,6 +391,8 @@ h1{font-size:22px;margin:0;color:#014359}h2{font-size:16px;color:#014359;margin:
 <header><h1>${esc(title)}</h1><strong style="color:#2B7F62">مدى كير</strong></header>
 <div class="pt">المريض: <b>${esc(ar(p.name))}</b> · رقم الملف <span dir="ltr">${esc(p.fileNo)}</span></div>${body}
 <footer>صدر من تطبيق مدى كير · ${esc(fullDate(new Date().toISOString()))}</footer><p><button onclick="print()" style="font:inherit;padding:10px 18px;border-radius:10px;border:0;background:#2B7F62;color:#fff">حفظ PDF أو طباعة</button></p></body></html>`;
+    // Inside the phone app: the phone prints it or saves it as PDF.
+    if (window.MADA_NATIVE && window.ReactNativeWebView) { window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'print', html: html.replace(/<p><button[\s\S]*?<\/p>/, '') })); return; }
     const w = window.open('', '_blank');
     if (!w) return;
     w.document.write(html); w.document.close();
