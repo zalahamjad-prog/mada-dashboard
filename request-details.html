@@ -562,7 +562,7 @@
       orderId: "Order ID", created: "Created Date", time: "Time", copy: "Copy order ID", copied: "Order ID copied.",
       s1: "1. Basic Information", s2: "2. Service", s3: "3. Schedule & Nurse", s4: "4. Patient", s5: "5. Payment", s2p: "2. Patient",
       locked: "Locked", mobile: "Mobile Number", source: "Request Source",
-      src_phone: "Call", src_whatsapp: "WhatsApp", src_website: "Website", src_other: "Other",
+      src_phone: "Call", src_whatsapp: "WhatsApp", src_website: "Website", src_app: "App", src_other: "Other",
       emgStatus: "Emergency Status", emergency: "Emergency", nonEmergency: "Non-Emergency",
       reasonTitle: "Reason for Emergency Referral", quick: "Quick Checklist", noChecks: "No checklist item was ticked.", notes: "Additional Notes", noNotes: "No notes.",
       lockedAgent: "This emergency case is locked. You can't edit it. Only a supervisor can close it and write the closing note.",
@@ -591,7 +591,7 @@
       orderId: "رقم الطلب", created: "تاريخ الإنشاء", time: "الوقت", copy: "نسخ رقم الطلب", copied: "تم نسخ رقم الطلب.",
       s1: "1. المعلومات الأساسية", s2: "2. الخدمة", s3: "3. الموعد والممرضة", s4: "4. المريض", s5: "5. الدفع", s2p: "2. المريض",
       locked: "مقفل", mobile: "رقم الجوال", source: "مصدر الطلب",
-      src_phone: "اتصال", src_whatsapp: "واتساب", src_website: "الموقع", src_other: "أخرى",
+      src_phone: "اتصال", src_whatsapp: "واتساب", src_website: "الموقع", src_app: "التطبيق", src_other: "أخرى",
       emgStatus: "الحالة الطبية", emergency: "طارئة", nonEmergency: "غير طارئة",
       reasonTitle: "سبب التحويل للطوارئ", quick: "قائمة التحقق", noChecks: "لم يتم تحديد أي عنصر.", notes: "ملاحظات إضافية", noNotes: "لا توجد ملاحظات.",
       lockedAgent: "هذه الحالة الطارئة مقفلة وما تقدرين تعدلين عليها. المشرفة فقط تقفل الحالة وتكتب ملاحظة الإقفال.",
@@ -772,6 +772,7 @@
   const ICON = {
     phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
     whatsapp: '<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2z"/>',
+    app: '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
     website: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
     other: '<circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/>',
     lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'
@@ -812,7 +813,7 @@
     // Emergency referrals and "Not Approved" requests are locked for agents; a supervisor closes them.
     const isRej = !isEmg && o.decision === "rejected", locked = isEmg || isRej;
     const closed = o.status === "emergency_closed" || o.status === "cancelled";
-    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "other" ? ["other"] : []);
+    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "app" ? ["app"] : [], o.source === "other" ? ["other"] : []);
     let html = `
     <section class="card strip${o.bookingId ? " four" : ""}">
       <div>${svg('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 11h6M9 15h6"/>')}<div><small>${t().orderId}</small><strong class="oid">${esc(o.id)}<button type="button" class="copy" id="copyId" aria-label="${esc(t().copy)}" title="${esc(t().copy)}">${svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h9"/>')}</button></strong></div></div>
@@ -1353,7 +1354,7 @@
     canBook = !held && !done;
     const canPay = canBook && o.decision === "approved" && (o.total > 0 || o.payment === "unpaid");
     const dis = canBook ? "" : "disabled";
-    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "other" ? ["other"] : []);
+    const srcs = ["phone", "whatsapp", "website"].concat(o.source === "app" ? ["app"] : [], o.source === "other" ? ["other"] : []);
     const dec = o.decision === "approved" ? `<span class="status-chip non">${svg(I.check, 2)}${t().approveChip}</span>`
       : `<span class="status-chip wait">${svg(o.decision === "on_hold" ? I.pause : I.clock, 2)}${o.decision === "on_hold" ? t().holdChip : t().pendingChip}</span>`;
     const banner = held ? `<div class="banner">${svg(I.pause, 2)}<span>${t().holdBanner}</span><a class="btn btn-primary btn-sm" href="new-request.html?hold=${encodeURIComponent(o.id)}">${t().holdGo}</a></div>`
