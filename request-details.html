@@ -562,7 +562,7 @@
       orderId: "Order ID", created: "Created Date", time: "Time", copy: "Copy order ID", copied: "Order ID copied.",
       s1: "1. Basic Information", s2: "2. Service", s3: "3. Schedule & Nurse", s4: "4. Patient", s5: "5. Payment", s2p: "2. Patient",
       locked: "Locked", mobile: "Mobile Number", source: "Request Source",
-      src_phone: "Call", src_whatsapp: "WhatsApp", src_website: "Website", src_app: "App", src_other: "Other",
+      src_phone: "Call", src_whatsapp: "WhatsApp", src_website: "Website", src_app: "App", appRating: "Customer rating (app)", src_other: "Other",
       emgStatus: "Emergency Status", emergency: "Emergency", nonEmergency: "Non-Emergency",
       reasonTitle: "Reason for Emergency Referral", quick: "Quick Checklist", noChecks: "No checklist item was ticked.", notes: "Additional Notes", noNotes: "No notes.",
       lockedAgent: "This emergency case is locked. You can't edit it. Only a supervisor can close it and write the closing note.",
@@ -591,7 +591,7 @@
       orderId: "رقم الطلب", created: "تاريخ الإنشاء", time: "الوقت", copy: "نسخ رقم الطلب", copied: "تم نسخ رقم الطلب.",
       s1: "1. المعلومات الأساسية", s2: "2. الخدمة", s3: "3. الموعد والممرضة", s4: "4. المريض", s5: "5. الدفع", s2p: "2. المريض",
       locked: "مقفل", mobile: "رقم الجوال", source: "مصدر الطلب",
-      src_phone: "اتصال", src_whatsapp: "واتساب", src_website: "الموقع", src_app: "التطبيق", src_other: "أخرى",
+      src_phone: "اتصال", src_whatsapp: "واتساب", src_website: "الموقع", src_app: "التطبيق", appRating: "تقييم العميل (التطبيق)", src_other: "أخرى",
       emgStatus: "الحالة الطبية", emergency: "طارئة", nonEmergency: "غير طارئة",
       reasonTitle: "سبب التحويل للطوارئ", quick: "قائمة التحقق", noChecks: "لم يتم تحديد أي عنصر.", notes: "ملاحظات إضافية", noNotes: "لا توجد ملاحظات.",
       lockedAgent: "هذه الحالة الطارئة مقفلة وما تقدرين تعدلين عليها. المشرفة فقط تقفل الحالة وتكتب ملاحظة الإقفال.",
@@ -841,6 +841,7 @@
         <div class="${isRej ? "row3" : "row2"}">
           <div><span class="lbl">${t().mobile}</span><div class="ro">${svg(ICON.phone)}<span class="num">${esc(o.mobile)}</span></div></div>
           <div><span class="lbl">${t().source}</span><div class="srcs">${srcs.map(k => `<span class="src ${o.source === k ? "on" : ""}">${svg(ICON[k])}${esc(k === "other" && o.sourceOther ? o.sourceOther : t()["src_" + k])}</span>`).join("")}</div></div>
+          ${o.rating && o.rating.score ? `<div><span class="lbl">${t().appRating}</span><strong>${"★".repeat(o.rating.score)}${"☆".repeat(5 - o.rating.score)}</strong>${o.rating.comment ? ` <span dir="auto">${esc(o.rating.comment)}</span>` : ""}</div>` : ""}
           ${isRej ? `<div><span class="lbl">${t().patientStatus}</span>${statusChip(false)}</div>` : ""}
         </div>
         <div class="divider"></div>`;
@@ -1373,6 +1374,7 @@
         <div class="row3">
           <div><span class="lbl">${t().mobile}</span><div class="ro">${svg(ICON.phone)}<span class="num">${esc(o.mobile)}</span></div></div>
           <div><span class="lbl">${t().source}</span><div class="srcs">${srcs.map(k => `<span class="src ${o.source === k ? "on" : ""}">${svg(ICON[k])}${esc(k === "other" && o.sourceOther ? o.sourceOther : t()["src_" + k])}</span>`).join("")}</div></div>
+          ${o.rating && o.rating.score ? `<div><span class="lbl">${t().appRating}</span><strong>${"★".repeat(o.rating.score)}${"☆".repeat(5 - o.rating.score)}</strong>${o.rating.comment ? ` <span dir="auto">${esc(o.rating.comment)}</span>` : ""}</div>` : ""}
           <div><span class="lbl">${t().patientStatus}</span>${statusChip(false)}</div>
         </div>
         <div class="divider"></div>
