@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الإجازات المرضية · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" aria-label="رجوع لملفي الصحي" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">الإجازات المرضية</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <sc-for list="{{list}}" as="x" hint-placeholder-count="2">
+    <sc-if value="{{x.pending}}" hint-placeholder-val="{{ true }}">
+    <article style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #FEF4E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px;">{{x.title}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{x.doctor}} · {{x.date}}</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: #FEF4E5; color: #8A5A12;"><span style="width: 7px; height: 7px; border-radius: 4px; background: #F4A738;"></span>قيد الإصدار</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; background: #F6F8F8; border-radius: 12px; padding: 10px 12px;"><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">رقم الطلب</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{x.orderNo}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">رقم الحجز</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{x.bookingNo}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">من</span><strong style="font-size: 14px; line-height: 20px;">{{x.from}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">إلى</span><strong style="font-size: 14px; line-height: 20px;">{{x.to}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px; grid-column: 1 / -1;"><span style="font-size: 12px; color: #51656B;">الجهة</span><strong style="font-size: 14px; line-height: 20px;">قطاع خاص · شركة الأفق</strong></span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));"><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="display: none;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #4CB491; border: 2px solid #4CB491;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 500; color: #22684F;">طلبها الطبيب</span></span><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: #4CB491;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #FFFFFF; border: 5px solid #014359;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 700; color: #014359;">صدرت من صحة</span></span><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: #DDE5E7;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #FFFFFF; border: 2px solid #DDE5E7;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 500; color: #7F9196;">وصلتك</span></span></div>
+      <div style="background: #FEF4E5; border-radius: 12px; padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg><span style="font-size: 13px; line-height: 20px; color: #0E2A33;">فريقنا يصدرها من منصة صحة، ويوصلك إشعار أول ما تجهز.</span></div>
+      <button class="mc-btn" disabled="true" aria-disabled="true" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; height: 48px; font-size: 15px; background: #E8EEEF; color: #51656B; cursor: not-allowed;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#51656B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg><span>تحميل الإجازة PDF</span></button>
+    </article>
+    </sc-if>
+    <sc-if value="{{x.issued}}" hint-placeholder-val="{{ true }}">
+    <article style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #FEF4E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px;">{{x.title}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{x.doctor}} · {{x.date}}</span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: #E9F6F1; color: #22684F;"><span style="width: 7px; height: 7px; border-radius: 4px; background: #4CB491;"></span>صدرت</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; background: #F6F8F8; border-radius: 12px; padding: 10px 12px;"><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">رقم الطلب</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{x.orderNo}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">رقم الحجز</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{x.bookingNo}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">من</span><strong style="font-size: 14px; line-height: 20px;">{{x.from}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">إلى</span><strong style="font-size: 14px; line-height: 20px;">{{x.to}}</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">رقم إجازة صحة</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">PSL-25108843</strong></span><span style="display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">الجهة</span><strong style="font-size: 14px; line-height: 20px;">قطاع خاص · شركة الأفق</strong></span></div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));"><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="display: none;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #4CB491; border: 2px solid #4CB491;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 500; color: #22684F;">طلبها الطبيب</span></span><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: #4CB491;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #4CB491; border: 2px solid #4CB491;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 500; color: #22684F;">صدرت من صحة</span></span><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: #4CB491;"></span><span style="position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #4CB491; border: 2px solid #4CB491;"></span><span style="font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: 700; color: #014359;">وصلتك</span></span></div>
+      <button class="mc-btn" onClick="{{x.pdf}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; height: 48px; font-size: 15px; background: #4CB491; color: #014359;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span>تحميل الإجازة PDF</span></button>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">تقدر تتحقق منها برقم الإجازة في منصة صحة.</span>
+    </article>
+    </sc-if>
+    </sc-for>
+    <p style="margin: 0 4px; font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">الإجازة يقررها الطبيب أثناء الزيارة، ونصدرها رسميًا من منصة صحة.</p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"pageH":{"editor":"string","default":"1160px"},"$preview":{"width":390,"height":1160}}'>
+// Sick leave in the health file, mirroring the system: the doctor orders it in the visit (doctor-orders.js leave: entity, employer, days 1–30, from/to),
+// staff issue it on Sehha (medical.js type "leave", step issued: leaveNo, from, to, file) and send it (step sent). New send channel "app":
+// uploading the file notifies the patient and marks it sent. The download is the file staff attached.
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      pageH: this.props.pageH || '1160px',
+      // Sick leaves the doctor ordered (Mada.leaves(): medical.js type "leave", requested → issued → sent).
+      list: Mada.leaves().map((x) => ({ ...x, pending: !x.issued, pdf: () => Mada.pdf && Mada.pdf('leave', x.id) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

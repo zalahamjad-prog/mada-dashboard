@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>العلامات الحيوية · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+<sc-if value="{{showAll}}" hint-placeholder-val="{{ true }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{noop}}" aria-label="رجوع لملفي الصحي" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">العلامات الحيوية</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 16px rgba(1,67,89,0.06);">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+      <span style="font-size: 13px; line-height: 20px; color: #0E2A33;">من آخر 5 زيارات: زيارتين طبيب و3 زيارات تمريض. آخر قراءة 24 أكتوبر.</span>
+    </div>
+    <sc-for list="{{signs}}" as="v" hint-placeholder-count="6">
+      <button class="mc-row" onClick="{{v.open}}" style="width: 100%; background: #FFFFFF; border: 0; border-radius: 18px; padding: 14px 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; align-items: center; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; cursor: pointer;">
+        <span style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+          <span style="font-size: 13px; font-weight: 700; color: #51656B;">{{v.label}}</span>
+          <span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 22px; color: #0E2A33;">{{v.val}}</strong><span dir="ltr" style="font-size: 12px; color: #51656B;">{{v.unit}}</span></span>
+          <span style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;"><span style="{{v.tag}}">{{v.state}}</span><span style="font-size: 12px; color: #51656B;">{{v.trend}}</span></span>
+        </span>
+        <svg aria-hidden="true" width="110" height="44" viewBox="0 0 110 44" style="flex-shrink: 0;"><polyline points="{{v.pts}}" fill="none" stroke="{{v.line}}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline><circle cx="{{v.lx}}" cy="{{v.ly}}" r="4" fill="{{v.line}}"></circle></svg>
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7F9196" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M15 18l-6-6 6-6"></path></svg>
+      </button>
+    </sc-for>
+    <p style="margin: 0 4px; font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">القراءات من زيارات الطبيب والتمريض في مدى كير. لو عندك قراءة تقلقك تواصل مع خدمة العملاء.</p>
+  </main>
+</sc-if>
+
+<sc-if value="{{showOne}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{back}}" aria-label="رجوع للعلامات الحيوية" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">{{one.label}}</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px;">
+        <span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 28px; color: #0E2A33;">{{one.val}}</strong><span dir="ltr" style="font-size: 13px; color: #51656B;">{{one.unit}}</span></span>
+        <span style="{{one.tag}}">{{one.state}}</span>
+      </div>
+      <span style="font-size: 12px; color: #51656B;">{{one.trend}} · الطبيعي <span dir="ltr">{{one.rng}}</span></span>
+      <svg role="img" aria-label="تغيّر القراءة عبر الزيارات" width="318" height="150" viewBox="0 0 318 150">
+        <rect x="0" y="{{one.bandY}}" width="318" height="{{one.bandH}}" rx="6" fill="#E9F6F1"></rect>
+        <polyline points="{{one.pts}}" fill="none" stroke="#014359" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        <sc-for list="{{one.dots}}" as="p" hint-placeholder-count="5"><circle cx="{{p.x}}" cy="{{p.y}}" r="5" fill="{{p.fill}}" stroke="#FFFFFF" stroke-width="2"></circle></sc-for>
+      </svg>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px;"><sc-for list="{{one.dots}}" as="p" hint-placeholder-count="5"><span style="font-size: 11px; color: #51656B; text-align: center;">{{p.d}}</span></sc-for></div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: #51656B;"><span style="display: flex; align-items: center; gap: 6px;"><span style="width: 14px; height: 10px; border-radius: 3px; background: #E9F6F1;"></span>المعدل الطبيعي</span><span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; border-radius: 5px; background: #F4A738;"></span>خارج الطبيعي</span></div>
+    </section>
+    <section aria-label="كل القراءات" style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 0; padding-top: 14px; padding-bottom: 6px;">
+      <h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359; padding-bottom: 4px;">كل القراءات</h2>
+      <sc-for list="{{one.rows}}" as="r" hint-placeholder-count="5"><div style="{{r.rowStyle}}">
+        <span style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0;">
+          <span style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><strong style="font-size: 14px;">{{r.date}}</strong><span style="{{r.kindChip}}">{{r.kind}}</span></span>
+          <span style="font-size: 12px; line-height: 18px; color: #51656B;">قاسها {{r.by}} · <span dir="ltr" style="font-family: Inter, sans-serif;">{{r.order}}</span></span>
+        </span>
+        <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 17px;">{{r.val}}</strong><span style="{{r.tag}}">{{r.state}}</span></span>
+      </div></sc-for>
+    </section>
+  </main>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"all","options":["all","bp","sugar"]},"pageH":{"editor":"string","default":"1080px"},"$preview":{"width":390,"height":1080}}'>
+// Vital signs across visits: every doctor visit (doctorVisit.steps.vitals) and nursing visit (nurseVisit.steps.vitals, a required step) of this medical file,
+// oldest to newest. Ranges and normal/high/low rules are the ones in medical-report.js. Physiotherapy visits have no vitals.
+const VIT = [['bp', 'ضغط الدم', 'mmHg', 90, 139, '90/60–139/89'], ['sugar', 'سكر الدم', 'mg/dL', 70, 180, '70–180'], ['hr', 'النبض', 'bpm', 60, 100, '60–100'], ['temp', 'الحرارة', '°C', 36, 37.9, '36–37.9'], ['spo2', 'الأكسجين', '%', 94, 100, '94–100'], ['rr', 'معدل التنفس', '/min', 12, 20, '12–20']];
+let READ = [];
+const num = (k, x) => k === 'bp' ? +x.split('/')[0] : +x;
+const vState = (k, x, lo, hi) => { if (k === 'bp') { const [a, b] = x.split('/').map(Number); return a >= 140 || b >= 90 ? 'high' : a < 90 || b < 60 ? 'low' : 'ok'; } return +x < lo ? 'low' : +x > hi ? 'high' : 'ok'; };
+const STATE = { ok: ['طبيعي', '#E9F6F1', '#22684F'], high: ['مرتفع', '#FEF4E5', '#8A5A12'], low: ['منخفض', '#E6EFF2', '#014359'] };
+const tagOf = (st) => `font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: ${STATE[st][1]}; color: ${STATE[st][2]};`;
+class Component extends DCLogic {
+  st() { const i = this.props.initial || 'all'; return { sign: i === 'all' ? null : i, ...(this.state || {}) }; }
+  series(k) { const xs = READ.filter((r) => r.v[k] != null).map((r) => num(k, r.v[k])); return xs.length ? xs : [0]; }
+  scale(k, lo, hi, w, h, pad) {
+    const xs = this.series(k), mn = Math.min(lo, ...xs) - 4, mx = Math.max(hi, ...xs) + 4;
+    const y = (x) => +(pad + (h - 2 * pad) * (1 - (x - mn) / (mx - mn))).toFixed(1);
+    const x = (n) => +(pad + (w - 2 * pad) * (xs.length > 1 ? n / (xs.length - 1) : 0.5)).toFixed(1);
+    return { xs, x, y };
+  }
+  sign([k, label, unit, lo, hi, rng]) {
+    const has = READ.filter((r) => r.v[k] != null);
+    const last = has.length ? has[has.length - 1].v[k] : '—', prev = has.length > 1 ? has[has.length - 2].v[k] : last;
+    if (!has.length) return { k, label, unit, rng, val: '—', state: '', tag: 'display: none;', trend: 'لا توجد قراءة بعد', st: 'ok' };
+    const st = vState(k, last, lo, hi), d = num(k, last) - num(k, prev);
+    const better = st === 'ok' ? 'ضمن الطبيعي' : '';
+    const trend = d === 0 ? 'نفس القراءة السابقة' : (d > 0 ? 'أعلى' : 'أقل') + ' من الزيارة السابقة';
+    return { k, label, unit, rng, val: last, state: STATE[st][0], tag: tagOf(st), trend, st };
+  }
+  renderVals() {
+    const s = this.st();
+    const put = (p) => this.setState({ ...s, ...p });
+    READ = Mada.vitals();
+    const signs = VIT.map((v) => {
+      const b = this.sign(v), sc = this.scale(v[0], v[3], v[4], 110, 44, 5);
+      const pts = sc.xs.map((x, n) => `${sc.x(n)},${sc.y(x)}`).join(' ');
+      return { ...b, pts, lx: sc.x(sc.xs.length - 1), ly: sc.y(sc.xs[sc.xs.length - 1]), line: b.st === 'ok' ? '#2B7F62' : '#D98A16', open: () => put({ sign: v[0] }) };
+    });
+    const def = VIT.find((v) => v[0] === s.sign) || VIT[0];
+    const [k, , , lo, hi] = def;
+    const sc = this.scale(k, lo, hi, 318, 150, 12);
+    const one = { ...this.sign(def) };
+    one.pts = sc.xs.map((x, n) => `${sc.x(n)},${sc.y(x)}`).join(' ');
+    one.bandY = sc.y(hi); one.bandH = +(sc.y(lo) - sc.y(hi)).toFixed(1);
+    one.dots = READ.filter((r) => r.v[k] != null).map((r, n) => ({ x: sc.x(n), y: sc.y(sc.xs[n]), d: r.d.split(' ')[0] + ' ' + r.d.split(' ')[1].slice(0, 3), fill: vState(k, r.v[k], lo, hi) === 'ok' ? '#2B7F62' : '#F4A738' }));
+    one.rows = READ.filter((r) => r.v[k] != null).slice().reverse().map((r, n) => { const st2 = vState(k, r.v[k], lo, hi); const doc = r.kind === 'doctor';
+      return { date: r.d, by: r.by, order: r.order, val: r.v[k], state: STATE[st2][0], tag: tagOf(st2), kind: doc ? 'زيارة طبيب' : 'زيارة تمريض',
+        kindChip: `font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: ${doc ? '#E6EFF2' : '#FEF4E5'}; color: ${doc ? '#014359' : '#8A5A12'};`,
+        rowStyle: `min-height: 64px; padding: 10px 0; ${n ? 'border-top: 1px solid #EEF2F2; ' : ''}display: flex; align-items: center; gap: 12px;` }; });
+    return {
+      pageH: this.props.pageH || '1080px',
+      showAll: !s.sign, showOne: !!s.sign, signs, one,
+      back: () => put({ sign: null }), noop: () => {},
+    };
+  }
+}
+</script>
+</body>
+</html>

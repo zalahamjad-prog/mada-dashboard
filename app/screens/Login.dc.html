@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تسجيل الدخول · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#014359}a:hover{color:#1F6378}
+.mc-field:focus{outline:none}
+.mc-field::placeholder{color:#7F9196;font-family:Tajawal,sans-serif}
+.mc-btn:focus-visible,.mc-seg:focus-visible,.mc-link:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-otp:focus{outline:none}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+@keyframes mcspin{to{transform:rotate(360deg)}}
+.mc-spin{animation:mcspin .8s linear infinite}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFFFFF; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+
+<sc-if value="{{showForm}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; flex-grow: 1;">
+  <div class="mc-hero" style="height: 272px; box-sizing: border-box; padding: 40px 24px 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+    <svg role="img" aria-label="شعار مدى كير" width="84" height="90" viewBox="0 0 1498 1600" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+    <p style="margin: 0; font-size: 15px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.5px;">نرعاكم كأهلنا</p>
+  </div>
+
+  <div style="margin-top: -28px; position: relative; background: #FFFFFF; border-radius: 28px 28px 0 0; box-shadow: 0 -6px 20px rgba(1,67,89,0.08); padding: 10px 24px 0; display: flex; flex-direction: column; flex-grow: 1;">
+    <span aria-hidden="true" style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #DDE5E7; margin-bottom: 14px;"></span>
+    <h1 style="margin: 0; font-size: 28px; line-height: 40px; font-weight: 700; color: #014359;">أهلًا بك في مدى كير</h1>
+    <p style="margin: 2px 0 0; font-size: 17px; line-height: 26px; font-weight: 500; color: #51656B;">ملفك الصحي وطلبات رعايتك، في متناولك.</p>
+
+    <div role="tablist" aria-label="طريقة الدخول" style="margin-top: 24px; background: #E6EFF2; border-radius: 14px; padding: 4px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px;">
+      <button class="mc-seg" role="tab" aria-selected="{{phoneOn}}" onClick="{{pickPhone}}" style="{{segPhone}}">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{segPhoneIcon}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <span>رقم الجوال</span>
+      </button>
+      <button class="mc-seg" role="tab" aria-selected="{{fileOn}}" onClick="{{pickFile}}" style="{{segFile}}">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{segFileIcon}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M9 13h6"></path><path d="M9 17h4"></path></svg>
+        <span>رقم الملف الطبي</span>
+      </button>
+    </div>
+
+    <label for="mc-input" style="margin-top: 22px; font-size: 14px; line-height: 20px; font-weight: 500; color: #0E2A33;">{{fieldLabel}}</label>
+    <div style="{{boxStyle}}">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="{{boxIcon}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <sc-if value="{{phoneOn}}" hint-placeholder-val="{{ true }}"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></sc-if>
+        <sc-if value="{{fileOn}}" hint-placeholder-val="{{ false }}"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M9 13h6"></path><path d="M9 17h4"></path></sc-if>
+      </svg>
+      <input id="mc-input" class="mc-field" dir="{{inputDir}}" type="text" inputMode="{{inputMode}}" autoComplete="{{autoComplete}}" placeholder="{{placeholder}}" value="{{value}}" onChange="{{onType}}" onBlur="{{onBlur}}" disabled="{{busy}}" aria-invalid="{{showError}}" aria-describedby="mc-hint" style="flex-grow: 1; min-width: 0; border: 0; background: transparent; font-family: Inter, sans-serif; font-weight: 500; font-size: 17px; color: #0E2A33; text-align: {{inputAlign}}; padding: 0; height: 52px;">
+      <sc-if value="{{phoneOn}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span aria-hidden="true" style="width: 1px; height: 28px; background: #DDE5E7;"></span>
+          <span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 600; font-size: 16px; color: #0E2A33;">+966</span>
+        </div>
+      </sc-if>
+    </div>
+    <div id="mc-hint" style="margin-top: 8px; display: flex; align-items: flex-start; gap: 6px; font-size: 13px; line-height: 20px; color: {{hintColor}};">
+      <sc-if value="{{showError}}" hint-placeholder-val="{{ false }}">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 2px; flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+      </sc-if>
+      <span>{{hint}}</span>
+    </div>
+
+    <sc-if value="{{fileOn}}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top: 14px; background: #F6F8F8; border-radius: 14px; padding: 12px 16px 4px; display: flex; flex-direction: column; gap: 2px;">
+        <p style="margin: 0; font-size: 14px; line-height: 22px; font-weight: 700; color: #014359;">لا تعرف رقم ملفك الطبي؟</p>
+        <p style="margin: 0; font-size: 13px; line-height: 20px; color: #51656B;">يسعدنا مساعدتك في الوصول إلى ملفك.</p>
+        <button class="mc-link" onClick="{{callSupport}}" style="align-self: flex-start; background: none; border: 0; padding: 4px 0; min-height: 44px; display: flex; align-items: center; gap: 6px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+          <span>تواصل مع خدمة العملاء</span>
+        </button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showAlert}}" hint-placeholder-val="{{ false }}">
+      <div role="alert" style="{{alertStyle}}">
+        <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 18px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <sc-if value="{{isNetwork}}" hint-placeholder-val="{{ false }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 2l20 20"></path><path d="M8.5 16.5a5 5 0 0 1 7 0"></path><path d="M2 8.82a15 15 0 0 1 4.17-2.65"></path><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"></path><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"></path><path d="M5 13a10 10 0 0 1 5.24-2.76"></path><path d="M12 20h.01"></path></svg>
+          </sc-if>
+          <sc-if value="{{isNotFound}}" hint-placeholder-val="{{ true }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B9771A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+          </sc-if>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1;">
+          <p style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 700; color: {{alertTitleColor}};">{{alertTitle}}</p>
+          <p style="margin: 0; font-size: 13px; line-height: 20px; color: #0E2A33;">{{alertBody}}</p>
+          <button class="mc-link" onClick="{{alertAction}}" style="align-self: flex-start; margin-top: 2px; background: none; border: 0; padding: 4px 0; min-height: 44px; display: flex; align-items: center; gap: 6px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: {{alertTitleColor}}; cursor: pointer;">
+            <span>{{alertActionLabel}}</span>
+          </button>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="flex-grow: 1;"></div>
+    <button class="mc-btn" onClick="{{submit}}" disabled="{{btnDisabled}}" aria-busy="{{busy}}" style="{{btnStyle}}">
+      <sc-if value="{{busy}}" hint-placeholder-val="{{ false }}">
+        <svg class="mc-spin" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2.6" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-6.2-8.56"></path></svg>
+      </sc-if>
+      <span>{{btnLabel}}</span>
+    </button>
+    <p style="margin: 14px 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; line-height: 20px; color: #51656B; text-align: center;">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+      <span>نحرص على خصوصية بياناتك الصحية، ونتحقق من هويتك قبل إتاحتها.</span>
+    </p>
+    <div style="height: 34px;"></div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{showNotFound}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; flex-grow: 1;">
+  <div class="mc-hero" style="height: 232px; box-sizing: border-box; padding: 36px 24px 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+    <svg role="img" aria-label="شعار مدى كير" width="70" height="75" viewBox="0 0 1498 1600" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+    <p style="margin: 0; font-size: 15px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.5px;">نرعاكم كأهلنا</p>
+  </div>
+  <div style="margin-top: -28px; position: relative; background: #FFFFFF; border-radius: 28px 28px 0 0; box-shadow: 0 -6px 20px rgba(1,67,89,0.08); padding: 10px 24px 0; display: flex; flex-direction: column; flex-grow: 1;">
+    <span aria-hidden="true" style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #DDE5E7; margin-bottom: 22px;"></span>
+    <span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 20px; background: #FEF4E5; display: flex; align-items: center; justify-content: center;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B9771A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M10 13l4 4"></path><path d="M14 13l-4 4"></path></svg>
+    </span>
+    <h1 style="margin: 18px 0 0; font-size: 26px; line-height: 38px; font-weight: 700; color: #014359;">لم نعثر على ملفك الطبي</h1>
+    <p style="margin: 6px 0 0; font-size: 18px; line-height: 28px; font-weight: 700; color: #2B7F62;">يسعدنا انضمامك إلى مدى كير 💚</p>
+    <p style="margin: 10px 0 0; font-size: 16px; line-height: 27px; color: #51656B;">لا يوجد ملف طبي مرتبط بالرقم الذي أدخلته حاليًا. تواصل مع فريق خدمة العملاء، وسيساعدك في فتح ملفك الطبي في منظومة مدى كير وإكمال إجراءات الوصول إلى خدماتنا.</p>
+    <div style="flex-grow: 1;"></div>
+    <button class="mc-btn" onClick="{{callSupport}}" style="height: 56px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: Tajawal, sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+      <span>تواصل مع خدمة العملاء</span>
+    </button>
+    <button class="mc-link" onClick="{{tryAgain}}" style="align-self: center; margin-top: 8px; background: none; border: 0; padding: 4px 12px; min-height: 44px; font-family: Tajawal, sans-serif; font-size: 15px; font-weight: 700; color: #014359; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">العودة والمحاولة مرة أخرى</button>
+    <p style="margin: 6px 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; line-height: 20px; color: #51656B; text-align: center;">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+      <span>نحرص على خصوصية بياناتك الصحية، ونتحقق من هويتك قبل إتاحتها.</span>
+    </p>
+    <div style="height: 34px;"></div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{showProfiles}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; flex-grow: 1; padding: 52px 24px 0; background: #F6F8F8;">
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <svg role="img" aria-label="شعار مدى كير" width="34" height="36" viewBox="0 0 1498 1600" xmlns="http://www.w3.org/2000/svg"><path fill="#4CB491" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+    <span style="font-size: 14px; font-weight: 700; color: #2B7F62;">اختر الملف الصحي</span>
+  </div>
+  <h1 style="margin: 18px 0 0; font-size: 26px; line-height: 38px; font-weight: 700; color: #014359;">لمن تبحث عن الرعاية اليوم؟</h1>
+  <p style="margin: 4px 0 0; font-size: 15px; line-height: 24px; color: #51656B;">تظهر هنا الملفات الصحية المرتبطة برقم جوالك. اختر الشخص الذي ترغب في عرض ملفه الصحي.</p>
+  <div role="list" style="margin-top: 18px; display: flex; flex-direction: column; gap: 12px;">
+    <sc-for list="{{profiles}}" as="p" hint-placeholder-count="3">
+      <div role="listitem" style="{{p.cardStyle}}">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span aria-hidden="true" style="{{p.avatarStyle}}">{{p.initial}}</span>
+          <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <strong style="font-size: 17px; line-height: 26px; color: #0E2A33;">{{p.name}}</strong>
+              <span style="{{p.tagStyle}}">{{p.relation}}</span>
+            </div>
+            <span style="font-size: 13px; line-height: 20px; color: #51656B;">رقم الملف: <span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 500;">{{p.mrn}}</span></span>
+          </div>
+        </div>
+        <button class="mc-btn" onClick="{{p.open}}" aria-label="{{p.aria}}" style="{{p.btnStyle}}">
+          <span>{{p.btnLabel}}</span>
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+        </button>
+      </div>
+    </sc-for>
+  </div>
+  <div style="margin-top: 18px; background: #FFFFFF; border: 1px solid #DDE5E7; border-radius: 16px; padding: 14px 16px 4px; display: flex; flex-direction: column; gap: 2px;">
+    <p style="margin: 0; font-size: 15px; line-height: 22px; font-weight: 700; color: #014359;">هل تحتاج إلى مساعدة؟</p>
+    <p style="margin: 0; font-size: 13px; line-height: 20px; color: #51656B;">إذا لم تتمكن من التعرّف على الملف المطلوب، يسعد فريق مدى كير بمساعدتك.</p>
+    <button class="mc-link" onClick="{{callSupport}}" style="align-self: flex-start; background: none; border: 0; padding: 4px 0; min-height: 44px; display: flex; align-items: center; gap: 6px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+      <span>تواصل مع خدمة العملاء</span>
+    </button>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{showOtp}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; flex-grow: 1;">
+  <div class="mc-hero" style="height: 196px; box-sizing: border-box; padding: 36px 24px 36px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <svg role="img" aria-label="شعار مدى كير" width="72" height="77" viewBox="0 0 1498 1600" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+  </div>
+  <div style="margin-top: -28px; position: relative; background: #FFFFFF; border-radius: 28px 28px 0 0; box-shadow: 0 -6px 20px rgba(1,67,89,0.08); padding: 10px 24px 0; display: flex; flex-direction: column; flex-grow: 1;">
+    <span aria-hidden="true" style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #DDE5E7; margin-bottom: 14px;"></span>
+    <h1 style="margin: 0; font-size: 26px; line-height: 38px; font-weight: 700; color: #014359;">{{otpTitle}}</h1>
+    <sc-if value="{{fileOn}}" hint-placeholder-val="{{ false }}">
+      <p style="margin: 2px 0 0; font-size: 17px; line-height: 26px; font-weight: 700; color: #2B7F62;">ملفك الصحي بانتظارك 💚</p>
+    </sc-if>
+    <p style="margin: 6px 0 0; font-size: 15px; line-height: 24px; color: #51656B;">{{otpLead}}</p>
+
+    <div style="margin-top: 14px; background: #F6F8F8; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 12px;">
+      <div style="display: flex; flex-direction: column; flex-grow: 1;">
+        <span style="font-size: 13px; line-height: 20px; color: #51656B;">{{phoneLabel}}</span>
+        <span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 600; font-size: 17px; line-height: 26px; color: #0E2A33; text-align: right;">{{maskedPhone}}</span>
+      </div>
+      <button class="mc-link" onClick="{{backToForm}}" style="min-height: 44px; padding: 0 14px; border-radius: 10px; border: 0; background: #E6EFF2; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; cursor: pointer;">تغيير</button>
+    </div>
+
+    <label for="mc-otp" style="margin-top: 18px; font-size: 17px; line-height: 26px; font-weight: 700; color: #014359;">أدخل رمز التحقق</label>
+    <p style="margin: 0; font-size: 14px; line-height: 22px; color: #51656B;">أدخل الرمز المكوّن من 6 أرقام الذي أرسلناه إلى جوالك.</p>
+    <div dir="ltr" style="margin-top: 12px; position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px;">
+      <sc-for list="{{cells}}" as="cell" hint-placeholder-count="6">
+        <div style="{{cell.style}}">{{cell.d}}</div>
+      </sc-for>
+      <input id="mc-otp" class="mc-otp" type="text" inputMode="numeric" autoComplete="one-time-code" maxLength="6" value="{{otp}}" onChange="{{onOtp}}" aria-invalid="{{otpBad}}" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; border: 0; cursor: text;">
+    </div>
+    <sc-if value="{{otpBad}}" hint-placeholder-val="{{ false }}">
+      <p role="alert" style="margin: 8px 0 0; font-size: 13px; color: #C62F2F;">الرمز غير صحيح. تأكد منه وحاول مرة أخرى.</p>
+    </sc-if>
+    <div style="margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; font-size: 14px; color: #51656B;">
+      <span>لم يصلك الرمز؟</span>
+      <sc-if value="{{canResend}}" hint-placeholder-val="{{ false }}">
+        <button class="mc-link" onClick="{{resend}}" style="background: none; border: 0; padding: 4px 0; min-height: 44px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; text-decoration: underline; text-underline-offset: 4px; cursor: pointer;">إعادة إرسال الرمز</button>
+      </sc-if>
+      <sc-if value="{{waitResend}}" hint-placeholder-val="{{ true }}">
+        <span style="font-weight: 700; color: #7F9196;">إعادة إرسال الرمز بعد <span dir="ltr" style="font-family: Inter, sans-serif;">{{secsText}}</span></span>
+      </sc-if>
+    </div>
+
+    <div style="flex-grow: 1;"></div>
+    <button class="mc-btn" onClick="{{verify}}" disabled="{{otpDisabled}}" style="{{otpBtnStyle}}"><span>تأكيد ومتابعة</span></button>
+    <p style="margin: 14px 0 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; line-height: 20px; color: #51656B; text-align: center;">
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
+      <span>نحافظ على خصوصية بياناتك الصحية، ونتحقق من هويتك قبل إتاحتها لك.</span>
+    </p>
+    <div style="height: 30px;"></div>
+  </div>
+</div>
+</sc-if>
+
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"default","options":["default","phone","file","error","loading","notfound-phone","notfound-file","network","otp","otp-file","profiles"]},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  seed() {
+    const i = this.props.initial || 'default';
+    const s = { method: 'phone', value: '', touched: false, status: 'idle', otp: '', otpBad: false, secs: 45, verified: false };
+    if (i === 'phone') s.value = '55 123 4567';
+    if (i === 'file') s.method = 'file';
+    if (i === 'error') { s.value = '5512 34'; s.touched = true; }
+    if (i === 'loading') { s.value = '55 123 4567'; s.status = 'loading'; }
+    if (i === 'notfound-phone') { s.value = '56 111 2233'; s.status = 'notfound'; }
+    if (i === 'notfound-file') { s.method = 'file'; s.value = 'MC-2026-999'; s.status = 'notfound'; }
+    if (i === 'network') { s.value = '55 123 4567'; s.status = 'network'; }
+    if (i === 'otp') { s.value = '55 123 4567'; s.status = 'otp'; s.otp = '48'; s.secs = 38; }
+    if (i === 'otp-file') { s.method = 'file'; s.value = 'MC-2026-301'; s.status = 'otp'; s.otp = '48'; s.secs = 38; }
+    if (i === 'profiles') { s.value = '55 123 4567'; s.status = 'profiles'; }
+    return s;
+  }
+  st() { return { ...this.seed(), ...(this.state || {}) }; }
+  put(patch) { this.setState({ ...this.st(), ...patch }); }
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const s = this.st();
+      if (s.status === 'otp' && s.secs > 0 && !s.verified) this.put({ secs: s.secs - 1 });
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); clearTimeout(this.wait); }
+  digits(v) { return (v || '').replace(/[^0-9]/g, ''); }
+  phoneDigits(v) { let d = this.digits(v); if (d.startsWith('966')) d = d.slice(3); if (d.startsWith('0')) d = d.slice(1); return d; }
+  valid(s) {
+    if (s.method === 'phone') return /^5[0-9]{8}$/.test(this.phoneDigits(s.value));
+    return /^MC-[0-9]{4}-[0-9]{3,6}$/i.test((s.value || '').trim());
+  }
+  // Sends the sign in code: by phone straight to Supabase Auth; by file number through the mada-file-login function, which
+  // looks the file up on the server and texts its registered phone (the number itself never reaches the app).
+  async send(s) {
+    if (s.method === 'phone') { await Mada.sendOtp(this.phoneDigits(s.value)); return { status: 'otp', last2: this.phoneDigits(s.value).slice(-2) }; }
+    const r = await Mada.fileOtp((s.value || '').trim().toUpperCase());
+    return r.notfound ? { status: 'notfound' } : { status: 'otp', last2: r.last2 };
+  }
+  async verifyNow(code) {
+    const s = this.st();
+    if (code.length < 6 || s.verified) return;
+    this.put({ verified: true });
+    try {
+      const list = s.method === 'phone' ? await Mada.verifyOtp(this.phoneDigits(s.value), code) : await Mada.fileVerify((s.value || '').trim().toUpperCase(), code);
+      if (!list.length) return this.put({ status: 'notfound', verified: false, otp: '' });
+      if (list.length === 1) return Mada.pick(list[0].fileNo);
+      this.put({ status: 'profiles', picked: null, verified: false });
+    } catch (e) {
+      const net = !e || !e.status || e.status >= 500 || /fetch|network/i.test(e.message || '');
+      this.put(net ? { status: 'network', verified: false, otp: '' } : { otpBad: true, verified: false });
+    }
+  }
+  renderVals() {
+    const s = this.st();
+    const phone = s.method === 'phone';
+    const ok = this.valid(s);
+    const busy = s.status === 'loading';
+    const showError = !!s.value && s.touched && !ok && !busy;
+    const alertKind = s.status === 'network' ? 'network' : null;
+    const segOn = 'height: 44px; border-radius: 10px; border: 0; background: #FFFFFF; box-shadow: 0 4px 14px rgba(1,67,89,0.10); display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; cursor: pointer;';
+    const segOff = 'height: 44px; border-radius: 10px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 500; color: #51656B; cursor: pointer;';
+    const border = showError ? '2px solid #C62F2F' : s.focus ? '2px solid #4CB491' : '1px solid #DDE5E7';
+    const boxStyle = `margin-top: 8px; height: 56px; box-sizing: border-box; border-radius: 14px; border: ${border}; background: ${showError ? '#FDEEEE' : busy ? '#F6F8F8' : '#FFFFFF'}; padding: 0 16px; display: flex; align-items: center; gap: 12px;`;
+    const btnDisabled = !ok || busy;
+    const btnStyle = `height: 56px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: Tajawal, sans-serif; font-size: 17px; font-weight: 700; cursor: ${btnDisabled && !busy ? 'not-allowed' : 'pointer'}; background: ${!ok && !busy ? '#D3DEDA' : '#4CB491'}; color: ${!ok && !busy ? '#6B7D78' : '#014359'};`;
+    const A = {
+      nfPhone: { t: 'لم نعثر على حساب', b: 'لم نتمكن من العثور على حساب مرتبط بهذا الرقم. تأكد من الرقم أو تواصل مع فريق مدى كير للمساعدة.', a: 'تواصل مع فريق مدى كير', bg: '#FEF4E5', c: '#8A5A12' },
+      nfFile: { t: 'لم نعثر على الملف', b: 'لم نتمكن من العثور على الملف بهذا الرقم. تأكد من الرقم وحاول مرة أخرى.', a: 'تواصل مع خدمة العملاء', bg: '#FEF4E5', c: '#8A5A12' },
+      network: { t: 'تعذّر الاتصال', b: 'تعذّر الاتصال بنظام مدى كير. تأكد من اتصالك بالإنترنت ثم حاول مرة أخرى.', a: 'إعادة المحاولة', bg: '#FDEEEE', c: '#C62F2F' },
+    }[alertKind] || { t: '', b: '', a: '', bg: '#FFFFFF', c: '#0E2A33' };
+    const otpDigits = this.digits(s.otp).slice(0, 6);
+    const cells = [0, 1, 2, 3, 4, 5].map((i) => {
+      const d = otpDigits[i] || '';
+      const active = i === otpDigits.length && !s.verified;
+      const bd = s.otpBad ? '2px solid #C62F2F' : active ? '2px solid #4CB491' : d ? '1px solid #CDEBDF' : '1px solid #DDE5E7';
+      const bg = s.otpBad ? '#FDEEEE' : d ? '#E9F6F1' : '#FFFFFF';
+      return { d, style: `height: 56px; box-sizing: border-box; border-radius: 14px; border: ${bd}; background: ${bg}; display: flex; align-items: center; justify-content: center; font-family: Inter, sans-serif; font-weight: 600; font-size: 24px; color: ${s.otpBad ? '#C62F2F' : '#014359'};` };
+    });
+    const otpDisabled = otpDigits.length < 6 || s.verified;
+    const last2 = phone ? this.phoneDigits(s.value).slice(-2) || '67' : '67';
+    return {
+      showForm: s.status !== 'otp' && s.status !== 'notfound' && s.status !== 'profiles',
+      showNotFound: s.status === 'notfound',
+      showProfiles: s.status === 'profiles',
+      // The patient files on this number (Mada.files()); the first file opened on the number is the customer's own.
+      profiles: Mada.files().map((f, n) => {
+        const name = Mada.ar(f.name);
+        return { id: f.fileNo, name, initial: name.trim().charAt(0), relation: n === 0 ? 'ملفي الصحي' : 'فرد من العائلة', mrn: f.fileNo, me: n === 0 };
+      }).map((p) => {
+        const on = s.picked === p.id;
+        return {
+          ...p,
+          aria: `عرض الملف الصحي لـ ${p.name}`,
+          btnLabel: on ? 'جاري فتح الملف…' : 'عرض الملف الصحي',
+          open: () => { this.put({ picked: p.id }); setTimeout(() => Mada.pick(p.id), 350); },
+          cardStyle: `background: #FFFFFF; border-radius: 18px; padding: 14px 16px; border: ${on ? '2px solid #4CB491' : '1px solid #DDE5E7'}; box-shadow: 0 4px 14px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;`,
+          avatarStyle: `width: 48px; height: 48px; border-radius: 24px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; background: ${p.me ? '#014359' : '#E9F6F1'}; color: ${p.me ? '#FFFFFF' : '#2B7F62'};`,
+          tagStyle: `font-size: 12px; line-height: 18px; font-weight: 700; padding: 2px 10px; border-radius: 999px; background: ${p.me ? '#E6EFF2' : '#FEF4E5'}; color: ${p.me ? '#014359' : '#8A5A12'};`,
+          btnStyle: `height: 46px; border-radius: 12px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; background: ${on ? '#4CB491' : '#E9F6F1'}; color: #014359;`,
+        };
+      }),
+      tryAgain: () => this.put({ status: 'idle', touched: false }),
+      showOtp: s.status === 'otp',
+      phoneOn: phone, fileOn: !phone,
+      segPhone: phone ? segOn : segOff, segFile: phone ? segOff : segOn,
+      segPhoneIcon: phone ? '#2B7F62' : '#51656B', segFileIcon: phone ? '#51656B' : '#2B7F62',
+      pickPhone: () => this.put({ method: 'phone', value: '', touched: false, status: 'idle' }),
+      pickFile: () => this.put({ method: 'file', value: '', touched: false, status: 'idle' }),
+      fieldLabel: phone ? 'رقم الجوال' : 'رقم الملف الطبي',
+      placeholder: phone ? '5X XXX XXXX' : 'مثال: MC-2026-301',
+      inputDir: 'ltr', inputAlign: phone ? 'left' : (s.value ? 'left' : 'right'),
+      inputMode: phone ? 'tel' : 'text', autoComplete: phone ? 'tel-national' : 'off',
+      value: s.value, busy, showError, boxStyle,
+      boxIcon: showError ? '#C62F2F' : s.focus ? '#2B7F62' : '#51656B',
+      onType: (e) => this.put({ value: e.target.value, status: 'idle', touched: s.touched && !!e.target.value, focus: true }),
+      onBlur: () => this.put({ touched: true, focus: false }),
+      hint: showError
+        ? (phone ? 'رقم الجوال غير صحيح. اكتب 9 أرقام تبدأ بـ 5.' : 'رقم الملف غير مكتمل. مثال على الصيغة الصحيحة: MC-2026-301')
+        : (phone ? 'أدخل رقم الجوال المسجل لدينا.' : 'أدخل رقم الملف الطبي المسجل لدينا.'),
+      hintColor: showError ? '#C62F2F' : '#51656B',
+      callSupport: () => Mada.call(),
+      showAlert: !!alertKind, isNetwork: alertKind === 'network', isNotFound: alertKind === 'nfPhone' || alertKind === 'nfFile',
+      alertStyle: `margin-top: 16px; border-radius: 14px; padding: 14px 16px 6px; background: ${A.bg}; display: flex; gap: 12px; align-items: flex-start;`,
+      alertTitle: A.t, alertBody: A.b, alertActionLabel: A.a, alertTitleColor: A.c,
+      alertAction: () => {
+        if (alertKind === 'network') return this.submitNow();
+        Mada.call();
+      },
+      submit: () => this.submitNow(),
+      btnDisabled, btnStyle, btnLabel: busy ? 'جاري التحقق…' : 'متابعة',
+      otpTitle: phone ? 'تحقّق من رقم جوالك' : 'تأكيد الهوية',
+      otpLead: phone ? 'أرسلنا لك رمز تحقق للتأكد من هويتك والوصول إلى ملفاتك الطبية بأمان.' : 'للوصول إلى الملف الطبي، أرسلنا رمز تحقق إلى رقم الجوال المرتبط بهذا الملف.',
+      phoneLabel: phone ? 'رقم الجوال' : 'رقم الجوال المسجل',
+      maskedPhone: `+966 5X XXX XX${s.last2 || last2}`,
+      cells, otp: otpDigits, otpBad: s.otpBad,
+      onOtp: (e) => this.put({ otp: this.digits(e.target.value).slice(0, 6), otpBad: false }),
+      waitResend: s.secs > 0, secsText: `0:${String(s.secs).padStart(2, '0')}`,
+      canResend: s.secs === 0,
+      resend: () => { this.put({ secs: 45, otp: '', otpBad: false }); this.send(this.st()).catch(() => {}); },
+      backToForm: () => this.put({ status: 'idle', otp: '', otpBad: false, verified: false }),
+      verify: () => this.verifyNow(otpDigits),
+      verified: s.verified, otpDisabled,
+      otpBtnStyle: `height: 56px; border-radius: 14px; border: 0; font-family: Tajawal, sans-serif; font-size: 17px; font-weight: 700; cursor: pointer; background: ${otpDisabled ? '#D3DEDA' : '#4CB491'}; color: ${otpDisabled ? '#6B7D78' : '#014359'};`,
+    };
+  }
+  submitNow() {
+    const s = this.st();
+    if (!this.valid(s)) return this.put({ touched: true });
+    this.put({ status: 'loading', focus: false });
+    clearTimeout(this.wait);
+    this.send(this.st())
+      .then((r) => this.put({ ...r, secs: 45, otp: '', otpBad: false, verified: false }))
+      .catch(() => this.put({ status: 'network' }));
+  }
+}
+</script>
+</body>
+</html>

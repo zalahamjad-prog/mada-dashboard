@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>معلوماتي الصحية · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F3F7F6; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+
+<sc-if value="{{v.hub}}" hint-placeholder-val="{{ true }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" aria-label="رجوع لملفي الصحي" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #FFFFFF; box-shadow: 0 2px 8px rgba(1,67,89,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">معلوماتي الصحية</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 8px 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 22px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span style="display: flex; flex-direction: column; flex-grow: 1; gap: 2px;"><strong style="font-size: 19px; line-height: 28px;">{{headline}}</strong><span style="font-size: 13px; line-height: 20px; color: #51656B;">3 خطوات بسيطة، وما يلزم تكملها كلها الحين</span></span>
+        <svg role="img" aria-label="نسبة الاكتمال {{pct}}" width="76" height="76" viewBox="0 0 76 76" style="flex-shrink: 0;"><circle cx="38" cy="38" r="30" fill="none" stroke="#E8EEEF" stroke-width="7"></circle><circle cx="38" cy="38" r="30" fill="none" stroke="#2B7F62" stroke-width="7" stroke-linecap="round" stroke-dasharray="{{dash}}" transform="rotate(-90 38 38)"></circle><text x="38" y="38" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="600" fill="#0E2A33">{{pct}}</text><text x="38" y="53" text-anchor="middle" font-family="Tajawal, sans-serif" font-size="10" fill="#51656B">مكتمل</text></svg>
+      </div>
+      <button class="mc-row" onClick="{{go1}}" style="width: 100%; min-height: 72px; padding: 12px; border-radius: 16px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; cursor: pointer;">
+        <span style="{{s1.dot}}">{{s1.mark}}</span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px; color: #0E2A33;">معلومات الطوارئ</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">الحساسية والأمراض المزمنة ومين نكلم</span></span>
+        <span style="{{s1.tag}}">{{s1.label}}</span>
+      </button>
+      <button class="mc-row" onClick="{{go2}}" style="width: 100%; min-height: 72px; padding: 12px; border-radius: 16px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; cursor: pointer;">
+        <span style="{{s2.dot}}">{{s2.mark}}</span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px; color: #0E2A33;">أدويتك</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">صوّر علبة الدواء أو اكتب اسمه</span></span>
+        <span style="{{s2.tag}}">{{s2.label}}</span>
+      </button>
+      <button class="mc-row" onClick="{{go3}}" style="width: 100%; min-height: 72px; padding: 12px; border-radius: 16px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; cursor: pointer;">
+        <span style="{{s3.dot}}">{{s3.mark}}</span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px; color: #0E2A33;">عرّفنا عليك</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">اللغة ووقت الزيارة وأي شي نحتاج ننتبه له</span></span>
+        <span style="{{s3.tag}}">{{s3.label}}</span>
+      </button>
+      <div style="background: #EEF3FB; border-radius: 14px; padding: 10px 12px; display: flex; gap: 8px; align-items: center;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B4590" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="7" r="4"></circle><path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path></svg><span style="font-size: 13px; line-height: 20px; color: #3B4590;">ما تبي تكتب؟ الممرض يكملها معك في الزيارة.</span></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 14px 16px; display: flex; gap: 10px; align-items: flex-start;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg><span style="font-size: 13px; line-height: 20px; color: #0E2A33;">اللي يسجله طبيبك أو ممرضك في الزيارة يظهر هنا تلقائيًا، واللي تضيفه أنت يشوفه فريقك قبل الزيارة ويتأكد منه معك.</span></section>
+  </main>
+</sc-if>
+
+<sc-if value="{{v.s1}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{toHub}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #FFFFFF; box-shadow: 0 2px 8px rgba(1,67,89,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 17px; line-height: 26px; color: #0E2A33; flex-grow: 1; text-align: center;">معلومات الطوارئ</h1>
+    <span style="font-size: 12px; color: #51656B; width: 44px; text-align: left;">1 من 3</span>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 4px 4px 0;"><span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #FDEEEE; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px;"><strong style="font-size: 20px; line-height: 28px;">لو صار لك شي، هذا أول شي نعرفه</strong><span style="font-size: 13px; line-height: 20px; color: #51656B;">سؤالين بس، واختار بلمسة. وكل شي تقدر تعدّله بعدين.</span></span></div>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 13px; background: #E9F6F1; color: #1F6B52; font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">1</span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">عندك حساسية من شي؟</h2></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">من دواء أو أكل أو أي شي ثاني</span><sc-if value="{{allergySrc}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: #E6EFF2; color: #014359;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>{{allergySrc}}</span></sc-if>
+      <div role="group" aria-label="عندك حساسية من شي؟" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;"><sc-for list="{{allergy}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <sc-if value="{{hasAllergyDetail}}" hint-placeholder-val="{{ true }}"><div style="background: #FDEEEE; border-radius: 14px; padding: 10px 12px; display: flex; gap: 8px; align-items: center; margin-top: -4px;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A32626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg><span style="font-size: 13px; font-weight: 700; color: #A32626;">{{allergyDetail}}</span></div></sc-if>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 26px; height: 26px; border-radius: 13px; background: #E9F6F1; color: #1F6B52; font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">2</span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">عندك أمراض مزمنة؟</h2></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">اختر كل اللي ينطبق</span><sc-if value="{{chronicSrc}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; gap: 4px; align-self: flex-start; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: #E6EFF2; color: #014359;"><svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>{{chronicSrc}}</span></sc-if>
+      <div role="group" aria-label="عندك أمراض مزمنة؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{chronic}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.9v3a2 2 0 0 1-2.2 2a19.8 19.8 0 0 1-8.6-3.1a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg><h2 style="margin: 0; font-size: 16px;">للتواصل في الطوارئ</h2></div>
+      <div style="display: flex; align-items: center; gap: 12px;"><span aria-hidden="true" style="width: 42px; height: 42px; border-radius: 21px; background: #E9F6F1; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #22684F;">{{initial}}</span><span style="display: flex; flex-direction: column; flex-grow: 1;"><strong style="font-size: 15px;">{{ownerLabel}}</strong><span dir="ltr" style="font-family: Inter, sans-serif; font-size: 13px; color: #51656B; text-align: right;">{{phoneMasked}}</span></span><button class="mc-link" onClick="{{callSupport}}" style="min-height: 40px; padding: 0 8px; border: 0; background: none; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #1F6B52; cursor: pointer;">تغيير</button></div>
+      <button class="mc-link" onClick="{{addContact}}" style="min-height: 48px; border-radius: 14px; border: 1.5px dashed #B9C7CB; background: #FFFFFF; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #1F6B52; cursor: pointer;">{{contactLabel}}</button>
+    </section>
+  </main>
+  <div style="flex-grow: 1;"></div>
+  <div style="flex-shrink: 0; background: #FFFFFF; padding: 12px 20px 30px; border-top: 1px solid #EEF2F2; display: flex; flex-direction: column; gap: 8px;">
+    <button class="mc-btn" onClick="{{save}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #1F6B52; color: #FFFFFF;"><span>حفظ</span></button>
+    <span style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #51656B;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#51656B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>محفوظة بسرية، ويشوفها بس فريق الرعاية</span>
+  </div>
+</sc-if>
+
+<sc-if value="{{v.s2}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{toHub}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #FFFFFF; box-shadow: 0 2px 8px rgba(1,67,89,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 17px; line-height: 26px; color: #0E2A33; flex-grow: 1; text-align: center;">الأدوية</h1>
+    <span style="font-size: 12px; color: #51656B; width: 44px; text-align: left;">2 من 3</span>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;"><span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 20px; background: #FEF4E5; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"></path><path d="M8.5 8.5l7 7"></path></svg></span><strong style="font-size: 20px;">أدويتك اللي تاخذها الحين</strong><span style="font-size: 13px; color: #51656B;">صوّر العلبة ونتعرّف عليها، أو اكتب اسمها</span></div>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 6px 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column;">
+      <sc-for list="{{meds}}" as="m" hint-placeholder-count="3"><div style="{{m.row}}"><span aria-hidden="true" style="{{m.badge}}"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A55A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"></path><path d="M8.5 8.5l7 7"></path></svg></span><span style="display: flex; flex-direction: column; flex-grow: 1;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{m.name}}</strong><span style="font-size: 12px; color: #51656B;">{{m.sub}}</span></span><span style="{{m.tagStyle}}">{{m.tag}}</span></div></sc-for>
+    </section>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+      <button class="mc-btn" onClick="{{addMed}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; height: 50px; font-size: 15px; background: #1F6B52; color: #FFFFFF;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span>صوّر العلبة</span></button>
+      <button class="mc-btn" onClick="{{addMed}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; height: 50px; font-size: 15px; background: #FFFFFF; color: #1F6B52; border: 1.5px solid #2B7F62;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6B52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg><span>اكتب الاسم</span></button>
+    </div>
+    <span style="font-size: 13px; text-align: center; color: #51656B;">أو <strong style="color: #1F6B52;">خلّ الممرض يسجلها في الزيارة</strong></span>
+  </main>
+  <div style="flex-grow: 1;"></div>
+  <div style="flex-shrink: 0; background: #FFFFFF; padding: 12px 20px 30px; border-top: 1px solid #EEF2F2; display: flex; flex-direction: column; gap: 8px;">
+    <button class="mc-btn" onClick="{{save}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #1F6B52; color: #FFFFFF;"><span>حفظ</span></button>
+    <span style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #51656B;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#51656B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>محفوظة بسرية، ويشوفها بس فريق الرعاية</span>
+  </div>
+</sc-if>
+
+<sc-if value="{{v.s3}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{toHub}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 22px; border: 0; background: #FFFFFF; box-shadow: 0 2px 8px rgba(1,67,89,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 17px; line-height: 26px; color: #0E2A33; flex-grow: 1; text-align: center;">عرّفنا عليك</h1>
+    <span style="font-size: 12px; color: #51656B; width: 44px; text-align: left;">3 من 3</span>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 16px 20px; display: flex; flex-direction: column; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 4px 4px 0;"><span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #FFF4E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B26B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9h.01"></path><path d="M15 9h.01"></path></svg></span><span style="display: flex; flex-direction: column; gap: 2px;"><strong style="font-size: 20px; line-height: 28px;">عشان تكون الزيارة مريحة لك</strong><span style="font-size: 13px; line-height: 20px; color: #51656B;">كلها اختيارية، واختار بلمسة. اللي ما يهمك تخطاه.</span></span></div>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">وش اللغة اللي ترتاح فيها؟</h2></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">تقدر تختار أكثر من وحدة</span>
+      <div role="group" aria-label="وش اللغة اللي ترتاح فيها؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{lang}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">كيف نتواصل معك؟</h2></div>
+      
+      <div role="group" aria-label="كيف نتواصل معك؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{contact}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">تفضّل مقدّم الرعاية؟</h2></div>
+      
+      <div role="group" aria-label="تفضّل مقدّم الرعاية؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{gender}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">الوقت الأنسب للزيارة؟</h2></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">تقدر تختار أكثر من وحدة</span>
+      <div role="group" aria-label="الوقت الأنسب للزيارة؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{time}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">نحتاج ننتبه لشي؟</h2><span style="font-size: 12px; font-weight: 500; color: #7F9196;">(اختياري)</span></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">تقدر تختار أكثر من وحدة</span>
+      <div role="group" aria-label="نحتاج ننتبه لشي؟" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{needs}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #0E2A33;">عن المكان</h2><span style="font-size: 12px; font-weight: 500; color: #7F9196;">(اختياري)</span></div>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; margin-top: -6px;">تقدر تختار أكثر من وحدة</span>
+      <div role="group" aria-label="عن المكان" style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{place}}" as="c" hint-placeholder-count="4"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 2px 10px rgba(1,67,89,0.05); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;"><label for="pfNote" style="font-size: 16px; font-weight: 700;">شي ودّك فريقنا يعرفه؟</label><span style="font-size: 12px; color: #7F9196;">(اختياري)</span></div>
+      <textarea id="pfNote" rows="3" value="{{note}}" onChange="{{setNote}}" placeholder="اكتب أي شي يساعدنا نخدمك أحسن" style="box-sizing: border-box; width: 100%; border-radius: 14px; border: 1px solid #DDE5E7; padding: 12px; font-family: Tajawal, sans-serif; font-size: 15px; resize: none;"></textarea>
+    </section>
+    <section style="background: #F2FAF6; border: 1px solid #CDEBDF; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="display: flex; align-items: center; gap: 8px;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F6B52" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg><strong style="font-size: 15px;">اللي بيعرفه فريقنا قبل الزيارة</strong></span><span style="font-size: 11px; color: #51656B;">تقدر تعدّله متى ما بغيت</span></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{summary}}" as="x" hint-placeholder-count="5"><span style="font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 14px; background: #FFFFFF; border: 1px solid #CDEBDF; color: #0E2A33;">{{x}}</span></sc-for></div>
+    </section>
+  </main>
+  <div style="flex-grow: 1;"></div>
+  <div style="flex-shrink: 0; background: #FFFFFF; padding: 12px 20px 30px; border-top: 1px solid #EEF2F2; display: flex; flex-direction: column; gap: 8px;">
+    <button class="mc-btn" onClick="{{save}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #1F6B52; color: #FFFFFF;"><span>حفظ</span></button>
+    <span style="display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; color: #51656B;"><svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#51656B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>يشوفها بس فريق الرعاية اللي يزورك</span>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"","options":["hub","s1","s2","s3"]},"pageH":{"editor":"string","default":"844px"},"$preview":{"width":390,"height":844}}'>
+// "My health info": the same fields the doctors and nursing portals record, so either side fills them and both see the same thing.
+// Allergies: doctorVisit.steps.allergy.status yes|no|unknown (+ items). Chronic: history pmh.chronic (diabetes, htn, asthma, heart, kidney, none).
+// Current medicines: history meds.current [{ name, dose, freq }]. What the patient adds is marked as theirs and the team confirms it at the visit.
+// Step 3 (language, contact, caregiver, time, needs, place, note) is new: patient preferences on the patient file, shown to the visiting team.
+// No blood type (Amjad).
+const GROUPS = {
+  allergy: [['no', 'لا'], ['yes', 'إيه'], ['unknown', 'ما أدري']],
+  chronic: [['diabetes', 'السكر'], ['htn', 'الضغط'], ['heart', 'القلب'], ['asthma', 'الربو'], ['kidney', 'الكلى'], ['other', 'أخرى'], ['none', 'ما فيه']],
+  lang: [['ar', 'العربية'], ['en', 'English'], ['other', 'لغة ثانية']],
+  contact: [['call', 'اتصال'], ['wa', 'واتساب'], ['sms', 'رسالة نصية']],
+  gender: [['m', 'رجل'], ['f', 'امرأة'], ['any', 'ما يفرق']],
+  time: [['am', 'الصبح'], ['noon', 'الظهر'], ['asr', 'العصر'], ['pm', 'المساء'], ['any', 'أي وقت']],
+  needs: [['hear', 'ضعف في السمع'], ['see', 'ضعف في النظر'], ['move', 'صعوبة في الحركة'], ['chair', 'كرسي متحرك'], ['speak', 'صعوبة في الكلام'], ['none', 'ما فيه شي']],
+  place: [['stairs', 'فيه درج'], ['lift', 'فيه مصعد'], ['pets', 'فيه حيوانات أليفة'], ['call', 'اتصلوا قبل الوصول']],
+};
+const SINGLE = ['allergy', 'gender'];
+const chipStyle = (on, single) => `min-height: 44px; padding: 0 16px; border-radius: ${single ? '14px' : '22px'}; font-family: Tajawal, sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; border: 1.5px solid ${on ? (single ? '#1F6B52' : '#4CB491') : '#DDE5E7'}; background: ${on ? (single ? '#1F6B52' : '#E9F6F1') : '#FFFFFF'}; color: ${on ? (single ? '#FFFFFF' : '#1F6B52') : '#0E2A33'};`;
+const CHRONIC_MAP = { ckd: 'kidney' };
+const FREQ = { od: 'مرة يوميًا', bid: 'مرتين يوميًا', tid: 'ثلاث مرات يوميًا', q6h: 'كل 6 ساعات', hs: 'قبل النوم', prn: 'عند الحاجة' };
+const tagStyle = (bg, fg) => `font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 8px; background: ${bg}; color: ${fg};`;
+class Component extends DCLogic {
+  // What the team recorded: the latest approved doctor visit, then the doctors' patient file (mada-pmed-<fileNo>).
+  clinical() {
+    const me = Mada.me() || {}, pm = Mada.row('mada-pmed-' + me.fileNo) || {};
+    const o = Mada.orders().filter((x) => ((x.doctorVisit || {}).report || {}).status === 'approved')
+      .sort((a, b) => String(b.doctorVisit.completedAt || '').localeCompare(String(a.doctorVisit.completedAt || '')))[0];
+    const dv = (o && o.doctorVisit) || {}, h = dv.history || {}, al = (dv.steps || {}).allergy;
+    const doc = o ? Mada.staff().get(String((o.booking || {}).doctorId)) : null;
+    const src = o ? `سجلها ${doc ? Mada.ar(doc.name) : 'طبيبك'} · ${Mada.fmt.dayMonth(new Date(dv.completedAt || o.completedAt))}` : '';
+    const em = (pm.emergency || {}).chronic || {};
+    const chronic = (h.pmh && h.pmh.chronic && h.pmh.chronic.length ? h.pmh.chronic : em.status === 'yes' ? em.items || [] : em.status === 'no' ? ['none'] : []).map((k) => CHRONIC_MAP[k] || k);
+    const meds = ((h.meds || {}).current || []).map((m) => ({ name: m.name, sub: [m.dose, FREQ[m.freq] || m.freq].filter(Boolean).join(' · ') + ` · ${src.replace('سجلها ', 'سجلها ')}`, by: 'doctor' }))
+      .concat((Array.isArray(pm.meds) ? pm.meds : []).filter((m) => m.status !== 'off' && m.name).map((m) => ({ name: Mada.ar(m.name), sub: 'سجلها فريق الرعاية', by: 'nurse' })));
+    return { allergy: al && al.status ? al : null, allergySrc: al && al.status ? src : '', chronic, chronicSrc: chronic.length ? src : '', meds };
+  }
+  st() {
+    if (this.state) return this.state;
+    const ah = (Mada.me() || {}).appHealth || {}, c = this.clinical();
+    const pick = (v, d) => (Array.isArray(v) ? v : d);
+    return { view: this.props.initial || 'hub', sel: {
+      allergy: [(ah.allergy && ah.allergy.status) || (c.allergy && c.allergy.status) || ''].filter(Boolean), chronic: pick(ah.chronic, c.chronic),
+      lang: pick(ah.lang, []), contact: pick(ah.contact, []), gender: pick(ah.gender, []), time: pick(ah.time, []), needs: pick(ah.needs, []), place: pick(ah.place, []) },
+      added: ah.meds || [], note: ah.note || '', ec: (Mada.me() || {}).emergencyContact || null };
+  }
+  renderVals() {
+    const s = this.st();
+    const put = (p) => this.setState({ ...s, ...p });
+    const me = Mada.me() || {}, ah = me.appHealth || {}, c = this.clinical();
+    const chips = (g) => GROUPS[g].map(([k, l]) => { const on = s.sel[g].includes(k), single = SINGLE.includes(g);
+      return { label: l, on: on ? 'true' : 'false', style: chipStyle(on, single), pick: () => {
+        let cur = s.sel[g];
+        if (single) cur = [k];
+        else if (k === 'none' || k === 'any') cur = on ? [] : [k];
+        else cur = on ? cur.filter((x) => x !== k) : [...cur.filter((x) => x !== 'none' && x !== 'any'), k];
+        put({ sel: { ...s.sel, [g]: cur } });
+      } }; });
+    const lbl = (g) => s.sel[g].map((k) => (GROUPS[g].find((x) => x[0] === k) || [])[1]).filter(Boolean);
+    const step = (done, label) => ({ mark: done ? '✓' : '', label,
+      dot: `width: 30px; height: 30px; border-radius: 15px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #FFFFFF; background: ${done ? '#2B7F62' : '#FFFFFF'}; border: 2px solid ${done ? '#2B7F62' : '#B9C7CB'};`,
+      tag: `font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 10px; white-space: nowrap; background: ${done ? '#E9F6F1' : '#F1F4F4'}; color: ${done ? '#22684F' : '#51656B'};` });
+    const meds = c.meds.concat(s.added.map((m) => ({ name: m.name, sub: 'أضفته أنت · يتأكد منه الممرض في الزيارة', by: 'app' })));
+    const d1 = !!(s.sel.allergy.length && s.sel.chronic.length), d2 = meds.length > 0 || !!ah.medsNone, d3 = !!(s.sel.lang.length || s.sel.contact.length || s.sel.time.length || ah.at3);
+    const n = [d1, d2, d3].filter(Boolean).length, p = Math.round(n / 3 * 100), C = 2 * Math.PI * 30;
+    const save = () => {
+      const view = s.view, next = { ...ah };
+      if (view === 's1') Object.assign(next, { allergy: { ...(ah.allergy || {}), status: s.sel.allergy[0] || 'unknown' }, chronic: s.sel.chronic });
+      if (view === 's2') Object.assign(next, { meds: s.added });
+      if (view === 's3') Object.assign(next, { lang: s.sel.lang, contact: s.sel.contact, gender: s.sel.gender, time: s.sel.time, needs: s.sel.needs, place: s.sel.place, note: s.note, at3: new Date().toISOString() });
+      next.at = new Date().toISOString();
+      const patch = { appHealth: next }; if (view === 's1' && s.ec) patch.emergencyContact = s.ec;
+      put({ view: 'hub' });
+      Mada.put('mada-patients', me.fileNo, patch).catch(() => {});
+    };
+    const ph = String(me.mobile || '').replace(/\D/g, '');
+    const nm = Mada.ar(me.name) || '';
+    return {
+      pageH: this.props.pageH || '844px',
+      v: { hub: s.view === 'hub', s1: s.view === 's1', s2: s.view === 's2', s3: s.view === 's3' },
+      headline: n === 3 ? 'ملفك مكتمل 💚' : n ? 'ملفك قرّب يكتمل 🌱' : 'خلّنا نكمّل ملفك 🌱', pct: p + '%', dash: `${(C * p / 100).toFixed(1)} ${C.toFixed(1)}`,
+      s1: step(d1, d1 ? (c.allergySrc ? 'من زيارتك' : 'مكتملة') : 'دقيقة'), s2: step(d2, d2 ? (meds.length ? `${meds.length === 1 ? 'دواء واحد' : meds.length === 2 ? 'دوائين' : meds.length + ' أدوية'}` : 'مكتملة') : 'دقيقة'), s3: step(d3, d3 ? 'مكتملة' : 'دقيقة'),
+      go1: () => put({ view: 's1' }), go2: () => put({ view: 's2' }), go3: () => put({ view: 's3' }), toHub: () => put({ view: 'hub' }),
+      save,
+      allergy: chips('allergy'), allergyYes: s.sel.allergy[0] === 'yes', chronic: chips('chronic'),
+      allergySrc: c.allergySrc, chronicSrc: c.chronicSrc,
+      hasAllergyDetail: s.sel.allergy[0] === 'yes' && !!Mada.allergies().items.length, allergyDetail: 'حساسية من ' + Mada.allergies().items.join(' و'),
+      initial: nm.trim().charAt(0), ownerLabel: s.ec ? s.ec.name : 'أنت (صاحب الحساب)', phoneMasked: s.ec ? s.ec.mobile : ph ? `+966 5•• ••• ${ph.slice(-3)}` : '',
+      contactLabel: s.ec ? 'تغيير الشخص' : '+ أضف شخص ثاني', callSupport: () => Mada.call(),
+      addContact: () => { const name = (window.prompt('اسم الشخص اللي نكلمه في الطوارئ') || '').trim(); if (!name) return; const mobile = (window.prompt('رقم جواله') || '').replace(/[^\d+]/g, ''); if (!mobile) return; put({ ec: { name, mobile, at: new Date().toISOString() } }); },
+      meds: meds.map((m, i) => ({ ...m, row: `min-height: 60px; padding: 10px 0; ${i ? 'border-top: 1px solid #EEF2F2; ' : ''}display: flex; align-items: center; gap: 12px;`,
+        badge: `width: 38px; height: 38px; border-radius: 12px; background: ${m.by === 'app' ? '#FEF4E5' : '#EEF0FB'}; display: flex; align-items: center; justify-content: center; flex-shrink: 0;`,
+        tag: m.by === 'app' ? 'أضفته أنت' : m.by === 'doctor' ? 'من الطبيب' : 'من الممرض', tagStyle: m.by === 'app' ? tagStyle('#FEF4E5', '#8A5A12') : tagStyle('#E6EFF2', '#014359') })),
+      addMed: () => { const name = (window.prompt('اكتب اسم الدواء') || '').trim(); if (name) put({ added: [...s.added, { name, at: new Date().toISOString() }] }); },
+      note: s.note, setNote: (e) => { this.state = { ...s, note: e.target.value }; },
+      lang: chips('lang'), contact: chips('contact'), gender: chips('gender'), time: chips('time'), needs: chips('needs'), place: chips('place'),
+      summary: [...lbl('lang'), ...lbl('contact'), ...lbl('gender'), ...lbl('time'), ...lbl('needs'), ...lbl('place')],
+    };
+  }
+}
+</script>
+</body>
+</html>
