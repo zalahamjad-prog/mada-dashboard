@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الصفحة الرئيسية · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+<sc-if value="{{showHome}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; flex-grow: 1;">
+
+  <header class="mc-hero" style="flex-shrink: 0; position: relative; overflow: hidden; padding: 50px 24px 56px; border-radius: 0 0 28px 28px; display: flex; flex-direction: column; gap: 16px;">
+    <svg aria-hidden="true" width="170" height="182" viewBox="0 0 1498 1600" style="position: absolute; left: -46px; bottom: -40px;"><path fill="rgba(255,255,255,0.07)" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+    <div style="position: relative; display: flex; align-items: center; gap: 10px;">
+      <svg role="img" aria-label="شعار مدى كير" width="32" height="34" viewBox="0 0 1498 1600" xmlns="http://www.w3.org/2000/svg"><path fill="#FFFFFF" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+      <div style="display: flex; flex-direction: column; flex-grow: 1;">
+        <span style="font-size: 17px; line-height: 22px; font-weight: 700; color: #FFFFFF;">مدى كير</span>
+        <span style="font-size: 11px; line-height: 16px; font-weight: 500; color: #E9F6F1;"><span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 600; letter-spacing: 1px;">MADA CARE</span> | نرعاكم كأهلنا</span>
+      </div>
+      <button class="mc-link" aria-label="الإشعارات، يوجد إشعار جديد" style="position: relative; width: 44px; height: 44px; border-radius: 22px; border: 0; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 10px; left: 11px; width: 9px; height: 9px; border-radius: 5px; background: #F4A738; border: 2px solid #3A9F7D;"></span>
+      </button>
+    </div>
+    <div style="position: relative;">
+      <h1 style="margin: 0; font-size: 26px; line-height: 38px; font-weight: 700; color: #FFFFFF;">مرحبًا، {{firstName}} 💚</h1>
+      <p style="margin: 2px 0 0; font-size: 16px; line-height: 24px; font-weight: 500; color: #E9F6F1;">نسعد بوجودك معنا.</p>
+    </div>
+  </header>
+
+  <main style="flex-shrink: 0; margin-top: -36px; position: relative; padding: 0 20px; display: flex; flex-direction: column; gap: 22px;">
+    <sc-if value="{{offline}}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="margin-bottom: -12px; background: #0E2A33; color: #FFFFFF; border-radius: 14px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 20px rgba(1,67,89,0.2);">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F4A738" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M2 2l20 20"></path><path d="M8.5 16.5a5 5 0 0 1 7 0"></path><path d="M2 8.82a15 15 0 0 1 4.17-2.65"></path><path d="M10.66 5c4.01-.36 8.14.9 11.34 3.76"></path><path d="M16.85 11.25a10 10 0 0 1 2.22 1.68"></path><path d="M5 13a10 10 0 0 1 5.24-2.76"></path><path d="M12 20h.01"></path></svg>
+        <div style="display: flex; flex-direction: column; flex-grow: 1;">
+          <strong style="font-size: 14px; line-height: 20px;">أنت غير متصل بالإنترنت</strong>
+          <span style="font-size: 12px; line-height: 18px; color: #C9D6DA;">نعرض آخر تحديث الساعة 2:35 م، ونحدّث تلقائيًا أول ما يرجع الاتصال.</span>
+        </div>
+      </div>
+    </sc-if>
+    <section aria-labelledby="mc-orders" style="background: #FFFFFF; border-radius: 22px; box-shadow: 0 8px 24px rgba(1,67,89,0.10); overflow: hidden; display: flex; flex-direction: column;">
+      <div style="padding: 18px 18px 0;">
+        <h2 id="mc-orders" style="margin: 0; font-size: 19px; line-height: 28px; font-weight: 700; color: #014359;">طلباتك في مكان واحد</h2>
+        <p style="margin: 2px 0 0; font-size: 14px; line-height: 22px; color: #51656B;">تابع طلباتك الصحية واطّلع على تفاصيلها بكل سهولة.</p>
+      </div>
+
+      <sc-if value="{{hasOrder}}" hint-placeholder-val="{{ true }}">
+        <div style="margin: 14px 12px 0; border-radius: 18px; background: linear-gradient(180deg, #F2FAF6 0%, #FFFFFF 100%); border: 1px dashed #BFE3D4; padding: 16px 14px 14px; display: flex; flex-direction: column;">
+          <ol aria-label="مراحل الطلب" style="margin: 4px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+            <sc-for list="{{steps}}" as="st" hint-placeholder-count="4">
+              <li aria-current="{{st.cur}}" style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;">
+                <span aria-hidden="true" style="{{st.line}}"></span>
+                <span aria-hidden="true" style="{{st.dot}}">{{st.mark}}</span>
+                <span style="{{st.lbl}}">{{st.label}}</span>
+              </li>
+            </sc-for>
+          </ol>
+          <p style="margin: 14px 0 0; font-size: 16px; line-height: 24px; font-weight: 700; color: #0E2A33; text-align: center;">{{statusLine}}</p>
+          <p style="margin: 2px 0 0; font-size: 14px; line-height: 22px; color: #51656B; text-align: center;">{{statusSub}}</p>
+          <sc-if value="{{showCount}}" hint-placeholder-val="{{ false }}">
+            <div aria-label="الوقت المتبقي على موعدك" style="margin-top: 12px; display: flex; justify-content: center; gap: 8px;" dir="rtl">
+              <div style="width: 74px; background: #FFFFFF; border: 1px solid #CDEBDF; border-radius: 14px; padding: 8px 0; display: flex; flex-direction: column; align-items: center;"><strong style="font-family: Inter, sans-serif; font-size: 24px; line-height: 30px; color: #014359;">{{c1}}</strong><span style="font-size: 12px; color: #51656B;">{{c1l}}</span></div>
+              <div style="width: 74px; background: #FFFFFF; border: 1px solid #CDEBDF; border-radius: 14px; padding: 8px 0; display: flex; flex-direction: column; align-items: center;"><strong style="font-family: Inter, sans-serif; font-size: 24px; line-height: 30px; color: #014359;">{{c2}}</strong><span style="font-size: 12px; color: #51656B;">{{c2l}}</span></div>
+            </div>
+          </sc-if>
+          <div style="margin-top: 12px; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 12px; background: #E9F6F1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M5 3v6a5 5 0 0 0 10 0V3"></path><path d="M10 14v2a5 5 0 0 0 10 0v-2"></path><circle cx="20" cy="12" r="2"></circle></svg></span>
+              <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;">
+                <span style="font-size: 12px; line-height: 18px; color: #51656B;">طلبك الحالي</span>
+                <span style="font-size: 14px; line-height: 20px; font-weight: 700; color: #0E2A33;">{{service}}</span>
+              </div>
+              <span style="{{chipStyle}}">{{status}}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding-top: 8px; border-top: 1px solid #EEF2F3;">
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">رقم الطلب</span><span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 600; text-align: right; font-size: 13px; color: #0E2A33;">{{orderNo}}</span></div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">رقم الحجز</span><span dir="ltr" style="font-family: Inter, sans-serif; font-weight: 600; text-align: right; font-size: 13px; color: #0E2A33;">{{bookingNo}}</span></div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">موعد الخدمة</span><span style="font-weight: 700; font-size: 13px; color: #0E2A33;">{{whenShort}}</span><span style="font-size: 12px; color: #51656B;">{{whenTime}}</span></div>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 14px 12px 14px;">
+          <button class="mc-btn" onClick="{{openDetail}}" style="width: 100%; height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;">
+            <span>عرض تفاصيل الطلب</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+          </button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{noOrder}}" hint-placeholder-val="{{ false }}">
+        <div style="margin: 14px 12px 0; border-radius: 18px; background: linear-gradient(180deg, #F2FAF6 0%, #FFFFFF 100%); border: 1px dashed #BFE3D4; padding: 16px 14px 14px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+          <svg aria-hidden="true" width="230" height="132" viewBox="0 0 230 132" fill="none" style="display: block;">
+            <ellipse cx="115" cy="120" rx="104" ry="10" fill="#E9F6F1"></ellipse>
+            <path d="M18 112c22-26 44 6 66-14s30-26 44-20" stroke="#4CB491" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 9"></path>
+            <circle cx="18" cy="112" r="7" fill="#FFFFFF" stroke="#4CB491" stroke-width="3"></circle>
+            <path d="M118 62l40-30 40 30v52a4 4 0 0 1-4 4h-72a4 4 0 0 1-4-4z" fill="#FFFFFF" stroke="#014359" stroke-width="3" stroke-linejoin="round"></path>
+            <path d="M110 66l48-38 48 38" stroke="#014359" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect x="148" y="84" width="20" height="34" rx="3" fill="#E6EFF2" stroke="#014359" stroke-width="3"></rect>
+            <path d="M158 72c-3-5-11-4-11 2 0 5 11 11 11 11s11-6 11-11c0-6-8-7-11-2z" fill="#4CB491"></path>
+            <circle cx="196" cy="22" r="10" fill="#FEF4E5"></circle><path d="M196 16v12M190 22h12" stroke="#F4A738" stroke-width="3" stroke-linecap="round"></path>
+            <circle cx="86" cy="30" r="4" fill="#CDEBDF"></circle><circle cx="100" cy="16" r="2.5" fill="#CDEBDF"></circle>
+          </svg>
+          <p style="margin: 10px 0 0; font-size: 16px; line-height: 24px; font-weight: 700; color: #0E2A33;">لا يوجد لديك طلب نشط حاليًا.</p>
+          <p style="margin: 2px 0 0; font-size: 14px; line-height: 22px; color: #51656B;">يمكنك الرجوع إلى طلباتك السابقة للاطلاع على تفاصيلها.</p>
+          <sc-if value="{{hasLast}}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top: 12px; align-self: stretch; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; text-align: right;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M4 22V4a1 1 0 0 1 1-1h11l-2 4 2 4H5"></path></svg></span>
+              <div style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;">
+                <span style="font-size: 12px; line-height: 18px; color: #51656B;">آخر طلب</span>
+                <span style="font-size: 14px; line-height: 20px; font-weight: 700; color: #0E2A33;">{{lastService}}</span>
+              </div>
+              <span style="font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: #E9F6F1; color: #22684F; white-space: nowrap;">{{lastStatus}}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding-top: 8px; border-top: 1px solid #EEF2F3;">
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">رقم الطلب</span><span dir="ltr" style="font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; color: #0E2A33; text-align: right;">{{lastOrderNo}}</span></div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">رقم الحجز</span><span dir="ltr" style="font-family: Inter, sans-serif; font-size: 13px; font-weight: 600; color: #0E2A33; text-align: right;">{{lastBookingNo}}</span></div>
+              <div style="display: flex; flex-direction: column;"><span style="font-size: 11px; color: #7F9196;">اكتمل</span><span style="font-size: 13px; font-weight: 700; color: #0E2A33;">{{lastAgo}}</span></div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{hasLast}}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 14px 12px 14px;">
+          <button class="mc-btn" onClick="{{tab_list}}" style="width: 100%; height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #E9F6F1; color: #014359;">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg><span>عرض الطلبات السابقة</span>
+          </button>
+        </div>
+        </sc-if>
+      </sc-if>
+    </section>
+
+    <section aria-labelledby="mc-svcs" style="display: flex; flex-direction: column;">
+      <h2 id="mc-svcs" style="margin: 0; font-size: 20px; line-height: 30px; font-weight: 700; color: #014359;">خدمات مدى كير</h2>
+      <p style="margin: 2px 0 0; font-size: 15px; line-height: 24px; font-weight: 700; color: #2B7F62;">رعاية أقرب، واهتمام يمتد إلى منزلك.</p>
+      <p style="margin: 4px 0 0; font-size: 14px; line-height: 22px; color: #51656B;">نحرص على توفير خدمات الرعاية الصحية المنزلية التي تلبي احتياجاتك واحتياجات عائلتك.</p>
+      <div role="list" style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+        <div role="listitem" style="height: 92px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 18px; padding: 0 14px; display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #E9F6F1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M5 3v6a5 5 0 0 0 10 0V3"></path><path d="M10 14v2a5 5 0 0 0 10 0v-2"></path><circle cx="20" cy="12" r="2"></circle></svg></span>
+          <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+            <strong style="font-size: 16px; line-height: 24px; color: #0E2A33;">زيارة طبيب منزلية</strong>
+            <span style="font-size: 13px; line-height: 19px; color: #51656B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">رعاية طبية يقدمها الطبيب في راحة منزلك.</span>
+          </div>
+        </div>
+        <div role="listitem" style="height: 92px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 18px; padding: 0 14px; display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"></path><path d="M12 9v6"></path><path d="M9 12h6"></path></svg></span>
+          <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+            <strong style="font-size: 16px; line-height: 24px; color: #0E2A33;">خدمات تمريضية</strong>
+            <span style="font-size: 13px; line-height: 19px; color: #51656B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">رعاية تمريضية يقدمها مختصون باهتمام وعناية.</span>
+          </div>
+        </div>
+        <div role="listitem" style="height: 92px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 18px; padding: 0 14px; display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #FDEEEE; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 2.7l5.7 5.6a8 8 0 1 1-11.4 0z"></path></svg></span>
+          <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+            <strong style="font-size: 16px; line-height: 24px; color: #0E2A33;">تحاليل الدم</strong>
+            <span style="font-size: 13px; line-height: 19px; color: #51656B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">سحب عينات الدم من منزلك بكل سهولة.</span>
+          </div>
+        </div>
+        <div role="listitem" style="height: 92px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 18px; padding: 0 14px; display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #FEF4E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B9771A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="13" cy="4" r="2"></circle><path d="M7 21l3-6 3 2v4"></path><path d="M10 15l1-6 4 3 3 1"></path><path d="M11 9l-4 2-1 3"></path></svg></span>
+          <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+            <strong style="font-size: 16px; line-height: 24px; color: #0E2A33;">العلاج الطبيعي</strong>
+            <span style="font-size: 13px; line-height: 19px; color: #51656B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">جلسات علاج وتأهيل لدعم الحركة وتحسين القدرة على أداء الأنشطة اليومية.</span>
+          </div>
+        </div>
+        <div role="listitem" style="height: 92px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E3EAEB; border-radius: 18px; padding: 0 14px; display: flex; align-items: center; gap: 14px;">
+          <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 16px; background: #EEF0FA; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#3D4FA0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M12 7v10"></path><path d="M8 9c2 1 6 1 8 0"></path><path d="M8 12c2 1 6 1 8 0"></path><path d="M8 15c2 1 6 1 8 0"></path></svg></span>
+          <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0;">
+            <strong style="font-size: 16px; line-height: 24px; color: #0E2A33;">الأشعة المنزلية</strong>
+            <span style="font-size: 13px; line-height: 19px; color: #51656B; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">خدمات تصوير طبي منزلي لتلبية الاحتياجات التشخيصية المناسبة.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="mc-help" class="mc-hero" style="position: relative; overflow: hidden; border-radius: 22px; padding: 18px; display: flex; align-items: flex-start; gap: 14px;">
+      <svg aria-hidden="true" width="110" height="118" viewBox="0 0 1498 1600" style="position: absolute; left: -24px; bottom: -30px;"><path fill="rgba(255,255,255,0.08)" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+      <span aria-hidden="true" style="position: relative; width: 48px; height: 48px; border-radius: 16px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg></span>
+      <div style="position: relative; display: flex; flex-direction: column; flex-grow: 1; min-width: 0;">
+        <h2 id="mc-help" style="margin: 0; font-size: 18px; line-height: 26px; font-weight: 700; color: #FFFFFF;">نحن هنا لمساعدتك</h2>
+        <p style="margin: 2px 0 0; font-size: 14px; line-height: 22px; color: #F2FAF6;">هل تحتاج إلى مساعدة بشأن طلبك أو استخدام التطبيق؟</p>
+        <p style="margin: 0; font-size: 14px; line-height: 22px; color: #F2FAF6;">يسعد فريق مدى كير بمساعدتك.</p>
+        <button class="mc-link" onClick="{{callSupport}}" style="margin-top: 10px; align-self: flex-start; min-height: 44px; padding: 0 16px; border-radius: 12px; border: 0; background: #FFFFFF; display: flex; align-items: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; cursor: pointer;">
+          <span>تواصل مع خدمة العملاء</span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M19 12H5"></path><path d="M12 19l-7-7 7-7"></path></svg>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <div style="flex-grow: 1; min-height: 20px;"></div>
+  <nav aria-label="التنقل الرئيسي" style="flex-shrink: 0; background: #FFFFFF; border-top: 1px solid #E8EEEF; padding: 6px 8px 28px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+    <button class="mc-tab" onClick="{{tab_home}}" aria-current="page" style="background: none; border: 0; padding: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Tajawal, sans-serif; font-size: 12px; font-weight: 700; color: #014359; cursor: pointer;">
+      <span style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: #E9F6F1;"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg></span>
+      <span>الرئيسية</span>
+    </button>
+    <button class="mc-tab" onClick="{{tab_list}}" aria-current="false" style="background: none; border: 0; padding: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Tajawal, sans-serif; font-size: 12px; font-weight: 500; color: #7F9196; cursor: pointer;">
+      <span style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: transparent;"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7F9196" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6"></path><path d="M9 12h6"></path><path d="M9 16h4"></path></svg></span>
+      <span>طلباتي</span>
+    </button>
+    <button class="mc-tab" onClick="{{tab_file}}" aria-current="false" style="background: none; border: 0; padding: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Tajawal, sans-serif; font-size: 12px; font-weight: 500; color: #7F9196; cursor: pointer;">
+      <span style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: transparent;"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7F9196" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 12v6"></path><path d="M9 15h6"></path></svg></span>
+      <span>ملفي الصحي</span>
+    </button>
+    <button class="mc-tab" onClick="{{tab_user}}" aria-current="false" style="background: none; border: 0; padding: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: Tajawal, sans-serif; font-size: 12px; font-weight: 500; color: #7F9196; cursor: pointer;">
+      <span style="width: 52px; height: 28px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: transparent;"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7F9196" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>
+      <span>حسابي</span>
+    </button>
+  </nav>
+</div>
+</sc-if>
+<sc-if value="{{showDetailBooked}}" hint-placeholder-val="{{ false }}">
+  <dc-import name="OrderDetail" initial="booked" back="{{backHome}}" hint-size="390px,1780px"></dc-import>
+</sc-if>
+<sc-if value="{{showDetailLive}}" hint-placeholder-val="{{ false }}">
+  <dc-import name="OrderDetail" initial="ontheway" back="{{backHome}}" hint-size="390px,1780px"></dc-import>
+</sc-if>
+<sc-if value="{{showDetail}}" hint-placeholder-val="{{ false }}">
+  <button class="mc-link" onClick="{{backHome}}" aria-label="رجوع للرئيسية" style="position: absolute; top: 52px; right: 16px; width: 44px; height: 44px; border-radius: 14px; border: 0; background: transparent; cursor: pointer;"></button>
+</sc-if>
+<sc-if value="{{showOrders}}" hint-placeholder-val="{{ false }}">
+  <dc-import name="Orders" initial="current" home="{{tab_home}}" health="{{tab_file}}" pageH="1000px" hint-size="390px,1000px"></dc-import>
+</sc-if>
+<sc-if value="{{showAccount}}" hint-placeholder-val="{{ false }}">
+  <dc-import name="Account" initial="main" home="{{tab_home}}" pageH="1440px" hint-size="390px,1440px"></dc-import>
+</sc-if>
+<sc-if value="{{showHealth}}" hint-placeholder-val="{{ false }}">
+  <dc-import name="HealthFile" initial="full" home="{{tab_home}}" pageH="1440px" hint-size="390px,1440px"></dc-import>
+</sc-if>
+<sc-if value="{{showTabs}}" hint-placeholder-val="{{ false }}">
+  <div style="position: absolute; right: 0; left: 0; bottom: 0; height: 86px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+    <button class="mc-link" onClick="{{tab_home}}" aria-label="الرئيسية" style="border: 0; background: transparent; cursor: pointer;"></button>
+    <button class="mc-link" onClick="{{tab_list}}" aria-label="طلباتي" style="border: 0; background: transparent; cursor: pointer;"></button>
+    <button class="mc-link" onClick="{{tab_file}}" aria-label="ملفي الصحي" style="border: 0; background: transparent; cursor: pointer;"></button>
+    <button class="mc-link" onClick="{{tab_user}}" aria-label="حسابي" style="border: 0; background: transparent; cursor: pointer;"></button>
+  </div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"ontheway","options":["booked","received","ontheway","arrived","visit","empty","offline"]},"pageH":{"editor":"string","default":"1540px"},"$preview":{"width":390,"height":1540}}'>
+// Home services, in the dashboard's service keys (orders.js, requests.html sv_*).
+const SERVICES = {"doctor": {"name": "زيارة طبيب منزلية"}, "nursing": {"name": "خدمات تمريضية"}, "blood": {"name": "تحاليل الدم"}, "physio": {"name": "العلاج الطبيعي"}, "rad": {"name": "الأشعة المنزلية"}};
+class Component extends DCLogic {
+  // The current booking of the open patient file (Mada.current(): paid, not completed or cancelled, nearest first).
+  order() { return Mada.view(Mada.current()[0]); }
+  stage(v) { return v.stage === 'arrived' ? 'arrived' : v.stage === 'ontheway' ? 'ontheway' : 'booked'; }
+  st() { return { view: 'home', ...(this.state || {}) }; }
+  // The last completed or cancelled booking, for the home screen without a current one.
+  last() {
+    const p = Mada.view(Mada.past()[0]);
+    if (!p) return { hasLast: false };
+    return { hasLast: true, lastService: p.service, lastOrderNo: p.id, lastBookingNo: p.bookingId, lastAgo: Mada.fmt.ago(p.doneAt), lastStatus: p.stage === 'cancelled' ? 'ملغي' : 'اكتملت' };
+  }
+  // Time left to the appointment in two boxes: hours and minutes, or days and hours when more than a day away.
+  count(o) {
+    const m = Math.max(0, Math.round((o.msLeft || 0) / 60000)), h = Math.floor(m / 60);
+    if (h >= 24) return { c1: String(Math.floor(h / 24)), c1l: Math.floor(h / 24) === 1 ? 'يوم' : 'أيام', c2: String(h % 24).padStart(2, '0'), c2l: 'ساعات' };
+    return { c1: String(h).padStart(2, '0'), c1l: 'ساعات', c2: String(m % 60).padStart(2, '0'), c2l: 'دقيقة' };
+  }
+  // The tab bar of the screens shown inside Home (Orders, HealthFile, Account) switches tabs through Mada.tab (app.js).
+  componentDidMount() { this.tick = setInterval(() => this.forceUpdate(), 30000); Mada.tab = (i) => { this.setState({ view: ['home', 'orders', 'health', 'account'][i] || 'home' }); document.getElementById('root').firstElementChild?.scrollTo(0, 0); }; if (Mada.st.healthView) Mada.tab(2); }
+  componentWillUnmount() { clearInterval(this.tick); }
+  renderVals() {
+    const o = this.order();
+    const s = this.st();
+    const live = !!(o && o.stage !== 'booked');
+    const nav = {
+      showHome: s.view === 'home', showDetail: s.view === 'detail',
+      showDetailBooked: s.view === 'detail' && !live, showDetailLive: s.view === 'detail' && live,
+      openDetail: () => this.setState({ view: 'detail' }),
+      backHome: () => this.setState({ view: 'home' }),
+      showOrders: s.view === 'orders', showHealth: s.view === 'health', showAccount: s.view === 'account', showTabs: false,
+      tab_home: () => this.setState({ view: 'home' }), tab_list: () => this.setState({ view: 'orders' }),
+      tab_file: () => this.setState({ view: 'health' }), tab_user: () => this.setState({ view: 'account' }),
+    };
+    const base = {
+      ...nav,
+      offline: !navigator.onLine,
+      firstName: (Mada.ar((Mada.me() || {}).name).trim().split(/\s+/)[0]) || '', pageH: s.view === 'detail' ? '1780px' : s.view === 'orders' ? '1000px' : s.view === 'health' ? '1440px' : s.view === 'account' ? '1440px' : (this.props.pageH || '1540px'), hasOrder: !!o, noOrder: !o,
+      ...this.last(),
+      callSupport: () => Mada.call(),
+    };
+    if (!o) return { ...base, steps: [] };
+    const ST = {
+      booked: ['تم تأكيد الحجز', '#E9F6F1', '#22684F', '#4CB491'],
+      ontheway: ['الفريق في الطريق', '#FEF4E5', '#8A5A12', '#F4A738'],
+      arrived: ['وصل الفريق', '#E9F6F1', '#22684F', '#4CB491'],
+    };
+    const stg = this.stage(o);
+    const [label, bg, fg, dot] = ST[stg];
+    const FLOW = [['booked', 'تم الحجز'], ['ontheway', 'الفريق في الطريق'], ['arrived', 'وصل الفريق'], ['done', 'اكتملت']];
+    const at = Math.max(0, FLOW.findIndex((f) => f[0] === stg));
+    const pre = false;
+    const steps = FLOW.map(([k, l], n) => {
+      const done = !pre && n < at, cur = !pre && n === at;
+      return {
+        label: l, cur: cur ? 'step' : 'false', mark: done ? '✓' : '',
+        line: n === 0 ? 'display: none;' : `position: absolute; top: 9px; left: 50%; width: 100%; height: 2px; z-index: 0; background: ${!pre && n <= at ? '#4CB491' : '#DDE5E7'};`,
+        dot: `position: relative; z-index: 1; width: 20px; height: 20px; box-sizing: border-box; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #FFFFFF; background: ${done ? '#4CB491' : '#FFFFFF'}; border: ${cur ? '6px solid #014359' : '2px solid ' + (done ? '#4CB491' : '#DDE5E7')};`,
+        lbl: `font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: ${cur ? 700 : 500}; color: ${cur ? '#014359' : done ? '#22684F' : '#7F9196'};`,
+      };
+    });
+    
+    return {
+      ...base, steps,
+      service: o.service, status: label,
+      chipStyle: `display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 3px 10px; white-space: nowrap; border-radius: 999px; background: ${bg}; color: ${fg};`,
+      chipDot: `width: 8px; height: 8px; border-radius: 4px; background: ${dot};`,
+      orderNo: o.id, bookingNo: o.bookingId, ...this.count(o),
+      when: o.when,
+      showCount: stg === 'booked',
+      whenShort: o.dayMonth, whenTime: o.time,
+      statusLine: { booked: 'حجزك مؤكد، ونراك قريبًا 💚', ontheway: 'الفريق في الطريق إليك', arrived: 'وصلنا إليك 💚' }[stg],
+      statusSub: { booked: 'باقي على موعدك', ontheway: 'الفريق في طريقه إليك، وتقدر تتابعه على الخريطة.', arrived: 'فريق مدى كير عندك الآن، يرعاك كأنك من أهله.' }[stg],
+    };
+  }
+}
+</script>
+</body>
+</html>

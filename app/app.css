@@ -1,0 +1,11 @@
+/* App frame around the design screens: the outer screen fills the phone and scrolls; screens shown inside another
+   screen grow with their content. Sheets and dialogs cover the visible screen. */
+html, body { margin: 0; height: 100%; background: #F6F8F8; -webkit-tap-highlight-color: transparent; }
+#root { max-width: 480px; margin: 0 auto; min-height: 100%; position: relative; }
+#root > div[style*="width: 390px"] { width: 100% !important; height: 100vh !important; height: 100dvh !important; overflow-y: auto !important; overflow-x: hidden !important; }
+[data-screen] > div[style*="width: 390px"] { width: 100% !important; height: auto !important; min-height: 100%; overflow: visible !important; }
+nav[aria-label="التنقل الرئيسي"] { position: sticky; bottom: 0; z-index: 20; padding-bottom: max(28px, env(safe-area-inset-bottom)) !important; }
+div[style*="position: absolute; inset: 0; background: rgba"] { position: fixed !important; z-index: 40; max-width: 480px; margin: 0 auto; }
+#boot { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #F6F8F8; }
+/* A booking opened from "طلباتي" covers the whole screen, like a new page. */
+div[style*="position: absolute; inset: 0; background: #F6F8F8"], div[style*="position: absolute; inset: 0; background: #F3F7F6"] { position: fixed !important; z-index: 30; overflow-y: auto; max-width: 480px; margin: 0 auto; }

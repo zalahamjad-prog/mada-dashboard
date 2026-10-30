@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>بعد الزيارة · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+
+<sc-if value="{{showDone}}" hint-placeholder-val="{{ true }}">
+  <header class="mc-hero" style="flex-shrink: 0; position: relative; overflow: hidden; padding: 64px 20px 60px; border-radius: 0 0 28px 28px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;">
+    <svg aria-hidden="true" width="150" height="160" viewBox="0 0 1498 1600" style="position: absolute; left: -40px; bottom: -36px;"><path fill="rgba(255,255,255,0.07)" fill-rule="evenodd" d="M634.3 1598.5C490.3 1585.4 324.3 1481.1 221.2 1338.8C213.1 1327.5 197.8 1304.9 195.1 1300.2C193.9 1298.1 193.4 1298.6 185.1 1312.5C171.8 1334.8 160.2 1361.1 153.4 1384.2C151.5 1390.9 148.7 1400.3 147.3 1405.0C134.0 1449.9 87.7 1467.4 42.0 1444.8C16.7 1432.3 -0.0 1406.4 0.0 1379.6C0.0 1357.5 17.5 1305.0 39.0 1262.5C58.2 1224.5 80.6 1191.7 109.7 1158.7L120.1 1146.9L114.5 1130.3C72.3 1004.5 63.6 872.2 89.6 753.0C106.7 674.9 141.8 598.2 187.5 539.5C257.2 449.8 358.7 401.0 475.5 401.0C598.8 401.0 720.9 457.2 800.5 550.5C808.6 559.9 808.1 559.6 809.9 556.8C813.5 550.8 829.4 530.6 839.0 519.7C906.4 443.1 992.7 396.3 1083.7 386.9C1098.9 385.4 1143.1 386.3 1157.0 388.4C1255.0 403.6 1337.0 460.9 1402.5 560.0C1520.3 738.1 1528.9 983.0 1423.7 1162.7C1365.9 1261.4 1277.8 1332.8 1171.0 1367.5C1137.7 1378.3 1118.9 1377.7 1099.2 1365.3C1076.5 1351.0 1064.5 1326.9 1064.5 1296.0C1064.5 1275.1 1068.6 1262.8 1080.1 1249.0C1090.1 1237.0 1099.0 1231.7 1123.2 1223.6C1195.5 1199.4 1247.6 1159.8 1287.5 1098.6C1370.6 971.2 1364.6 776.6 1273.4 640.0C1209.8 544.7 1119.8 514.3 1030.5 558.0C960.9 592.0 908.5 663.5 884.7 757.0C880.5 773.1 877.9 779.4 871.6 787.7C857.8 806.0 835.5 816.0 808.7 816.0C772.2 816.0 744.1 795.0 737.4 762.7C714.5 652.1 621.7 567.6 507.4 553.5C418.2 542.4 338.7 580.3 290.7 656.9C240.2 737.6 218.6 852.1 232.1 968.0C235.2 994.8 243.8 1042.8 246.0 1045.3C246.3 1045.7 252.7 1042.6 260.1 1038.4C332.1 997.4 420.7 970.9 502.0 966.0C552.0 963.0 605.1 967.8 647.5 979.1C651.9 980.2 657.1 981.6 659.0 982.0C671.7 985.1 704.7 997.7 723.5 1006.6C810.6 1047.7 886.6 1127.6 919.9 1213.0C953.3 1298.8 949.2 1393.6 908.9 1465.4C857.3 1557.0 750.1 1609.0 634.3 1598.5ZM676.8 1446.9C724.9 1441.6 759.1 1419.1 776.9 1380.8C795.5 1341.0 791.0 1287.0 765.6 1242.1C748.3 1211.6 714.9 1178.1 680.0 1156.5C583.0 1096.5 453.5 1101.0 334.0 1168.8C320.9 1176.2 303.0 1187.6 303.0 1188.6C303.0 1189.9 314.7 1209.1 324.7 1224.2C378.0 1304.9 449.3 1368.9 535.5 1413.6C587.2 1440.4 634.6 1451.6 676.8 1446.9ZM739.0 387.4C664.7 377.6 602.5 326.3 579.1 255.5C540.4 138.5 619.0 15.8 741.8 1.5C838.6 -9.8 930.3 54.6 952.5 149.5C960.1 182.2 959.3 216.8 950.2 248.5C923.7 340.2 833.0 399.8 739.0 387.4Z"></path></svg>
+    <span aria-hidden="true" style="position: relative; width: 64px; height: 64px; border-radius: 32px; background: #FFFFFF; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg></span>
+    <h1 style="position: relative; margin: 0; font-size: 24px; line-height: 34px; color: #FFFFFF;">اكتملت زيارتك</h1>
+    <p style="position: relative; margin: 0; font-size: 15px; line-height: 24px; color: #E9F6F1;">الله يعطيك العافية يا {{firstName}} 💚</p>
+  </header>
+  <main style="flex-shrink: 0; margin-top: -36px; position: relative; padding: 0 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 24px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; font-weight: 700; color: #014359;">{{lead.initial}}</span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 16px; line-height: 24px;">{{lead.name}}</strong><span style="font-size: 13px; line-height: 20px; color: #51656B;">{{visitLine}}</span></span>
+      </div>
+      <div style="border-top: 1px solid #EEF2F2; padding-top: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <h2 style="margin: 0; font-size: 17px; line-height: 26px; color: #0E2A33;">كيف كانت الزيارة؟</h2>
+        <div role="group" aria-label="التقييم من 5" style="display: flex; flex-direction: row-reverse; justify-content: center; gap: 2px;"><sc-for list="{{stars}}" as="g" hint-placeholder-count="5"><button class="mc-star" aria-label="{{g.label}}" aria-pressed="{{g.on}}" onClick="{{g.pick}}" style="width: 52px; height: 52px; padding: 0; border: 0; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="{{g.fill}}" stroke="{{g.stroke}}" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"></path></svg></button></sc-for></div>
+        <span style="font-size: 13px; color: #51656B;">اضغط على النجوم</span>
+      </div>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #FEF4E5; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 12v6"></path><path d="M9 15h6"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px;">{{reportTitle}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{reportSub}}</span></span>
+      </div>
+    </section>
+    <button class="mc-link" onClick="{{skip}}" style="min-height: 44px; background: none; border: 0; font-family: Tajawal, sans-serif; font-size: 15px; font-weight: 700; color: #51656B; cursor: pointer;">بعدين</button>
+  </main>
+</sc-if>
+
+<sc-if value="{{showRate}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px; background: #F6F8F8;">
+    <button class="mc-link" onClick="{{back}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">قيّم الزيارة</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 48px; height: 48px; border-radius: 24px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; font-weight: 700; color: #014359;">{{lead.initial}}</span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 16px; line-height: 24px;">{{lead.name}}</strong><span style="font-size: 13px; line-height: 20px; color: #51656B;">{{visitLine}}</span></span>
+      </div>
+      <div role="group" aria-label="التقييم من 5" style="border-top: 1px solid #EEF2F2; padding-top: 10px; display: flex; flex-direction: row-reverse; justify-content: center; gap: 2px;"><sc-for list="{{stars}}" as="g" hint-placeholder-count="5"><button class="mc-star" aria-label="{{g.label}}" aria-pressed="{{g.on}}" onClick="{{g.pick}}" style="width: 52px; height: 52px; padding: 0; border: 0; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="{{g.fill}}" stroke="{{g.stroke}}" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"></path></svg></button></sc-for></div>
+      <strong style="text-align: center; font-size: 16px; color: #014359;">{{starText}}</strong>
+    </section>
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">{{chipTitle}}</h2>
+      <sc-if value="{{high}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{goodChips}}" as="c" hint-placeholder-count="5"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div></sc-if>
+      <sc-if value="{{low}}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{badChips}}" as="c" hint-placeholder-count="5"><button class="mc-chip" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="{{c.style}}">{{c.label}}</button></sc-for></div></sc-if>
+      <label for="rateNote" style="font-size: 14px; font-weight: 700; color: #014359;">تبي تضيف شي؟ (اختياري)</label>
+      <textarea id="rateNote" rows="3" placeholder="{{notePh}}" value="{{note}}" onChange="{{setNote}}" style="box-sizing: border-box; width: 100%; border-radius: 14px; border: 1px solid #DDE5E7; padding: 12px; font-family: Tajawal, sans-serif; font-size: 15px; color: #0E2A33; resize: none;"></textarea>
+      <sc-if value="{{low}}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FEF4E5; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 12px;">
+          <span style="display: flex; flex-direction: column; flex-grow: 1;"><strong style="font-size: 14px; line-height: 22px; color: #0E2A33;">ودّك خدمة العملاء تتصل فيك؟</strong><span style="font-size: 12px; line-height: 18px; color: #8A5A12;">مشرف الجودة يتواصل معك خلال 24 ساعة</span></span>
+          <button class="mc-link" role="switch" aria-checked="{{callMe.on}}" aria-label="ودّك خدمة العملاء تتصل فيك؟" onClick="{{callMe.flip}}" style="{{callMe.track}}"><span style="{{callMe.knob}}"></span></button>
+        </div>
+      </sc-if>
+    </section>
+    <button class="mc-btn" onClick="{{send}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;">أرسل التقييم</button>
+    <span style="font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">تقييمك يوصل لقسم الجودة، وما يظهر اسمك للفريق.</span>
+  </main>
+</sc-if>
+
+<sc-if value="{{showThanks}}" hint-placeholder-val="{{ false }}">
+  <main style="flex-grow: 1; padding: 120px 28px 20px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;">
+    <span aria-hidden="true" style="width: 88px; height: 88px; border-radius: 44px; background: #E9F6F1; display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></span>
+    <h1 style="margin: 0; font-size: 24px; line-height: 34px; color: #0E2A33;">شكرًا على تقييمك</h1>
+    <p style="margin: 0; font-size: 15px; line-height: 24px; color: #51656B;">{{thanksText}}</p>
+    <div style="width: 100%; margin-top: 18px; display: flex; flex-direction: column; gap: 10px;">
+      <button class="mc-btn" onClick="{{openReport}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 12v6"></path><path d="M9 15h6"></path></svg><span>تقرير الزيارة</span></button>
+      <button class="mc-btn" onClick="{{skip}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #E6EFF2; color: #014359;">الرئيسية</button>
+    </div>
+  </main>
+</sc-if>
+
+<sc-if value="{{showReport}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px; background: #F6F8F8;">
+    <button class="mc-link" onClick="{{back}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">تقرير الزيارة</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M12 12v6"></path><path d="M9 15h6"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 16px; line-height: 24px;">زيارة طبيب منزلية</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">24 أكتوبر · <span dir="ltr" style="font-family: Inter, sans-serif;">ORD-1036</span></span></span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: #E9F6F1; color: #22684F;"><span style="width: 7px; height: 7px; border-radius: 4px; background: #4CB491;"></span>معتمد</span>
+      </div>
+      <div style="border-top: 1px solid #EEF2F2; padding-top: 10px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">المريض</span><strong style="font-size: 14px;">أمجد صالح</strong></span>
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">الطبيب</span><strong style="font-size: 14px;">د. خالد المطيري</strong></span>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">ملخص الزيارة</h2></div>
+      <p style="margin: 0; font-size: 14px; line-height: 23px; color: #0E2A33;">تشتكي من عطش وكثرة تبول من أسبوعين. السكر العشوائي مرتفع والضغط أعلى من المعدل. عدّلنا جرعة دواء السكر وطلبنا تحاليل للمتابعة.</p>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">العلامات الحيوية</h2></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;"><div style="background: #F6F8F8; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">الضغط</span><span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 18px; color: #0E2A33;">148/92</strong><span style="font-size: 11px; color: #51656B;">mmHg</span></span><span style="font-size: 11px; font-weight: 700; color: #8A5A12;">أعلى من الطبيعي</span></div><div style="background: #F6F8F8; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">النبض</span><span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 18px; color: #0E2A33;">82</strong><span style="font-size: 11px; color: #51656B;">نبضة/د</span></span><span style="font-size: 11px; font-weight: 700; color: #22684F;">طبيعي</span></div><div style="background: #F6F8F8; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">الحرارة</span><span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 18px; color: #0E2A33;">36.8</strong><span style="font-size: 11px; color: #51656B;">°C</span></span><span style="font-size: 11px; font-weight: 700; color: #22684F;">طبيعي</span></div><div style="background: #F6F8F8; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px;"><span style="font-size: 12px; color: #51656B;">السكر العشوائي</span><span style="display: flex; align-items: baseline; gap: 4px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 18px; color: #0E2A33;">212</strong><span style="font-size: 11px; color: #51656B;">mg/dL</span></span><span style="font-size: 11px; font-weight: 700; color: #8A5A12;">مرتفع</span></div></div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 3h6"></path><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 9V3"></path><path d="M7 15h10"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">التشخيص</h2></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 12px; background: #F1F4F4; color: #0E2A33;">سكري النوع الثاني غير منضبط</span><span style="font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 12px; background: #F1F4F4; color: #0E2A33;">ارتفاع ضغط الدم</span></div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #EEF0FB; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A55A2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"></path><path d="M8.5 8.5l7 7"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">الأدوية</h2></div>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;"><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>ميتفورمين 1000 ملغ · حبة بعد الفطور وحبة بعد العشاء</span></li><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>أملوديبين 5 ملغ · حبة الصبح</span></li></ul><div style="background: #EEF0FB; border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; line-height: 20px; font-weight: 700; color: #3B4590;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B4590" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"></path></svg><span>انضافت لأدويتي وشغّلنا التذكير. تقدر تقفله من ملفك الصحي.</span></div>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">الخطة والتوصيات</h2></div>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px;"><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>قيس السكر الصائم كل يوم وسجّله</span></li><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>قلّل السكريات والنشويات البيضاء</span></li><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>مشي 30 دقيقة، 5 أيام بالأسبوع</span></li><li style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 22px; color: #0E2A33;"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 3px; background: #4CB491; margin-top: 8px; flex-shrink: 0;"></span><span>راجع الطوارئ لو السكر فوق 300 أو حسيت بدوخة شديدة</span></li></ul>
+    </section>
+
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg></span><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">المتابعة</h2></div>
+      <div style="display: flex; flex-direction: column; gap: 8px;"><div style="display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 22px;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 3h6"></path><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 9V3"></path><path d="M7 15h10"></path></svg><span style="flex-grow: 1;">تحليل السكر التراكمي ووظائف الكلى</span><span style="font-size: 12px; font-weight: 700; color: #8A5A12; white-space: nowrap;">خلال أسبوع</span></div><div style="display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 22px;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg><span style="flex-grow: 1;">زيارة متابعة مع الطبيب</span><span style="font-size: 12px; font-weight: 700; color: #8A5A12; white-space: nowrap;">بعد 3 أسابيع</span></div></div><button class="mc-btn" onClick="{{callSupport}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.9v3a2 2 0 0 1-2.2 2a19.8 19.8 0 0 1-8.6-3.1a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg><span>احجز المتابعة</span></button>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+      <button class="mc-btn" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #FFFFFF; color: #014359; border: 1px solid #DDE5E7;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span>تنزيل PDF</span></button>
+      <button class="mc-btn" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #FFFFFF; color: #014359; border: 1px solid #DDE5E7;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4"></path><path d="M15.4 6.5l-6.8 4"></path></svg><span>مشاركة</span></button>
+    </div>
+
+    <sc-if value="{{rated}}" hint-placeholder-val="{{ false }}">
+      <div style="background: #F2FAF6; border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: #22684F;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22684F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>قيّمت الزيارة {{starsShort}} · شكرًا لك</span></div>
+    </sc-if>
+    <sc-if value="{{notRated}}" hint-placeholder-val="{{ true }}">
+      <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 8px; align-items: center;">
+        <h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">كيف كانت الزيارة؟</h2>
+        <div role="group" aria-label="التقييم من 5" style="display: flex; flex-direction: row-reverse; justify-content: center; gap: 2px;"><sc-for list="{{stars}}" as="g" hint-placeholder-count="5"><button class="mc-star" aria-label="{{g.label}}" aria-pressed="{{g.on}}" onClick="{{g.pick}}" style="width: 52px; height: 52px; padding: 0; border: 0; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="40" height="40" viewBox="0 0 24 24" fill="{{g.fill}}" stroke="{{g.stroke}}" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3-4.6-4.4 6.3-.9z"></path></svg></button></sc-for></div>
+      </section>
+    </sc-if>
+    <p style="margin: 0 4px; font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">هذا التقرير اعتمده طبيبك. عندك سؤال عنه؟ تواصل مع خدمة العملاء ونوصله للطبيب.</p>
+  </main>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"","options":["done","high","low","thanks","report","reportRated"]},"pageH":{"editor":"string","default":"844px"},"$preview":{"width":390,"height":844}}'>
+// After the visit (ops status "completed"). Rating is stored on the order as feedback {stars, tags[], note, callMe, at} and goes to the quality review; the report shows only after the doctor approves it.
+const sw = (on, flip) => ({ on: on ? 'true' : 'false', flip,
+  track: `width: 50px; height: 30px; padding: 0; border-radius: 15px; border: 0; position: relative; flex-shrink: 0; cursor: pointer; background: ${on ? '#2B7F62' : '#B9C7CB'};`,
+  knob: `position: absolute; top: 4px; ${on ? 'left' : 'right'}: 4px; width: 22px; height: 22px; border-radius: 11px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.2);`,
+});
+const GOOD = ['وصلوا بالموعد', 'تعامل راقي', 'شرح واضح', 'نظافة والتزام', 'سهولة الحجز'];
+const BAD = ['تأخر الفريق', 'الشرح ما كان واضح', 'التعامل', 'مشكلة في الدفع', 'شي ثاني'];
+const WORD = ['', 'سيئة', 'مو زينة', 'عادية', 'زينة', 'ممتازة'];
+const chipStyle = (on) => `min-height: 40px; padding: 0 14px; border-radius: 20px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; border: 1px solid ${on ? '#014359' : '#DDE5E7'}; background: ${on ? '#014359' : '#FFFFFF'}; color: ${on ? '#FFFFFF' : '#0E2A33'};`;
+class Component extends DCLogic {
+  st() {
+    const i = this.props.initial || 'done';
+    const stars = { high: 5, low: 2, thanks: 5, reportRated: 5 }[i] || 0;
+    const view = { high: 'rate', low: 'rate', reportRated: 'report' }[i] || i;
+    return { view, stars, tags: [], callMe: true, note: '', sent: false, ...(this.state || {}) };
+  }
+  renderVals() {
+    const s = this.st();
+    const put = (p) => this.setState({ ...s, ...p });
+    const high = s.stars >= 4;
+    const chips = (list) => list.map((l) => { const on = s.tags.includes(l); return { label: l, on: on ? 'true' : 'false', style: chipStyle(on), pick: () => put({ tags: on ? s.tags.filter((x) => x !== l) : [...s.tags, l] }) }; });
+    const o = Mada.orders().find((x) => x.id === this.props.orderId) || {}, v = o.id ? Mada.view(o) : {};
+    const lead = (v.team || [])[0] || { initial: "", name: "" };
+    const dv = o.doctorVisit || {}, approved = ((dv.report || {}).status === 'approved') || (((o.physioVisit || {}).report || {}).status === 'approved');
+    const done = new Date(v.doneAt || Date.now());
+    const today = Mada.fmt.ymd(done) === Mada.fmt.ymd(new Date());
+    // Rating on the order (mada_app_put "rating"): request details show score and comment; tags and callMe go to the quality review.
+    const send = () => {
+      if (!s.stars) return;
+      const note = s.note.trim(), rating = { score: s.stars, comment: [s.tags.join('، '), note].filter(Boolean).join(' · '), tags: s.tags, note, callMe: !high && s.callMe, at: new Date().toISOString() };
+      Mada.st.holdRate = o.id;
+      put({ view: 'thanks', sent: true });
+      Mada.put('mada-orders', o.id, { rating }).catch(() => {});
+    };
+    const close = (then) => () => { if (then) then(); Mada.skipRate(o.id); };
+    return {
+      pageH: this.props.pageH || '844px',
+      showDone: s.view === 'done', showRate: s.view === 'rate', showThanks: s.view === 'thanks', showReport: false,
+      firstName: (Mada.ar((Mada.me() || {}).name) || '').split(' ')[0], lead,
+      visitLine: [v.service, today ? `اليوم ${Mada.fmt.timeOf(done.toISOString())}` : Mada.fmt.dayMonth(done)].filter(Boolean).join(' · '),
+      reportTitle: approved ? 'تقرير الزيارة جاهز' : 'تقرير الزيارة يتجهّز',
+      reportSub: approved ? 'تلقاه في ملفك الصحي، في التقارير الطبية.' : 'يوصلك إشعار أول ما يعتمده الطبيب، ويظهر في ملفك الصحي.',
+      stars: [1, 2, 3, 4, 5].map((n) => ({ label: `${n} من 5`, on: n <= s.stars ? 'true' : 'false', fill: n <= s.stars ? '#F4A738' : 'none', stroke: n <= s.stars ? '#D98A16' : '#B9C7CB', pick: () => put({ stars: n, view: s.sent ? s.view : 'rate', tags: [] }) })),
+      starText: s.stars ? `${WORD[s.stars]} · ${s.stars} من 5` : 'اختر من 1 إلى 5',
+      high, low: !!s.stars && !high,
+      chipTitle: high ? 'وش أعجبك؟' : 'وش اللي ما كان زين؟',
+      notePh: high ? 'مثال: الدكتور كان صبور وشرح كل شي' : 'قول لنا وش صار، ونتابعه',
+      note: s.note, setNote: (e) => { this.state = { ...s, note: e.target.value }; },
+      goodChips: chips(GOOD), badChips: chips(BAD),
+      callMe: sw(s.callMe, () => put({ callMe: !s.callMe })),
+      send,
+      thanksText: high || !s.callMe ? 'رأيك يوصل للفريق وقسم الجودة، ويساعدنا نرعاك أحسن كل مرة.' : 'وصلنا رأيك، ومشرف الجودة بيتصل فيك خلال 24 ساعة.',
+      openReport: close(() => Mada.openHealth && Mada.openHealth('reports')),
+      back: () => put({ view: 'done' }),
+      skip: close(),
+      rated: s.sent, notRated: !s.sent, starsShort: `${s.stars} من 5`,
+      callSupport: () => Mada.call(),
+    };
+  }
+}
+</script>
+</body>
+</html>

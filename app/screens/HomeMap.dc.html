@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>ربط الرئيسية بنظام التشغيل</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}</style>
+</helmet>
+<div dir="rtl" style="width: 720px; height: 844px; box-sizing: border-box; padding: 36px; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column; gap: 16px;">
+  <div>
+    <h1 style="margin: 0; font-size: 26px; line-height: 38px; font-weight: 700; color: #014359;">ربط الرئيسية بنظام التشغيل</h1>
+    <p style="margin: 2px 0 0; font-size: 14px; line-height: 22px; color: #51656B;">الحالات والحقول مأخوذة من الطلبات في لوحة التشغيل (orders.js وخطوات الزيارة العشر من تطبيق الفريق).</p>
+  </div>
+  <section style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #014359;">حالة الطلب للعميل ← من التشغيل</h2>
+    <table style="border-collapse: collapse; width: 100%; font-size: 14px;"><tbody><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">تم تأكيد الحجز</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">bookingId موجود، ولا توجد خطوات زيارة بعد (أو received فقط)</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">الفريق في الطريق</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">visit.steps.ontheway</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">وصل الفريق</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">visit.steps.arrived أو arrival.at، ويبقى حتى إغلاق الزيارة (تشمل خطوات الزيارة كلها)</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">اكتملت الزيارة</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">status = "completed" أو visit.steps.report، وينتقل إلى «طلباتي»</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">لا يظهر في الرئيسية</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">لا يظهر الطلب في التطبيق إلا بعد الدفع (bookingId موجود). قبل الدفع: awaiting_doctor · on_hold · unpaid لا تظهر. بعد الدفع: cancelled تظهر في «طلباتي».</td></tr></tbody></table>
+  </section>
+  <section style="background: #FFFFFF; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+    <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #014359;">الحقول</h2>
+    <table style="border-collapse: collapse; width: 100%; font-size: 14px;"><tbody><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">اسم الخدمة</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">service ← sv_doctor «زيارة طبيب مع تمريض»، sv_nursing، sv_blood، sv_iv، sv_physio</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">رقم الطلب</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">id مثل ORD-1036</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">رقم الحجز</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">bookingId مثل BK-5001</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">موعد الخدمة</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">appointment.date + appointment.minute</td></tr><tr><td style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-weight: 700; color: #014359; white-space: nowrap;">الطلب الحالي</td><td dir="auto" style="padding: 10px 12px; border-top: 1px solid #E8EEEF; font-size: 13px; color: #0E2A33;">أقرب طلب للمريض المختار حالته غير مكتملة وغير ملغاة</td></tr></tbody></table>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":720,"height":844}}'>
+class Component extends DCLogic { renderVals() { return {}; } }
+</script>
+</body>
+</html>

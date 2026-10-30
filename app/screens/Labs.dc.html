@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>نتائج التحاليل · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+<sc-if value="{{showList}}" hint-placeholder-val="{{ true }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" aria-label="رجوع لملفي الصحي" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">نتائج التحاليل</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <div role="tablist" style="background: #E8EEEF; border-radius: 14px; padding: 4px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px;">
+      <sc-for list="{{segs}}" as="g" hint-placeholder-count="3"><button class="mc-seg" role="tab" aria-selected="{{g.on}}" onClick="{{g.pick}}" style="{{g.style}}">{{g.label}}</button></sc-for>
+    </div>
+    <sc-for list="{{items}}" as="x" hint-placeholder-count="3">
+      <button class="mc-row" onClick="{{x.open}}" style="width: 100%; background: #FFFFFF; border: 0; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; cursor: pointer;">
+        <span style="width: 100%; display: flex; align-items: flex-start; gap: 12px;">
+          <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #FDEEEE; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C62F2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 3h6"></path><path d="M10 3v6L4.5 18.5A2 2 0 0 0 6.2 21h11.6a2 2 0 0 0 1.7-2.5L14 9V3"></path><path d="M7 15h10"></path></svg></span>
+          <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 15px; line-height: 22px; color: #0E2A33;">{{x.title}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{x.date}} · <span dir="ltr" style="font-family: Inter, sans-serif;">{{x.orderNo}}</span></span></span>
+          <span style="{{x.chip}}"><span style="{{x.dotS}}"></span>{{x.status}}</span>
+        </span>
+        <span style="align-self: flex-start; {{x.srcChip}}">{{x.src}}</span>
+        <span style="width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));"><sc-for list="{{x.steps}}" as="p" hint-placeholder-count="4"><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="{{p.line}}"></span><span style="{{p.dot}}"></span><span style="{{p.lbl}}">{{p.label}}</span></span></sc-for></span>
+        <span style="width: 100%; box-sizing: border-box; {{x.noteBox}}">{{x.note}}</span>
+      </button>
+    </sc-for>
+    <p style="margin: 0 4px; font-size: 12px; line-height: 18px; color: #51656B; text-align: center;">كل نتيجة يراجعها طبيب من مدى كير ويكتب ملاحظته قبل ما تظهر لك، سواء طلبها طبيبك أو طلبتها أنت.</p>
+  </main>
+</sc-if>
+
+<sc-if value="{{showDetail}}" hint-placeholder-val="{{ false }}">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{back}}" aria-label="رجوع لنتائج التحاليل" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">{{d.title}}</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 4px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;"><span style="{{d.srcChip}}">{{d.src}}</span><span style="{{d.chip}}"><span style="{{d.dotS}}"></span>{{d.status}}</span></div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">رقم الطلب</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{d.orderNo}}</strong></span>
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">رقم الحجز</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{d.bookingNo}}</strong></span>
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">سحبت العينة</span><strong style="font-size: 14px;">{{d.nurse}}</strong></span>
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">وقت السحب</span><strong style="font-size: 14px;">{{d.collected}}</strong></span>
+      </div>
+    </section>
+
+    <sc-if value="{{d.ready}}" hint-placeholder-val="{{ true }}">
+      <section aria-label="ملاحظة الطبيب" style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 8px; border: 1px solid #CDEBDF;">
+        <div style="display: flex; align-items: center; gap: 10px;"><span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 19px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #014359;">{{d.docIni}}</span><span style="display: flex; flex-direction: column;"><strong style="font-size: 14px;">ملاحظة {{d.doctorName}}</strong><span style="font-size: 12px; color: #51656B;">راجعها واعتمدها · {{d.reviewed}}</span></span></div>
+        <p style="margin: 0; font-size: 15px; line-height: 24px; color: #0E2A33;">{{d.docNote}}</p>
+      </section>
+      <section aria-label="النتائج" style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 0; padding-top: 14px; padding-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 6px;"><h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">النتائج</h2><span style="font-size: 12px; color: #51656B;">{{d.summary}}</span></div>
+        <sc-for list="{{d.rows}}" as="r" hint-placeholder-count="5"><div style="{{r.rowStyle}}">
+          <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 14px; line-height: 20px;">{{r.name}}</strong><span style="font-size: 11px; color: #51656B;">الطبيعي <span dir="ltr">{{r.rng}}</span></span></span>
+          <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px;"><span style="display: flex; align-items: baseline; gap: 3px;"><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 16px;">{{r.val}}</strong><span dir="ltr" style="font-size: 11px; color: #51656B;">{{r.unit}}</span></span><span style="{{r.tag}}">{{r.state}}</span></span>
+        </div></sc-for>
+      </section>
+      <button class="mc-btn" onClick="{{pdf}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span>تحميل تقرير المختبر PDF</span></button>
+      <span style="font-size: 12px; line-height: 18px; color: #51656B; text-align: center; margin-top: -6px;">نفس تقرير المختبر المعتمد في سجل مدى كير، ومعه ملف المختبر الأصلي.</span>
+    </sc-if>
+    <sc-if value="{{d.waiting}}" hint-placeholder-val="{{ false }}">
+      <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));"><sc-for list="{{d.steps}}" as="p" hint-placeholder-count="4"><span style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;"><span style="{{p.line}}"></span><span style="{{p.dot}}"></span><span style="{{p.lbl}}">{{p.label}}</span></span></sc-for></span>
+        <div style="background: #FEF4E5; border-radius: 14px; padding: 12px; display: flex; gap: 10px; align-items: flex-start;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A5A12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg><span style="display: flex; flex-direction: column; gap: 2px;"><strong style="font-size: 14px; line-height: 22px; color: #8A5A12;">{{d.waitTitle}}</strong><span style="font-size: 13px; line-height: 20px; color: #0E2A33;">{{d.waitText}}</span></span></div>
+        <button class="mc-btn" disabled="true" aria-disabled="true" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #E8EEEF; color: #51656B; cursor: not-allowed;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#51656B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg><span>تحميل تقرير المختبر PDF</span></button>
+      </section>
+    </sc-if>
+  </main>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"list","options":["list","ready","review","lab"]},"pageH":{"editor":"string","default":"1000px"},"$preview":{"width":390,"height":1000}}'>
+// Lab results in the health file. Two sources in one list (lab-samples.js): a doctor's order from a visit (medical.js item type "lab")
+// and the patient's own lab booking (order.labResults). Rule (Amjad): a Mada Care doctor reviews and approves every result before the patient sees it,
+// both sources. Stages: sample collected → at the lab (until due by labs.js hours) → doctor review → ready. Values and the PDF (MadaLabReport) only when ready.
+let LIST = [];
+const FLOW = ['سحب العينة', 'في المختبر', 'مراجعة الطبيب', 'جاهزة'];
+const STATE = { ok: ['طبيعي', '#E9F6F1', '#22684F'], high: ['مرتفع', '#FEF4E5', '#8A5A12'], low: ['منخفض', '#E6EFF2', '#014359'] };
+const segStyle = (on) => `min-height: 40px; border-radius: 11px; border: 0; font-family: Tajawal, sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; background: ${on ? '#FFFFFF' : 'transparent'}; color: ${on ? '#014359' : '#51656B'}; box-shadow: ${on ? '0 2px 6px rgba(1,67,89,0.10)' : 'none'};`;
+class Component extends DCLogic {
+  st() { const i = this.props.initial || 'list'; return { open: i === 'list' ? null : i, seg: 'all', ...(this.state || {}) }; }
+  card(r) {
+    const ready = r.at === 3;
+    const status = ready ? 'جاهزة' : r.at === 2 ? 'عند الطبيب' : 'في المختبر';
+    return { ...r, status, ready, waiting: !ready, doctorName: r.doctorName || 'طبيب مدى كير', docIni: String(r.doctorName || 'م').replace(/^(د\.|أ\.)\s*/, '').trim().charAt(0),
+      chip: `display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap; background: ${ready ? '#E9F6F1' : '#FEF4E5'}; color: ${ready ? '#22684F' : '#8A5A12'};`,
+      dotS: `width: 7px; height: 7px; border-radius: 4px; background: ${ready ? '#4CB491' : '#F4A738'};`,
+      src: r.doctor ? `طلبها ${r.doctorName || 'طبيبك'} في الزيارة` : 'طلبتها أنت',
+      srcChip: `font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 10px; background: ${r.doctor ? '#E6EFF2' : '#F1F4F4'}; color: ${r.doctor ? '#014359' : '#51656B'};`,
+      noteBox: `border-radius: 12px; padding: 8px 12px; font-size: 13px; font-weight: 700; background: ${ready ? '#F2FAF6' : '#F6F8F8'}; color: ${ready ? '#22684F' : '#51656B'};`,
+      steps: FLOW.map((label, n) => { const done = n < r.at, cur = n === r.at;
+        return { label,
+          line: n === 0 ? 'display: none;' : `position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: ${n <= r.at ? '#4CB491' : '#DDE5E7'};`,
+          dot: `position: relative; z-index: 1; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: ${done || (cur && ready) ? '#4CB491' : '#FFFFFF'}; border: ${cur && !ready ? '5px solid #014359' : '2px solid ' + (done || cur ? '#4CB491' : '#DDE5E7')};`,
+          lbl: `font-size: 11px; line-height: 14px; white-space: nowrap; font-weight: ${cur ? 700 : 500}; color: ${cur ? '#014359' : done ? '#22684F' : '#7F9196'};` }; }) };
+  }
+  renderVals() {
+    const s = this.st();
+    const put = (p) => this.setState({ ...s, ...p });
+    LIST = Mada.labs();
+    const items = LIST.filter((r) => s.seg === 'all' || (s.seg === 'doctor') === r.doctor).map((r) => ({ ...this.card(r), open: () => put({ open: r.id }) }));
+    const r = LIST.find((x) => x.id === s.open) || LIST[0] || { at: 0, rows: [], doctor: false };
+    if (s.open && r.isNew && r.medId) { r.isNew = false; Mada.seen(r.medId, r.itemId); }
+    const d = this.card(r);
+    d.rows = (r.rows || []).map(([name, val, unit, rng, st], n) => ({ name, val, unit, rng, state: STATE[st][0],
+      tag: `font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: ${STATE[st][1]}; color: ${STATE[st][2]};`,
+      rowStyle: `min-height: 56px; padding: 8px 0; ${n ? 'border-top: 1px solid #EEF2F2; ' : ''}display: flex; align-items: center; gap: 12px;` }));
+    const out = (r.rows || []).filter((x) => x[4] !== 'ok').length;
+    d.summary = `${(r.rows || []).length} قيم${out ? ` · ${out} خارج الطبيعي` : ''}`;
+    d.waitTitle = r.at === 2 ? 'النتيجة عند الطبيب للمراجعة' : 'العينة في المختبر';
+    d.waitText = r.at === 2 ? 'طبيب من مدى كير يراجع نتيجتك ويكتب ملاحظته، ويوصلك إشعار أول ما تجهز.' : 'أول ما تطلع النتيجة يراجعها طبيب من مدى كير قبل ما تظهر لك.';
+    return {
+      pdf: () => Mada.pdf && Mada.pdf('lab', s.open || ''),
+      pageH: this.props.pageH || '1000px',
+      showList: !s.open, showDetail: !!s.open, d, items,
+      back: () => put({ open: null }),
+      segs: [['all', `الكل (${LIST.length})`], ['doctor', 'طلبها طبيبك'], ['self', 'طلبتها أنت']].map(([k, l]) => ({ label: l, on: s.seg === k ? 'true' : 'false', pick: () => put({ seg: k }), style: segStyle(s.seg === k) })),
+    };
+  }
+}
+</script>
+</body>
+</html>

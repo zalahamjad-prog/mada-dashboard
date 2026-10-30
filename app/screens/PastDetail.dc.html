@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>تفاصيل طلب مكتمل · مدى كير</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&amp;family=Inter:wght@500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.mc-btn:focus-visible,.mc-tab:focus-visible,.mc-link:focus-visible,.mc-seg:focus-visible,.mc-row:focus-visible,.mc-star:focus-visible,.mc-chip:focus-visible{outline:3px solid #014359;outline-offset:2px}
+.mc-hero{background-color:#2F8F6E;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),repeating-linear-gradient(-45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 22px),linear-gradient(180deg,#4CB491 0%,#2F8F6E 60%,#23705A 100%)}
+textarea::placeholder{color:#7F9196}
+</style>
+</helmet>
+<div dir="rtl" style="width: 390px; height: {{pageH}}; box-sizing: border-box; position: relative; overflow: hidden; background: #F6F8F8; color: #0E2A33; font-family: Tajawal, sans-serif; display: flex; flex-direction: column;">
+  <div style="flex-shrink: 0; padding: 52px 16px 8px; display: flex; align-items: center; gap: 8px;">
+    <button class="mc-link" onClick="{{goBack}}" aria-label="رجوع" style="width: 44px; height: 44px; border-radius: 14px; border: 1px solid #E3EAEB; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M9 18l6-6-6-6"></path></svg></button>
+    <h1 style="margin: 0; font-size: 18px; line-height: 28px; color: #0E2A33; flex-grow: 1;">تفاصيل الطلب</h1>
+  </div>
+  <main style="flex-shrink: 0; padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+    <section style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #E9F6F1; color: #22684F;"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22684F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg>{{statusText}}</span>
+        <span style="font-size: 13px; color: #51656B;">{{whenText}}</span>
+      </div>
+      <button class="mc-row" onClick="{{openService}}" style="width: 100%; min-height: 64px; padding: 12px; border-radius: 16px; border: 1px solid #DDE5E7; background: #F6F8F8; display: flex; align-items: center; gap: 12px; font-family: Tajawal, sans-serif; text-align: right; color: #0E2A33; cursor: pointer;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E9F6F1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0;"><strong style="font-size: 16px; line-height: 24px;">{{service}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">اضغط تشوف وش تشمل الخدمة</span></span>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M15 18l-6-6 6-6"></path></svg>
+      </button>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; border-top: 1px solid #EEF2F2; padding-top: 10px;">
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">رقم الطلب</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{orderNo}}</strong></span>
+        <span style="display: flex; flex-direction: column;"><span style="font-size: 12px; color: #51656B;">رقم الحجز</span><strong dir="ltr" style="font-family: Inter, sans-serif; font-size: 14px; text-align: right;">{{bookingNo}}</strong></span>
+      </div>
+    </section>
+
+    <section aria-label="الفريق الطبي" style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 8px;">
+      <h2 style="margin: 0; font-size: 16px; line-height: 24px; color: #014359;">الفريق الطبي</h2>
+      <sc-for list="{{team}}" as="m" hint-placeholder-count="2">
+      <sc-if value="{{m.sep}}" hint-placeholder-val="{{ false }}"><div style="border-top: 1px solid #EEF2F2;"></div></sc-if>
+      <div style="display: flex; align-items: center; gap: 12px; min-height: 52px;">
+        <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 22px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 17px; font-weight: 700; color: #014359;">{{m.initial}}</span>
+        <span style="display: flex; flex-direction: column;"><strong style="font-size: 15px; line-height: 22px;">{{m.name}}</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{m.role}}</span></span>
+      </div>
+      </sc-for>
+    </section>
+
+    <section aria-label="الفاتورة" style="background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 4px 16px rgba(1,67,89,0.06); display: flex; flex-direction: column; gap: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 38px; height: 38px; border-radius: 12px; background: #E6EFF2; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"></path><path d="M9 8h6"></path><path d="M9 12h6"></path></svg></span>
+        <span style="display: flex; flex-direction: column; flex-grow: 1;"><strong style="font-size: 15px; line-height: 22px;">الفاتورة الضريبية</strong><span style="font-size: 12px; line-height: 18px; color: #51656B;">{{invoiceText}}</span></span>
+      </div>
+      <button class="mc-btn" onClick="{{openInvoice}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #4CB491; color: #014359;"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg><span>تحميل الفاتورة PDF</span></button>
+    </section>
+
+    <button class="mc-link" onClick="{{callSupport}}" style="min-height: 44px; background: none; border: 0; display: flex; align-items: center; justify-content: center; gap: 6px; font-family: Tajawal, sans-serif; font-size: 14px; font-weight: 700; color: #014359; cursor: pointer;"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#014359" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M22 16.9v3a2 2 0 0 1-2.2 2a19.8 19.8 0 0 1-8.6-3.1a19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg><span>عندك استفسار عن الطلب؟ تواصل معنا</span></button>
+  </main>
+  <sc-if value="{{showService}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: rgba(14,42,51,0.45); display: flex; flex-direction: column; justify-content: flex-end;"><button class="mc-link" onClick="{{closeService}}" aria-label="إغلاق" style="flex-grow: 1; border: 0; background: transparent; cursor: pointer;"></button><section role="dialog" aria-modal="true" style="background: #FFFFFF; border-radius: 24px 24px 0 0; padding: 12px 20px 34px; display: flex; flex-direction: column; gap: 14px;"><span aria-hidden="true" style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #DDE5E7;"></span><div style="display: flex; align-items: center; gap: 12px;">
+        <span aria-hidden="true" style="width: 52px; height: 52px; border-radius: 26px; background: #E9F6F1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"></path></svg></span>
+        <h2 style="margin: 0; font-size: 20px; line-height: 30px; color: #0E2A33;">{{service}}</h2>
+      </div>
+      <div style="border: 1px solid #DDE5E7; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 6px;">
+        <h3 style="margin: 0; font-size: 15px; line-height: 22px; color: #014359;">عن الخدمة</h3>
+        <p style="margin: 0; font-size: 15px; line-height: 25px; color: #0E2A33;">طبيب مرخّص يزورك في بيتك، يكشف عليك كشفًا كاملًا، ويشخّص حالتك، ويعطيك خطة علاج واضحة. بدون انتظار ولا مشاوير.</p>
+      </div>
+      <div style="border: 1px solid #DDE5E7; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+        <h3 style="margin: 0; font-size: 15px; line-height: 22px; color: #014359;">المهام المضمنة في الزيارة</h3>
+        <ul style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 4px;"><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>أخذ التاريخ المرضي</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>قياس العلامات الحيوية</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>الفحص السريري</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>التشخيص وخطة العلاج</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>الوصفة الطبية عند الحاجة</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>الإحالة عند الحاجة</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>التقرير الطبي</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>توعية المريض وأسرته</span></li><li style="display: flex; gap: 10px; align-items: flex-start; font-size: 15px; line-height: 24px; color: #0E2A33;"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2B7F62" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;"><path d="M20 6L9 17l-5-5"></path></svg><span>إجازة مرضية عند الحاجة</span></li></ul>
+      </div>
+      <button class="mc-btn" onClick="{{closeService}}" style="height: 54px; border-radius: 14px; border: 0; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Tajawal, sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; background: #E6EFF2; color: #014359;">تمام</button></section></div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initial":{"editor":"enum","default":"main","options":["main","service"]},"pageH":{"editor":"string","default":"844px"},"$preview":{"width":390,"height":844}}'>
+// Completed order details (phase 1): service (tap = what it includes + prep), status اكتملت, medical team names, tax invoice PDF. Report and rating live in ملفي الصحي / after-visit screen, not here.
+class Component extends DCLogic {
+  st() { return { sheet: false, ...(this.state || {}) }; }
+  renderVals() {
+    const s = this.st();
+    const v = Mada.view(Mada.orders().find((x) => x.id === this.props.orderId)) || { team: [], o: {} };
+    const cx = v.stage === 'cancelled';
+    const d = v.doneAt ? new Date(v.doneAt) : null;
+    const total = Number(v.o.total || v.o.amount || 0);
+    return {
+      pageH: this.props.pageH || '844px',
+      goBack: () => this.props.back && this.props.back(),
+      service: v.service, orderNo: v.id, bookingNo: v.bookingId,
+      statusText: cx ? 'ملغاة' : 'اكتملت',
+      whenText: d ? `${Mada.fmt.dayMonth(d)} ${d.getFullYear()} · ${Mada.fmt.timeOf(v.doneAt)}` : v.when,
+      team: v.team.map((m, i) => ({ ...m, sep: i > 0 })),
+      invoiceText: cx ? 'تم استرداد المبلغ بنفس طريقة الدفع' : total ? `مدفوعة · ${total.toLocaleString('en-US')} ريال شامل الضريبة` : 'مدفوعة',
+      // The tax invoice PDF comes from the ops dashboard's invoice page (to be linked with the payment provider).
+      openInvoice: () => {},
+      showService: s.sheet, openService: () => this.setState({ sheet: true }), closeService: () => this.setState({ sheet: false }),
+      callSupport: () => Mada.call(),
+    };
+  }
+}
+</script>
+</body>
+</html>
